@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Verification &amp; Test Plan &#8212; OSQAr Hello World: Temperature Monitor  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/styles.css?v=6c8eb985" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/layouts.css?v=448c382f" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
+    <script src="_static/jquery.js?v=5d32c60e"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+    <script src="_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+    <script src="_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+    <script src="_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+    <script src="_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=f783d6a5"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Implementation &amp; Test Code" href="04_implementation.html" />
+    <link rel="prev" title="System Architecture" href="02_architecture.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="verification-test-plan">
+<h1>Verification &amp; Test Plan<a class="headerlink" href="#verification-test-plan" title="Link to this heading">¶</a></h1>
+<section id="verification-strategy">
+<h2>Verification Strategy<a class="headerlink" href="#verification-strategy" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-25a1618a">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_VERIFY_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) Verification shall demonstrate that :need:`REQ_SAFETY_001`, :need:`REQ_SAFETY_002`, :need:`REQ_SAFETY_003`, and all functional requirements are met through unit tests and integration tests.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_VERIFY_001" title="TEST_VERIFY_001">TEST_VERIFY_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">v&amp;v</span><span class="needs_spacer">, </span><span class="needs_data">strategy</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="TEST_VERIFY_001">REQ_SAFETY_001</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="TEST_VERIFY_001">REQ_SAFETY_002</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="TEST_VERIFY_001">REQ_SAFETY_003</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="TEST_VERIFY_001">REQ_FUNC_001</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="TEST_VERIFY_001">REQ_FUNC_002</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="TEST_VERIFY_001">REQ_FUNC_003</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_004" title="TEST_VERIFY_001">REQ_FUNC_004</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="test-methods-overview">
+<h2>Test Methods Overview<a class="headerlink" href="#test-methods-overview" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-5dd2a4b3">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_METHOD_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) Unit tests shall verify individual components (:need:`ARCH_FUNC_001` Sensor Driver, :need:`ARCH_FUNC_002` Filter, :need:`ARCH_FUNC_003` State Machine) in isolation.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_METHOD_001" title="TEST_METHOD_001">TEST_METHOD_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">unit-test</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="02_architecture.html#ARCH_FUNC_001" title="TEST_METHOD_001">ARCH_FUNC_001</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_002" title="TEST_METHOD_001">ARCH_FUNC_002</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="TEST_METHOD_001">ARCH_FUNC_003</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="#TEST_METHOD_002" title="TEST_METHOD_001">TEST_METHOD_002</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-c91b9e81">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_METHOD_002">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) Integration tests shall verify end-to-end data flow from sensor input to state output (:need:`ARCH_001` TSIM).</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_METHOD_002" title="TEST_METHOD_002">TEST_METHOD_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">integration-test</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="#TEST_METHOD_001" title="TEST_METHOD_002">TEST_METHOD_001</a>, <a class="reference internal" href="02_architecture.html#ARCH_001" title="TEST_METHOD_002">ARCH_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-e6d66544">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_METHOD_003">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) Timing tests shall verify that all processing occurs within 100ms as specified in :need:`REQ_SAFETY_002`.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_METHOD_003" title="TEST_METHOD_003">TEST_METHOD_003</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">timing-test</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="TEST_METHOD_003">REQ_SAFETY_002</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="TEST_METHOD_003">ARCH_FUNC_003</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="#TEST_END_TO_END_001" title="TEST_METHOD_003">TEST_END_TO_END_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="unit-test-cases">
+<h2>Unit Test Cases<a class="headerlink" href="#unit-test-cases" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-f7d499a3">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_CONVERSION_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) TEST_CONVERSION_001: Sensor readings across full range (-40°C to +125°C) shall convert correctly per :need:`REQ_FUNC_001`.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_CONVERSION_001" title="TEST_CONVERSION_001">TEST_CONVERSION_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">unit-test</span><span class="needs_spacer">, </span><span class="needs_data">sensor-driver</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="TEST_CONVERSION_001">REQ_FUNC_001</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_001" title="TEST_CONVERSION_001">ARCH_FUNC_001</a>, <a class="reference internal" href="02_architecture.html#ARCH_SIGNAL_001" title="TEST_CONVERSION_001">ARCH_SIGNAL_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Test Steps</strong>:</p>
+<ol class="arabic simple">
+<li><p>Input ADC values: 0, 1024, 2048, 3072, 4095 LSB</p></li>
+<li><p>Verify output temperature: -40°C, -17.5°C, 42.5°C, 102.5°C, ~125°C</p></li>
+</ol>
+<p><strong>Pass Criteria</strong>: All conversions within ±1°C accuracy</p>
+<p><strong>Architecture</strong>: <a class="reference internal" href="02_architecture.html#ARCH_FUNC_001" title="ARCH_FUNC_001"><em class="xref need">(ARCH) The Sensor Driver sh... (ARCH_FUNC_001)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_SIGNAL_001" title="ARCH_SIGNAL_001"><em class="xref need">(ARCH) Raw Temperature Sign... (ARCH_SIGNAL_001)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-6fe71e72">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_FILTER_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) TEST_FILTER_001: Noise filtering with 5-sample moving average shall suppress sensor noise per :need:`REQ_FUNC_002`.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_FILTER_001" title="TEST_FILTER_001">TEST_FILTER_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">unit-test</span><span class="needs_spacer">, </span><span class="needs_data">filter</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="TEST_FILTER_001">REQ_FUNC_002</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_002" title="TEST_FILTER_001">ARCH_FUNC_002</a>, <a class="reference internal" href="02_architecture.html#ARCH_SIGNAL_002" title="TEST_FILTER_001">ARCH_SIGNAL_002</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Test Steps</strong>:</p>
+<ol class="arabic simple">
+<li><p>Input noisy sequence: [50, 60, 45, 55, 50, 48, 52, 49]°C</p></li>
+<li><p>After 5 samples, filter output shall stabilize around 50°C</p></li>
+</ol>
+<p><strong>Pass Criteria</strong>: Noise amplitude reduced by ≥80%</p>
+<p><strong>Architecture</strong>: <a class="reference internal" href="02_architecture.html#ARCH_FUNC_002" title="ARCH_FUNC_002"><em class="xref need">(ARCH) The Temperature Filt... (ARCH_FUNC_002)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_SIGNAL_002" title="ARCH_SIGNAL_002"><em class="xref need">(ARCH) Temperature Reading ... (ARCH_SIGNAL_002)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-50cadeaf">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_THRESHOLD_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) TEST_THRESHOLD_001: State machine shall transition to UNSAFE when temperature ≥ 100°C per :need:`REQ_FUNC_003`.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_THRESHOLD_001" title="TEST_THRESHOLD_001">TEST_THRESHOLD_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">unit-test</span><span class="needs_spacer">, </span><span class="needs_data">state-machine</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="TEST_THRESHOLD_001">REQ_FUNC_003</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="TEST_THRESHOLD_001">REQ_SAFETY_002</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="TEST_THRESHOLD_001">ARCH_FUNC_003</a>, <a class="reference internal" href="01_requirements.html#ARCH_DESIGN_001" title="TEST_THRESHOLD_001">ARCH_DESIGN_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Test Steps</strong>:</p>
+<ol class="arabic simple">
+<li><p>Set initial state: SAFE (T=50°C)</p></li>
+<li><p>Inject temperature: 100°C</p></li>
+<li><p>Verify state output: UNSAFE</p></li>
+</ol>
+<p><strong>Pass Criteria</strong>: State transition occurs on first call after threshold exceeded</p>
+<p><strong>Architecture</strong>: <a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="ARCH_FUNC_003"><em class="xref need">(ARCH) The State Machine sh... (ARCH_FUNC_003)</em></a>, <a class="reference internal" href="01_requirements.html#ARCH_DESIGN_001" title="ARCH_DESIGN_001"><em class="xref need">(ARCH) Temperature monitori... (ARCH_DESIGN_001)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-e92c710d">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_HYSTERESIS_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) TEST_HYSTERESIS_001: State machine shall transition to SAFE only when temperature ≤ 95°C (hysteresis) per :need:`REQ_FUNC_004`.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_HYSTERESIS_001" title="TEST_HYSTERESIS_001">TEST_HYSTERESIS_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">unit-test</span><span class="needs_spacer">, </span><span class="needs_data">state-machine</span><span class="needs_spacer">, </span><span class="needs_data">hysteresis</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_004" title="TEST_HYSTERESIS_001">REQ_FUNC_004</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="TEST_HYSTERESIS_001">REQ_SAFETY_003</a>, <a class="reference internal" href="01_requirements.html#ARCH_DESIGN_001" title="TEST_HYSTERESIS_001">ARCH_DESIGN_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Test Steps</strong>:</p>
+<ol class="arabic simple">
+<li><p>Set state: UNSAFE (T=100°C)</p></li>
+<li><p>Lower temperature to 99°C (still below hysteresis) → state remains UNSAFE</p></li>
+<li><p>Lower temperature to 95°C → state transitions to SAFE</p></li>
+</ol>
+<p><strong>Pass Criteria</strong>: Hysteresis deadband prevents spurious oscillations</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="integration-test-cases">
+<h2>Integration Test Cases<a class="headerlink" href="#integration-test-cases" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-0f75f166">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_END_TO_END_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) TEST_END_TO_END_001: Full sensor-to-state pipeline shall operate within latency budget per :need:`REQ_SAFETY_002`.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_END_TO_END_001" title="TEST_END_TO_END_001">TEST_END_TO_END_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">integration-test</span><span class="needs_spacer">, </span><span class="needs_data">timing</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="TEST_END_TO_END_001">REQ_SAFETY_002</a>, <a class="reference internal" href="02_architecture.html#ARCH_001" title="TEST_END_TO_END_001">ARCH_001</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="TEST_END_TO_END_001">ARCH_FUNC_003</a>, <a class="reference internal" href="#TEST_METHOD_003" title="TEST_END_TO_END_001">TEST_METHOD_003</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Test Steps</strong>:</p>
+<ol class="arabic simple">
+<li><p>Simulate analog sensor input ramping from 25°C to 105°C</p></li>
+<li><p>Measure time from input change to state output change</p></li>
+</ol>
+<p><strong>Pass Criteria</strong>: End-to-end latency ≤ 50ms (margin within 100ms requirement)</p>
+<p><strong>Architecture</strong>: <a class="reference internal" href="02_architecture.html#ARCH_001" title="ARCH_001"><em class="xref need">(ARCH) The Thermal Sensor I... (ARCH_001)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="ARCH_FUNC_003"><em class="xref need">(ARCH) The State Machine sh... (ARCH_FUNC_003)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-7b98ad28">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_ERROR_RECOVERY_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) TEST_ERROR_RECOVERY_001: Module shall recover gracefully from persistent sensor errors per :need:`ARCH_ERROR_001`.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_ERROR_RECOVERY_001" title="TEST_ERROR_RECOVERY_001">TEST_ERROR_RECOVERY_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">integration-test</span><span class="needs_spacer">, </span><span class="needs_data">error-handling</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="02_architecture.html#ARCH_ERROR_001" title="TEST_ERROR_RECOVERY_001">ARCH_ERROR_001</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="TEST_ERROR_RECOVERY_001">REQ_SAFETY_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Test Steps</strong>:</p>
+<ol class="arabic simple">
+<li><p>Inject invalid readings (&lt;-50°C or &gt;150°C range)</p></li>
+<li><p>Verify state remains unchanged for up to 9 errors</p></li>
+<li><p>Inject valid reading; verify normal operation resumes</p></li>
+</ol>
+<p><strong>Pass Criteria</strong>: State unchanged during error sequence; recovery successful</p>
+<p><strong>Architecture</strong>: <a class="reference internal" href="02_architecture.html#ARCH_ERROR_001" title="ARCH_ERROR_001"><em class="xref need">(ARCH) If sensor reading is... (ARCH_ERROR_001)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-c6bd154c">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_FAIL_SAFE_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) TEST_FAIL_SAFE_001: After 10 consecutive sensor failures, module shall enter UNSAFE state per :need:`ARCH_ERROR_002`.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_FAIL_SAFE_001" title="TEST_FAIL_SAFE_001">TEST_FAIL_SAFE_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">integration-test</span><span class="needs_spacer">, </span><span class="needs_data">fail-safe</span><span class="needs_spacer">, </span><span class="needs_data">safety</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="02_architecture.html#ARCH_ERROR_002" title="TEST_FAIL_SAFE_001">ARCH_ERROR_002</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="TEST_FAIL_SAFE_001">REQ_SAFETY_002</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="TEST_FAIL_SAFE_001">REQ_SAFETY_003</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Test Steps</strong>:</p>
+<ol class="arabic simple">
+<li><p>Inject 10 consecutive invalid readings</p></li>
+<li><p>Verify state transitions to UNSAFE</p></li>
+<li><p>Confirm recovery pathway when valid readings resume</p></li>
+</ol>
+<p><strong>Pass Criteria</strong>: UNSAFE state triggered; system alerts integrating system</p>
+<p><strong>Architecture</strong>: <a class="reference internal" href="02_architecture.html#ARCH_ERROR_002" title="ARCH_ERROR_002"><em class="xref need">(ARCH) The module shall tra... (ARCH_ERROR_002)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_SEOOC_001" title="ARCH_SEOOC_001"><em class="xref need">(ARCH) The TSIM shall be a ... (ARCH_SEOOC_001)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="traceability-matrix">
+<h2>Traceability Matrix<a class="headerlink" href="#traceability-matrix" title="Link to this heading">¶</a></h2>
+<figure class="align-center" id="id1">
+<figcaption>
+<p><span class="caption-text">Complete Requirements-to-Test Traceability - Architecture: <a class="reference internal" href="02_architecture.html#ARCH_001" title="ARCH_001"><em class="xref need">(ARCH) The Thermal Sensor I... (ARCH_001)</em></a> | Safety: <a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="REQ_SAFETY_001"><em class="xref need">(SG) Prevent thermal damage... (REQ_SAFETY_001)</em></a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="REQ_SAFETY_002"><em class="xref need">(SR) The system shall detec... (REQ_SAFETY_002)</em></a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="REQ_SAFETY_003"><em class="xref need">(SR) The system shall repor... (REQ_SAFETY_003)</em></a></span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="detailed-traceability-table">
+<h2>Detailed Traceability Table<a class="headerlink" href="#detailed-traceability-table" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Requirements to Test Coverage</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Requirement</p></th>
+<th class="head"><p>Test Case</p></th>
+<th class="head"><p>Status</p></th>
+<th class="head"><p>Coverage Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="REQ_SAFETY_001"><em class="xref need">(SG) Prevent thermal damage... (REQ_SAFETY_001)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_THRESHOLD_001" title="TEST_THRESHOLD_001"><em class="xref need">(TEST) TEST_THRESHOLD_001: ... (TEST_THRESHOLD_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>Safety goal foundation</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="REQ_SAFETY_002"><em class="xref need">(SR) The system shall detec... (REQ_SAFETY_002)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_THRESHOLD_001" title="TEST_THRESHOLD_001"><em class="xref need">(TEST) TEST_THRESHOLD_001: ... (TEST_THRESHOLD_001)</em></a>, <a class="reference internal" href="#TEST_END_TO_END_001" title="TEST_END_TO_END_001"><em class="xref need">(TEST) TEST_END_TO_END_001:... (TEST_END_TO_END_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>Detects &amp; reports within 100ms</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="REQ_SAFETY_003"><em class="xref need">(SR) The system shall repor... (REQ_SAFETY_003)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_HYSTERESIS_001" title="TEST_HYSTERESIS_001"><em class="xref need">(TEST) TEST_HYSTERESIS_001:... (TEST_HYSTERESIS_001)</em></a>, <a class="reference internal" href="#TEST_FAIL_SAFE_001" title="TEST_FAIL_SAFE_001"><em class="xref need">(TEST) TEST_FAIL_SAFE_001: ... (TEST_FAIL_SAFE_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>Recovery &amp; fail-safe behavior</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="REQ_FUNC_001"><em class="xref need">(FR) The module shall read ... (REQ_FUNC_001)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_CONVERSION_001" title="TEST_CONVERSION_001"><em class="xref need">(TEST) TEST_CONVERSION_001:... (TEST_CONVERSION_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>Sensor reading accuracy (-40 to +125°C)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="REQ_FUNC_002"><em class="xref need">(FR) The module shall filte... (REQ_FUNC_002)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_FILTER_001" title="TEST_FILTER_001"><em class="xref need">(TEST) TEST_FILTER_001: Noi... (TEST_FILTER_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>Noise filtering (≥80% reduction)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="REQ_FUNC_003"><em class="xref need">(FR) The module shall trigg... (REQ_FUNC_003)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_THRESHOLD_001" title="TEST_THRESHOLD_001"><em class="xref need">(TEST) TEST_THRESHOLD_001: ... (TEST_THRESHOLD_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>Threshold detection at 100°C</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="01_requirements.html#REQ_FUNC_004" title="REQ_FUNC_004"><em class="xref need">(FR) The module shall trigg... (REQ_FUNC_004)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_HYSTERESIS_001" title="TEST_HYSTERESIS_001"><em class="xref need">(TEST) TEST_HYSTERESIS_001:... (TEST_HYSTERESIS_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>Hysteresis deadband (95°C recovery)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="02_architecture.html#ARCH_FUNC_001" title="ARCH_FUNC_001"><em class="xref need">(ARCH) The Sensor Driver sh... (ARCH_FUNC_001)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_CONVERSION_001" title="TEST_CONVERSION_001"><em class="xref need">(TEST) TEST_CONVERSION_001:... (TEST_CONVERSION_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>100Hz sampling implementation</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="02_architecture.html#ARCH_FUNC_002" title="ARCH_FUNC_002"><em class="xref need">(ARCH) The Temperature Filt... (ARCH_FUNC_002)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_FILTER_001" title="TEST_FILTER_001"><em class="xref need">(TEST) TEST_FILTER_001: Noi... (TEST_FILTER_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>5-sample moving average</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="ARCH_FUNC_003"><em class="xref need">(ARCH) The State Machine sh... (ARCH_FUNC_003)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_THRESHOLD_001" title="TEST_THRESHOLD_001"><em class="xref need">(TEST) TEST_THRESHOLD_001: ... (TEST_THRESHOLD_001)</em></a>, <a class="reference internal" href="#TEST_HYSTERESIS_001" title="TEST_HYSTERESIS_001"><em class="xref need">(TEST) TEST_HYSTERESIS_001:... (TEST_HYSTERESIS_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>State machine logic</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="01_requirements.html#ARCH_DESIGN_001" title="ARCH_DESIGN_001"><em class="xref need">(ARCH) Temperature monitori... (ARCH_DESIGN_001)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_THRESHOLD_001" title="TEST_THRESHOLD_001"><em class="xref need">(TEST) TEST_THRESHOLD_001: ... (TEST_THRESHOLD_001)</em></a>, <a class="reference internal" href="#TEST_HYSTERESIS_001" title="TEST_HYSTERESIS_001"><em class="xref need">(TEST) TEST_HYSTERESIS_001:... (TEST_HYSTERESIS_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>Hysteresis state machine</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="02_architecture.html#ARCH_ERROR_002" title="ARCH_ERROR_002"><em class="xref need">(ARCH) The module shall tra... (ARCH_ERROR_002)</em></a></p></td>
+<td><p><a class="reference internal" href="#TEST_FAIL_SAFE_001" title="TEST_FAIL_SAFE_001"><em class="xref need">(TEST) TEST_FAIL_SAFE_001: ... (TEST_FAIL_SAFE_001)</em></a></p></td>
+<td><p>Active</p></td>
+<td><p>Fail-safe error handling</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="test-execution-reporting">
+<h2>Test Execution &amp; Reporting<a class="headerlink" href="#test-execution-reporting" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-904e1a92">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_EXEC_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) All unit tests shall execute in ≤ 1 second; integration tests in ≤ 5 seconds.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_EXEC_001" title="TEST_EXEC_001">TEST_EXEC_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">performance</span><span class="needs_spacer">, </span><span class="needs_data">ci-cd</span></span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-a18cd156">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_REPORT_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) Test results shall be exported in JUnit XML format for traceability reporting via sphinx-test-reports.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_REPORT_001" title="TEST_REPORT_001">TEST_REPORT_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">reporting</span><span class="needs_spacer">, </span><span class="needs_data">artifact</span></span></span></div>
+</span></span></div>
+<div class="line"><span></span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Integration</strong>: Configure sphinx-test-reports in <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> to import test results into this documentation for automated compliance artifact generation.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">OSQAr Hello World: Temperature Monitor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01_requirements.html">Safety &amp; Functional Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_architecture.html">System Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Verification &amp; Test Plan</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#verification-strategy">Verification Strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-methods-overview">Test Methods Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unit-test-cases">Unit Test Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integration-test-cases">Integration Test Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#traceability-matrix">Traceability Matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#detailed-traceability-table">Detailed Traceability Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-execution-reporting">Test Execution &amp; Reporting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_implementation.html">Implementation &amp; Test Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_test_results.html">Test Results &amp; Traceability</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="02_architecture.html" title="previous chapter">System Architecture</a></li>
+      <li>Next: <a href="04_implementation.html" title="next chapter">Implementation &amp; Test Code</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, OSQAr Contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/03_verification.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
