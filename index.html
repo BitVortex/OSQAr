@@ -4,9 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>OSQAr — Documentation</title>
+    <style>
+      :root { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+      body { margin: 0; padding: 0; background: #f8fafc; color: #0f172a; }
+      .container { max-width: 900px; margin: 40px auto; background: #ffffff; padding: 28px; box-shadow: 0 6px 18px rgba(15,23,42,0.06); border-radius: 8px; }
+      h1 { margin-top: 0; font-size: 1.75rem; }
+      p.lead { color: #334155; margin-bottom: 0.75rem; }
+      .example-link { display: inline-block; margin-top: 18px; background: #0366d6; color: white; padding: 10px 14px; border-radius: 6px; text-decoration: none; }
+      pre, code { background: #0f172a05; padding: 2px 4px; border-radius: 4px; }
+      hr { border: none; border-top: 1px solid #e6eef8; margin: 24px 0; }
+    </style>
   </head>
   <body>
-    <p>(This project README was intentionally left minimal for the example.)</p>
+    <div class="container">
+      <h1>OSQAr</h1>
+      <p class="lead">OSQAr is an open functional safety documentation boilerplate that demonstrates requirements traceability, example architecture, and verification artifacts. The example contains a small Python component, its unit tests, and Sphinx documentation that imports test results and diagrams.</p>
+      <hr />
+      <p>(This project README was intentionally left minimal for the example.)</p>
 <p><a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
 <h1>OSQAr</h1>
 <p>Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs
@@ -38,7 +52,7 @@ custom domain, I can add instructions or a workflow step for that.</p>
     recommended approach is to keep <code>README.md</code> minimal and provide a link to
     the Pages site (as done here).</li>
 </ul>
-    <hr>
-    <p><a href="/example/index.html">Open the built example docs</a></p>
+      <p><a class="example-link" href="/example/index.html">Open the Live Example</a></p>
+    </div>
   </body>
 </html>
