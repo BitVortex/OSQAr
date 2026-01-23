@@ -32,7 +32,7 @@ jobs:
         poetry config virtualenvs.in-project true
 
     - name: Install dependencies
-      run: poetry install --no-dev
+      run: poetry install
 
     - name: Run tests
       run: poetry run pytest --tb=short --strict-markers
