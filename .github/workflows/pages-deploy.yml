@@ -36,7 +36,8 @@ jobs:
 
       - name: Build example docs
         run: |
-          sphinx-build -b html examples/hello_world examples/hello_world/_build/html
+          # Run sphinx via Poetry so the virtualenv-installed sphinx-build is available
+          poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html
 
       - name: Deploy to GitHub Pages (push to gh-pages)
         uses: peaceiris/actions-gh-pages@v4
