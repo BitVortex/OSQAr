@@ -6,7 +6,6 @@ authors = ["Jan Toennemann <jan@toennemann.net>"]
 readme = "README.md"
 package-mode = false
 license = "Apache-2.0"
-license-file = "LICENSE"
 
 [tool.poetry.dependencies]
 python = "^3.9"
