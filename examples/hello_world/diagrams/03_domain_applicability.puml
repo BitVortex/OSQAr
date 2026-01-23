@@ -1,0 +1,23 @@
+@startuml TSIM_DomainApplicability
+
+title TSIM Domain-Agnostic Pattern
+
+usecase "TSIM Core" as Core
+usecase "Medical" as Med
+usecase "Industrial" as Ind
+usecase "Automotive" as Auto
+usecase "Robotics" as Rob
+
+Med --> Core
+Ind --> Core
+Auto --> Core
+Rob --> Core
+
+note bottom
+    Same TSIM core
+    reused across
+    all domains
+end note
+
+@enduml
+

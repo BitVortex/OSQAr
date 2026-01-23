@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "osqar"
+version = "0.1.0"
+description = "Open Safety Qualification Architecture - A Sphinx-Needs boilerplate for safety-related systems."
+authors = ["Jan Toennemann <jan@toennemann.net>"]
+readme = "README.md"
+package-mode = false
+license = "Apache-2.0"
+license-file = "LICENSE"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+# Core Documentation Tools
+Sphinx = "^7.2"
+sphinx-needs = "^2.0"  # The engine for requirements & traceability
+sphinx-test-reports = "^1.0" # To import JUnit/TRF test results into Sphinx
+sphinxcontrib-plantuml = "^0.25" # For architecture diagrams
+
+# Theme
+sphinx-press-theme = "^0.8"
+
+# Extras
+esbonio = "^0.16" # LSP server (optional, helpful for VS Code autocomplete)
+
+[tool.poetry.group.dev.dependencies]
+# Tools for maintaining the boilerplate itself
+pytest = "^7.4"
+black = "^23.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
