@@ -1,7 +1,7 @@
 name: Build and Deploy example to GitHub Pages
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -38,10 +38,14 @@ jobs:
         run: |
           sphinx-build -b html examples/hello_world examples/hello_world/_build/html
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
+      - name: Deploy to GitHub Pages (push to gh-pages)
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: ./examples/hello_world/_build/html
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./examples/hello_world/_build/html
+          publish_branch: gh-pages
+          user_name: 'github-actions[bot]'
+          user_email: '41898282+github-actions[bot]@users.noreply.github.com'
 
   deploy:
     needs: build
