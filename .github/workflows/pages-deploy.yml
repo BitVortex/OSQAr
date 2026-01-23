@@ -39,7 +39,7 @@ jobs:
           sphinx-build -b html examples/hello_world examples/hello_world/_build/html
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: ./examples/hello_world/_build/html
 
