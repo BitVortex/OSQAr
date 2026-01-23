@@ -80,7 +80,7 @@ jobs:
                 <p class="lead">OSQAr is an open functional safety documentation boilerplate that demonstrates requirements traceability, example architecture, and verification artifacts. The example contains a small Python component, its unit tests, and Sphinx documentation that imports test results and diagrams.</p>
                 <hr />
                 {BODY_PLACEHOLDER}
-                <p><a class="example-link" href="/example/index.html">Open the Live Example</a></p>
+                <p><a class="example-link" href="/OSQAr/example/index.html">Open the Live Example</a></p>
               </div>
             </body>
           </html>"""

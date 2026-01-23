@@ -10,7 +10,8 @@ test traceability suitable for safety-related documentation and examples.
 
 For license terms see the `LICENSE` file (Apache License 2.0).
 
-The example documentation at `examples/hello_world/_build/html` is built and deployed automatically on pushes to `main` (via `.github/workflows/gh-pages.yml`).
+
+The [example](https://bitvortex.github.io/OSQAr/example/) is built and deployed automatically on pushes to `main` (via `.github/workflows/gh-pages.yml`) from the sources in the `examples/hello_world` directtory.
 
 To view the example locally:
 
