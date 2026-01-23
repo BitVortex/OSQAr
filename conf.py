@@ -8,11 +8,15 @@ author = 'OSQAr Team'
 extensions = [
     'sphinx_needs',              # The core traceability extension
     'sphinxcontrib.plantuml',    # PlantUML integration
-    'sphinx_press_theme',        # The requested theme
 ]
 
 # -- Theme Configuration -----------------------------------------------------
-html_theme = 'press'
+# Use a built-in, well-supported theme for CI builds to avoid compatibility
+# issues with third-party themes (the project previously used `press`).
+# To restore `sphinx_press_theme`, add it back to `extensions` and set
+# `html_theme = 'press'` after confirming compatibility with your Sphinx
+# version (or upgrading the theme).
+html_theme = 'alabaster'
 
 # -- PlantUML Configuration --------------------------------------------------
 # Ensure you have the plantuml.jar available or use a remote server.
