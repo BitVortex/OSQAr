@@ -41,7 +41,7 @@ jobs:
       run: poetry run sphinx-build -b html . _build/html
 
     - name: Upload documentation
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: documentation-${{ matrix.python-version }}
         path: _build/html/
@@ -83,7 +83,7 @@ jobs:
         test -f _build/html/05_test_results.html
 
     - name: Upload Hello World artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: hello-world-example
         path: |
