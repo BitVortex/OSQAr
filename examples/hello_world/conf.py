@@ -58,14 +58,14 @@ elif shutil.which('java'):
         else:
             # Java available but no JAR found, try web service
             print("! PlantUML JAR not found; attempting to use web service")
-            plantuml = 'http://www.plantuml.com/plantuml/svg/'
+            plantuml_server = 'http://www.plantuml.com/plantuml'
     except Exception as e:
         print(f"✗ PlantUML configuration error: {e}")
-        plantuml = 'http://www.plantuml.com/plantuml/svg/'
+        plantuml_server = 'http://www.plantuml.com/plantuml'
 else:
     # Last resort: web service (requires internet connection)
     print("! PlantUML and Java not found; using web service (requires internet)")
-    plantuml = 'http://www.plantuml.com/plantuml/svg/'
+    plantuml_server = 'http://www.plantuml.com/plantuml'
 
 # PlantUML output directory
 plantuml_output_directory = '_diagrams'
