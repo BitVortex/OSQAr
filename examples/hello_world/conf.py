@@ -34,6 +34,13 @@ import subprocess
 
 plantuml_output_format = 'svg'
 
+# Allow CI to provide a PLANTUML_JAR path via environment for local rendering
+import os
+env_jar = os.environ.get('PLANTUML_JAR')
+if env_jar:
+    plantuml = f'java -jar {env_jar}'
+    print(f"✓ Using PLANTUML JAR from environment: {env_jar}")
+
 # Strategy 1: Try to use installed plantuml command
 if shutil.which('plantuml'):
     plantuml = 'plantuml'
