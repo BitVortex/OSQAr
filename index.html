@@ -27,31 +27,13 @@
 boilerplate for requirements traceability, architecture diagrams, and
 test traceability suitable for safety-related documentation and examples.</p>
 <p>For license terms see the <code>LICENSE</code> file (Apache License 2.0).</p>
-<p>Live example:</p>
-<ul>
-<li><strong>Hosted (GitHub Pages)</strong>: https://bitvortex.github.io/OSQAr/ — the example
-    documentation at <code>examples/hello_world/_build/html</code> is built and deployed
-    automatically on pushes to <code>main</code> (via <code>.github/workflows/gh-pages.yml</code>).</li>
-</ul>
+<p>The example documentation at <code>examples/hello_world/_build/html</code> is built and deployed automatically on pushes to <code>main</code> (via <code>.github/workflows/gh-pages.yml</code>).</p>
 <p>To view the example locally:</p>
 <pre><code class="language-bash"># from the repository root
 pip install Sphinx sphinx-press-theme sphinx-needs sphinxcontrib-plantuml
 sphinx-build -b html examples/hello_world examples/hello_world/_build/html
 open examples/hello_world/_build/html/index.html
 </code></pre>
-<p>If you want me to configure Pages to use the <code>gh-pages</code> branch or add a
-custom domain, I can add instructions or a workflow step for that.</p>
-<p>Repository landing page</p>
-<ul>
-<li>The repository includes an <code>index.html</code> at its root which redirects to the
-    hosted documentation: https://bitvortex.github.io/OSQAr/ — GitHub Pages is
-    the canonical location for the built HTML.</li>
-<li>If you prefer the repository's GitHub UI landing page to show the documentation
-    directly, note that GitHub displays <code>README.md</code> on the repository page; an
-    HTML <code>index.html</code> in the repository root will not replace that view. The
-    recommended approach is to keep <code>README.md</code> minimal and provide a link to
-    the Pages site (as done here).</li>
-</ul>
       <p><a class="example-link" href="/example/index.html">Open the Live Example</a></p>
     </div>
   </body>
