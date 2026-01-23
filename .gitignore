@@ -1,0 +1,7 @@
+# Ignore Sphinx build artifacts and virtualenvs
+_build/
+**/_build/
+.venv/
+*.pyc
+__pycache__/
+.DS_Store
