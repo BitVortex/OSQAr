@@ -48,9 +48,7 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: '41898282+github-actions[bot]@users.noreply.github.com'
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+  # No separate deploy job: `peaceiris/actions-gh-pages@v4` in the `build` job
+  # pushes the built site to the `gh-pages` branch directly. The older
+  # `actions/deploy-pages` job expected an uploaded artifact; removing it
+  # prevents artifact lookup errors and duplicate deployments.
