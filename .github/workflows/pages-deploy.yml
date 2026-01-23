@@ -40,13 +40,37 @@ jobs:
           # README as the site index and keep the built example under `/example/`.
           poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
 
-      - name: Copy repository README as site index
+      - name: Render README.md to index.html
         run: |
-          # Copy the repo README into the published site root as `index.md` so
-          # GitHub Pages/Jekyll will render it as the site root. Also include a
-          # short pointer to the example docs (built under `/example/`).
-          cp README.md examples/hello_world/_build/html/index.md || true
-          echo "\n\n---\n\n[Open the built example docs](/example/index.html)" >> examples/hello_world/_build/html/index.md || true
+          # Render the repository README.md into a static index.html so the
+          # published site has a proper landing page. Use Python's markdown
+          # package to convert Markdown to HTML and write a small wrapper.
+          python -m pip install --upgrade pip
+          pip install markdown
+          python - <<'PY'
+          import pathlib
+          import markdown
+
+          md_path = pathlib.Path('README.md')
+          out_path = pathlib.Path('examples/hello_world/_build/html/index.html')
+          md_text = md_path.read_text(encoding='utf-8')
+          body = markdown.markdown(md_text, extensions=['fenced_code', 'tables'])
+          html_doc = f"""<!doctype html>
+          <html lang=\"en\"> 
+            <head>
+              <meta charset=\"utf-8\">
+              <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">
+              <title>OSQAr — Documentation</title>
+            </head>
+            <body>
+              {body}
+              <hr>
+              <p><a href=\"/example/index.html\">Open the built example docs</a></p>
+            </body>
+          </html>"""
+          out_path.parent.mkdir(parents=True, exist_ok=True)
+          out_path.write_text(html_doc, encoding='utf-8')
+          PY
 
       - name: Deploy to GitHub Pages (push to gh-pages)
         uses: peaceiris/actions-gh-pages@v4
