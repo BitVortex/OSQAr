@@ -23,13 +23,13 @@ jobs:
 
     - name: Install Poetry
       run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
+        python -m pip install --upgrade pip
+        pip install poetry
 
     - name: Configure Poetry
       run: |
         poetry config virtualenvs.create true
-        poetry config virtualenvs.in-project false
+        poetry config virtualenvs.in-project true
 
     - name: Install dependencies
       run: poetry install --no-dev
@@ -59,13 +59,13 @@ jobs:
 
     - name: Install Poetry
       run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
+        python -m pip install --upgrade pip
+        pip install poetry
 
     - name: Configure Poetry
       run: |
         poetry config virtualenvs.create true
-        poetry config virtualenvs.in-project false
+        poetry config virtualenvs.in-project true
 
     - name: Install dependencies
       run: poetry install
