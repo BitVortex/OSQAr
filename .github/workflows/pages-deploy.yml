@@ -36,8 +36,17 @@ jobs:
 
       - name: Build example docs
         run: |
-          # Run sphinx via Poetry so the virtualenv-installed sphinx-build is available
-          poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html
+          # Build the example into a subdirectory so we can publish a repository
+          # README as the site index and keep the built example under `/example/`.
+          poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
+
+      - name: Copy repository README as site index
+        run: |
+          # Copy the repo README into the published site root as `index.md` so
+          # GitHub Pages/Jekyll will render it as the site root. Also include a
+          # short pointer to the example docs (built under `/example/`).
+          cp README.md examples/hello_world/_build/html/index.md || true
+          echo "\n\n---\n\n[Open the built example docs](/example/index.html)" >> examples/hello_world/_build/html/index.md || true
 
       - name: Deploy to GitHub Pages (push to gh-pages)
         uses: peaceiris/actions-gh-pages@v4
