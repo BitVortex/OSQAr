@@ -38,13 +38,15 @@ jobs:
       run: poetry run pytest --tb=short --strict-markers
 
     - name: Build documentation
-      run: poetry run sphinx-build -b html . _build/html
+      run: |
+        # Build the example docs (project root has no index.rst)
+        poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html
 
     - name: Upload documentation
       uses: actions/upload-artifact@v4
       with:
         name: documentation-${{ matrix.python-version }}
-        path: _build/html/
+        path: examples/hello_world/_build/html/
         retention-days: 30
 
   hello-world-example:
