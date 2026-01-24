@@ -89,6 +89,19 @@ jobs:
           out_path.write_text(html_doc, encoding='utf-8')
           PY
 
+      - name: Copy committed static PlantUML diagrams (if present)
+        run: |
+          # If a developer has pre-rendered PlantUML diagrams and committed
+          # them under `examples/hello_world/static_plantuml`, copy them into
+          # the Sphinx build output so Pages will publish the static images.
+          if [ -d examples/hello_world/static_plantuml ]; then
+            mkdir -p examples/hello_world/_build/html/_plantuml
+            cp -a examples/hello_world/static_plantuml/* examples/hello_world/_build/html/_plantuml/ || true
+            echo "Copied static PlantUML diagrams into build output"
+          else
+            echo "No committed static PlantUML diagrams found; skipping copy"
+          fi
+
       - name: Deploy to GitHub Pages (push to gh-pages)
         uses: peaceiris/actions-gh-pages@v4
         with:
