@@ -40,39 +40,39 @@ env_jar = os.environ.get('PLANTUML_JAR')
 if env_jar:
     plantuml = f'java -jar {env_jar}'
     print(f"✓ Using PLANTUML JAR from environment: {env_jar}")
-
-# Strategy 1: Try to use installed plantuml command
-if shutil.which('plantuml'):
-    plantuml = 'plantuml'
-    print("✓ Using system 'plantuml' command")
-# Strategy 2: Try to use Java + JAR file if available
-elif shutil.which('java'):
-    try:
-        jar_paths = [
-            '/opt/plantuml/plantuml.jar',
-            '/usr/share/plantuml/plantuml.jar',
-            '/usr/local/opt/plantuml/libexec/plantuml.jar',
-        ]
-        for jar_path in jar_paths:
-            try:
-                subprocess.run(['java', '-jar', jar_path, '-version'], 
-                             capture_output=True, check=True, timeout=5)
-                plantuml = f'java -jar {jar_path}'
-                print(f"✓ Using PlantUML JAR: {jar_path}")
-                break
-            except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
-                continue
-        else:
-            # Java available but no JAR found, try web service
-            print("! PlantUML JAR not found; attempting to use web service")
-            plantuml_server = 'http://www.plantuml.com/plantuml'
-    except Exception as e:
-        print(f"✗ PlantUML configuration error: {e}")
-        plantuml_server = 'http://www.plantuml.com/plantuml'
 else:
-    # Last resort: web service (requires internet connection)
-    print("! PlantUML and Java not found; using web service (requires internet)")
-    plantuml_server = 'http://www.plantuml.com/plantuml'
+    # Strategy 1: Try to use installed plantuml command
+    if shutil.which('plantuml'):
+        plantuml = 'plantuml'
+        print("✓ Using system 'plantuml' command")
+    # Strategy 2: Try to use Java + JAR file if available
+    elif shutil.which('java'):
+        try:
+            jar_paths = [
+                '/opt/plantuml/plantuml.jar',
+                '/usr/share/plantuml/plantuml.jar',
+                '/usr/local/opt/plantuml/libexec/plantuml.jar',
+            ]
+            for jar_path in jar_paths:
+                try:
+                    subprocess.run(['java', '-jar', jar_path, '-version'],
+                                   capture_output=True, check=True, timeout=5)
+                    plantuml = f'java -jar {jar_path}'
+                    print(f"✓ Using PlantUML JAR: {jar_path}")
+                    break
+                except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
+                    continue
+            else:
+                # Java available but no JAR found, try web service
+                print("! PlantUML JAR not found; attempting to use web service")
+                plantuml_server = 'http://www.plantuml.com/plantuml'
+        except Exception as e:
+            print(f"✗ PlantUML configuration error: {e}")
+            plantuml_server = 'http://www.plantuml.com/plantuml'
+    else:
+        # Last resort: web service (requires internet connection)
+        print("! PlantUML and Java not found; using web service (requires internet)")
+        plantuml_server = 'http://www.plantuml.com/plantuml'
 
 # PlantUML output directory
 plantuml_output_directory = '_diagrams'

@@ -21,6 +21,21 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set up Java (for PlantUML)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Graphviz (for PlantUML)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+
+      - name: Download PlantUML jar
+        run: |
+          mkdir -p .cache/plantuml
+          curl -L -o .cache/plantuml/plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
       - name: Install Poetry
         run: |
           python -m pip install --upgrade pip
@@ -35,6 +50,8 @@ jobs:
         run: poetry install
 
       - name: Build example docs
+        env:
+          PLANTUML_JAR: ${{ github.workspace }}/.cache/plantuml/plantuml.jar
         run: |
           # Build the example into a subdirectory so we can publish a repository
           # README as the site index and keep the built example under `/example/`.
