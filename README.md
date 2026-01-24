@@ -2,22 +2,42 @@
 
 # OSQAr
 
-Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs
-boilerplate for requirements traceability, architecture diagrams, and
-test traceability suitable for safety-related documentation and examples.
+Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boilerplate for building **auditable safety/compliance documentation** with:
+
+- requirements + traceability (sphinx-needs)
+- architecture diagrams (PlantUML)
+- verification planning and traceability matrices
 
 For license terms see the `LICENSE` file (Apache License 2.0).
 
-The [example](https://bitvortex.github.io/OSQAr/example/) is built and deployed automatically on pushes to `main` (via `.github/workflows/pages-deploy.yml`) from the sources in the `examples/hello_world` directory. It shall serve as a reference on how a toolchain setup could look like.
+## Documentation (GitHub Pages)
+
+- Framework documentation (landing page): https://bitvortex.github.io/OSQAr/
+- Reference example project: https://bitvortex.github.io/OSQAr/example/
+
+GitHub Pages is built automatically on pushes to `main` via `.github/workflows/pages-deploy.yml`.
 
 The docs default to the `furo` theme (with built-in light/dark mode). To force a fallback theme, set `OSQAR_SPHINX_THEME=alabaster`.
 
-## How to use this boilerplate
+## Repository structure
 
-- Framework documentation (general guides): `index.rst` + `docs/*.rst`
-- Reference implementation (example project): `examples/hello_world/` (published to GitHub Pages)
+- Framework documentation (general guides):
+	- `index.rst` (framework landing page)
+	- `docs/` (guides such as integrator/supplier usage)
+	- `conf.py` (root Sphinx configuration; intentionally excludes `examples/**`)
 
-## Build the framework documentation (repo root)
+- Reference implementation (example project):
+	- `examples/hello_world/` (end-to-end reference project demonstrating requirements → architecture → verification → tests)
+	- `examples/hello_world/conf.py` (example-specific Sphinx config, including PlantUML setup)
+	- `examples/hello_world/build-and-test.sh` (scripted workflow: test → docs → traceability)
+
+- Styling:
+	- `_static/` (root static assets for framework docs)
+	- `examples/hello_world/_static/` (example-specific tweaks)
+
+## Build locally
+
+### Framework documentation (repo root)
 
 ```bash
 poetry install
@@ -25,28 +45,39 @@ poetry run sphinx-build -b html . _build/html
 open _build/html/index.html
 ```
 
-## Build the example application documentation
+### Example project documentation (published under `/example/`)
 
 ```bash
-# from the repository root
 poetry install
-poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
-open examples/hello_world/_build/html/example/index.html
+poetry run sphinx-build -b html examples/hello_world _build/html/example
+open _build/html/example/index.html
 ```
 
-To view the example locally:
+### Optional environment variables
+
+- `OSQAR_SPHINX_THEME`: override theme (e.g., `furo`, `alabaster`)
+- `PLANTUML_JAR`: point to a local `plantuml.jar` for offline PlantUML rendering
+
+## Start here
+
+If you are new to the repository:
+
+1. Open the framework docs: https://bitvortex.github.io/OSQAr/
+2. Then explore the example project: https://bitvortex.github.io/OSQAr/example/
+3. If you want to copy a proven structure, start from `examples/hello_world/` and replace its requirements/diagrams/tests with your system’s artifacts.
+
+## Legacy note
+
+The file `docs/BOILERPLATE_USAGE.md` is a GitHub-readable overview. The authoritative framework documentation lives in `index.rst` and `docs/*.rst` and is what gets published to GitHub Pages.
+
+---
+
+### Build the example with the example’s original output path (legacy command)
+
+Some older instructions build into `examples/hello_world/_build/html/example`. This still works, but the recommended approach is to build the example under the root output directory (`_build/html/example`) so it matches how GitHub Pages publishes the site.
 
 ```bash
-# from the repository root
 poetry install
-
-# Optional theme override
-export OSQAR_SPHINX_THEME=furo
-
-# If you want local PlantUML rendering via a jar, point Sphinx at it.
-# (CI downloads a jar and sets PLANTUML_JAR automatically.)
-# export PLANTUML_JAR=/absolute/path/to/plantuml.jar
-
 poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
 open examples/hello_world/_build/html/example/index.html
 ```
