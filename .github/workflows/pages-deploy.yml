@@ -1,4 +1,4 @@
-name: Build and Deploy example to GitHub Pages
+name: Build and Deploy docs to GitHub Pages
 
 permissions:
   contents: write
@@ -49,68 +49,23 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Build example docs
+      - name: Build framework docs
         env:
           PLANTUML_JAR: ${{ github.workspace }}/.cache/plantuml/plantuml.jar
         run: |
-          # Build the example into a subdirectory so we can publish a repository
-          # README as the site index and keep the built example under `/example/`.
-          poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
+          poetry run sphinx-build -b html . _build/html
 
-      - name: Render README.md to index.html
+      - name: Build example docs (published under /example/)
+        env:
+          PLANTUML_JAR: ${{ github.workspace }}/.cache/plantuml/plantuml.jar
         run: |
-          # Render the repository README.md into a static index.html so the
-          # published site has a proper landing page. Use Python's markdown
-          # package to convert Markdown to HTML and write a small wrapper.
-          python -m pip install --upgrade pip
-          pip install markdown
-          python - <<'PY'
-          import pathlib
-          import markdown
-
-          md_path = pathlib.Path('README.md')
-          out_path = pathlib.Path('examples/hello_world/_build/html/index.html')
-          md_text = md_path.read_text(encoding='utf-8')
-          body = markdown.markdown(md_text, extensions=['fenced_code', 'tables'])
-          # Use a placeholder instead of an f-string to avoid accidental
-          # interpolation of CSS braces like '{' and '}' inside an f-string.
-          html_template = """<!doctype html>
-          <html lang="en"> 
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width,initial-scale=1">
-              <title>OSQAr — Documentation</title>
-              <style>
-                :root { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
-                body { margin: 0; padding: 0; background: #f8fafc; color: #0f172a; }
-                .container { max-width: 900px; margin: 40px auto; background: #ffffff; padding: 28px; box-shadow: 0 6px 18px rgba(15,23,42,0.06); border-radius: 8px; }
-                h1 { margin-top: 0; font-size: 1.75rem; }
-                p.lead { color: #334155; margin-bottom: 0.75rem; }
-                .example-link { display: inline-block; margin-top: 18px; background: #0366d6; color: white; padding: 10px 14px; border-radius: 6px; text-decoration: none; }
-                pre, code { background: #0f172a05; padding: 2px 4px; border-radius: 4px; }
-                hr { border: none; border-top: 1px solid #e6eef8; margin: 24px 0; }
-              </style>
-            </head>
-            <body>
-              <div class="container">
-                <h1>OSQAr</h1>
-                <p class="lead">OSQAr is an open functional safety documentation boilerplate that demonstrates requirements traceability, example architecture, and verification artifacts. The example contains a small Python component, its unit tests, and Sphinx documentation that imports test results and diagrams.</p>
-                <hr />
-                {BODY_PLACEHOLDER}
-                <p><a class="example-link" href="/OSQAr/example/index.html">Open the Live Example</a></p>
-              </div>
-            </body>
-          </html>"""
-          html_doc = html_template.replace('{BODY_PLACEHOLDER}', body)
-          out_path.parent.mkdir(parents=True, exist_ok=True)
-          out_path.write_text(html_doc, encoding='utf-8')
-          PY
+          poetry run sphinx-build -b html examples/hello_world _build/html/example
 
       - name: Deploy to GitHub Pages (push to gh-pages)
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./examples/hello_world/_build/html
+          publish_dir: ./_build/html
           publish_branch: gh-pages
           user_name: 'github-actions[bot]'
           user_email: '41898282+github-actions[bot]@users.noreply.github.com'

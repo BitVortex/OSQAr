@@ -12,6 +12,28 @@ The [example](https://bitvortex.github.io/OSQAr/example/) is built and deployed 
 
 The docs default to the `furo` theme (with built-in light/dark mode). To force a fallback theme, set `OSQAR_SPHINX_THEME=alabaster`.
 
+## How to use this boilerplate
+
+- Framework documentation (general guides): `index.rst` + `docs/*.rst`
+- Reference implementation (example project): `examples/hello_world/` (published to GitHub Pages)
+
+## Build the framework documentation (repo root)
+
+```bash
+poetry install
+poetry run sphinx-build -b html . _build/html
+open _build/html/index.html
+```
+
+## Build the example application documentation
+
+```bash
+# from the repository root
+poetry install
+poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
+open examples/hello_world/_build/html/example/index.html
+```
+
 To view the example locally:
 
 ```bash
