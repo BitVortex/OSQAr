@@ -20,22 +20,27 @@
       <h1>OSQAr</h1>
       <p class="lead">OSQAr is an open functional safety documentation boilerplate that demonstrates requirements traceability, example architecture, and verification artifacts. The example contains a small Python component, its unit tests, and Sphinx documentation that imports test results and diagrams.</p>
       <hr />
-      <p>(This project README was intentionally left minimal for the example.)</p>
-<p><a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
+      <p><a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
 <h1>OSQAr</h1>
 <p>Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs
 boilerplate for requirements traceability, architecture diagrams, and
 test traceability suitable for safety-related documentation and examples.</p>
 <p>For license terms see the <code>LICENSE</code> file (Apache License 2.0).</p>
 <p>The <a href="https://bitvortex.github.io/OSQAr/example/">example</a> is built and deployed automatically on pushes to <code>main</code> (via <code>.github/workflows/pages-deploy.yml</code>) from the sources in the <code>examples/hello_world</code> directory.</p>
-<p>The docs default to the <code>press</code> theme and include optional dark-mode styling via <code>prefers-color-scheme</code>.
-To force a fallback theme, set <code>OSQAR_SPHINX_THEME=alabaster</code>.</p>
+<p>The docs default to the <code>furo</code> theme (with built-in light/dark mode). To force a fallback theme, set <code>OSQAR_SPHINX_THEME=alabaster</code>.</p>
 <p>To view the example locally:</p>
 <pre><code class="language-bash"># from the repository root
-pip install Sphinx sphinx-press-theme sphinx-needs sphinxcontrib-plantuml
-export OSQAR_SPHINX_THEME=press
-sphinx-build -b html examples/hello_world examples/hello_world/_build/html
-open examples/hello_world/_build/html/index.html
+poetry install
+
+# Optional theme override
+export OSQAR_SPHINX_THEME=furo
+
+# If you want local PlantUML rendering via a jar, point Sphinx at it.
+# (CI downloads a jar and sets PLANTUML_JAR automatically.)
+# export PLANTUML_JAR=/absolute/path/to/plantuml.jar
+
+poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
+open examples/hello_world/_build/html/example/index.html
 </code></pre>
       <p><a class="example-link" href="/OSQAr/example/index.html">Open the Live Example</a></p>
     </div>
