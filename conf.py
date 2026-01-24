@@ -35,7 +35,9 @@ exclude_patterns = [
 html_theme = os.environ.get('OSQAR_SPHINX_THEME', 'furo')
 
 html_static_path = ['_static']
-html_css_files = ['custom.css']
+# Only inject our fallback CSS when using a theme without built-in dark mode.
+# For furo, this caused readability issues by overriding theme colors.
+html_css_files = ['custom.css'] if html_theme != 'furo' else []
 
 
 # -- sphinx-needs ------------------------------------------------------------
