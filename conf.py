@@ -11,12 +11,14 @@ extensions = [
 ]
 
 # -- Theme Configuration -----------------------------------------------------
-# Use a built-in, well-supported theme for CI builds to avoid compatibility
-# issues with third-party themes (the project previously used `press`).
-# To restore `sphinx_press_theme`, add it back to `extensions` and set
-# `html_theme = 'press'` after confirming compatibility with your Sphinx
-# version (or upgrading the theme).
-html_theme = 'alabaster'
+# Default to a modern theme, but keep it overridable for compatibility.
+# Set `OSQAR_SPHINX_THEME=alabaster` to fall back to the built-in theme.
+import os
+
+html_theme = os.environ.get('OSQAR_SPHINX_THEME', 'press')
+
+html_static_path = ['_static']
+html_css_files = ['custom.css']
 
 # -- PlantUML Configuration --------------------------------------------------
 # Ensure you have the plantuml.jar available or use a remote server.

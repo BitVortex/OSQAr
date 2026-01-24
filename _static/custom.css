@@ -1,0 +1,25 @@
+/* Optional dark-mode support for any Sphinx builds using the repo-root conf.py.
+   Applies automatically when the viewer prefers a dark color scheme.
+*/
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background: #0b0f14;
+    color: #e6edf3;
+  }
+
+  a {
+    color: #7ab7ff;
+  }
+
+  a:visited {
+    color: #c59bff;
+  }
+
+  code,
+  pre {
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+  }
+}

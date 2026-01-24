@@ -1,0 +1,73 @@
+/* Optional dark-mode support for the published docs.
+   Applies automatically when the viewer prefers a dark color scheme.
+*/
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background: #0b0f14;
+    color: #e6edf3;
+  }
+
+  a {
+    color: #7ab7ff;
+  }
+
+  a:visited {
+    color: #c59bff;
+  }
+
+  code,
+  pre {
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+  }
+
+  /* Common containers across themes */
+  .document,
+  .body,
+  .content,
+  .wy-nav-content,
+  .bd-content,
+  .bd-main,
+  .container {
+    background: transparent;
+  }
+
+  /* Tables */
+  table {
+    color: inherit;
+  }
+
+  th,
+  td {
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  /* Sphinx admonitions */
+  .admonition,
+  .note,
+  .warning,
+  .caution,
+  .important,
+  .tip {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Pygments / code blocks (best-effort across themes) */
+  .highlight,
+  .highlight pre {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  /* Sphinx-Needs tables */
+  .needs_table {
+    color: inherit;
+  }
+
+  /* Borders / separators */
+  hr {
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+}
