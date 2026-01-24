@@ -1,49 +1,191 @@
 <!DOCTYPE html>
-
-<html lang="en" data-content_root="./">
+<html  lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Implementation &amp; Test Code &#8212; OSQAr Hello World: Temperature Monitor  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common.css?v=bd9ab754" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/styles.css?v=6c8eb985" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
-    <script src="_static/jquery.js?v=5d32c60e"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
-    <script src="_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
-    <script src="_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
-    <script src="_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
-    <script src="_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=f783d6a5"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Test Results &amp; Traceability" href="05_test_results.html" />
-    <link rel="prev" title="Verification &amp; Test Plan" href="03_verification.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
+      <title>Implementation &amp; Test Code</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+          <link rel="stylesheet" href="_static/sphinx-data-viewer/jsonview.bundle.css" type="text/css" />
+          <link rel="stylesheet" href="_static/sphinx-needs/libs/html/datatables.min.css" type="text/css" />
+          <link rel="stylesheet" href="_static/sphinx-needs/common.css" type="text/css" />
+          <link rel="stylesheet" href="_static/sphinx-needs/styles.css" type="text/css" />
+          <link rel="stylesheet" href="_static/sphinx-needs/layouts.css" type="text/css" />
+          <link rel="stylesheet" href="_static/sphinx-needs/modern.css" type="text/css" />
+          <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+        <script src="_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+        <script src="_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+        <script src="_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+        <script src="_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=f783d6a5"></script>
 
-  
-  
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Test Results &amp; Traceability" href="05_test_results.html" />
+  <link rel="prev" title="Verification &amp; Test Plan" href="03_verification.html" /> 
+  </head>
 
-  </head><body>
-  
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">OSQAr Hello World: Temperature Monitor</span>
+    
+  </router-link>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
           
+          <navlinks>
+            
 
-          <div class="body" role="main">
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#osqar-hello-world-temperature-monitor">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="01_requirements.html" class="reference internal ">Safety & Functional Requirements</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="02_architecture.html" class="reference internal ">System Architecture</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="03_verification.html" class="reference internal ">Verification & Test Plan</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Implementation & Test Code</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#code-organization" class="reference internal">Code Organization</a></li>
+                
+                  <li class="toctree-l2"><a href="#implementation-traceability" class="reference internal">Implementation Traceability</a></li>
+                
+                  <li class="toctree-l2"><a href="#example-sensor-driver-implementation" class="reference internal">Example: Sensor Driver Implementation</a></li>
+                
+                  <li class="toctree-l2"><a href="#state-machine-example" class="reference internal">State Machine Example</a></li>
+                
+                  <li class="toctree-l2"><a href="#test-suite-mapping" class="reference internal">Test Suite Mapping</a></li>
+                
+                  <li class="toctree-l2"><a href="#test-execution-reporting" class="reference internal">Test Execution & Reporting</a></li>
+                
+                  <li class="toctree-l2"><a href="#test-results-integration" class="reference internal">Test Results Integration</a></li>
+                
+                  <li class="toctree-l2"><a href="#building-the-full-chain" class="reference internal">Building the Full Chain</a></li>
+                
+                  <li class="toctree-l2"><a href="#code-repository-structure" class="reference internal">Code Repository Structure</a></li>
+                
+                  <li class="toctree-l2"><a href="#extending-the-example" class="reference internal">Extending the Example</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="05_test_results.html" class="reference internal ">Test Results & Traceability</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>Implementation &amp; Test Code</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="03_verification.html"
+       title="previous chapter">← Verification &amp; Test Plan</a>
+  </li>
+  <li class="next">
+    <a href="05_test_results.html"
+       title="next chapter">Test Results &amp; Traceability →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
             
   <section id="implementation-test-code">
 <h1>Implementation &amp; Test Code<a class="headerlink" href="#implementation-test-code" title="Link to this heading">¶</a></h1>
@@ -64,7 +206,7 @@
 <section id="implementation-traceability">
 <h2>Implementation Traceability<a class="headerlink" href="#implementation-traceability" title="Link to this heading">¶</a></h2>
 <p>All code modules include requirement traceability in docstrings and comments. Click on requirement IDs below to navigate to their definitions:</p>
-<div class="need_container docutils container" id="SNCB-02941f50">
+<div class="need_container docutils container" id="SNCB-e46bf9ac">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="CODE_IMPL_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -165,7 +307,7 @@
 </section>
 <section id="test-suite-mapping">
 <h2>Test Suite Mapping<a class="headerlink" href="#test-suite-mapping" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-5431f049">
+<div class="need_container docutils container" id="SNCB-4479e768">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_CODE_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -266,7 +408,7 @@ Compliance Artifacts (HTML with traceability matrix)
 </section>
 <section id="code-repository-structure">
 <h2>Code Repository Structure<a class="headerlink" href="#code-repository-structure" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-819530b1">
+<div class="need_container docutils container" id="SNCB-8e073fbb">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="CODE_REPO_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -318,87 +460,26 @@ Compliance Artifacts (HTML with traceability matrix)
 
 
           </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">OSQAr Hello World: Temperature Monitor</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="01_requirements.html">Safety &amp; Functional Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="02_architecture.html">System Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="03_verification.html">Verification &amp; Test Plan</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Implementation &amp; Test Code</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#code-organization">Code Organization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#implementation-traceability">Implementation Traceability</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example-sensor-driver-implementation">Example: Sensor Driver Implementation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#state-machine-example">State Machine Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#test-suite-mapping">Test Suite Mapping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#test-execution-reporting">Test Execution &amp; Reporting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#test-results-integration">Test Results Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-the-full-chain">Building the Full Chain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#code-repository-structure">Code Repository Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#extending-the-example">Extending the Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="05_test_results.html">Test Results &amp; Traceability</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="03_verification.html" title="previous chapter">Verification &amp; Test Plan</a></li>
-      <li>Next: <a href="05_test_results.html" title="next chapter">Test Results &amp; Traceability</a></li>
-  </ul></li>
-</ul>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="03_verification.html"
+       title="previous chapter">← Verification &amp; Test Plan</a>
+  </li>
+  <li class="next">
+    <a href="05_test_results.html"
+       title="next chapter">Test Results &amp; Traceability →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2025, OSQAr Contributors.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &#169;2025, OSQAr Contributors.
-      
-      |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
-      
-      |
-      <a href="_sources/04_implementation.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
+            </div>
+          </div>
+      </page>
+    </div></div>
     
-
     
   </body>
 </html>

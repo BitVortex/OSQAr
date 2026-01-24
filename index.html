@@ -27,10 +27,13 @@
 boilerplate for requirements traceability, architecture diagrams, and
 test traceability suitable for safety-related documentation and examples.</p>
 <p>For license terms see the <code>LICENSE</code> file (Apache License 2.0).</p>
-<p>The <a href="https://bitvortex.github.io/OSQAr/example/">example</a> is built and deployed automatically on pushes to <code>main</code> (via <code>.github/workflows/gh-pages.yml</code>) from the sources in the <code>examples/hello_world</code> directtory.</p>
+<p>The <a href="https://bitvortex.github.io/OSQAr/example/">example</a> is built and deployed automatically on pushes to <code>main</code> (via <code>.github/workflows/pages-deploy.yml</code>) from the sources in the <code>examples/hello_world</code> directory.</p>
+<p>The docs default to the <code>press</code> theme and include optional dark-mode styling via <code>prefers-color-scheme</code>.
+To force a fallback theme, set <code>OSQAR_SPHINX_THEME=alabaster</code>.</p>
 <p>To view the example locally:</p>
 <pre><code class="language-bash"># from the repository root
 pip install Sphinx sphinx-press-theme sphinx-needs sphinxcontrib-plantuml
+export OSQAR_SPHINX_THEME=press
 sphinx-build -b html examples/hello_world examples/hello_world/_build/html
 open examples/hello_world/_build/html/index.html
 </code></pre>
