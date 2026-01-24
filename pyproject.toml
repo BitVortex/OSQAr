@@ -17,6 +17,7 @@ sphinxcontrib-plantuml = "^0.25" # For architecture diagrams
 
 # Theme
 sphinx-press-theme = "^0.8"
+furo = "^2024.8.6"
 
 # Extras
 esbonio = "^0.16" # LSP server (optional, helpful for VS Code autocomplete)

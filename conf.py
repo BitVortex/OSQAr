@@ -12,13 +12,11 @@ extensions = [
 
 # -- Theme Configuration -----------------------------------------------------
 # Default to a modern theme, but keep it overridable for compatibility.
+# Furo includes built-in light/dark mode support.
 # Set `OSQAR_SPHINX_THEME=alabaster` to fall back to the built-in theme.
 import os
 
-html_theme = os.environ.get('OSQAR_SPHINX_THEME', 'press')
-
-html_static_path = ['_static']
-html_css_files = ['custom.css']
+html_theme = os.environ.get('OSQAR_SPHINX_THEME', 'furo')
 
 # -- PlantUML Configuration --------------------------------------------------
 # Ensure you have the plantuml.jar available or use a remote server.

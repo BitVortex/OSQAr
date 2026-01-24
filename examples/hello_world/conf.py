@@ -14,7 +14,7 @@ root_dir = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(root_dir))
 
 
-project = 'OSQAr Hello World: Temperature Monitor'
+project = 'OSQAr: Temperature Monitor'
 copyright = '2025, OSQAr Contributors'
 author = 'OSQAr Team'
 
@@ -25,8 +25,11 @@ extensions = [
 ]
 
 
-# Theme (modern default + optional fallback)
-html_theme = os.environ.get('OSQAR_SPHINX_THEME', 'press')
+# Theme (modern default + optional override)
+# Furo includes built-in light/dark mode support.
+html_theme = os.environ.get('OSQAR_SPHINX_THEME', 'furo')
+
+# Additional CSS tweaks for PlantUML + sphinx-needs so they match the theme.
 html_static_path = ['_static']
 html_css_files = ['custom.css']
 

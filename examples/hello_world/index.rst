@@ -1,5 +1,4 @@
-========================================
-OSQAr Hello World: Temperature Monitor
+OSQAr Example: Temperature Monitor
 ========================================
 
 .. toctree::

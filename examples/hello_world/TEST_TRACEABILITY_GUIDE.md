@@ -1,8 +1,8 @@
-# Test Traceability Guide: OSQAr Hello World Example
+# Test Traceability Guide: OSQAr Example (TSIM)
 
 ## Overview
 
-This guide explains how the OSQAr Hello World example demonstrates **end-to-end traceability** from ISO 26262 safety goals through test results, and how this traceability chain can be automated for compliance artifact generation.
+This guide explains how the OSQAr example demonstrates **end-to-end traceability** from ISO 26262 safety goals through test results, and how this traceability chain can be automated for compliance artifact generation.
 
 ## Traceability Chain
 

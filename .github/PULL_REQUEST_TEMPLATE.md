@@ -32,7 +32,7 @@ Brief description of the changes made in this PR.
 ### Manual Testing
 - [ ] Tested locally with `./build-and-test.sh`
 - [ ] Documentation builds successfully
-- [ ] Hello World example works
+- [ ] Temperature Monitor (TSIM) example works
 
 ## Documentation
 

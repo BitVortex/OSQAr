@@ -1,4 +1,4 @@
-# OSQAr Hello World: Complete Example Overview
+# OSQAr Example: Temperature Monitor (TSIM) — Overview
 
 ## 🎯 What This Example Demonstrates
 

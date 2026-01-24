@@ -1,4 +1,4 @@
-# OSQAr Hello World: Test Results Auto-Import & Traceability Summary
+# OSQAr Example (TSIM): Test Results Auto-Import & Traceability Summary
 
 ## What Was Accomplished
 
@@ -276,7 +276,7 @@ tar -czf compliance_v1.0.tar.gz _build/html/ test_results.xml
 
 ## Summary
 
-The OSQAr Hello World example now demonstrates:
+The OSQAr example now demonstrates:
 
 ✅ **Complete test-to-requirement traceability** from ISO 26262 safety goals through code to automated test reporting
 

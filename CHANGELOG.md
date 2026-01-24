@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Complete Hello World example demonstrating OSQAr capabilities
+- Complete Temperature Monitor (TSIM) example demonstrating OSQAr capabilities
 - Interactive traceability with 111 clickable requirement links
 - Automated test integration with JUnit XML import
 - PlantUML architecture diagrams with requirement traceability

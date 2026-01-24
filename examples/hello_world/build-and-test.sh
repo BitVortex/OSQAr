@@ -1,5 +1,5 @@
 #!/bin/bash
-# build-and-test.sh - OSQAr Hello World: Automated Build & Traceability
+# build-and-test.sh - OSQAr example: Automated Build & Traceability
 # 
 # This script demonstrates the complete workflow for generating compliance artifacts:
 # 1. Run unit tests with JUnit output
@@ -20,7 +20,7 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🔨 OSQAr Hello World: Build & Traceability Workflow${NC}\n"
+echo -e "${BLUE}🔨 OSQAr example: Build & Traceability Workflow${NC}\n"
 
 # Step 1: Run Code Style Checks
 echo -e "${BLUE}Step 1️⃣: Code Style Checks${NC}"

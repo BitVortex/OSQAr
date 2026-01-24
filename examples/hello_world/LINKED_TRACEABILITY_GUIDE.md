@@ -2,7 +2,7 @@
 
 ## Overview
 
-The OSQAr Hello World example now features **comprehensive linked traceability** across all documentation, implementation, and test artifacts. All requirement IDs (REQ_*, ARCH_*, TEST_*) are now **clickable hyperlinks** in the generated HTML documentation, enabling seamless navigation through the entire compliance artifact chain.
+The OSQAr example now features **comprehensive linked traceability** across all documentation, implementation, and test artifacts. All requirement IDs (REQ_*, ARCH_*, TEST_*) are now **clickable hyperlinks** in the generated HTML documentation, enabling seamless navigation through the entire compliance artifact chain.
 
 ## What Changed
 
@@ -325,6 +325,6 @@ TEST_HYSTERESIS_001 (Hysteresis test)
 
 ## Summary
 
-The OSQAr Hello World example now features **111 clickable hyperlinks** connecting all 30 requirement IDs across safety goals, functional requirements, architecture specifications, test cases, and implementation code. Users can click through the entire compliance artifact chain interactively in the HTML documentation, with full bidirectional traceability suitable for ISO 26262 qualification review.
+The OSQAr example now features **111 clickable hyperlinks** connecting all 30 requirement IDs across safety goals, functional requirements, architecture specifications, test cases, and implementation code. Users can click through the entire compliance artifact chain interactively in the HTML documentation, with full bidirectional traceability suitable for ISO 26262 qualification review.
 
 **Result**: Industry-standard requirement traceability that makes compliance verification transparent, auditable, and user-friendly.

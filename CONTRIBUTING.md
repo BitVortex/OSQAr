@@ -46,7 +46,7 @@ This project follows a code of conduct to ensure a welcoming environment for all
    poetry install
    ```
 
-4. Run the Hello World example to verify setup:
+4. Run the Temperature Monitor (TSIM) example to verify setup:
    ```bash
    cd examples/hello_world
    poetry run ./build-and-test.sh
@@ -86,7 +86,7 @@ OSQAr/
 │   ├── workflows/             # CI/CD workflows
 │   └── ISSUE_TEMPLATE/        # Issue templates
 ├── examples/                  # Example implementations
-│   └── hello_world/          # Complete working example
+│   └── hello_world/          # Temperature Monitor (TSIM) example
 │       ├── src/              # Implementation code
 │       ├── tests/            # Test suite
 │       ├── diagrams/         # PlantUML diagrams

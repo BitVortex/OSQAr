@@ -1,73 +1,66 @@
-/* Optional dark-mode support for the published docs.
-   Applies automatically when the viewer prefers a dark color scheme.
+/* Theme integration tweaks.
+
+   - Furo already provides built-in light/dark modes.
+   - PlantUML HTML embeds an inline `background:#...` on the <object>, which
+     clashes with dark mode; override it to be transparent.
+   - sphinx-needs “need” tables use their own backgrounds; align them with
+     Furo's CSS variables so they follow the active theme.
 */
 
-@media (prefers-color-scheme: dark) {
-  html,
-  body {
-    background: #0b0f14;
-    color: #e6edf3;
-  }
+/* --- PlantUML ------------------------------------------------------------ */
 
-  a {
-    color: #7ab7ff;
-  }
+/* Override sphinxcontrib-plantuml's inline background style. */
+p.plantuml object,
+p.plantuml img {
+  background: transparent !important;
+}
 
-  a:visited {
-    color: #c59bff;
-  }
+/* Improve contrast for typical black-on-white diagrams in dark mode.
+   (Best-effort: this applies a filter to the rendered asset.) */
+body[data-theme="dark"] p.plantuml object,
+body[data-theme="dark"] p.plantuml img {
+  filter: invert(1) hue-rotate(180deg);
+}
 
-  code,
-  pre {
-    background: rgba(255, 255, 255, 0.06);
-    color: inherit;
-  }
 
-  /* Common containers across themes */
-  .document,
-  .body,
-  .content,
-  .wy-nav-content,
-  .bd-content,
-  .bd-main,
-  .container {
-    background: transparent;
-  }
+/* --- sphinx-needs -------------------------------------------------------- */
 
-  /* Tables */
-  table {
-    color: inherit;
-  }
+table.need {
+  background: var(--color-background-primary);
+  color: var(--color-foreground-primary);
+  border: 1px solid var(--color-background-border, var(--color-border, rgba(127, 127, 127, 0.35)));
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
 
-  th,
-  td {
-    border-color: rgba(255, 255, 255, 0.18);
-  }
+table.need td,
+table.need th {
+  border-color: var(--color-background-border, var(--color-border, rgba(127, 127, 127, 0.35))) !important;
+}
 
-  /* Sphinx admonitions */
-  .admonition,
-  .note,
-  .warning,
-  .caution,
-  .important,
-  .tip {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.12);
-  }
+/* Remove row striping/backgrounds that assume a light page. */
+table.need tr.row-odd,
+table.need tr.row-even {
+  background: transparent !important;
+}
 
-  /* Pygments / code blocks (best-effort across themes) */
-  .highlight,
-  .highlight pre {
-    background: rgba(255, 255, 255, 0.06);
-  }
+table.need tr.need.head td.need.head {
+  background: var(--color-background-secondary);
+}
 
-  /* Sphinx-Needs tables */
-  .needs_table {
-    color: inherit;
-  }
+table.need tr.need.meta td.need.meta {
+  background: var(--color-background-primary);
+}
 
-  /* Borders / separators */
-  hr {
-    border-color: rgba(255, 255, 255, 0.14);
-  }
+table.need tr.need.content td.need.content {
+  background: var(--color-background-primary);
+}
+
+.needs_head,
+.needs_meta {
+  color: var(--color-foreground-primary);
+}
+
+.needs_label {
+  color: var(--color-foreground-muted, var(--color-foreground-secondary, #666));
 }

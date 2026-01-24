@@ -49,7 +49,7 @@ jobs:
         path: examples/hello_world/_build/html/
         retention-days: 30
 
-  hello-world-example:
+  temperature-monitor-example:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -72,7 +72,7 @@ jobs:
     - name: Install dependencies
       run: poetry install
 
-    - name: Run Hello World example
+    - name: Run Temperature Monitor (TSIM) example
       run: |
         cd examples/hello_world
         chmod +x build-and-test.sh
@@ -84,10 +84,10 @@ jobs:
         ls -la _build/html/index.html
         test -f _build/html/05_test_results.html
 
-    - name: Upload Hello World artifacts
+    - name: Upload Temperature Monitor (TSIM) artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: hello-world-example
+        name: temperature-monitor-example
         path: |
           examples/hello_world/_build/html/
           examples/hello_world/test_results.xml
