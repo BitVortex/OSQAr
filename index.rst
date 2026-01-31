@@ -17,6 +17,12 @@ Start here:
    docs/integrators_guide
    docs/suppliers_guide
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Examples
+
+   examples/index
+
 Reference examples
 ==================
 

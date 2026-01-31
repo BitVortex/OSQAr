@@ -39,6 +39,11 @@ html_theme = os.environ.get('OSQAR_SPHINX_THEME', 'furo')
 html_static_path = ['_static']
 html_css_files = ['custom.css']
 
+# Keep indices tidy: examples are not API references.
+html_use_index = False
+html_domain_indices = False
+html_use_modindex = False
+
 
 # sphinx-needs
 needs_id_regex = '^[A-Z0-9_]{3,}'

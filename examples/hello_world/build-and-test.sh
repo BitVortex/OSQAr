@@ -71,6 +71,7 @@ fi
 # Step 4: Build Documentation
 echo -e "\n${BLUE}Step 4️⃣: Build Documentation with Test Results${NC}"
 echo "  Running Sphinx..."
+rm -rf _build/html
 if poetry run sphinx-build -b html . _build/html 2>&1 | tail -5; then
     echo -e "${GREEN}  ✓ Documentation build succeeded${NC}"
 else

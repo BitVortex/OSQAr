@@ -57,7 +57,8 @@ jobs:
 
       - name: Clean published example output dirs
         run: |
-          rm -rf _build/html/example _build/html/examples
+          rm -rf _build/html/example
+          rm -rf _build/html/examples/c _build/html/examples/cpp _build/html/examples/rust _build/html/examples/python
 
       - name: Build example docs (default published under /example/)
         env:
@@ -73,36 +74,6 @@ jobs:
           poetry run sphinx-build -b html examples/cpp_hello_world _build/html/examples/cpp
           poetry run sphinx-build -b html examples/rust_hello_world _build/html/examples/rust
           poetry run sphinx-build -b html examples/hello_world _build/html/examples/python
-
-      - name: Create /examples landing page
-        run: |
-          cat > _build/html/examples/index.html <<'EOF'
-          <!doctype html>
-          <html lang="en">
-            <head>
-              <meta charset="utf-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1" />
-              <title>OSQAr Examples</title>
-              <style>
-                body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; max-width: 920px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
-                h1 { margin-bottom: 0.25rem; }
-                ul { padding-left: 1.2rem; }
-                code { background: rgba(0,0,0,0.06); padding: 0.1rem 0.3rem; border-radius: 0.25rem; }
-              </style>
-            </head>
-            <body>
-              <h1>OSQAr Examples</h1>
-              <p>These are standalone Sphinx projects published as part of this site.</p>
-              <ul>
-                <li><a href="../example/">Default example</a> (C)</li>
-                <li><a href="c/">C example</a> (<code>examples/c_hello_world</code>)</li>
-                <li><a href="cpp/">C++ example</a> (<code>examples/cpp_hello_world</code>)</li>
-                <li><a href="rust/">Rust example</a> (<code>examples/rust_hello_world</code>)</li>
-                <li><a href="python/">Legacy Python example</a> (<code>examples/hello_world</code>)</li>
-              </ul>
-            </body>
-          </html>
-          EOF
 
       - name: Deploy to GitHub Pages (push to gh-pages)
         uses: peaceiris/actions-gh-pages@v4

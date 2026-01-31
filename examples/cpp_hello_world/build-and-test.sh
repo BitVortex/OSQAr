@@ -39,6 +39,7 @@ fi
 
 echo -e "\n${BLUE}Step 3: Build documentation${NC}"
 if command -v poetry >/dev/null 2>&1; then
+  rm -rf _build/html
   poetry install --no-interaction >/dev/null
   poetry run sphinx-build -b html . _build/html 2>&1 | tail -10
 else

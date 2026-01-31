@@ -25,7 +25,9 @@ extensions = [
 # treated as root Sphinx sources.
 exclude_patterns = [
     '_build',
-    'examples/**',
+    # The example projects are built separately.
+    'examples/*_hello_world/**',
+    'examples/hello_world/**',
 ]
 
 
@@ -35,9 +37,20 @@ exclude_patterns = [
 html_theme = os.environ.get('OSQAR_SPHINX_THEME', 'furo')
 
 html_static_path = ['_static']
-# Only inject our fallback CSS when using a theme without built-in dark mode.
-# For furo, this caused readability issues by overriding theme colors.
-html_css_files = ['custom.css'] if html_theme != 'furo' else []
+
+# Keep indices tidy: this is not an API reference.
+html_use_index = False
+html_domain_indices = False
+html_use_modindex = False
+
+# Styling:
+# - `custom.css` provides a generic dark-mode fallback for themes without built-in dark mode.
+# - `furo-fixes.css` contains small, safe tweaks for PlantUML + sphinx-needs that should
+#   apply even when using furo.
+if html_theme == 'furo':
+    html_css_files = ['furo-fixes.css']
+else:
+    html_css_files = ['custom.css', 'furo-fixes.css']
 
 
 # -- sphinx-needs ------------------------------------------------------------
