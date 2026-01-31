@@ -269,15 +269,31 @@ open<span class="w"> </span>_build/html/index.html
 </pre></div>
 </div>
 </section>
-<section id="reference-example">
-<h2>Reference example<a class="headerlink" href="#reference-example" title="Link to this heading">¶</a></h2>
-<p>To view the full reference example locally:</p>
+<section id="reference-examples-c-c-rust">
+<h2>Reference examples (C/C++/Rust)<a class="headerlink" href="#reference-examples-c-c-rust" title="Link to this heading">¶</a></h2>
+<p>OSQAr primarily targets <strong>C</strong>, <strong>C++</strong>, and <strong>Rust</strong> projects.</p>
+<p>Each example produces:</p>
+<ul class="simple">
+<li><p>native test results as <cite>test_results.xml</cite> (JUnit)</p></li>
+<li><p>rendered HTML documentation that can import the JUnit results (via <cite>sphinx-test-reports</cite>)</p></li>
+</ul>
+<p>Build any example documentation directly:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install
-poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/hello_world<span class="w"> </span>examples/hello_world/_build/html/example
-open<span class="w"> </span>examples/hello_world/_build/html/example/index.html
+poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/c_hello_world<span class="w"> </span>examples/c_hello_world/_build/html/example
+poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/cpp_hello_world<span class="w"> </span>examples/cpp_hello_world/_build/html/example
+poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/rust_hello_world<span class="w"> </span>examples/rust_hello_world/_build/html/example
 </pre></div>
 </div>
-<p>Or run the example’s end-to-end workflow script (tests → docs):</p>
+<p>Run an end-to-end workflow (native tests → docs) for an example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/c_hello_world
+./build-and-test.sh
+open<span class="w"> </span>_build/html/index.html
+</pre></div>
+</div>
+</section>
+<section id="legacy-python-reference">
+<h2>Legacy Python reference<a class="headerlink" href="#legacy-python-reference" title="Link to this heading">¶</a></h2>
+<p>The original Python example remains available as a documentation/reference variant:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/hello_world
 ./build-and-test.sh
 open<span class="w"> </span>_build/html/index.html
@@ -403,7 +419,8 @@ open<span class="w"> </span>_build/html/index.html
 <li><a class="reference internal" href="#">Using the OSQAr Boilerplate</a><ul>
 <li><a class="reference internal" href="#purpose">Purpose</a></li>
 <li><a class="reference internal" href="#quick-start">Quick start</a></li>
-<li><a class="reference internal" href="#reference-example">Reference example</a></li>
+<li><a class="reference internal" href="#reference-examples-c-c-rust">Reference examples (C/C++/Rust)</a></li>
+<li><a class="reference internal" href="#legacy-python-reference">Legacy Python reference</a></li>
 <li><a class="reference internal" href="#core-workflow">Core workflow</a></li>
 <li><a class="reference internal" href="#writing-requirements-sphinx-needs">Writing requirements (sphinx-needs)</a></li>
 <li><a class="reference internal" href="#recommended-id-scheme">Recommended ID scheme</a></li>

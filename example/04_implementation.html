@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Test Results &amp; Traceability" href="05_test_results.html" /><link rel="prev" title="Verification &amp; Test Plan" href="03_verification.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Implementation &amp; Test Code - OSQAr: Temperature Monitor documentation</title>
+        <title>Implementation &amp; Test Code - OSQAr: Temperature Monitor (C) documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -15,8 +15,9 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/layouts.css?v=448c382f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-test-results/common.css?v=9ec2c1d5" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e7c89827" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d478e2a8" />
     
     
 
@@ -173,7 +174,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">OSQAr: Temperature Monitor  documentation</div></a>
+      <a href="index.html"><div class="brand">OSQAr: Temperature Monitor (C)  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +198,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr: Temperature Monitor  documentation</span>
+  <span class="sidebar-brand-text">OSQAr: Temperature Monitor (C)  documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -254,24 +255,7 @@
         <article role="main" id="furo-main-content">
           <section id="implementation-test-code">
 <h1>Implementation &amp; Test Code<a class="headerlink" href="#implementation-test-code" title="Link to this heading">¶</a></h1>
-<section id="code-organization">
-<h2>Code Organization<a class="headerlink" href="#code-organization" title="Link to this heading">¶</a></h2>
-<p>The TSIM implementation demonstrates traceability from requirements through architecture to code and tests.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>examples/hello_world/
-├── src/
-│   ├── __init__.py
-│   └── tsim.py              # Implementation with requirement IDs as docstring comments
-├── tests/
-│   ├── __init__.py
-│   └── test_tsim.py         # Test cases linked to TEST_* requirements
-└── test_results.xml         # JUnit XML for sphinx-test-reports integration
-</pre></div>
-</div>
-</section>
-<section id="implementation-traceability">
-<h2>Implementation Traceability<a class="headerlink" href="#implementation-traceability" title="Link to this heading">¶</a></h2>
-<p>All code modules include requirement traceability in docstrings and comments. Click on requirement IDs below to navigate to their definitions:</p>
-<div class="need_container docutils container" id="SNCB-244cc8d9">
+<div class="need_container docutils container" id="SNCB-367fb2b0">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="CODE_IMPL_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -288,95 +272,16 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"><p>Each Python module, class, and function includes docstring comments mapping to:</p>
-<ul class="simple">
-<li><p>Safety Requirements (<a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="REQ_SAFETY_001"><em class="xref need">(SG) Prevent thermal damage... (REQ_SAFETY_001)</em></a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="REQ_SAFETY_002"><em class="xref need">(SR) The system shall detec... (REQ_SAFETY_002)</em></a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="REQ_SAFETY_003"><em class="xref need">(SR) The system shall repor... (REQ_SAFETY_003)</em></a>)</p></li>
-<li><p>Functional Requirements (<a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="REQ_FUNC_001"><em class="xref need">(FR) The module shall read ... (REQ_FUNC_001)</em></a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="REQ_FUNC_002"><em class="xref need">(FR) The module shall filte... (REQ_FUNC_002)</em></a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="REQ_FUNC_003"><em class="xref need">(FR) The module shall trigg... (REQ_FUNC_003)</em></a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_004" title="REQ_FUNC_004"><em class="xref need">(FR) The module shall trigg... (REQ_FUNC_004)</em></a>)</p></li>
-<li><p>Architecture Specifications (<a class="reference internal" href="02_architecture.html#ARCH_001" title="ARCH_001"><em class="xref need">(ARCH) The Thermal Sensor I... (ARCH_001)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_001" title="ARCH_FUNC_001"><em class="xref need">(ARCH) The Sensor Driver sh... (ARCH_FUNC_001)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_002" title="ARCH_FUNC_002"><em class="xref need">(ARCH) The Temperature Filt... (ARCH_FUNC_002)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="ARCH_FUNC_003"><em class="xref need">(ARCH) The State Machine sh... (ARCH_FUNC_003)</em></a>, <a class="reference internal" href="01_requirements.html#ARCH_DESIGN_001" title="ARCH_DESIGN_001"><em class="xref need">(ARCH) Temperature monitori... (ARCH_DESIGN_001)</em></a>)</p></li>
-</ul>
-</td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>The C implementation captures traceability via structured comments and stable interfaces.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</section>
-<section id="example-sensor-driver-implementation">
-<h2>Example: Sensor Driver Implementation<a class="headerlink" href="#example-sensor-driver-implementation" title="Link to this heading">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">SensorDriver</span></code> class implements <a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="REQ_FUNC_001"><em class="xref need">(FR) The module shall read ... (REQ_FUNC_001)</em></a> (ADC conversion) as specified in <a class="reference internal" href="02_architecture.html#ARCH_FUNC_001" title="ARCH_FUNC_001"><em class="xref need">(ARCH) The Sensor Driver sh... (ARCH_FUNC_001)</em></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">SensorDriver</span><span class="p">:</span>
-<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="linenos"> 3</span><span class="sd">    ADC Sensor Input Driver</span>
-<span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="sd">    Traceability:</span>
-<span class="linenos"> 6</span><span class="sd">      - ARCH_FUNC_001: 100Hz sampling rate</span>
-<span class="linenos"> 7</span><span class="sd">      - REQ_FUNC_001: ADC to temperature conversion</span>
-<span class="linenos"> 8</span><span class="sd">      - ARCH_SIGNAL_001: 12-bit ADC input</span>
-<span class="linenos"> 9</span><span class="sd">      - ARCH_SIGNAL_002: 16-bit signed output</span>
-<span class="linenos">10</span><span class="sd">    &quot;&quot;&quot;</span>
-<span class="linenos">11</span>
-<span class="linenos">12</span>    <span class="k">def</span><span class="w"> </span><span class="nf">read_adc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adc_counts</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="linenos">13</span><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="linenos">14</span><span class="sd">        Read ADC value and convert to temperature.</span>
-<span class="linenos">15</span>
-<span class="linenos">16</span><span class="sd">        Traceability:</span>
-<span class="linenos">17</span><span class="sd">            TEST_CONVERSION_001: Validates conversion</span>
-<span class="linenos">18</span><span class="sd">            REQ_FUNC_001: Conversion requirement</span>
-<span class="linenos">19</span><span class="sd">        &quot;&quot;&quot;</span>
-<span class="linenos">20</span>        <span class="c1"># Linear interpolation: ADC counts → Celsius</span>
-<span class="linenos">21</span>        <span class="n">celsius</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">22</span>            <span class="bp">self</span><span class="o">.</span><span class="n">ADC_MIN_CELSIUS</span> <span class="o">+</span>
-<span class="linenos">23</span>            <span class="p">(</span><span class="n">adc_counts</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADC_MIN_COUNTS</span><span class="p">)</span> <span class="o">*</span>
-<span class="linenos">24</span>            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ADC_MAX_CELSIUS</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADC_MIN_CELSIUS</span><span class="p">)</span> <span class="o">/</span>
-<span class="linenos">25</span>            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ADC_MAX_COUNTS</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADC_MIN_COUNTS</span><span class="p">)</span>
-<span class="linenos">26</span>        <span class="p">)</span>
-<span class="linenos">27</span>        <span class="c1"># ...</span>
-</pre></div>
-</div>
-<p><strong>Linked Requirements</strong>: <a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="REQ_FUNC_001"><em class="xref need">(FR) The module shall read ... (REQ_FUNC_001)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_001" title="ARCH_FUNC_001"><em class="xref need">(ARCH) The Sensor Driver sh... (ARCH_FUNC_001)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_SIGNAL_001" title="ARCH_SIGNAL_001"><em class="xref need">(ARCH) Raw Temperature Sign... (ARCH_SIGNAL_001)</em></a>, <a class="reference internal" href="02_architecture.html#ARCH_SIGNAL_002" title="ARCH_SIGNAL_002"><em class="xref need">(ARCH) Temperature Reading ... (ARCH_SIGNAL_002)</em></a></p>
-</section>
-<section id="state-machine-example">
-<h2>State Machine Example<a class="headerlink" href="#state-machine-example" title="Link to this heading">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">StateMachine</span></code> class implements <a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="REQ_FUNC_003"><em class="xref need">(FR) The module shall trigg... (REQ_FUNC_003)</em></a> and <a class="reference internal" href="01_requirements.html#REQ_FUNC_004" title="REQ_FUNC_004"><em class="xref need">(FR) The module shall trigg... (REQ_FUNC_004)</em></a> (threshold &amp; hysteresis) as specified in <a class="reference internal" href="01_requirements.html#ARCH_DESIGN_001" title="ARCH_DESIGN_001"><em class="xref need">(ARCH) Temperature monitori... (ARCH_DESIGN_001)</em></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">StateMachine</span><span class="p">:</span>
-<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="linenos"> 3</span><span class="sd">    Temperature state machine with hysteresis.</span>
-<span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="sd">    Traceability:</span>
-<span class="linenos"> 6</span><span class="sd">      - ARCH_DESIGN_001: State machine architecture</span>
-<span class="linenos"> 7</span><span class="sd">      - REQ_SAFETY_002: Detect within 100ms</span>
-<span class="linenos"> 8</span><span class="sd">      - REQ_FUNC_003: Threshold detection</span>
-<span class="linenos"> 9</span><span class="sd">      - REQ_FUNC_004: Hysteresis recovery</span>
-<span class="linenos">10</span><span class="sd">    &quot;&quot;&quot;</span>
-<span class="linenos">11</span>
-<span class="linenos">12</span>    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TemperatureState</span><span class="p">:</span>
-<span class="linenos">13</span><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="linenos">14</span><span class="sd">        Evaluate temperature with hysteresis.</span>
-<span class="linenos">15</span>
-<span class="linenos">16</span><span class="sd">        Traceability:</span>
-<span class="linenos">17</span><span class="sd">            TEST_THRESHOLD_001: Threshold at 100°C</span>
-<span class="linenos">18</span><span class="sd">            TEST_HYSTERESIS_001: Hysteresis at 95°C</span>
-<span class="linenos">19</span><span class="sd">        &quot;&quot;&quot;</span>
-<span class="linenos">20</span>        <span class="n">high_threshold</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">threshold_high_celsius</span> <span class="o">*</span> <span class="mf">10.0</span><span class="p">))</span>
-<span class="linenos">21</span>        <span class="n">low_threshold</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">threshold_low_celsius</span> <span class="o">*</span> <span class="mf">10.0</span><span class="p">))</span>
-<span class="linenos">22</span>
-<span class="linenos">23</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">TemperatureState</span><span class="o">.</span><span class="n">SAFE</span><span class="p">:</span>
-<span class="linenos">24</span>            <span class="k">if</span> <span class="n">temperature</span> <span class="o">&gt;=</span> <span class="n">high_threshold</span><span class="p">:</span>
-<span class="linenos">25</span>                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">TemperatureState</span><span class="o">.</span><span class="n">UNSAFE</span>
-<span class="linenos">26</span>        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">TemperatureState</span><span class="o">.</span><span class="n">UNSAFE</span><span class="p">:</span>
-<span class="linenos">27</span>            <span class="k">if</span> <span class="n">temperature</span> <span class="o">&lt;=</span> <span class="n">low_threshold</span><span class="p">:</span>
-<span class="linenos">28</span>                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">TemperatureState</span><span class="o">.</span><span class="n">SAFE</span>
-<span class="linenos">29</span>
-<span class="linenos">30</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
-</pre></div>
-</div>
-</section>
-<section id="test-suite-mapping">
-<h2>Test Suite Mapping<a class="headerlink" href="#test-suite-mapping" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-1ee9336d">
+<div class="need_container docutils container" id="SNCB-18f426db">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_CODE_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) Test suite provides complete coverage of requirements.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_CODE_001" title="TEST_CODE_001">TEST_CODE_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(TEST) Test suite provides coverage of requirements.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#TEST_CODE_001" title="TEST_CODE_001">TEST_CODE_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -388,92 +293,12 @@
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Test Coverage Matrix</strong>:</p>
-<ul class="simple">
-<li><p><strong>TestSensorDriver</strong>: Tests ARCH_FUNC_001, REQ_FUNC_001
-- <cite>test_conversion_full_range</cite> → TEST_CONVERSION_001
-- <cite>test_conversion_accuracy</cite> → TEST_CONVERSION_001</p></li>
-<li><p><strong>TestTemperatureFilter</strong>: Tests ARCH_FUNC_002, REQ_FUNC_002
-- <cite>test_filter_noise_rejection</cite> → TEST_FILTER_001
-- <cite>test_filter_stabilization</cite> → TEST_FILTER_001</p></li>
-<li><p><strong>TestStateMachine</strong>: Tests ARCH_DESIGN_001, REQ_FUNC_003/004
-- <cite>test_threshold_detection</cite> → TEST_THRESHOLD_001
-- <cite>test_hysteresis_deadband</cite> → TEST_HYSTERESIS_001
-- <cite>test_state_output_bit</cite> → ARCH_SIGNAL_003</p></li>
-<li><p><strong>TestTSIMIntegration</strong>: Tests end-to-end ARCH_001
-- <cite>test_end_to_end_latency</cite> → TEST_END_TO_END_001
-- <cite>test_detection_within_100ms</cite> → TEST_END_TO_END_001
-- <cite>test_safe_state_recovery</cite> → REQ_SAFETY_003
-- <cite>test_error_recovery</cite> → TEST_ERROR_RECOVERY_001
-- <cite>test_fail_safe_on_persistent_errors</cite> → TEST_FAIL_SAFE_001</p></li>
-</ul>
-<p><strong>Total</strong>: 13 test cases covering 20+ requirements</p>
-</td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>The native test runner writes <cite>test_results.xml</cite> in JUnit format and maps to the <cite>TEST_*</cite> needs.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</section>
-<section id="test-execution-reporting">
-<h2>Test Execution &amp; Reporting<a class="headerlink" href="#test-execution-reporting" title="Link to this heading">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run tests with verbose output</span>
-<span class="nb">cd</span><span class="w"> </span>examples/hello_world
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>-v
-
-<span class="c1"># Generate JUnit XML for compliance reporting</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
-
-<span class="c1"># Results can be imported by sphinx-test-reports for automated traceability</span>
-</pre></div>
-</div>
-</section>
-<section id="test-results-integration">
-<h2>Test Results Integration<a class="headerlink" href="#test-results-integration" title="Link to this heading">¶</a></h2>
-<p>The generated <code class="docutils literal notranslate"><span class="pre">test_results.xml</span></code> can be integrated into Sphinx documentation via sphinx-test-reports:</p>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">conf.py configuration for test result integration</span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure sphinx-test-reports</span>
-<span class="n">test_reports</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;junit&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;test_results.xml&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;requirement_mapping&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s1">&#39;TEST_CONVERSION_001&#39;</span><span class="p">:</span> <span class="s1">&#39;REQ_FUNC_001&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;TEST_FILTER_001&#39;</span><span class="p">:</span> <span class="s1">&#39;REQ_FUNC_002&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;TEST_THRESHOLD_001&#39;</span><span class="p">:</span> <span class="s1">&#39;REQ_FUNC_003&#39;</span><span class="p">,</span>
-            <span class="c1"># ... map all tests to requirements</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</section>
-<section id="building-the-full-chain">
-<h2>Building the Full Chain<a class="headerlink" href="#building-the-full-chain" title="Link to this heading">¶</a></h2>
-<p>The complete traceability chain flows:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ISO 26262 Safety Goal (REQ_SAFETY_001)
-         ↓
-Safety Requirements (REQ_SAFETY_002/003)
-         ↓
-Functional Requirements (REQ_FUNC_001-004)
-         ↓
-Architectural Design (ARCH_FUNC_001-003, ARCH_DESIGN_001)
-         ↓
-Implementation Code (src/tsim.py)
-         ↓
-Unit Tests (tests/test_tsim.py)
-         ↓
-Test Results (test_results.xml)
-         ↓
-Documentation (index.rst, *.rst)
-         ↓
-Compliance Artifacts (HTML with traceability matrix)
-</pre></div>
-</div>
-</section>
-<section id="code-repository-structure">
-<h2>Code Repository Structure<a class="headerlink" href="#code-repository-structure" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-7f6e16c0">
+<div class="need_container docutils container" id="SNCB-e706b81f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="CODE_REPO_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -489,37 +314,57 @@ Compliance Artifacts (HTML with traceability matrix)
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>File Listing</strong>:</p>
-<ul class="simple">
-<li><p><cite>01_requirements.rst</cite> - Requirements specification</p></li>
-<li><p><cite>02_architecture.rst</cite> - Architecture with diagrams</p></li>
-<li><p><cite>03_verification.rst</cite> - Verification plan and traceability matrix</p></li>
-<li><p><cite>**04_implementation.rst**</cite> - This file (code examples and test mapping)</p></li>
-<li><p><cite>conf.py</cite> - Sphinx configuration</p></li>
-<li><p><cite>diagrams/</cite> - PlantUML architecture diagrams</p></li>
-<li><p><cite>src/tsim.py</cite> - Implementation with traceability comments</p></li>
-<li><p><cite>tests/test_tsim.py</cite> - Comprehensive test suite</p></li>
-<li><p><cite>test_results.xml</cite> - JUnit test results</p></li>
-</ul>
-</td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>This example keeps documentation (<cite>*.rst</cite>) next to the C source and test artifacts for end-to-end traceability.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<section id="code-organization">
+<h2>Code Organization<a class="headerlink" href="#code-organization" title="Link to this heading">¶</a></h2>
+<p>This TSIM implementation is written in <strong>C</strong> and keeps the same requirement IDs as the reference example.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>examples/c_hello_world/
+├── include/
+│   └── tsim.h
+├── src/
+│   └── tsim.c
+├── tests/
+│   └── test_tsim.c          # Native test runner writing JUnit XML
+├── CMakeLists.txt
+├── test_results.xml         # Generated by ./build-and-test.sh
+└── build-and-test.sh
+</pre></div>
+</div>
 </section>
-<section id="extending-the-example">
-<h2>Extending the Example<a class="headerlink" href="#extending-the-example" title="Link to this heading">¶</a></h2>
-<p>To add more domains or features:</p>
-<ol class="arabic simple">
-<li><p><strong>Add new requirements</strong> to <cite>01_requirements.rst</cite></p></li>
-<li><p><strong>Update architecture</strong> in <cite>02_architecture.rst</cite> and <cite>diagrams/</cite></p></li>
-<li><p><strong>Extend implementation</strong> in <cite>src/tsim.py</cite> with domain-specific code</p></li>
-<li><p><strong>Add tests</strong> in <cite>tests/test_tsim.py</cite> mapped to new test requirements</p></li>
-<li><p><strong>Rebuild documentation</strong>: <cite>sphinx-build -b html . _build/html</cite></p></li>
-<li><p><strong>Run tests</strong>: <cite>pytest tests/ –junit-xml=test_results.xml</cite></p></li>
-<li><p><strong>Verify traceability</strong>: Check generated HTML matrix</p></li>
-</ol>
-<p>This demonstrates how OSQAr enables <strong>complete compliance verification</strong> from high-level safety goals through low-level code and automated test reporting—all traceable in the generated documentation.</p>
+<section id="traceability-in-c-code">
+<h2>Traceability in C Code<a class="headerlink" href="#traceability-in-c-code" title="Link to this heading">¶</a></h2>
+<p>In C/C++ projects, requirement traceability is typically captured via:</p>
+<ul class="simple">
+<li><p>structured comments (e.g., <cite>REQ_FUNC_001</cite>, <cite>TEST_CONVERSION_001</cite>)</p></li>
+<li><p>module-level headers (interfaces as architecture artifacts)</p></li>
+</ul>
+<p>The functions in <cite>include/tsim.h</cite> map directly to:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="REQ_FUNC_001"><em class="xref need">(FR) The module shall read ... (REQ_FUNC_001)</em></a> (ADC conversion)</p></li>
+<li><p><a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="REQ_FUNC_002"><em class="xref need">(FR) The module shall filte... (REQ_FUNC_002)</em></a> (5-sample moving average)</p></li>
+<li><p><a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="REQ_FUNC_003"><em class="xref need">(FR) The module shall trigg... (REQ_FUNC_003)</em></a> / <a class="reference internal" href="01_requirements.html#REQ_FUNC_004" title="REQ_FUNC_004"><em class="xref need">(FR) The module shall trigg... (REQ_FUNC_004)</em></a> (threshold + hysteresis)</p></li>
+</ul>
+</section>
+<section id="building-running-tests">
+<h2>Building &amp; Running Tests<a class="headerlink" href="#building-running-tests" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/c_hello_world
+
+<span class="c1"># Build</span>
+cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build
+cmake<span class="w"> </span>--build<span class="w"> </span>build
+
+<span class="c1"># Run tests (writes JUnit XML)</span>
+./build/junit_tests<span class="w"> </span>test_results.xml
+</pre></div>
+</div>
+<p>Then build the documentation (imports <cite>test_results.xml</cite>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>.<span class="w"> </span>_build/html
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -580,15 +425,8 @@ Compliance Artifacts (HTML with traceability matrix)
             <ul>
 <li><a class="reference internal" href="#">Implementation &amp; Test Code</a><ul>
 <li><a class="reference internal" href="#code-organization">Code Organization</a></li>
-<li><a class="reference internal" href="#implementation-traceability">Implementation Traceability</a></li>
-<li><a class="reference internal" href="#example-sensor-driver-implementation">Example: Sensor Driver Implementation</a></li>
-<li><a class="reference internal" href="#state-machine-example">State Machine Example</a></li>
-<li><a class="reference internal" href="#test-suite-mapping">Test Suite Mapping</a></li>
-<li><a class="reference internal" href="#test-execution-reporting">Test Execution &amp; Reporting</a></li>
-<li><a class="reference internal" href="#test-results-integration">Test Results Integration</a></li>
-<li><a class="reference internal" href="#building-the-full-chain">Building the Full Chain</a></li>
-<li><a class="reference internal" href="#code-repository-structure">Code Repository Structure</a></li>
-<li><a class="reference internal" href="#extending-the-example">Extending the Example</a></li>
+<li><a class="reference internal" href="#traceability-in-c-code">Traceability in C Code</a></li>
+<li><a class="reference internal" href="#building-running-tests">Building &amp; Running Tests</a></li>
 </ul>
 </li>
 </ul>

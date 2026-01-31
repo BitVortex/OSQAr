@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Verification &amp; Test Plan" href="03_verification.html" /><link rel="prev" title="Safety &amp; Functional Requirements" href="01_requirements.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>System Architecture - OSQAr: Temperature Monitor documentation</title>
+        <title>System Architecture - OSQAr: Temperature Monitor (C) documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -15,8 +15,9 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/layouts.css?v=448c382f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-test-results/common.css?v=9ec2c1d5" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e7c89827" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d478e2a8" />
     
     
 
@@ -173,7 +174,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">OSQAr: Temperature Monitor  documentation</div></a>
+      <a href="index.html"><div class="brand">OSQAr: Temperature Monitor (C)  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +198,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr: Temperature Monitor  documentation</span>
+  <span class="sidebar-brand-text">OSQAr: Temperature Monitor (C)  documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -256,7 +257,7 @@
 <h1>System Architecture<a class="headerlink" href="#system-architecture" title="Link to this heading">¶</a></h1>
 <section id="component-architecture">
 <h2>Component Architecture<a class="headerlink" href="#component-architecture" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-bd9cab5f">
+<div class="need_container docutils container" id="SNCB-4acc9cf7">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -281,8 +282,8 @@
 </div>
 <figure class="align-center" id="id1">
 <p class="plantuml">
-<object data="_images/plantuml-b03cb5b203a7f6ed5ceb629d04b4dc9468c1c4b9.svg" type="image/svg+xml" style="width:698px;height:629px;background:#FAFAFA;">
-<img src="_images/plantuml-b03cb5b203a7f6ed5ceb629d04b4dc9468c1c4b9.png" alt="&#64;startuml TSIM_Component_Architecture
+<object data="_images/plantuml-d9a54c5e08159fb92180dd815de98fde7a4a0bee.svg" type="image/svg+xml" style="width:698px;height:629px;background:#FAFAFA;">
+<img src="_images/plantuml-d9a54c5e08159fb92180dd815de98fde7a4a0bee.png" alt="&#64;startuml TSIM_Component_Architecture
 !define COMPONENT_COLOR #E1F5FF
 !define INTERFACE_COLOR #FFF9C4
 !define EXTERNAL_COLOR #FFCCBC
@@ -292,14 +293,14 @@ skinparam backgroundColor #FAFAFA
 title TSIM Component Architecture\n(Domain-Agnostic Safety Element)
 
 package &quot;Thermal Sensor Interface Module (TSIM)&quot; {
-    component SensorDriver as &quot;Sensor Driver\nARCH_FUNC_001&quot;
-    component TempFilter as &quot;Temperature Filter\nARCH_FUNC_002&quot;
-    component StateMachine as &quot;State Machine\nARCH_FUNC_003&quot;
+		component SensorDriver as &quot;Sensor Driver\nARCH_FUNC_001&quot;
+		component TempFilter as &quot;Temperature Filter\nARCH_FUNC_002&quot;
+		component StateMachine as &quot;State Machine\nARCH_FUNC_003&quot;
 }
 
 package &quot;Integration (SEooC Assumptions)&quot; {
-    component SensorHW as &quot;Sensor Hardware\n±2°C Accuracy&quot;
-    component SystemCtrl as &quot;System Controller\n&lt;1s Response&quot;
+		component SensorHW as &quot;Sensor Hardware\n±2°C Accuracy&quot;
+		component SystemCtrl as &quot;System Controller\n&lt;1s Response&quot;
 }
 
 SensorHW --&gt; SensorDriver : Analog Signal (100Hz)
@@ -308,30 +309,30 @@ TempFilter --&gt; StateMachine : Filtered Temp
 StateMachine --&gt; SystemCtrl : Safe/Unsafe State
 
 note right of SensorDriver
-  ADC to °C Conversion
-  Range: -40 to +125°C
-  REQ_FUNC_001
+	ADC to °C Conversion
+	Range: -40 to +125°C
+	REQ_FUNC_001
 end note
 
 note right of TempFilter
-  5-Sample Moving Average
-  Noise Rejection (≥90%)
-  REQ_FUNC_002, 003, 004
+	5-Sample Moving Average
+	Noise Rejection (≥90%)
+	REQ_FUNC_002, 003, 004
 end note
 
 note right of StateMachine
-  Hysteresis State Machine
-  UNSAFE ≥100°C
-  SAFE ≤95°C
-  REQ_SAFETY_002, 003
+	Hysteresis State Machine
+	UNSAFE ≥100°C
+	SAFE ≤95°C
+	REQ_SAFETY_002, 003
 end note
 
 note left of SystemCtrl
-  Integrator Responsibility:
-  Shutdown Logic
-  Error Handling
-  Domain-Specific Action
-  ARCH_SEOOC_002
+	Integrator Responsibility:
+	Shutdown Logic
+	Error Handling
+	Domain-Specific Action
+	ARCH_SEOOC_002
 end note
 
 &#64;enduml
@@ -347,8 +348,8 @@ end note
 <h2>Data Flow &amp; Timing<a class="headerlink" href="#data-flow-timing" title="Link to this heading">¶</a></h2>
 <figure class="align-center" id="id2">
 <p class="plantuml">
-<object data="_images/plantuml-1eff63ad5a9bb6a63155966f77fec607e7ae40fa.svg" type="image/svg+xml" style="width:795px;height:1272px;background:#FAFAFA;">
-<img src="_images/plantuml-1eff63ad5a9bb6a63155966f77fec607e7ae40fa.png" alt="&#64;startuml TSIM_DataFlow
+<object data="_images/plantuml-f20fb14afc6de8c455604c4a57478477ab9395ca.svg" type="image/svg+xml" style="width:795px;height:1272px;background:#FAFAFA;">
+<img src="_images/plantuml-f20fb14afc6de8c455604c4a57478477ab9395ca.png" alt="&#64;startuml TSIM_DataFlow
 !define PROCESS_COLOR #B3E5FC
 !define STORE_COLOR #C8E6C9
 !define DATA_COLOR #FFF9C4
@@ -358,29 +359,29 @@ skinparam backgroundColor #FAFAFA
 title TSIM Data Flow Diagram\nWith 100ms Latency Budget (REQ_SAFETY_002)
 
 rectangle &quot;Timing Budget: 0-100ms&quot; #FFE0B2 {
-    rectangle &quot;0-10ms: Sensor Read&quot; #B3E5FC {
-        component &quot;ADC Input&quot; as ADC1
-        component &quot;Convert to °C&quot; as Conv
-    }
+	rectangle &quot;0-10ms: Sensor Read&quot; #B3E5FC {
+		component &quot;ADC Input&quot; as ADC1
+		component &quot;Convert to °C&quot; as Conv
+	}
     
-    rectangle &quot;10-20ms: Filter&quot; #B3E5FC {
-        component &quot;5-Sample Buffer&quot; as Buf
-        component &quot;Moving Average&quot; as Avg
-    }
+	rectangle &quot;10-20ms: Filter&quot; #B3E5FC {
+		component &quot;5-Sample Buffer&quot; as Buf
+		component &quot;Moving Average&quot; as Avg
+	}
     
-    rectangle &quot;20-50ms: State Machine&quot; #B3E5FC {
-        component &quot;Threshold Check\n(≥100°C?)&quot; as Thresh
-        component &quot;Hysteresis\n(≤95°C?)&quot; as Hyst
-        component &quot;Output State&quot; as Out
-    }
+	rectangle &quot;20-50ms: State Machine&quot; #B3E5FC {
+		component &quot;Threshold Check\n(≥100°C?)&quot; as Thresh
+		component &quot;Hysteresis\n(≤95°C?)&quot; as Hyst
+		component &quot;Output State&quot; as Out
+	}
     
-    rectangle &quot;50-100ms: Safety Margin&quot; #FFCDD2 {
-        note right
-            Reserved for:
-            Real-time delays
-            Integration overhead
-        end note
-    }
+	rectangle &quot;50-100ms: Safety Margin&quot; #FFCDD2 {
+		note right
+			Reserved for:
+			Real-time delays
+			Integration overhead
+		end note
+	}
 }
 
 ADC1 --&gt; Conv : Raw 12-bit\nARCH_SIGNAL_001
@@ -392,20 +393,20 @@ Hyst --&gt; Out : State Decision\nARCH_FUNC_003
 Out --&gt; Out : SAFE/UNSAFE\nARCH_SIGNAL_003
 
 note bottom of Conv
-    REQ_FUNC_001
-    Range: -40 to +125°C
+	REQ_FUNC_001
+	Range: -40 to +125°C
 end note
 
 note bottom of Avg
-    REQ_FUNC_002
-    Noise Rejection
+	REQ_FUNC_002
+	Noise Rejection
 end note
 
 note bottom of Out
-    REQ_SAFETY_002: Within 100ms
-    REQ_SAFETY_003: Safe/Unsafe
-    REQ_FUNC_003: ≥100°C
-    REQ_FUNC_004: ≤95°C (hysteresis)
+	REQ_SAFETY_002: Within 100ms
+	REQ_SAFETY_003: Safe/Unsafe
+	REQ_FUNC_003: ≥100°C
+	REQ_FUNC_004: ≤95°C (hysteresis)
 end note
 
 &#64;enduml
@@ -417,7 +418,7 @@ end note
 </figcaption>
 </figure>
 <p>The diagram above shows the complete data flow from sensor input through each processing stage, with timing allocations required by <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="REQ_SAFETY_002"><em class="xref need">(SR) The system shall detec... (REQ_SAFETY_002)</em></a>.</p>
-<div class="need_container docutils container" id="SNCB-a18aa61b">
+<div class="need_container docutils container" id="SNCB-9bf766f0">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_FUNC_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -442,7 +443,7 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-668131d1">
+<div class="need_container docutils container" id="SNCB-25f7bd2f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_FUNC_002">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -465,7 +466,7 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-26a30f62">
+<div class="need_container docutils container" id="SNCB-e9e2d284">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_FUNC_003">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -493,7 +494,7 @@ end note
 </section>
 <section id="signal-definition">
 <h2>Signal Definition<a class="headerlink" href="#signal-definition" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-15ce309e">
+<div class="need_container docutils container" id="SNCB-96137d2a">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SIGNAL_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -524,7 +525,7 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-c223c604">
+<div class="need_container docutils container" id="SNCB-8345a480">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SIGNAL_002">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -549,7 +550,7 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-f8d87ff2">
+<div class="need_container docutils container" id="SNCB-3587c9ae">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SIGNAL_003">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -575,7 +576,7 @@ end note
 </section>
 <section id="error-handling">
 <h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-31b5d99a">
+<div class="need_container docutils container" id="SNCB-1c8e95a1">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_ERROR_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -598,7 +599,7 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-f8343f4f">
+<div class="need_container docutils container" id="SNCB-f2a3b0e4">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_ERROR_002">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -628,8 +629,8 @@ end note
 <h2>SEooC Boundary Definition<a class="headerlink" href="#seooc-boundary-definition" title="Link to this heading">¶</a></h2>
 <figure class="align-center" id="id3">
 <p class="plantuml">
-<object data="_images/plantuml-03d008b69a2bc957b624a3f124ce06dc75ff96ed.svg" type="image/svg+xml" style="width:528px;height:194px;background:#FFFFFF;">
-<img src="_images/plantuml-03d008b69a2bc957b624a3f124ce06dc75ff96ed.png" alt="&#64;startuml TSIM_DomainApplicability
+<object data="_images/plantuml-ab0faf4b28bec4fec5251aea4151d6054ef6db4e.svg" type="image/svg+xml" style="width:528px;height:194px;background:#FFFFFF;">
+<img src="_images/plantuml-ab0faf4b28bec4fec5251aea4151d6054ef6db4e.png" alt="&#64;startuml TSIM_DomainApplicability
 
 title TSIM Domain-Agnostic Pattern
 
@@ -645,13 +646,12 @@ Auto --&gt; Core
 Rob --&gt; Core
 
 note bottom
-    Same TSIM core
-    reused across
-    all domains
+	Same TSIM core
+	reused across
+	all domains
 end note
 
 &#64;enduml
-
 "/>
 
 </object></p>
@@ -659,7 +659,7 @@ end note
 <p><span class="caption-text">Domain-Agnostic SEooC Pattern - Architecture: <a class="reference internal" href="#ARCH_SEOOC_001" title="ARCH_SEOOC_001"><em class="xref need">(ARCH) The TSIM shall be a ... (ARCH_SEOOC_001)</em></a>, <a class="reference internal" href="#ARCH_SEOOC_002" title="ARCH_SEOOC_002"><em class="xref need">(ARCH) TSIM does not implem... (ARCH_SEOOC_002)</em></a></span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
-<div class="need_container docutils container" id="SNCB-f4fb8d0c">
+<div class="need_container docutils container" id="SNCB-cb2bac65">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SEOOC_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -696,7 +696,7 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-762533e5">
+<div class="need_container docutils container" id="SNCB-212445ae">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SEOOC_002">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">

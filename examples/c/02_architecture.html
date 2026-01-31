@@ -1,0 +1,808 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Verification &amp; Test Plan" href="03_verification.html" /><link rel="prev" title="Safety &amp; Functional Requirements" href="01_requirements.html" />
+
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
+        <title>System Architecture - OSQAr: Temperature Monitor (C) documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/styles.css?v=6c8eb985" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/layouts.css?v=448c382f" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-test-results/common.css?v=9ec2c1d5" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d478e2a8" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">OSQAr: Temperature Monitor (C)  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">OSQAr: Temperature Monitor (C)  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01_requirements.html">Safety &amp; Functional Requirements</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">System Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_verification.html">Verification &amp; Test Plan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_implementation.html">Implementation &amp; Test Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_test_results.html">Test Results &amp; Traceability</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/02_architecture.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="system-architecture">
+<h1>System Architecture<a class="headerlink" href="#system-architecture" title="Link to this heading">¶</a></h1>
+<section id="component-architecture">
+<h2>Component Architecture<a class="headerlink" href="#component-architecture" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-a8a3907c">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The Thermal Sensor Interface Module (TSIM) shall consist of three components: Sensor Driver, Temperature Filter, and State Machine.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_001" title="ARCH_001">ARCH_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">architecture</span><span class="needs_spacer">, </span><span class="needs_data">components</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="ARCH_001">REQ_SAFETY_001</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="ARCH_001">REQ_SAFETY_002</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="ARCH_001">REQ_SAFETY_003</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="ARCH_001">REQ_SAFETY_001</a>, <a class="reference internal" href="#ARCH_SEOOC_002" title="ARCH_001">ARCH_SEOOC_002</a>, <a class="reference internal" href="03_verification.html#TEST_METHOD_002" title="ARCH_001">TEST_METHOD_002</a>, <a class="reference internal" href="03_verification.html#TEST_END_TO_END_001" title="ARCH_001">TEST_END_TO_END_001</a>, <a class="reference internal" href="04_implementation.html#CODE_IMPL_001" title="ARCH_001">CODE_IMPL_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="align-center" id="id1">
+<p class="plantuml">
+<object data="_images/plantuml-d9a54c5e08159fb92180dd815de98fde7a4a0bee.svg" type="image/svg+xml" style="width:698px;height:629px;background:#FAFAFA;">
+<img src="_images/plantuml-d9a54c5e08159fb92180dd815de98fde7a4a0bee.png" alt="&#64;startuml TSIM_Component_Architecture
+!define COMPONENT_COLOR #E1F5FF
+!define INTERFACE_COLOR #FFF9C4
+!define EXTERNAL_COLOR #FFCCBC
+
+skinparam backgroundColor #FAFAFA
+
+title TSIM Component Architecture\n(Domain-Agnostic Safety Element)
+
+package &quot;Thermal Sensor Interface Module (TSIM)&quot; {
+		component SensorDriver as &quot;Sensor Driver\nARCH_FUNC_001&quot;
+		component TempFilter as &quot;Temperature Filter\nARCH_FUNC_002&quot;
+		component StateMachine as &quot;State Machine\nARCH_FUNC_003&quot;
+}
+
+package &quot;Integration (SEooC Assumptions)&quot; {
+		component SensorHW as &quot;Sensor Hardware\n±2°C Accuracy&quot;
+		component SystemCtrl as &quot;System Controller\n&lt;1s Response&quot;
+}
+
+SensorHW --&gt; SensorDriver : Analog Signal (100Hz)
+SensorDriver --&gt; TempFilter : ADC Value
+TempFilter --&gt; StateMachine : Filtered Temp
+StateMachine --&gt; SystemCtrl : Safe/Unsafe State
+
+note right of SensorDriver
+	ADC to °C Conversion
+	Range: -40 to +125°C
+	REQ_FUNC_001
+end note
+
+note right of TempFilter
+	5-Sample Moving Average
+	Noise Rejection (≥90%)
+	REQ_FUNC_002, 003, 004
+end note
+
+note right of StateMachine
+	Hysteresis State Machine
+	UNSAFE ≥100°C
+	SAFE ≤95°C
+	REQ_SAFETY_002, 003
+end note
+
+note left of SystemCtrl
+	Integrator Responsibility:
+	Shutdown Logic
+	Error Handling
+	Domain-Specific Action
+	ARCH_SEOOC_002
+end note
+
+&#64;enduml
+"/>
+
+</object></p>
+<figcaption>
+<p><span class="caption-text">TSIM Component Architecture - Links: <a class="reference internal" href="#ARCH_001" title="ARCH_001"><em class="xref need">(ARCH) The Thermal Sensor I... (ARCH_001)</em></a>, <a class="reference internal" href="#ARCH_FUNC_001" title="ARCH_FUNC_001"><em class="xref need">(ARCH) The Sensor Driver sh... (ARCH_FUNC_001)</em></a>, <a class="reference internal" href="#ARCH_FUNC_002" title="ARCH_FUNC_002"><em class="xref need">(ARCH) The Temperature Filt... (ARCH_FUNC_002)</em></a>, <a class="reference internal" href="#ARCH_FUNC_003" title="ARCH_FUNC_003"><em class="xref need">(ARCH) The State Machine sh... (ARCH_FUNC_003)</em></a></span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="data-flow-timing">
+<h2>Data Flow &amp; Timing<a class="headerlink" href="#data-flow-timing" title="Link to this heading">¶</a></h2>
+<figure class="align-center" id="id2">
+<p class="plantuml">
+<object data="_images/plantuml-f20fb14afc6de8c455604c4a57478477ab9395ca.svg" type="image/svg+xml" style="width:795px;height:1272px;background:#FAFAFA;">
+<img src="_images/plantuml-f20fb14afc6de8c455604c4a57478477ab9395ca.png" alt="&#64;startuml TSIM_DataFlow
+!define PROCESS_COLOR #B3E5FC
+!define STORE_COLOR #C8E6C9
+!define DATA_COLOR #FFF9C4
+
+skinparam backgroundColor #FAFAFA
+
+title TSIM Data Flow Diagram\nWith 100ms Latency Budget (REQ_SAFETY_002)
+
+rectangle &quot;Timing Budget: 0-100ms&quot; #FFE0B2 {
+	rectangle &quot;0-10ms: Sensor Read&quot; #B3E5FC {
+		component &quot;ADC Input&quot; as ADC1
+		component &quot;Convert to °C&quot; as Conv
+	}
+    
+	rectangle &quot;10-20ms: Filter&quot; #B3E5FC {
+		component &quot;5-Sample Buffer&quot; as Buf
+		component &quot;Moving Average&quot; as Avg
+	}
+    
+	rectangle &quot;20-50ms: State Machine&quot; #B3E5FC {
+		component &quot;Threshold Check\n(≥100°C?)&quot; as Thresh
+		component &quot;Hysteresis\n(≤95°C?)&quot; as Hyst
+		component &quot;Output State&quot; as Out
+	}
+    
+	rectangle &quot;50-100ms: Safety Margin&quot; #FFCDD2 {
+		note right
+			Reserved for:
+			Real-time delays
+			Integration overhead
+		end note
+	}
+}
+
+ADC1 --&gt; Conv : Raw 12-bit\nARCH_SIGNAL_001
+Conv --&gt; Buf : Temperature\nARCH_FUNC_001
+Buf --&gt; Avg : Buffer Full
+Avg --&gt; Thresh : Filtered Temp\nARCH_SIGNAL_002
+Thresh --&gt; Hyst : Temperature\nARCH_FUNC_002
+Hyst --&gt; Out : State Decision\nARCH_FUNC_003
+Out --&gt; Out : SAFE/UNSAFE\nARCH_SIGNAL_003
+
+note bottom of Conv
+	REQ_FUNC_001
+	Range: -40 to +125°C
+end note
+
+note bottom of Avg
+	REQ_FUNC_002
+	Noise Rejection
+end note
+
+note bottom of Out
+	REQ_SAFETY_002: Within 100ms
+	REQ_SAFETY_003: Safe/Unsafe
+	REQ_FUNC_003: ≥100°C
+	REQ_FUNC_004: ≤95°C (hysteresis)
+end note
+
+&#64;enduml
+"/>
+
+</object></p>
+<figcaption>
+<p><span class="caption-text">TSIM Data Flow (Budget: <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="REQ_SAFETY_002"><em class="xref need">(SR) The system shall detec... (REQ_SAFETY_002)</em></a> &#64; 100ms) - Architecture: <a class="reference internal" href="#ARCH_FUNC_001" title="ARCH_FUNC_001"><em class="xref need">(ARCH) The Sensor Driver sh... (ARCH_FUNC_001)</em></a>, <a class="reference internal" href="#ARCH_FUNC_002" title="ARCH_FUNC_002"><em class="xref need">(ARCH) The Temperature Filt... (ARCH_FUNC_002)</em></a>, <a class="reference internal" href="#ARCH_FUNC_003" title="ARCH_FUNC_003"><em class="xref need">(ARCH) The State Machine sh... (ARCH_FUNC_003)</em></a></span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The diagram above shows the complete data flow from sensor input through each processing stage, with timing allocations required by <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="REQ_SAFETY_002"><em class="xref need">(SR) The system shall detec... (REQ_SAFETY_002)</em></a>.</p>
+<div class="need_container docutils container" id="SNCB-9e34bb6a">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_FUNC_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The Sensor Driver shall read analog input at 100Hz sampling rate.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_FUNC_001" title="ARCH_FUNC_001">ARCH_FUNC_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">sampling</span><span class="needs_spacer">, </span><span class="needs_data">timing</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="ARCH_FUNC_001">REQ_FUNC_001</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="ARCH_FUNC_001">REQ_FUNC_001</a>, <a class="reference internal" href="03_verification.html#TEST_METHOD_001" title="ARCH_FUNC_001">TEST_METHOD_001</a>, <a class="reference internal" href="03_verification.html#TEST_CONVERSION_001" title="ARCH_FUNC_001">TEST_CONVERSION_001</a>, <a class="reference internal" href="04_implementation.html#CODE_IMPL_001" title="ARCH_FUNC_001">CODE_IMPL_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Rationale</strong>: 100Hz &gt; 2× highest temperature change rate expected in any domain.</p>
+<p><strong>Tests</strong>: <a class="reference internal" href="03_verification.html#TEST_CONVERSION_001" title="TEST_CONVERSION_001"><em class="xref need">(TEST) TEST_CONVERSION_001:... (TEST_CONVERSION_001)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-93cec1c9">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_FUNC_002">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The Temperature Filter shall apply a 5-sample moving average before state evaluation.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_FUNC_002" title="ARCH_FUNC_002">ARCH_FUNC_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">filtering</span><span class="needs_spacer">, </span><span class="needs_data">noise-rejection</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="ARCH_FUNC_002">REQ_FUNC_002</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="ARCH_FUNC_002">REQ_FUNC_002</a>, <a class="reference internal" href="03_verification.html#TEST_METHOD_001" title="ARCH_FUNC_002">TEST_METHOD_001</a>, <a class="reference internal" href="03_verification.html#TEST_FILTER_001" title="ARCH_FUNC_002">TEST_FILTER_001</a>, <a class="reference internal" href="04_implementation.html#CODE_IMPL_001" title="ARCH_FUNC_002">CODE_IMPL_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Tests</strong>: <a class="reference internal" href="03_verification.html#TEST_FILTER_001" title="TEST_FILTER_001"><em class="xref need">(TEST) TEST_FILTER_001: Noi... (TEST_FILTER_001)</em></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-44410c01">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_FUNC_003">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The State Machine shall evaluate temperature against thresholds and output state transitions within 50ms of detection.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_FUNC_003" title="ARCH_FUNC_003">ARCH_FUNC_003</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">state-machine</span><span class="needs_spacer">, </span><span class="needs_data">timing</span><span class="needs_spacer">, </span><span class="needs_data">response</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="ARCH_FUNC_003">REQ_SAFETY_002</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="ARCH_FUNC_003">REQ_FUNC_003</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_004" title="ARCH_FUNC_003">REQ_FUNC_004</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="ARCH_FUNC_003">REQ_SAFETY_002</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="ARCH_FUNC_003">REQ_FUNC_003</a>, <a class="reference internal" href="01_requirements.html#ARCH_DESIGN_001" title="ARCH_FUNC_003">ARCH_DESIGN_001</a>, <a class="reference internal" href="03_verification.html#TEST_METHOD_001" title="ARCH_FUNC_003">TEST_METHOD_001</a>, <a class="reference internal" href="03_verification.html#TEST_METHOD_003" title="ARCH_FUNC_003">TEST_METHOD_003</a>, <a class="reference internal" href="03_verification.html#TEST_THRESHOLD_001" title="ARCH_FUNC_003">TEST_THRESHOLD_001</a>, <a class="reference internal" href="03_verification.html#TEST_END_TO_END_001" title="ARCH_FUNC_003">TEST_END_TO_END_001</a>, <a class="reference internal" href="04_implementation.html#CODE_IMPL_001" title="ARCH_FUNC_003">CODE_IMPL_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Timing Budget</strong>: 50ms margin within 100ms requirement (<a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="REQ_SAFETY_002"><em class="xref need">(SR) The system shall detec... (REQ_SAFETY_002)</em></a>).</p>
+<p><strong>Tests</strong>: <a class="reference internal" href="03_verification.html#TEST_THRESHOLD_001" title="TEST_THRESHOLD_001"><em class="xref need">(TEST) TEST_THRESHOLD_001: ... (TEST_THRESHOLD_001)</em></a>, <a class="reference internal" href="03_verification.html#TEST_HYSTERESIS_001" title="TEST_HYSTERESIS_001"><em class="xref need">(TEST) TEST_HYSTERESIS_001:... (TEST_HYSTERESIS_001)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="signal-definition">
+<h2>Signal Definition<a class="headerlink" href="#signal-definition" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-ef1f2bf4">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SIGNAL_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) Raw Temperature Signal shall be a 12-bit analog input representing -40°C to +125°C.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SIGNAL_001" title="ARCH_SIGNAL_001">ARCH_SIGNAL_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">signal</span><span class="needs_spacer">, </span><span class="needs_data">input</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="ARCH_SIGNAL_001">REQ_FUNC_001</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="ARCH_SIGNAL_001">REQ_FUNC_001</a>, <a class="reference internal" href="03_verification.html#TEST_CONVERSION_001" title="ARCH_SIGNAL_001">TEST_CONVERSION_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>ADC Resolution</strong>: 12-bit (4096 steps)</p>
+<p><strong>Range Mapping</strong>:</p>
+<ul class="simple">
+<li><p>0 LSB → -40°C</p></li>
+<li><p>2048 LSB → 42.5°C</p></li>
+<li><p>4095 LSB → ~125°C</p></li>
+</ul>
+<p><strong>Tested by</strong>: <a class="reference internal" href="03_verification.html#TEST_CONVERSION_001" title="TEST_CONVERSION_001"><em class="xref need">(TEST) TEST_CONVERSION_001:... (TEST_CONVERSION_001)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-b85b534b">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SIGNAL_002">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) Temperature Reading shall be a 16-bit signed integer in units of 0.1°C.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SIGNAL_002" title="ARCH_SIGNAL_002">ARCH_SIGNAL_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">signal</span><span class="needs_spacer">, </span><span class="needs_data">intermediate</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="ARCH_SIGNAL_002">REQ_FUNC_002</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="ARCH_SIGNAL_002">REQ_FUNC_002</a>, <a class="reference internal" href="01_requirements.html#ARCH_DESIGN_002" title="ARCH_SIGNAL_002">ARCH_DESIGN_002</a>, <a class="reference internal" href="03_verification.html#TEST_FILTER_001" title="ARCH_SIGNAL_002">TEST_FILTER_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Range</strong>: -400 to +1250 (representing -40.0°C to +125.0°C)</p>
+<p><strong>Tested by</strong>: <a class="reference internal" href="03_verification.html#TEST_FILTER_001" title="TEST_FILTER_001"><em class="xref need">(TEST) TEST_FILTER_001: Noi... (TEST_FILTER_001)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-9d496dce">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SIGNAL_003">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) State Output shall be a 1-bit signal: 0=SAFE, 1=UNSAFE.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SIGNAL_003" title="ARCH_SIGNAL_003">ARCH_SIGNAL_003</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">signal</span><span class="needs_spacer">, </span><span class="needs_data">output</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="ARCH_SIGNAL_003">REQ_SAFETY_002</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="ARCH_SIGNAL_003">REQ_SAFETY_003</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="ARCH_SIGNAL_003">REQ_FUNC_003</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_004" title="ARCH_SIGNAL_003">REQ_FUNC_004</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="ARCH_SIGNAL_003">REQ_SAFETY_002</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="ARCH_SIGNAL_003">REQ_SAFETY_003</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Tested by</strong>: <a class="reference internal" href="03_verification.html#TEST_THRESHOLD_001" title="TEST_THRESHOLD_001"><em class="xref need">(TEST) TEST_THRESHOLD_001: ... (TEST_THRESHOLD_001)</em></a>, <a class="reference internal" href="03_verification.html#TEST_HYSTERESIS_001" title="TEST_HYSTERESIS_001"><em class="xref need">(TEST) TEST_HYSTERESIS_001:... (TEST_HYSTERESIS_001)</em></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading">¶</a></h2>
+<div class="need_container docutils container" id="SNCB-5425c6c6">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_ERROR_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) If sensor reading is invalid (out of physical bounds), the module shall remain in current state and log an error.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_ERROR_001" title="ARCH_ERROR_001">ARCH_ERROR_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">error-handling</span><span class="needs_spacer">, </span><span class="needs_data">robustness</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="ARCH_ERROR_001">REQ_SAFETY_001</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="03_verification.html#TEST_ERROR_RECOVERY_001" title="ARCH_ERROR_001">TEST_ERROR_RECOVERY_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Rationale</strong>: Conservative approach—hold last safe state rather than guess.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-14158c80">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_ERROR_002">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The module shall track sensor read failures; after 10 consecutive failures, it shall enter UNSAFE state.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_ERROR_002" title="ARCH_ERROR_002">ARCH_ERROR_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">error-handling</span><span class="needs_spacer">, </span><span class="needs_data">safety</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="ARCH_ERROR_002">REQ_SAFETY_002</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="ARCH_ERROR_002">REQ_SAFETY_003</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_003" title="ARCH_ERROR_002">REQ_SAFETY_003</a>, <a class="reference internal" href="03_verification.html#TEST_FAIL_SAFE_001" title="ARCH_ERROR_002">TEST_FAIL_SAFE_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Rationale</strong>: Domain-agnostic fail-safe for sensor degradation (medical, industrial, automotive contexts).</p>
+<p><strong>Tested by</strong>: <a class="reference internal" href="03_verification.html#TEST_FAIL_SAFE_001" title="TEST_FAIL_SAFE_001"><em class="xref need">(TEST) TEST_FAIL_SAFE_001: ... (TEST_FAIL_SAFE_001)</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="seooc-boundary-definition">
+<h2>SEooC Boundary Definition<a class="headerlink" href="#seooc-boundary-definition" title="Link to this heading">¶</a></h2>
+<figure class="align-center" id="id3">
+<p class="plantuml">
+<object data="_images/plantuml-ab0faf4b28bec4fec5251aea4151d6054ef6db4e.svg" type="image/svg+xml" style="width:528px;height:194px;background:#FFFFFF;">
+<img src="_images/plantuml-ab0faf4b28bec4fec5251aea4151d6054ef6db4e.png" alt="&#64;startuml TSIM_DomainApplicability
+
+title TSIM Domain-Agnostic Pattern
+
+usecase &quot;TSIM Core&quot; as Core
+usecase &quot;Medical&quot; as Med
+usecase &quot;Industrial&quot; as Ind
+usecase &quot;Automotive&quot; as Auto
+usecase &quot;Robotics&quot; as Rob
+
+Med --&gt; Core
+Ind --&gt; Core
+Auto --&gt; Core
+Rob --&gt; Core
+
+note bottom
+	Same TSIM core
+	reused across
+	all domains
+end note
+
+&#64;enduml
+"/>
+
+</object></p>
+<figcaption>
+<p><span class="caption-text">Domain-Agnostic SEooC Pattern - Architecture: <a class="reference internal" href="#ARCH_SEOOC_001" title="ARCH_SEOOC_001"><em class="xref need">(ARCH) The TSIM shall be a ... (ARCH_SEOOC_001)</em></a>, <a class="reference internal" href="#ARCH_SEOOC_002" title="ARCH_SEOOC_002"><em class="xref need">(ARCH) TSIM does not implem... (ARCH_SEOOC_002)</em></a></span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="need_container docutils container" id="SNCB-42c19ffb">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SEOOC_001">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The TSIM shall be a Safety Element out of Context (SEooC) assuming the integrating system provides safe shutdown capability.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SEOOC_001" title="ARCH_SEOOC_001">ARCH_SEOOC_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">seooc</span><span class="needs_spacer">, </span><span class="needs_data">integration</span><span class="needs_spacer">, </span><span class="needs_data">safety-case</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="ARCH_SEOOC_001">REQ_SAFETY_001</a>, <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="ARCH_SEOOC_001">REQ_SAFETY_002</a></span></span></div>
+<div class="line">links incoming: <span class="links"><span><a class="reference internal" href="01_requirements.html#REQ_SAFETY_001" title="ARCH_SEOOC_001">REQ_SAFETY_001</a>, <a class="reference internal" href="#ARCH_SEOOC_002" title="ARCH_SEOOC_001">ARCH_SEOOC_002</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Integration Assumptions</strong>:</p>
+<ul class="simple">
+<li><p>Integrating system has verified shutdown mechanism</p></li>
+<li><p>System controller responds to UNSAFE state within 1 second</p></li>
+<li><p>Sensor hardware meets ±2°C accuracy</p></li>
+<li><p>Operating environment is within -40°C to +80°C ambient</p></li>
+</ul>
+<p><strong>Domain Examples</strong> (shown above):</p>
+<ul class="simple">
+<li><p><strong>Medical</strong>: Incubator/sterilizer temperature interlock (IEC 60601)</p></li>
+<li><p><strong>Industrial</strong>: Process control thermal limits (IEC 61508)</p></li>
+<li><p><strong>Automotive</strong>: Battery thermal management (ISO 26262)</p></li>
+<li><p><strong>Robotics</strong>: Motor overtemperature protection (ISO 13849)</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="need_container docutils container" id="SNCB-36e8522f">
+<table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SEOOC_002">
+<tbody>
+<tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) TSIM does not implement actual shutdown or corrective action; responsibility transfers to integrating system.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SEOOC_002" title="ARCH_SEOOC_002">ARCH_SEOOC_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+</div>
+</td>
+</tr>
+<tr class="need meta row-even"><td class="need meta"><div class="needs_meta line-block">
+<div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
+<div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">seooc</span><span class="needs_spacer">, </span><span class="needs_data">responsibility</span></span></span></div>
+</span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="#ARCH_SEOOC_001" title="ARCH_SEOOC_002">ARCH_SEOOC_001</a>, <a class="reference internal" href="#ARCH_001" title="ARCH_SEOOC_002">ARCH_001</a></span></span></div>
+</span></div>
+</div>
+</td>
+</tr>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p><strong>Rationale</strong>: Enables domain-agnostic reuse across medical (controlled environments), industrial (process control), robotics (motor shutdown), and automotive (powertrain management).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="03_verification.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Verification &amp; Test Plan</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="01_requirements.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Safety &amp; Functional Requirements</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, OSQAr Contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">System Architecture</a><ul>
+<li><a class="reference internal" href="#component-architecture">Component Architecture</a></li>
+<li><a class="reference internal" href="#data-flow-timing">Data Flow &amp; Timing</a></li>
+<li><a class="reference internal" href="#signal-definition">Signal Definition</a></li>
+<li><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li><a class="reference internal" href="#seooc-boundary-definition">SEooC Boundary Definition</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/jquery.js?v=5d32c60e"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+    <script src="_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+    <script src="_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+    <script src="_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+    <script src="_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=f783d6a5"></script>
+    </body>
+</html>

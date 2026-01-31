@@ -1,0 +1,66 @@
+/* Theme integration tweaks.
+
+   - Furo already provides built-in light/dark modes.
+   - PlantUML HTML embeds an inline `background:#...` on the <object>, which
+     clashes with dark mode; override it to be transparent.
+   - sphinx-needs “need” tables use their own backgrounds; align them with
+     Furo's CSS variables so they follow the active theme.
+*/
+
+/* --- PlantUML ------------------------------------------------------------ */
+
+/* Override sphinxcontrib-plantuml's inline background style. */
+p.plantuml object,
+p.plantuml img {
+  background: transparent !important;
+}
+
+/* Improve contrast for typical black-on-white diagrams in dark mode.
+   (Best-effort: this applies a filter to the rendered asset.) */
+body[data-theme="dark"] p.plantuml object,
+body[data-theme="dark"] p.plantuml img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+
+/* --- sphinx-needs -------------------------------------------------------- */
+
+table.need {
+  background: var(--color-background-primary);
+  color: var(--color-foreground-primary);
+  border: 1px solid var(--color-background-border, var(--color-border, rgba(127, 127, 127, 0.35)));
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+table.need td,
+table.need th {
+  border-color: var(--color-background-border, var(--color-border, rgba(127, 127, 127, 0.35))) !important;
+}
+
+/* Remove row striping/backgrounds that assume a light page. */
+table.need tr.row-odd,
+table.need tr.row-even {
+  background: transparent !important;
+}
+
+table.need tr.need.head td.need.head {
+  background: var(--color-background-secondary);
+}
+
+table.need tr.need.meta td.need.meta {
+  background: var(--color-background-primary);
+}
+
+table.need tr.need.content td.need.content {
+  background: var(--color-background-primary);
+}
+
+.needs_head,
+.needs_meta {
+  color: var(--color-foreground-primary);
+}
+
+.needs_label {
+  color: var(--color-foreground-muted, var(--color-foreground-secondary, #666));
+}
