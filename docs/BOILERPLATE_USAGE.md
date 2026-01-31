@@ -7,22 +7,28 @@ This guide explains how to use OSQAr (Open Safety Qualification Architecture) as
 - verification planning and traceability (requirements ↔ architecture ↔ tests)
 - optional embedding/import of test results (e.g., **JUnit XML**)
 
-The guidance below is based on the reference implementation in `examples/hello_world/`.
+The guidance below is based on the shared TSIM example documentation and its language-specific implementations:
 
-## 1) Quick start: build the reference example
+- `examples/c_hello_world/`
+- `examples/cpp_hello_world/`
+- `examples/rust_hello_world/`
+
+(The original Python variant in `examples/hello_world/` remains available as a legacy/reference example.)
+
+## 1) Quick start: build a reference example
 
 From the repository root:
 
 ```bash
 poetry install
-poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
-open examples/hello_world/_build/html/example/index.html
+poetry run sphinx-build -b html examples/c_hello_world _build/html/example
+open _build/html/example/index.html
 ```
 
-If you prefer to run the full “test → docs → traceability” workflow from within the example:
+If you prefer to run the full “test → docs → traceability” workflow from within an example:
 
 ```bash
-cd examples/hello_world
+cd examples/c_hello_world
 ./build-and-test.sh
 open _build/html/index.html
 ```
@@ -117,7 +123,9 @@ In the example, the verification chapter is the source of truth for what is test
 
 ### E) Run tests and keep machine-readable results
 
-The example uses pytest with JUnit output:
+Each example uses language-appropriate tooling to generate JUnit XML.
+
+For example, the legacy Python variant uses pytest with JUnit output:
 
 ```bash
 poetry run pytest tests/test_tsim.py -v --junit-xml=test_results.xml
@@ -212,7 +220,7 @@ The repository already depends on `sphinx-test-reports` (see `pyproject.toml`). 
 extensions = [
     'sphinx_needs',
     'sphinxcontrib.plantuml',
-    'sphinx_test_reports',
+  'sphinxcontrib.test_reports',
 ]
 
 test_reports = ['test_results.xml']

@@ -1,4 +1,4 @@
-# OSQAr Example: Temperature Monitor (TSIM)
+# OSQAr Example: Temperature Monitor (TSIM) (Legacy Python)
 
 This example demonstrates the core capabilities of OSQAr through a simple, domain-agnostic temperature monitoring component.
 
@@ -30,8 +30,8 @@ This example demonstrates the core capabilities of OSQAr through a simple, domai
 ```bash
 # from the repository root
 poetry install
-poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
-open examples/hello_world/_build/html/example/index.html
+poetry run sphinx-build -b html examples/hello_world _build/html/examples/python
+open _build/html/examples/python/index.html
 ```
 
 ## Key Takeaways

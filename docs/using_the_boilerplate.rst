@@ -22,18 +22,37 @@ Build the rendered HTML documentation from the repository root:
    poetry run sphinx-build -b html . _build/html
    open _build/html/index.html
 
-Reference example
-=================
+Reference examples (C/C++/Rust)
+===============================
 
-To view the full reference example locally:
+OSQAr primarily targets **C**, **C++**, and **Rust** projects.
+
+Each example produces:
+
+- native test results as `test_results.xml` (JUnit)
+- rendered HTML documentation that can import the JUnit results (via `sphinx-test-reports`)
+
+Build any example documentation directly:
 
 .. code-block:: bash
 
    poetry install
-   poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html/example
-   open examples/hello_world/_build/html/example/index.html
+   poetry run sphinx-build -b html examples/c_hello_world examples/c_hello_world/_build/html/example
+   poetry run sphinx-build -b html examples/cpp_hello_world examples/cpp_hello_world/_build/html/example
+   poetry run sphinx-build -b html examples/rust_hello_world examples/rust_hello_world/_build/html/example
 
-Or run the example’s end-to-end workflow script (tests → docs):
+Run an end-to-end workflow (native tests → docs) for an example:
+
+.. code-block:: bash
+
+   cd examples/c_hello_world
+   ./build-and-test.sh
+   open _build/html/index.html
+
+Legacy Python reference
+=======================
+
+The original Python example remains available as a documentation/reference variant:
 
 .. code-block:: bash
 

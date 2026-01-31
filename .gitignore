@@ -5,3 +5,11 @@ _build/
 *.pyc
 __pycache__/
 .DS_Store
+
+# Example build artifacts
+examples/**/build/
+examples/**/target/
+examples/**/test_results.xml
+
+# Editor settings
+.vscode/

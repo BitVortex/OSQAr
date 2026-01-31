@@ -13,7 +13,16 @@ For license terms see the `LICENSE` file (Apache License 2.0).
 ## Documentation (GitHub Pages)
 
 - Framework documentation (landing page): https://bitvortex.github.io/OSQAr/
-- Reference example project: https://bitvortex.github.io/OSQAr/example/
+
+Published examples:
+
+- Default example (C): https://bitvortex.github.io/OSQAr/example/
+- Examples index: https://bitvortex.github.io/OSQAr/examples/
+- C++ example: https://bitvortex.github.io/OSQAr/examples/cpp/
+- Rust example: https://bitvortex.github.io/OSQAr/examples/rust/
+- Legacy Python example: https://bitvortex.github.io/OSQAr/examples/python/
+
+Note: GitHub Pages publishes one default example under `/example/` for backwards compatibility, and publishes all examples under `/examples/`.
 
 GitHub Pages is built automatically on pushes to `main` via `.github/workflows/pages-deploy.yml`.
 
@@ -26,14 +35,17 @@ The docs default to the `furo` theme (with built-in light/dark mode). To force a
 	- `docs/` (guides such as integrator/supplier usage)
 	- `conf.py` (root Sphinx configuration; intentionally excludes `examples/**`)
 
-- Reference implementation (example project):
-	- `examples/hello_world/` (end-to-end reference project demonstrating requirements → architecture → verification → tests)
-	- `examples/hello_world/conf.py` (example-specific Sphinx config, including PlantUML setup)
-	- `examples/hello_world/build-and-test.sh` (scripted workflow: test → docs → traceability)
+
+- Reference implementations (example projects):
+	- `examples/c_hello_world/` (C implementation + native JUnit-emitting tests)
+	- `examples/cpp_hello_world/` (C++ implementation + native JUnit-emitting tests)
+	- `examples/rust_hello_world/` (Rust implementation + native JUnit-emitting tests)
+	- `examples/hello_world/` (legacy Python variant)
+
 
 - Styling:
 	- `_static/` (root static assets for framework docs)
-	- `examples/hello_world/_static/` (example-specific tweaks)
+	- `examples/*/_static/` (example-specific tweaks)
 
 ## Build locally
 
@@ -45,12 +57,37 @@ poetry run sphinx-build -b html . _build/html
 open _build/html/index.html
 ```
 
-### Example project documentation (published under `/example/`)
+### Reference example documentation
+
+Build one of the language-specific examples:
 
 ```bash
 poetry install
-poetry run sphinx-build -b html examples/hello_world _build/html/example
+poetry run sphinx-build -b html examples/c_hello_world _build/html/example
 open _build/html/example/index.html
+```
+
+Or build the C++ / Rust variants:
+
+```bash
+poetry run sphinx-build -b html examples/cpp_hello_world _build/html/example
+poetry run sphinx-build -b html examples/rust_hello_world _build/html/example
+```
+
+Run an end-to-end example workflow (native tests → docs):
+
+```bash
+cd examples/c_hello_world
+./build-and-test.sh
+open _build/html/index.html
+```
+
+### Legacy Python example documentation (published under `/example/` today)
+
+```bash
+poetry install
+poetry run sphinx-build -b html examples/hello_world _build/html/examples/python
+open _build/html/examples/python/index.html
 ```
 
 ### Optional environment variables
@@ -64,7 +101,7 @@ If you are new to the repository:
 
 1. Open the framework docs: https://bitvortex.github.io/OSQAr/
 2. Then explore the example project: https://bitvortex.github.io/OSQAr/example/
-3. If you want to copy a proven structure, start from `examples/hello_world/` and replace its requirements/diagrams/tests with your system’s artifacts.
+3. If you want to copy a proven structure, start from `examples/c_hello_world/` (or `examples/cpp_hello_world/` / `examples/rust_hello_world/`) and replace its requirements/diagrams/tests with your system’s artifacts.
 
 ## Legacy note
 

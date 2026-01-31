@@ -1,0 +1,7 @@
+/* Keep example-specific tweaks minimal; furo handles most styling. */
+
+/* Improve PlantUML SVG legibility in both themes */
+img.uml {
+  max-width: 100%;
+  height: auto;
+}

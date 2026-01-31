@@ -1,0 +1,6 @@
+/* Keep example-specific tweaks minimal; furo handles most styling. */
+
+img.uml {
+  max-width: 100%;
+  height: auto;
+}

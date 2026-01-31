@@ -1,0 +1,53 @@
+@startuml TSIM_Component_Architecture
+!define COMPONENT_COLOR #E1F5FF
+!define INTERFACE_COLOR #FFF9C4
+!define EXTERNAL_COLOR #FFCCBC
+
+skinparam backgroundColor #FAFAFA
+
+title TSIM Component Architecture\n(Domain-Agnostic Safety Element)
+
+package "Thermal Sensor Interface Module (TSIM)" {
+		component SensorDriver as "Sensor Driver\nARCH_FUNC_001"
+		component TempFilter as "Temperature Filter\nARCH_FUNC_002"
+		component StateMachine as "State Machine\nARCH_FUNC_003"
+}
+
+package "Integration (SEooC Assumptions)" {
+		component SensorHW as "Sensor Hardware\n±2°C Accuracy"
+		component SystemCtrl as "System Controller\n<1s Response"
+}
+
+SensorHW --> SensorDriver : Analog Signal (100Hz)
+SensorDriver --> TempFilter : ADC Value
+TempFilter --> StateMachine : Filtered Temp
+StateMachine --> SystemCtrl : Safe/Unsafe State
+
+note right of SensorDriver
+	ADC to °C Conversion
+	Range: -40 to +125°C
+	REQ_FUNC_001
+end note
+
+note right of TempFilter
+	5-Sample Moving Average
+	Noise Rejection (≥90%)
+	REQ_FUNC_002, 003, 004
+end note
+
+note right of StateMachine
+	Hysteresis State Machine
+	UNSAFE ≥100°C
+	SAFE ≤95°C
+	REQ_SAFETY_002, 003
+end note
+
+note left of SystemCtrl
+	Integrator Responsibility:
+	Shutdown Logic
+	Error Handling
+	Domain-Specific Action
+	ARCH_SEOOC_002
+end note
+
+@enduml

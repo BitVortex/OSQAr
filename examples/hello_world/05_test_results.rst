@@ -54,7 +54,7 @@ The test results are automatically imported via Sphinx configuration:
     # conf.py configuration
     extensions = [
         'sphinx_needs',         # Requirements traceability
-        'sphinx_test_reports',  # Auto-import JUnit XML
+      'sphinxcontrib.test_reports',  # Auto-import JUnit XML
         'sphinxcontrib.plantuml'  # Diagrams
     ]
     

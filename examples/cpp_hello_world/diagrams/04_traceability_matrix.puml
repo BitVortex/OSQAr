@@ -1,0 +1,69 @@
+@startuml TSIM_Traceability
+
+skinparam backgroundColor #FAFAFA
+
+title TSIM Traceability Matrix\nRequirements > Architecture > Verification
+
+rectangle "Safety Goals" #FFE0B2 {
+	usecase "SG: Prevent\nthermal damage" as SG1
+}
+
+rectangle "Safety Requirements" #FFCCCC {
+	usecase "REQ_SAFETY_001\nGoal definition" as SR1
+	usecase "REQ_SAFETY_002\nDetect within 100ms" as SR2
+	usecase "REQ_SAFETY_003\nReport safe state" as SR3
+}
+
+rectangle "Functional Requirements" #E1BEE7 {
+	usecase "REQ_FUNC_001\nADC conversion" as FR1
+	usecase "REQ_FUNC_002\nNoise filtering" as FR2
+	usecase "REQ_FUNC_003\nThreshold ≥100°C" as FR3
+	usecase "REQ_FUNC_004\nHysteresis ≤95°C" as FR4
+}
+
+rectangle "Architecture" #C8E6C9 {
+	usecase "ARCH_FUNC_001\nSensor Driver" as AF1
+	usecase "ARCH_FUNC_002\nFilter" as AF2
+	usecase "ARCH_FUNC_003\nState Machine" as AF3
+	usecase "ARCH_ERROR_002\nFail-safe" as AE2
+}
+
+rectangle "Verification & Test" #B3E5FC {
+	usecase "TEST_CONVERSION_001\nRange accuracy" as T1
+	usecase "TEST_FILTER_001\nNoise rejection" as T2
+	usecase "TEST_THRESHOLD_001\n100°C detection" as T3
+	usecase "TEST_HYSTERESIS_001\n95°C recovery" as T4
+	usecase "TEST_END_TO_END_001\nLatency ≤50ms" as T5
+	usecase "TEST_FAIL_SAFE_001\n10 failures" as T7
+}
+
+SG1 --> SR1
+SG1 --> SR2
+SG1 --> SR3
+
+SR2 --> FR1
+SR2 --> FR2
+SR2 --> FR3
+SR3 --> FR4
+
+FR1 --> AF1 : implemented
+FR2 --> AF2 : implemented
+FR3 --> AF3 : implemented
+FR4 --> AF3 : implemented
+
+AF1 --> T1 : verified
+AF2 --> T2 : verified
+AF3 --> T3 : verified
+AF3 --> T4 : verified
+AF3 --> T5 : verified
+AE2 --> T7 : verified
+
+SR2 --> T5 : verified
+
+note bottom
+	Complete traceability from
+	safety goals through architecture
+	to test verification
+end note
+
+@enduml

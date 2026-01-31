@@ -26,6 +26,7 @@ echo -e "${BLUE}🔨 OSQAr example: Build & Traceability Workflow${NC}\n"
 echo -e "${BLUE}Step 1️⃣: Code Style Checks${NC}"
 if command -v poetry &> /dev/null; then
     echo "✓ Poetry found"
+    poetry install --no-interaction >/dev/null
     echo "  Running black code formatter checks..."
     poetry run black --check src tests 2>/dev/null || {
         echo "  ⚠️  Code formatting issues found. Run: poetry run black src tests"
