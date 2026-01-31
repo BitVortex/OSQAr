@@ -285,9 +285,9 @@ open<span class="w"> </span>_build/html/index.html
 </ul>
 <p>Build any example documentation directly:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install
-poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/c_hello_world<span class="w"> </span>examples/c_hello_world/_build/html/example
-poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/cpp_hello_world<span class="w"> </span>examples/cpp_hello_world/_build/html/example
-poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/rust_hello_world<span class="w"> </span>examples/rust_hello_world/_build/html/example
+poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/c_hello_world<span class="w"> </span>_build/html/example
+poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/cpp_hello_world<span class="w"> </span>_build/html/examples/cpp
+poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>examples/rust_hello_world<span class="w"> </span>_build/html/examples/rust
 </pre></div>
 </div>
 <p>Run an end-to-end workflow (native tests → docs) for an example:</p>
@@ -356,6 +356,46 @@ open<span class="w"> </span>_build/html/index.html
 <li><p>test requirements as needs objects (<code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>)</p></li>
 <li><p>a traceability matrix mapping <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>/<code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code> → <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code></p></li>
 </ol>
+</section>
+<section id="code-complexity-optional">
+<h2>Code complexity (optional)<a class="headerlink" href="#code-complexity-optional" title="Link to this heading">¶</a></h2>
+<p>OSQAr supports generating additional <em>engineering evidence</em> artifacts alongside test results.</p>
+<p>All reference examples include an optional <strong>code complexity report</strong> step that produces
+<code class="docutils literal notranslate"><span class="pre">complexity_report.txt</span></code>.</p>
+<ul>
+<li><dl>
+<dt><strong>C / C++ / Python</strong>: <a class="reference external" href="https://github.com/terryyin/lizard">lizard</a> (Cyclomatic Complexity)</dt><dd><ul>
+<li><p>Runs as part of the example scripts via <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">lizard</span></code>.</p></li>
+<li><p>You can run it manually from the repository root, e.g.:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install
+poetry<span class="w"> </span>run<span class="w"> </span>lizard<span class="w"> </span>-C<span class="w"> </span><span class="m">10</span><span class="w"> </span>examples/c_hello_world/src<span class="w"> </span>examples/c_hello_world/include
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>Rust</strong>: <a class="reference external" href="https://github.com/fz0/cargo-cyclo">cargo-cyclo</a> (Cyclomatic Complexity)</dt><dd><ul>
+<li><p>Install once: <code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">install</span> <span class="pre">cargo-cyclo</span></code></p></li>
+<li><p>Then run from within the Rust example:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/rust_hello_world
+cargo<span class="w"> </span>cyclo
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The example scripts treat complexity reporting as <strong>best-effort</strong> by default (they do not fail
+the workflow if the tool is not installed). For CI, you can tighten this to enforce thresholds.</p>
 </section>
 <section id="troubleshooting">
 <h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
@@ -432,6 +472,7 @@ open<span class="w"> </span>_build/html/index.html
 <li><a class="reference internal" href="#recommended-id-scheme">Recommended ID scheme</a></li>
 <li><a class="reference internal" href="#architecture-diagrams-plantuml">Architecture diagrams (PlantUML)</a></li>
 <li><a class="reference internal" href="#verification-and-traceability">Verification and traceability</a></li>
+<li><a class="reference internal" href="#code-complexity-optional">Code complexity (optional)</a></li>
 <li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
