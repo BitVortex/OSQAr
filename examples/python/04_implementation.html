@@ -258,21 +258,21 @@
 <section id="code-organization">
 <h2>Code Organization<a class="headerlink" href="#code-organization" title="Link to this heading">¶</a></h2>
 <p>The TSIM implementation demonstrates traceability from requirements through architecture to code and tests.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>examples/hello_world/
-├── src/
-│   ├── __init__.py
-│   └── tsim.py              # Implementation with requirement IDs as docstring comments
-├── tests/
-│   ├── __init__.py
-│   └── test_tsim.py         # Test cases linked to TEST_* requirements
-└── test_results.xml         # JUnit XML for sphinx-test-reports integration
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>examples/python_hello_world/
+  ├── src/
+  │   ├── __init__.py
+  │   └── tsim.py              # Implementation with requirement IDs as docstring comments
+  ├── tests/
+  │   ├── __init__.py
+  │   └── test_tsim.py         # Test cases linked to TEST_* requirements
+  └── test_results.xml         # JUnit XML for sphinx-test-reports integration
 </pre></div>
 </div>
 </section>
 <section id="implementation-traceability">
 <h2>Implementation Traceability<a class="headerlink" href="#implementation-traceability" title="Link to this heading">¶</a></h2>
 <p>All code modules include requirement traceability in docstrings and comments. Click on requirement IDs below to navigate to their definitions:</p>
-<div class="need_container docutils container" id="SNCB-ec0259e8">
+<div class="need_container docutils container" id="SNCB-3c50a91d">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="CODE_IMPL_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -373,7 +373,7 @@
 </section>
 <section id="test-suite-mapping">
 <h2>Test Suite Mapping<a class="headerlink" href="#test-suite-mapping" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-ec60ecd8">
+<div class="need_container docutils container" id="SNCB-b954c945">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_CODE_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -417,14 +417,14 @@
 </section>
 <section id="test-execution-reporting">
 <h2>Test Execution &amp; Reporting<a class="headerlink" href="#test-execution-reporting" title="Link to this heading">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run tests with verbose output</span>
-<span class="nb">cd</span><span class="w"> </span>examples/hello_world
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>-v
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="c1"># Run tests with verbose output</span>
+<span class="nb">cd</span><span class="w"> </span>examples/python_hello_world
+<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>-v
 
-<span class="c1"># Generate JUnit XML for compliance reporting</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
+<span class="w"> </span><span class="c1"># Generate JUnit XML for compliance reporting</span>
+<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
 
-<span class="c1"># Results can be imported by sphinx-test-reports for automated traceability</span>
+<span class="w"> </span><span class="c1"># Results can be imported by sphinx-test-reports for automated traceability</span>
 </pre></div>
 </div>
 </section>
@@ -474,7 +474,7 @@ Compliance Artifacts (HTML with traceability matrix)
 </section>
 <section id="code-repository-structure">
 <h2>Code Repository Structure<a class="headerlink" href="#code-repository-structure" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-181530f3">
+<div class="need_container docutils container" id="SNCB-c4beb77c">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="CODE_REPO_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">

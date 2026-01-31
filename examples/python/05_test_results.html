@@ -265,9 +265,9 @@ Safety Requirement (REQ_SAFETY_*)
      ↓
 Functional Requirement (REQ_FUNC_*, ARCH_*)
      ↓
-Implementation Code (src/tsim.py with docstring IDs)
+    Implementation Code (src/* with requirement IDs)
      ↓
-Unit Tests (test_tsim.py with TEST_* IDs)
+    Unit Tests (tests/* with TEST_* IDs)
      ↓
 JUnit XML Test Results
      ↓
@@ -280,15 +280,13 @@ Compliance Artifact Package
 <section id="test-suite-execution">
 <h2>Test Suite Execution<a class="headerlink" href="#test-suite-execution" title="Link to this heading">¶</a></h2>
 <p>The test suite can be run locally to generate compliance artifacts:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install dependencies</span>
-<span class="nb">cd</span><span class="w"> </span>examples/hello_world
-poetry<span class="w"> </span>install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pick one language example and run its end-to-end script.</span>
+<span class="c1"># This generates JUnit XML + builds HTML docs with imported test results.</span>
+<span class="nb">cd</span><span class="w"> </span>examples/&lt;language&gt;_hello_world
+./build-and-test.sh
 
-<span class="c1"># Run all tests with JUnit output</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>-v<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
-
-<span class="c1"># Build documentation (auto-imports test results)</span>
-sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>.<span class="w"> </span>_build/html
+<span class="c1"># The generated docs live under the example directory.</span>
+open<span class="w"> </span>_build/html/index.html
 </pre></div>
 </div>
 </section>
@@ -297,9 +295,9 @@ sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w
 <p>The test results are automatically imported via Sphinx configuration:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># conf.py configuration</span>
 <span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;sphinx_needs&#39;</span><span class="p">,</span>         <span class="c1"># Requirements traceability</span>
-  <span class="s1">&#39;sphinxcontrib.test_reports&#39;</span><span class="p">,</span>  <span class="c1"># Auto-import JUnit XML</span>
-    <span class="s1">&#39;sphinxcontrib.plantuml&#39;</span>  <span class="c1"># Diagrams</span>
+  <span class="s1">&#39;sphinx_needs&#39;</span><span class="p">,</span>                 <span class="c1"># Requirements traceability</span>
+  <span class="s1">&#39;sphinxcontrib.test_reports&#39;</span><span class="p">,</span>   <span class="c1"># Auto-import JUnit XML</span>
+  <span class="s1">&#39;sphinxcontrib.plantuml&#39;</span><span class="p">,</span>       <span class="c1"># Diagrams</span>
 <span class="p">]</span>
 
 <span class="c1"># Point to the JUnit XML file</span>
@@ -408,7 +406,7 @@ sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w
 </section>
 <section id="automated-test-reporting">
 <h2>Automated Test Reporting<a class="headerlink" href="#automated-test-reporting" title="Link to this heading">¶</a></h2>
-<p>The JUnit XML output from pytest is automatically processed by Sphinx:</p>
+<p>The JUnit XML output from your test runner (pytest for the Python example, or a native runner for C/C++/Rust) is automatically processed by Sphinx:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;testsuite&gt;</span>
 <span class="w">  </span><span class="nt">&lt;testcase</span><span class="w"> </span><span class="na">classname=</span><span class="s">&quot;tests.test_tsim.TestSensorDriver&quot;</span>
 <span class="w">             </span><span class="na">name=</span><span class="s">&quot;test_conversion_full_range&quot;</span><span class="w"> </span><span class="na">time=</span><span class="s">&quot;0.002&quot;</span><span class="nt">&gt;</span>
@@ -428,18 +426,16 @@ sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w
 <section id="building-compliance-artifacts">
 <h2>Building Compliance Artifacts<a class="headerlink" href="#building-compliance-artifacts" title="Link to this heading">¶</a></h2>
 <p>The complete compliance artifact package is generated via:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Run tests and generate JUnit XML</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Run tests, emit JUnit XML, build docs</span>
+<span class="nb">cd</span><span class="w"> </span>examples/&lt;language&gt;_hello_world
+./build-and-test.sh
 
-<span class="c1"># 2. Build documentation (auto-imports test results + generates traceability)</span>
-sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>.<span class="w"> </span>_build/html
-
-<span class="c1"># 3. Output contains:</span>
+<span class="c1"># 2. Output contains:</span>
 <span class="c1">#    - Linked requirements and tests</span>
 <span class="c1">#    - Architecture diagrams with PlantUML</span>
 <span class="c1">#    - Test results integrated into HTML</span>
 <span class="c1">#    - Searchable traceability matrix</span>
-<span class="c1">#    - Compliance report suitable for ISO 26262 qualification</span>
+<span class="c1">#    - Compliance documentation suitable for assessment/audit</span>
 </pre></div>
 </div>
 </section>
@@ -463,61 +459,13 @@ sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w
 <section id="extending-the-test-suite">
 <h2>Extending the Test Suite<a class="headerlink" href="#extending-the-test-suite" title="Link to this heading">¶</a></h2>
 <p>To add domain-specific tests:</p>
-<ol class="arabic">
-<li><p><strong>Create domain directory</strong>: <code class="docutils literal notranslate"><span class="pre">examples/medical_device/tests/</span></code></p></li>
-<li><p><strong>Inherit test base classes</strong>: <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">hello_world.tests.test_tsim</span> <span class="pre">import</span> <span class="pre">TestSensorDriver</span></code></p></li>
-<li><p><strong>Add domain-specific tests</strong>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># examples/medical_device/tests/test_tsim_medical.py</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hello_world.tests.test_tsim</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestSensorDriver</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hello_world.src.tsim</span><span class="w"> </span><span class="kn">import</span> <span class="n">TSIM</span>
-
-<span class="k">class</span><span class="w"> </span><span class="nc">TestTSIMmedical</span><span class="p">(</span><span class="n">TestSensorDriver</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Medical device specific tests&quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">test_sensor_calibration_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verify sensor compensates for drift over time (medical ASIL)&quot;&quot;&quot;</span>
-        <span class="c1"># Test implementation</span>
-        <span class="k">pass</span>
-</pre></div>
-</div>
-</li>
-<li><p><strong>Update documentation</strong>: Link domain-specific tests to medical-specific requirements (e.g., <code class="docutils literal notranslate"><span class="pre">REQ_MEDICAL_SAFETY_001</span></code>)</p></li>
-<li><p><strong>Rebuild</strong>: Sphinx auto-imports results and updates traceability</p></li>
+<ol class="arabic simple">
+<li><p><strong>Create domain directory</strong>: <code class="docutils literal notranslate"><span class="pre">examples/&lt;your_domain_or_product&gt;/</span></code></p></li>
+<li><p><strong>Implement tests</strong> in the language of your product and ensure the runner emits JUnit XML.</p></li>
+<li><p><strong>Use stable IDs</strong>: keep requirement IDs (<code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>) and test IDs (<code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>) consistent so the traceability graph remains intact.</p></li>
+<li><p><strong>Update documentation</strong>: link domain-specific tests to domain-specific requirements (e.g., <code class="docutils literal notranslate"><span class="pre">REQ_MEDICAL_SAFETY_001</span></code>).</p></li>
+<li><p><strong>Rebuild</strong>: Sphinx imports results and updates traceability.</p></li>
 </ol>
-</section>
-<section id="test-execution-commands">
-<h2>Test Execution Commands<a class="headerlink" href="#test-execution-commands" title="Link to this heading">¶</a></h2>
-<p>Common commands for test execution and reporting:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1"># Run all tests</span>
-<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py
-
-<span class="w">  </span><span class="c1"># Run with verbose output</span>
-<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>-v
-
-<span class="w">  </span><span class="c1"># Run specific test class</span>
-<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py::TestSensorDriver<span class="w"> </span>-v
-
-<span class="w">  </span><span class="c1"># Run with coverage report</span>
-<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src
-
-<span class="w">  </span><span class="c1"># Generate JUnit XML for compliance reporting</span>
-<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
-
-Complexity<span class="w"> </span><span class="nv">report</span>
-<span class="o">=================</span>
-
-The<span class="w"> </span>example<span class="w"> </span>build<span class="w"> </span>generates<span class="w"> </span>a<span class="w"> </span>cyclomatic<span class="w"> </span>complexity<span class="w"> </span>report<span class="w"> </span><span class="o">(</span><span class="sb">``</span>complexity_report.txt<span class="sb">``</span><span class="o">)</span><span class="w"> </span>and<span class="w"> </span>embeds<span class="w"> </span>it<span class="w"> </span>here.
-
-..<span class="w"> </span>literalinclude::<span class="w"> </span>complexity_report.txt
-<span class="w">  </span>:language:<span class="w"> </span>text
-
-<span class="w">  </span><span class="c1"># Combine coverage + JUnit output</span>
-<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
-
-<span class="w">  </span><span class="c1"># Run with HTML report (alternative to Sphinx integration)</span>
-<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--html<span class="o">=</span>report.html
-</pre></div>
-</div>
 </section>
 <section id="compliance-artifact-checklist">
 <h2>Compliance Artifact Checklist<a class="headerlink" href="#compliance-artifact-checklist" title="Link to this heading">¶</a></h2>
@@ -546,6 +494,54 @@ The<span class="w"> </span>example<span class="w"> </span>build<span class="w"> 
 <li><p><strong>Extend Test Coverage</strong>: Add performance benchmarks, fault injection tests, environmental stress tests</p></li>
 <li><p><strong>Implement Requirements Gateway</strong>: Create automated checks that fail builds if requirements lack tests</p></li>
 </ol>
+</section>
+<section id="complexity-report">
+<h2>Complexity report<a class="headerlink" href="#complexity-report" title="Link to this heading">¶</a></h2>
+<p>The Python demo build generates a cyclomatic complexity report (<code class="docutils literal notranslate"><span class="pre">complexity_report.txt</span></code>) and embeds it here.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>================================================
+  NLOC    CCN   token  PARAM  length  location  
+------------------------------------------------
+       6      2     23      1       7 __post_init__@42-48@src/tsim.py
+       4      1     25      1       5 __init__@76-80@src/tsim.py
+      22      3    141      2      49 read_adc@82-130@src/tsim.py
+       2      1     12      1       3 __init__@145-147@src/tsim.py
+       8      3     68      2      26 update@149-174@src/tsim.py
+       4      2     40      2       5 __init__@190-194@src/tsim.py
+      12      5    110      2      33 evaluate@196-228@src/tsim.py
+       2      1     14      1      11 get_state_output@230-240@src/tsim.py
+       6      2     53      2       7 __init__@261-267@src/tsim.py
+      10      3     85      2      40 process_sample@269-308@src/tsim.py
+       2      1     16      1      12 get_safe_unsafe_output@310-321@src/tsim.py
+      13      2     65      1      23 test_conversion_full_range@36-58@tests/test_tsim.py
+       7      2     43      1      15 test_conversion_accuracy@60-74@tests/test_tsim.py
+      19      5    132      1      38 test_filter_noise_rejection@84-121@tests/test_tsim.py
+       6      3     39      1      13 test_filter_stabilization@123-135@tests/test_tsim.py
+      10      1     57      1      21 test_threshold_detection@145-165@tests/test_tsim.py
+      14      1     75      1      33 test_hysteresis_deadband@167-199@tests/test_tsim.py
+       5      1     34      1      14 test_state_output_bit@201-214@tests/test_tsim.py
+       8      2     71      1      27 test_end_to_end_latency@224-250@tests/test_tsim.py
+      15      4     96      1      26 test_detection_within_100ms@252-277@tests/test_tsim.py
+      10      3     63      1      21 test_safe_state_recovery@279-299@tests/test_tsim.py
+       7      2     56      1      16 test_error_recovery@301-316@tests/test_tsim.py
+       7      2     39      1      16 test_fail_safe_on_persistent_errors@318-333@tests/test_tsim.py
+      10      1     71      1      19 test_hysteresis_constraint@343-361@tests/test_tsim.py
+4 file analyzed.
+==============================================================
+NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
+--------------------------------------------------------------
+    103       7.1     2.2       53.4        11     src/tsim.py
+     16       0.0     0.0        0.0         0     src/__init__.py
+    148      10.1     2.2       64.7        13     tests/test_tsim.py
+      0       0.0     0.0        0.0         0     tests/__init__.py
+
+===============================================================================================================
+No thresholds exceeded (cyclomatic_complexity &gt; 10 or length &gt; 1000 or nloc &gt; 1000000 or parameter_count &gt; 100)
+==========================================================================================
+Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
+------------------------------------------------------------------------------------------
+       267       8.7     2.2       59.5       24            0      0.00    0.00
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -606,9 +602,9 @@ The<span class="w"> </span>example<span class="w"> </span>build<span class="w"> 
 <li><a class="reference internal" href="#building-compliance-artifacts">Building Compliance Artifacts</a></li>
 <li><a class="reference internal" href="#domain-agnostic-test-strategy">Domain-Agnostic Test Strategy</a></li>
 <li><a class="reference internal" href="#extending-the-test-suite">Extending the Test Suite</a></li>
-<li><a class="reference internal" href="#test-execution-commands">Test Execution Commands</a></li>
 <li><a class="reference internal" href="#compliance-artifact-checklist">Compliance Artifact Checklist</a></li>
 <li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li><a class="reference internal" href="#complexity-report">Complexity report</a></li>
 </ul>
 </li>
 </ul>

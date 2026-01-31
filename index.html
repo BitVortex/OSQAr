@@ -271,7 +271,7 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/using_the_boilerplate.html#purpose">Purpose</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/using_the_boilerplate.html#quick-start">Quick start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/using_the_boilerplate.html#reference-examples-c-c-rust">Reference examples (C/C++/Rust)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/using_the_boilerplate.html#legacy-python-reference">Legacy Python reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/using_the_boilerplate.html#python-demo-reference">Python demo reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/using_the_boilerplate.html#core-workflow">Core workflow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/using_the_boilerplate.html#writing-requirements-sphinx-needs">Writing requirements (sphinx-needs)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/using_the_boilerplate.html#recommended-id-scheme">Recommended ID scheme</a></li>
@@ -308,18 +308,22 @@
 </section>
 <section id="reference-examples">
 <h1>Reference examples<a class="headerlink" href="#reference-examples" title="Link to this heading">¶</a></h1>
-<p>OSQAr primarily targets <strong>C</strong>, <strong>C++</strong>, and <strong>Rust</strong> projects.</p>
+<p>OSQAr is designed to support safety/compliance documentation for many technology stacks.</p>
+<p>For <strong>safety-related embedded</strong> projects, OSQAr recommends using either <strong>C</strong> or <strong>Rust</strong> for the implementation and tests.</p>
+<p><strong>C++</strong> is a commonly used embedded language, but is typically harder to constrain (toolchain variability, language feature subset discipline, and qualification effort) and therefore is <strong>not recommended</strong> as a first choice.</p>
+<p>The <strong>Python</strong> example is provided as an easy-to-run workstation demo for the documentation and traceability workflow; it is <strong>not suited for embedded targets</strong>.</p>
 <p>Reference examples:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="example/">Default example (C)</a></p></li>
 <li><p><a class="reference external" href="examples/">All examples index</a></p></li>
+<li><p><a class="reference external" href="examples/c/">C example</a></p></li>
 <li><p><a class="reference external" href="examples/cpp/">C++ example</a></p></li>
 <li><p><a class="reference external" href="examples/rust/">Rust example</a></p></li>
+<li><p><a class="reference external" href="examples/python/">Python demo example</a></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/c_hello_world</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/cpp_hello_world</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">examples/rust_hello_world</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/python_hello_world</span></code></p></li>
 </ul>
-<p>The original Python example (<code class="docutils literal notranslate"><span class="pre">examples/hello_world</span></code>) remains available as a legacy/reference variant.</p>
 </section>
 
         </article>

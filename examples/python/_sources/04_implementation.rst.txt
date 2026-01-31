@@ -9,7 +9,7 @@ The TSIM implementation demonstrates traceability from requirements through arch
 
 .. code-block:: text
 
-    examples/hello_world/
+  examples/python_hello_world/
     ├── src/
     │   ├── __init__.py
     │   └── tsim.py              # Implementation with requirement IDs as docstring comments
@@ -150,7 +150,7 @@ Test Execution & Reporting
 .. code-block:: bash
 
    # Run tests with verbose output
-   cd examples/hello_world
+  cd examples/python_hello_world
    poetry run pytest tests/test_tsim.py -v
    
    # Generate JUnit XML for compliance reporting
