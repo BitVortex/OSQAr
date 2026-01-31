@@ -1,10 +1,11 @@
 /* Theme integration tweaks.
 
-   - Furo already provides built-in light/dark modes.
-   - PlantUML HTML embeds an inline `background:#...` on the <object>, which
-     clashes with dark mode; override it to be transparent.
+   These rules are designed to be safe with Furo's built-in light/dark modes.
+
+   - PlantUML HTML embeds an inline `background:#...` on the <object>, which can
+     clash with dark mode; override it to be transparent.
    - sphinx-needs “need” tables use their own backgrounds; align them with
-     Furo's CSS variables so they follow the active theme.
+     theme CSS variables so they follow the active theme.
 */
 
 /* --- PlantUML ------------------------------------------------------------ */
@@ -22,26 +23,26 @@ body[data-theme="dark"] p.plantuml img {
   filter: invert(1) hue-rotate(180deg);
 }
 
-/* Keep diagrams responsive. */
-img.uml {
-  max-width: 100%;
-  height: auto;
-}
-
 
 /* --- sphinx-needs -------------------------------------------------------- */
 
 table.need {
-  background: var(--color-background-primary);
-  color: var(--color-foreground-primary);
-  border: 1px solid var(--color-background-border, var(--color-border, rgba(127, 127, 127, 0.35)));
+  background: var(--color-background-primary, transparent);
+  color: var(--color-foreground-primary, inherit);
+  border: 1px solid var(
+    --color-background-border,
+    var(--color-border, rgba(127, 127, 127, 0.35))
+  );
   border-radius: 0.25rem;
   overflow: hidden;
 }
 
 table.need td,
 table.need th {
-  border-color: var(--color-background-border, var(--color-border, rgba(127, 127, 127, 0.35))) !important;
+  border-color: var(
+    --color-background-border,
+    var(--color-border, rgba(127, 127, 127, 0.35))
+  ) !important;
 }
 
 /* Remove row striping/backgrounds that assume a light page. */
@@ -51,20 +52,20 @@ table.need tr.row-even {
 }
 
 table.need tr.need.head td.need.head {
-  background: var(--color-background-secondary);
+  background: var(--color-background-secondary, rgba(127, 127, 127, 0.08));
 }
 
 table.need tr.need.meta td.need.meta {
-  background: var(--color-background-primary);
+  background: var(--color-background-primary, transparent);
 }
 
 table.need tr.need.content td.need.content {
-  background: var(--color-background-primary);
+  background: var(--color-background-primary, transparent);
 }
 
 .needs_head,
 .needs_meta {
-  color: var(--color-foreground-primary);
+  color: var(--color-foreground-primary, inherit);
 }
 
 .needs_label {
