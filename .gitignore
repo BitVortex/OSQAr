@@ -5,6 +5,8 @@ _build/
 *.pyc
 __pycache__/
 .pytest_cache/
+.coverage
+htmlcov/
 .DS_Store
 .DS_STORE
 

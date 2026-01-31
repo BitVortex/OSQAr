@@ -27,6 +27,7 @@ esbonio = "^0.16" # LSP server (optional, helpful for VS Code autocomplete)
 pytest = "^7.4"
 black = "^23.7"
 lizard = "^1.17.10"
+pytest-cov = "^7.0.0"
 
 [build-system]
 requires = ["poetry-core"]

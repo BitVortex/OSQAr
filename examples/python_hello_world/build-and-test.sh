@@ -9,7 +9,7 @@
 #
 # Usage: ./build-and-test.sh
 
-set -e  # Exit on error
+set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
@@ -28,9 +28,7 @@ if command -v poetry &> /dev/null; then
     echo "✓ Poetry found"
     poetry install --no-interaction >/dev/null
     echo "  Running black code formatter checks..."
-    poetry run black --check src tests 2>/dev/null || {
-        echo "  ⚠️  Code formatting issues found. Run: poetry run black src tests"
-    }
+    poetry run black --check src tests 1>/dev/null
 else
     echo "✗ Poetry not found. Install via: pip install poetry"
     exit 1
@@ -39,15 +37,14 @@ fi
 # Step 2: Run Unit Tests
 echo -e "\n${BLUE}Step 2️⃣: Unit Tests with Coverage${NC}"
 echo "  Running 13 test cases..."
-poetry run pytest tests/test_tsim.py \
+poetry run pytest \
     -v \
-    --junit-xml=test_results.xml \
+    --junitxml=test_results.xml \
     --cov=src \
     --cov-report=term-missing \
-    2>&1 | grep -E "(PASSED|FAILED|passed|failed|ERROR|test_)"
+    tests/test_tsim.py
 
-TEST_RESULT=$?
-if [ $TEST_RESULT -eq 0 ]; then
+if [ $? -eq 0 ]; then
     echo -e "${GREEN}  ✓ All tests passed${NC}"
 else
     echo -e "${RED}  ✗ Test failures detected${NC}"
@@ -56,8 +53,13 @@ fi
 
 # Step 3: Verify Test-Requirement Coverage
 echo -e "\n${BLUE}Step 3️⃣: Traceability Coverage Check${NC}"
-TEST_COUNT=$(grep -c "testcase" test_results.xml)
-REQ_COUNT=$(grep -c ".. need::" ../tsim_docs/03_verification.rst || echo "0")
+if [ ! -f test_results.xml ]; then
+    echo -e "${RED}  ✗ Missing test_results.xml (JUnit)${NC}"
+    exit 1
+fi
+
+TEST_COUNT=$(grep -oE 'tests="[0-9]+"' test_results.xml | head -1 | grep -oE '[0-9]+' || echo "0")
+REQ_COUNT=$(grep -c ":id: TEST_" ../tsim_docs/03_verification.rst 2>/dev/null || echo "0")
 echo "  Test cases: $TEST_COUNT"
 echo "  Test requirements: $REQ_COUNT"
 
@@ -93,10 +95,19 @@ fi
 echo -e "\n${BLUE}Step 5️⃣: Traceability Report${NC}"
 echo "  Analyzing traceability chain..."
 
-REQUIREMENTS=$(grep -c "^.. need::" ../tsim_docs/01_requirements.rst 2>/dev/null || echo "0")
+REQUIREMENTS=$(grep -cE "^\.\. need::" ../tsim_docs/01_requirements.rst 2>/dev/null || echo "0")
 ARCH=$(grep -c ":id: ARCH_" ../tsim_docs/02_architecture.rst 2>/dev/null || echo "0")
 TESTS=$(grep -c ":id: TEST_" ../tsim_docs/03_verification.rst 2>/dev/null || echo "0")
-PASSED=$(grep -c 'status="passed"' test_results.xml 2>/dev/null || echo "0")
+
+TOTAL=$(grep -oE 'tests="[0-9]+"' test_results.xml | head -1 | grep -oE '[0-9]+' || echo "0")
+FAILURES=$(grep -oE 'failures="[0-9]+"' test_results.xml | head -1 | grep -oE '[0-9]+' || echo "0")
+ERRORS=$(grep -oE 'errors="[0-9]+"' test_results.xml | head -1 | grep -oE '[0-9]+' || echo "0")
+SKIPPED=$(grep -oE 'skipped="[0-9]+"' test_results.xml | head -1 | grep -oE '[0-9]+' || echo "0")
+
+PASSED=$((TOTAL - FAILURES - ERRORS - SKIPPED))
+if [ "$PASSED" -lt 0 ]; then
+    PASSED=0
+fi
 
 echo "  Requirements defined: $REQUIREMENTS"
 echo "  Architecture specs: $ARCH"
