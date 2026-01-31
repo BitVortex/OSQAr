@@ -488,26 +488,34 @@ sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w
 <section id="test-execution-commands">
 <h2>Test Execution Commands<a class="headerlink" href="#test-execution-commands" title="Link to this heading">¶</a></h2>
 <p>Common commands for test execution and reporting:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run all tests</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1"># Run all tests</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py
 
-<span class="c1"># Run with verbose output</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>-v
+<span class="w">  </span><span class="c1"># Run with verbose output</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>-v
 
-<span class="c1"># Run specific test class</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py::TestSensorDriver<span class="w"> </span>-v
+<span class="w">  </span><span class="c1"># Run specific test class</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py::TestSensorDriver<span class="w"> </span>-v
 
-<span class="c1"># Run with coverage report</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src
+<span class="w">  </span><span class="c1"># Run with coverage report</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src
 
-<span class="c1"># Generate JUnit XML for compliance reporting</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
+<span class="w">  </span><span class="c1"># Generate JUnit XML for compliance reporting</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
 
-<span class="c1"># Combine coverage + JUnit output</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
+Complexity<span class="w"> </span><span class="nv">report</span>
+<span class="o">=================</span>
 
-<span class="c1"># Run with HTML report (alternative to Sphinx integration)</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--html<span class="o">=</span>report.html
+The<span class="w"> </span>example<span class="w"> </span>build<span class="w"> </span>generates<span class="w"> </span>a<span class="w"> </span>cyclomatic<span class="w"> </span>complexity<span class="w"> </span>report<span class="w"> </span><span class="o">(</span><span class="sb">``</span>complexity_report.txt<span class="sb">``</span><span class="o">)</span><span class="w"> </span>and<span class="w"> </span>embeds<span class="w"> </span>it<span class="w"> </span>here.
+
+..<span class="w"> </span>literalinclude::<span class="w"> </span>complexity_report.txt
+<span class="w">  </span>:language:<span class="w"> </span>text
+
+<span class="w">  </span><span class="c1"># Combine coverage + JUnit output</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
+
+<span class="w">  </span><span class="c1"># Run with HTML report (alternative to Sphinx integration)</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--html<span class="o">=</span>report.html
 </pre></div>
 </div>
 </section>

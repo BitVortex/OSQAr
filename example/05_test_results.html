@@ -488,26 +488,34 @@ sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w
 <section id="test-execution-commands">
 <h2>Test Execution Commands<a class="headerlink" href="#test-execution-commands" title="Link to this heading">¶</a></h2>
 <p>Common commands for test execution and reporting:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run all tests</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1"># Run all tests</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py
 
-<span class="c1"># Run with verbose output</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>-v
+<span class="w">  </span><span class="c1"># Run with verbose output</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>-v
 
-<span class="c1"># Run specific test class</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py::TestSensorDriver<span class="w"> </span>-v
+<span class="w">  </span><span class="c1"># Run specific test class</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py::TestSensorDriver<span class="w"> </span>-v
 
-<span class="c1"># Run with coverage report</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src
+<span class="w">  </span><span class="c1"># Run with coverage report</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src
 
-<span class="c1"># Generate JUnit XML for compliance reporting</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
+<span class="w">  </span><span class="c1"># Generate JUnit XML for compliance reporting</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
 
-<span class="c1"># Combine coverage + JUnit output</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
+Complexity<span class="w"> </span><span class="nv">report</span>
+<span class="o">=================</span>
 
-<span class="c1"># Run with HTML report (alternative to Sphinx integration)</span>
-poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--html<span class="o">=</span>report.html
+The<span class="w"> </span>example<span class="w"> </span>build<span class="w"> </span>generates<span class="w"> </span>a<span class="w"> </span>cyclomatic<span class="w"> </span>complexity<span class="w"> </span>report<span class="w"> </span><span class="o">(</span><span class="sb">``</span>complexity_report.txt<span class="sb">``</span><span class="o">)</span><span class="w"> </span>and<span class="w"> </span>embeds<span class="w"> </span>it<span class="w"> </span>here.
+
+..<span class="w"> </span>literalinclude::<span class="w"> </span>complexity_report.txt
+<span class="w">  </span>:language:<span class="w"> </span>text
+
+<span class="w">  </span><span class="c1"># Combine coverage + JUnit output</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--junit-xml<span class="o">=</span>test_results.xml
+
+<span class="w">  </span><span class="c1"># Run with HTML report (alternative to Sphinx integration)</span>
+<span class="w">  </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_tsim.py<span class="w"> </span>--html<span class="o">=</span>report.html
 </pre></div>
 </div>
 </section>
@@ -538,6 +546,40 @@ poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> 
 <li><p><strong>Extend Test Coverage</strong>: Add performance benchmarks, fault injection tests, environmental stress tests</p></li>
 <li><p><strong>Implement Requirements Gateway</strong>: Create automated checks that fail builds if requirements lack tests</p></li>
 </ol>
+</section>
+<section id="complexity-report">
+<h2>Complexity report<a class="headerlink" href="#complexity-report" title="Link to this heading">¶</a></h2>
+<p>This report is generated during the build and embedded as evidence.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>================================================
+  NLOC    CCN   token  PARAM  length  location  
+------------------------------------------------
+      11      4     78      1      18 tsim_adc_to_temp_x10@8-25@src/tsim.c
+       9      3     58      1       9 tsim_filter_init@27-35@src/tsim.c
+      19      4    155      3      24 tsim_filter_update@37-60@src/tsim.c
+       6      2     39      3       6 tsim_sm_init@62-67@src/tsim.c
+      13      5     69      2      15 tsim_sm_evaluate@69-83@src/tsim.c
+       5      1     53      2       5 set_fail@13-17@tests/test_tsim.c
+      19      4    201      0      23 test_conversion_full_range@19-41@tests/test_tsim.c
+      25      7    186      0      33 test_filter_noise_rejection@43-75@tests/test_tsim.c
+      26      6    156      0      34 test_threshold_and_hysteresis@77-110@tests/test_tsim.c
+      22      7    188      3      26 write_junit@112-137@tests/test_tsim.c
+      18      4    137      2      22 main@139-160@tests/test_tsim.c
+3 file analyzed.
+==============================================================
+NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
+--------------------------------------------------------------
+     60      11.6     3.6       79.8         5     src/tsim.c
+     25       0.0     0.0        0.0         0     include/tsim.h
+    124      19.2     4.8      153.5         6     tests/test_tsim.c
+
+===============================================================================================================
+No thresholds exceeded (cyclomatic_complexity &gt; 10 or length &gt; 1000 or nloc &gt; 1000000 or parameter_count &gt; 100)
+==========================================================================================
+Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
+------------------------------------------------------------------------------------------
+       209      15.7     4.3      120.0       11            0      0.00    0.00
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -601,6 +643,7 @@ poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> 
 <li><a class="reference internal" href="#test-execution-commands">Test Execution Commands</a></li>
 <li><a class="reference internal" href="#compliance-artifact-checklist">Compliance Artifact Checklist</a></li>
 <li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li><a class="reference internal" href="#complexity-report">Complexity report</a></li>
 </ul>
 </li>
 </ul>
