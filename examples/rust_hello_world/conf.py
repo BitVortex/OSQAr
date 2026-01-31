@@ -53,6 +53,43 @@ needs_css = 'modern.css'
 test_reports = ['test_results.xml']
 
 
+# Complexity report (embedded in HTML via literalinclude)
+def _write_complexity_report() -> None:
+    report_path = Path(__file__).parent / 'complexity_report.txt'
+
+    try:
+        # Prefer a Rust-specific tool if present, fall back to lizard.
+        if shutil.which('cargo-cyclo'):
+            result = subprocess.run(
+                ['cargo', 'cyclo'],
+                cwd=Path(__file__).parent,
+                capture_output=True,
+                text=True,
+            )
+            report_path.write_text(result.stdout + (result.stderr or ''), encoding='utf-8')
+        elif shutil.which('lizard'):
+            result = subprocess.run(
+                ['lizard', '-C', '10', 'src'],
+                cwd=Path(__file__).parent,
+                capture_output=True,
+                text=True,
+            )
+            report_path.write_text(result.stdout + (result.stderr or ''), encoding='utf-8')
+        else:
+            report_path.write_text(
+                'No complexity tool is available in this environment.\n'
+                'Install one of:\n'
+                '- poetry install (dev deps)  # provides lizard\n'
+                '- cargo install cargo-cyclo\n',
+                encoding='utf-8',
+            )
+    except Exception as exc:  # noqa: BLE001
+        report_path.write_text(f'Failed to generate complexity report: {exc}\n', encoding='utf-8')
+
+
+_write_complexity_report()
+
+
 # PlantUML
 plantuml_output_format = 'svg'
 

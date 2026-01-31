@@ -257,6 +257,14 @@ Common commands for test execution and reporting:
     
     # Generate JUnit XML for compliance reporting
     poetry run pytest tests/test_tsim.py --junit-xml=test_results.xml
+
+  Complexity report
+  =================
+
+  The example build generates a cyclomatic complexity report (``complexity_report.txt``) and embeds it here.
+
+  .. literalinclude:: complexity_report.txt
+    :language: text
     
     # Combine coverage + JUnit output
     poetry run pytest tests/test_tsim.py --cov=src --junit-xml=test_results.xml

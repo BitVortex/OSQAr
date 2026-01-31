@@ -58,6 +58,32 @@ test_results_file = 'test_results.xml'
 test_reports = [test_results_file]
 
 
+# Complexity report (embedded in HTML via literalinclude)
+def _write_complexity_report() -> None:
+    report_path = Path(__file__).parent / 'complexity_report.txt'
+
+    try:
+        if shutil.which('lizard'):
+            result = subprocess.run(
+                ['lizard', '-C', '10', 'src', 'tests'],
+                cwd=Path(__file__).parent,
+                capture_output=True,
+                text=True,
+            )
+            report_path.write_text(result.stdout + (result.stderr or ''), encoding='utf-8')
+        else:
+            report_path.write_text(
+                'lizard is not available in this environment.\n'
+                'Install with: poetry install (dev deps)\n',
+                encoding='utf-8',
+            )
+    except Exception as exc:  # noqa: BLE001
+        report_path.write_text(f'Failed to generate complexity report: {exc}\n', encoding='utf-8')
+
+
+_write_complexity_report()
+
+
 # PlantUML
 plantuml_output_format = 'svg'
 
