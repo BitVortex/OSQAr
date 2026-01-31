@@ -13,33 +13,39 @@ For license terms see the `LICENSE` file (Apache License 2.0).
 ## Documentation (GitHub Pages)
 
 - Framework documentation (landing page): https://bitvortex.github.io/OSQAr/
-
-Published examples:
-
 - Examples index: https://bitvortex.github.io/OSQAr/examples/
-- C++ example: https://bitvortex.github.io/OSQAr/examples/cpp/
-- Rust example: https://bitvortex.github.io/OSQAr/examples/rust/
+
+Published examples (built docs):
+
 - C example: https://bitvortex.github.io/OSQAr/examples/c/
-- Python demo example: https://bitvortex.github.io/OSQAr/examples/python/
+- Rust example: https://bitvortex.github.io/OSQAr/examples/rust/
+- C++ example: https://bitvortex.github.io/OSQAr/examples/cpp/
+- Python demo example (workstation): https://bitvortex.github.io/OSQAr/examples/python/
 
 GitHub Pages is built automatically on pushes to `main` via `.github/workflows/pages-deploy.yml`.
 
 The docs default to the `furo` theme (with built-in light/dark mode). To force a fallback theme, set `OSQAR_SPHINX_THEME=alabaster`.
 
+## Language guidance (examples)
+
+- For safety-related embedded projects, prefer **C** or **Rust** as a starting point.
+- **C++** is common in industry, but is usually harder to constrain and qualify for safety.
+- The **Python** example is a workstation demo to make the workflow easy to run; it is not intended for embedded targets.
+
 ## Repository structure
 
 - Framework documentation (general guides):
-	- `index.rst` (framework landing page)
-	- `docs/` (guides such as integrator/supplier usage)
+	- `index.rst` (Sphinx source for the framework landing page)
+	- `docs/` (Sphinx sources for guides such as integrator/supplier usage)
 	- `conf.py` (root Sphinx configuration; intentionally excludes `examples/**`)
 
 
 - Reference implementations (example projects):
-	- `examples/c_hello_world/` (C implementation + native JUnit-emitting tests)
-	- `examples/cpp_hello_world/` (C++ implementation + native JUnit-emitting tests)
-	- `examples/rust_hello_world/` (Rust implementation + native JUnit-emitting tests)
-	- `examples/python_hello_world/` (Python workstation demo; not embedded)
-	- `examples/tsim_docs/` (shared TSIM requirements/architecture/verification/test-results chapters)
+	- `examples/c_hello_world/` (source for the C example → published at https://bitvortex.github.io/OSQAr/examples/c/)
+	- `examples/rust_hello_world/` (source for the Rust example → published at https://bitvortex.github.io/OSQAr/examples/rust/)
+	- `examples/cpp_hello_world/` (source for the C++ example → published at https://bitvortex.github.io/OSQAr/examples/cpp/)
+	- `examples/python_hello_world/` (source for the Python workstation demo → published at https://bitvortex.github.io/OSQAr/examples/python/)
+	- `examples/tsim_docs/` (shared TSIM chapter sources included by all example projects)
 
 
 - Styling:
@@ -48,12 +54,16 @@ The docs default to the `furo` theme (with built-in light/dark mode). To force a
 
 ## Build locally
 
+If you just want to read the docs, prefer the published site:
+
+- Framework docs: https://bitvortex.github.io/OSQAr/
+- Examples index: https://bitvortex.github.io/OSQAr/examples/
+
 ### Framework documentation (repo root)
 
 ```bash
 poetry install
 poetry run sphinx-build -b html . _build/html
-open _build/html/index.html
 ```
 
 ### Reference example documentation
@@ -63,7 +73,6 @@ Build one of the language-specific examples (pick the language that matches your
 ```bash
 poetry install
 poetry run sphinx-build -b html examples/c_hello_world _build/html/examples/c
-open _build/html/examples/c/index.html
 ```
 
 Or build the C++ / Rust variants:
@@ -78,7 +87,6 @@ Run an end-to-end example workflow (native tests → docs):
 ```bash
 cd examples/c_hello_world
 ./build-and-test.sh
-open _build/html/index.html
 ```
 
 ### Python demo example (published under `/examples/python/`)
@@ -86,7 +94,6 @@ open _build/html/index.html
 ```bash
 poetry install
 poetry run sphinx-build -b html examples/python_hello_world _build/html/examples/python
-open _build/html/examples/python/index.html
 ```
 
 ### Optional environment variables
@@ -100,8 +107,7 @@ If you are new to the repository:
 
 1. Open the framework docs: https://bitvortex.github.io/OSQAr/
 2. Then explore the examples index: https://bitvortex.github.io/OSQAr/examples/
-3. For safety-related embedded projects, prefer **C** or **Rust** as a starting point; **C++** is common, but typically harder to constrain and qualify.
-4. The **Python** example exists to be easy to run on a workstation; it demonstrates traceability mechanics and test-result import, but is not intended for embedded targets.
+3. Pick an example language (guidance above): C/Rust preferred for safety-related embedded; Python is workstation-only.
 
 ## Notes
 
