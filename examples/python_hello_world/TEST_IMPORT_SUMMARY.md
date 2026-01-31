@@ -108,7 +108,7 @@ def test_conversion_full_range(self):
 ### Running the Full Cycle
 
 ```bash
-cd examples/hello_world
+cd examples/python_hello_world
 
 # Option 1: Use the automated script
 ./build-and-test.sh
@@ -174,7 +174,7 @@ Architecture Coverage:    All ARCH_* validated
 
 ### New Files Created
 ```
-examples/hello_world/
+examples/python_hello_world/
 ├── 05_test_results.rst         (294 lines) Auto-imported test documentation
 ├── TEST_TRACEABILITY_GUIDE.md  (400+ lines) Comprehensive traceability guide
 └── build-and-test.sh           (120 lines) Automated workflow script
@@ -182,7 +182,7 @@ examples/hello_world/
 
 ### Modified Files
 ```
-examples/hello_world/
+examples/python_hello_world/
 ├── conf.py                     Added test_results_file configuration
 └── index.rst                   Updated toctree to include 05_test_results
 ```

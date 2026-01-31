@@ -48,7 +48,7 @@ This project follows a code of conduct to ensure a welcoming environment for all
 
 4. Run the Temperature Monitor (TSIM) example to verify setup:
    ```bash
-   cd examples/hello_world
+   cd examples/python_hello_world
    poetry run ./build-and-test.sh
    ```
 
@@ -86,12 +86,11 @@ OSQAr/
 │   ├── workflows/             # CI/CD workflows
 │   └── ISSUE_TEMPLATE/        # Issue templates
 ├── examples/                  # Example implementations
-│   └── hello_world/          # Temperature Monitor (TSIM) example
-│       ├── src/              # Implementation code
-│       ├── tests/            # Test suite
-│       ├── diagrams/         # PlantUML diagrams
-│       ├── *.rst             # Documentation sources
-│       └── _build/           # Generated HTML (not committed)
+│   ├── c_hello_world/        # C example (TSIM)
+│   ├── cpp_hello_world/      # C++ example (TSIM)
+│   ├── rust_hello_world/     # Rust example (TSIM)
+│   ├── python_hello_world/   # Python workstation demo (TSIM)
+│   └── tsim_docs/            # Shared TSIM chapter sources
 ├── conf.py                    # Sphinx configuration
 ├── pyproject.toml             # Poetry configuration
 ├── poetry.lock               # Locked dependencies
@@ -164,10 +163,10 @@ test: add integration test for TSIM
 poetry run pytest
 
 # Run specific test file
-poetry run pytest examples/hello_world/tests/test_tsim.py
+poetry run pytest examples/python_hello_world/tests/test_tsim.py
 
 # Run with coverage
-poetry run pytest --cov=examples/hello_world/src
+poetry run pytest --cov=examples/python_hello_world/src
 
 # Run documentation tests
 poetry run pytest --doctest-modules

@@ -37,7 +37,7 @@ Build any example documentation directly:
 .. code-block:: bash
 
    poetry install
-   poetry run sphinx-build -b html examples/c_hello_world _build/html/example
+   poetry run sphinx-build -b html examples/c_hello_world _build/html/examples/c
    poetry run sphinx-build -b html examples/cpp_hello_world _build/html/examples/cpp
    poetry run sphinx-build -b html examples/rust_hello_world _build/html/examples/rust
 
@@ -49,14 +49,14 @@ Run an end-to-end workflow (native tests → docs) for an example:
    ./build-and-test.sh
    open _build/html/index.html
 
-Legacy Python reference
-=======================
+Python demo reference
+=====================
 
-The original Python example remains available as a documentation/reference variant:
+A Python example remains available as a documentation reference variant:
 
 .. code-block:: bash
 
-   cd examples/hello_world
+   cd examples/python_hello_world
    ./build-and-test.sh
    open _build/html/index.html
 

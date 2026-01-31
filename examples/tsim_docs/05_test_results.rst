@@ -17,9 +17,9 @@ The traceability flow is:
          ↓
     Functional Requirement (REQ_FUNC_*, ARCH_*)
          ↓
-    Implementation Code (src/tsim.py with docstring IDs)
+        Implementation Code (src/* with requirement IDs)
          ↓
-    Unit Tests (test_tsim.py with TEST_* IDs)
+        Unit Tests (tests/* with TEST_* IDs)
          ↓
     JUnit XML Test Results
          ↓
@@ -34,15 +34,13 @@ The test suite can be run locally to generate compliance artifacts:
 
 .. code-block:: bash
 
-    # Install dependencies
-    cd examples/hello_world
-    poetry install
+  # Pick one language example and run its end-to-end script.
+  # This generates JUnit XML + builds HTML docs with imported test results.
+  cd examples/<language>_hello_world
+  ./build-and-test.sh
 
-    # Run all tests with JUnit output
-    poetry run pytest tests/test_tsim.py -v --junit-xml=test_results.xml
-
-    # Build documentation (auto-imports test results)
-    sphinx-build -b html . _build/html
+  # The generated docs live under the example directory.
+  open _build/html/index.html
 
 Test Configuration File
 =======================
@@ -53,9 +51,9 @@ The test results are automatically imported via Sphinx configuration:
 
     # conf.py configuration
     extensions = [
-        'sphinx_needs',         # Requirements traceability
-      'sphinxcontrib.test_reports',  # Auto-import JUnit XML
-        'sphinxcontrib.plantuml'  # Diagrams
+      'sphinx_needs',                 # Requirements traceability
+      'sphinxcontrib.test_reports',   # Auto-import JUnit XML
+      'sphinxcontrib.plantuml',       # Diagrams
     ]
     
     # Point to the JUnit XML file
@@ -156,7 +154,7 @@ The following matrix demonstrates the complete traceability chain from requireme
 Automated Test Reporting
 ==========================
 
-The JUnit XML output from pytest is automatically processed by Sphinx:
+The JUnit XML output from your test runner (pytest for the Python example, or a native runner for C/C++/Rust) is automatically processed by Sphinx:
 
 .. code-block:: xml
 
@@ -181,18 +179,16 @@ The complete compliance artifact package is generated via:
 
 .. code-block:: bash
 
-    # 1. Run tests and generate JUnit XML
-    poetry run pytest tests/test_tsim.py --junit-xml=test_results.xml
-    
-    # 2. Build documentation (auto-imports test results + generates traceability)
-    sphinx-build -b html . _build/html
-    
-    # 3. Output contains:
-    #    - Linked requirements and tests
-    #    - Architecture diagrams with PlantUML
-    #    - Test results integrated into HTML
-    #    - Searchable traceability matrix
-    #    - Compliance report suitable for ISO 26262 qualification
+  # 1. Run tests, emit JUnit XML, build docs
+  cd examples/<language>_hello_world
+  ./build-and-test.sh
+
+  # 2. Output contains:
+  #    - Linked requirements and tests
+  #    - Architecture diagrams with PlantUML
+  #    - Test results integrated into HTML
+  #    - Searchable traceability matrix
+  #    - Compliance documentation suitable for assessment/audit
 
 Domain-Agnostic Test Strategy
 =============================
@@ -215,62 +211,12 @@ Extending the Test Suite
 
 To add domain-specific tests:
 
-1. **Create domain directory**: ``examples/medical_device/tests/``
-2. **Inherit test base classes**: ``from hello_world.tests.test_tsim import TestSensorDriver``
-3. **Add domain-specific tests**:
+1. **Create domain directory**: ``examples/<your_domain_or_product>/``
+2. **Implement tests** in the language of your product and ensure the runner emits JUnit XML.
+3. **Use stable IDs**: keep requirement IDs (``REQ_*``, ``ARCH_*``) and test IDs (``TEST_*``) consistent so the traceability graph remains intact.
+4. **Update documentation**: link domain-specific tests to domain-specific requirements (e.g., ``REQ_MEDICAL_SAFETY_001``).
+5. **Rebuild**: Sphinx imports results and updates traceability.
 
-   .. code-block:: python
-
-       # examples/medical_device/tests/test_tsim_medical.py
-       from hello_world.tests.test_tsim import TestSensorDriver
-       from hello_world.src.tsim import TSIM
-       
-       class TestTSIMmedical(TestSensorDriver):
-           """Medical device specific tests"""
-           
-           def test_sensor_calibration_drift(self):
-               """Verify sensor compensates for drift over time (medical ASIL)"""
-               # Test implementation
-               pass
-
-4. **Update documentation**: Link domain-specific tests to medical-specific requirements (e.g., ``REQ_MEDICAL_SAFETY_001``)
-5. **Rebuild**: Sphinx auto-imports results and updates traceability
-
-Test Execution Commands
-=======================
-
-Common commands for test execution and reporting:
-
-.. code-block:: bash
-
-    # Run all tests
-    poetry run pytest tests/test_tsim.py
-    
-    # Run with verbose output
-    poetry run pytest tests/test_tsim.py -v
-    
-    # Run specific test class
-    poetry run pytest tests/test_tsim.py::TestSensorDriver -v
-    
-    # Run with coverage report
-    poetry run pytest tests/test_tsim.py --cov=src
-    
-    # Generate JUnit XML for compliance reporting
-    poetry run pytest tests/test_tsim.py --junit-xml=test_results.xml
-
-  Complexity report
-  =================
-
-  The example build generates a cyclomatic complexity report (``complexity_report.txt``) and embeds it here.
-
-  .. literalinclude:: complexity_report.txt
-    :language: text
-    
-    # Combine coverage + JUnit output
-    poetry run pytest tests/test_tsim.py --cov=src --junit-xml=test_results.xml
-    
-    # Run with HTML report (alternative to Sphinx integration)
-    poetry run pytest tests/test_tsim.py --html=report.html
 
 Compliance Artifact Checklist
 =============================

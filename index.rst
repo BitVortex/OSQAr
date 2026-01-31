@@ -26,17 +26,23 @@ Start here:
 Reference examples
 ==================
 
-OSQAr primarily targets **C**, **C++**, and **Rust** projects.
+OSQAr is designed to support safety/compliance documentation for many technology stacks.
+
+For **safety-related embedded** projects, OSQAr recommends using either **C** or **Rust** for the implementation and tests.
+
+**C++** is a commonly used embedded language, but is typically harder to constrain (toolchain variability, language feature subset discipline, and qualification effort) and therefore is **not recommended** as a first choice.
+
+The **Python** example is provided as an easy-to-run workstation demo for the documentation and traceability workflow; it is **not suited for embedded targets**.
 
 Reference examples:
 
-- `Default example (C) <example/>`_
 - `All examples index <examples/>`_
+- `C example <examples/c/>`_
 - `C++ example <examples/cpp/>`_
 - `Rust example <examples/rust/>`_
+- `Python demo example <examples/python/>`_
 
 - ``examples/c_hello_world``
 - ``examples/cpp_hello_world``
 - ``examples/rust_hello_world``
-
-The original Python example (``examples/hello_world``) remains available as a legacy/reference variant.
+- ``examples/python_hello_world``

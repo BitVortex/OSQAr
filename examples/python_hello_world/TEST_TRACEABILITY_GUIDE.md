@@ -34,7 +34,7 @@ HTML Documentation with Traceability Matrix
 ## File Structure
 
 ```
-examples/hello_world/
+examples/python_hello_world/
 ├── conf.py                          # Sphinx configuration with requirements ID regex
 ├── index.rst                        # Documentation entry point (Table of Contents)
 ├── 01_requirements.rst              # Safety & functional requirements (needs objects)
@@ -158,7 +158,7 @@ Sphinx generates interactive HTML with:
 ### Step 1: Run Unit Tests
 
 ```bash
-cd examples/hello_world
+cd examples/python_hello_world
 poetry install
 poetry run pytest tests/test_tsim.py -v --junit-xml=test_results.xml
 ```
@@ -238,13 +238,13 @@ jobs:
       
       - name: Install dependencies
         run: |
-          cd examples/hello_world
+          cd examples/python_hello_world
           pip install poetry
           poetry install
       
       - name: Run tests with JUnit output
         run: |
-          cd examples/hello_world
+          cd examples/python_hello_world
           poetry run pytest tests/test_tsim.py \
             -v \
             --junit-xml=test_results.xml \
@@ -256,14 +256,14 @@ jobs:
       
       - name: Build documentation (auto-imports test results)
         run: |
-          cd examples/hello_world
+          cd examples/python_hello_world
           poetry run sphinx-build -b html . _build/html
       
       - name: Deploy compliance artifacts
         uses: actions/upload-artifact@v3
         with:
           name: compliance-documentation
-          path: examples/hello_world/_build/html/
+          path: examples/python_hello_world/_build/html/
 ```
 
 #### Local Development Workflow
@@ -274,7 +274,7 @@ jobs:
 
 set -e  # Exit on error
 
-cd examples/hello_world
+cd examples/python_hello_world
 
 echo "🔍 Running code style checks..."
 poetry run black --check src tests

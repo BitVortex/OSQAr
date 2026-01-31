@@ -1,0 +1,61 @@
+@startuml TSIM_DataFlow
+!define PROCESS_COLOR #B3E5FC
+!define STORE_COLOR #C8E6C9
+!define DATA_COLOR #FFF9C4
+
+skinparam backgroundColor #FAFAFA
+
+title TSIM Data Flow Diagram\nWith 100ms Latency Budget (REQ_SAFETY_002)
+
+rectangle "Timing Budget: 0-100ms" #FFE0B2 {
+	rectangle "0-10ms: Sensor Read" #B3E5FC {
+		component "ADC Input" as ADC1
+		component "Convert to °C" as Conv
+	}
+    
+	rectangle "10-20ms: Filter" #B3E5FC {
+		component "5-Sample Buffer" as Buf
+		component "Moving Average" as Avg
+	}
+    
+	rectangle "20-50ms: State Machine" #B3E5FC {
+		component "Threshold Check\n(≥100°C?)" as Thresh
+		component "Hysteresis\n(≤95°C?)" as Hyst
+		component "Output State" as Out
+	}
+    
+	rectangle "50-100ms: Safety Margin" #FFCDD2 {
+		note right
+			Reserved for:
+			Real-time delays
+			Integration overhead
+		end note
+	}
+}
+
+ADC1 --> Conv : Raw 12-bit\nARCH_SIGNAL_001
+Conv --> Buf : Temperature\nARCH_FUNC_001
+Buf --> Avg : Buffer Full
+Avg --> Thresh : Filtered Temp\nARCH_SIGNAL_002
+Thresh --> Hyst : Temperature\nARCH_FUNC_002
+Hyst --> Out : State Decision\nARCH_FUNC_003
+Out --> Out : SAFE/UNSAFE\nARCH_SIGNAL_003
+
+note bottom of Conv
+	REQ_FUNC_001
+	Range: -40 to +125°C
+end note
+
+note bottom of Avg
+	REQ_FUNC_002
+	Noise Rejection
+end note
+
+note bottom of Out
+	REQ_SAFETY_002: Within 100ms
+	REQ_SAFETY_003: Safe/Unsafe
+	REQ_FUNC_003: ≥100°C
+	REQ_FUNC_004: ≤95°C (hysteresis)
+end note
+
+@enduml

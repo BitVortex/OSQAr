@@ -57,7 +57,7 @@ fi
 # Step 3: Verify Test-Requirement Coverage
 echo -e "\n${BLUE}Step 3️⃣: Traceability Coverage Check${NC}"
 TEST_COUNT=$(grep -c "testcase" test_results.xml)
-REQ_COUNT=$(grep -c ".. need::" 03_verification.rst || echo "0")
+REQ_COUNT=$(grep -c ".. need::" ../tsim_docs/03_verification.rst || echo "0")
 echo "  Test cases: $TEST_COUNT"
 echo "  Test requirements: $REQ_COUNT"
 
@@ -93,9 +93,9 @@ fi
 echo -e "\n${BLUE}Step 5️⃣: Traceability Report${NC}"
 echo "  Analyzing traceability chain..."
 
-REQUIREMENTS=$(grep -c "^.. need::" 01_requirements.rst 2>/dev/null || echo "0")
-ARCH=$(grep -c ":id: ARCH_" 02_architecture.rst 2>/dev/null || echo "0")
-TESTS=$(grep -c ":id: TEST_" 03_verification.rst 2>/dev/null || echo "0")
+REQUIREMENTS=$(grep -c "^.. need::" ../tsim_docs/01_requirements.rst 2>/dev/null || echo "0")
+ARCH=$(grep -c ":id: ARCH_" ../tsim_docs/02_architecture.rst 2>/dev/null || echo "0")
+TESTS=$(grep -c ":id: TEST_" ../tsim_docs/03_verification.rst 2>/dev/null || echo "0")
 PASSED=$(grep -c 'status="passed"' test_results.xml 2>/dev/null || echo "0")
 
 echo "  Requirements defined: $REQUIREMENTS"

@@ -13,7 +13,7 @@ The guidance below is based on the shared TSIM example documentation and its lan
 - `examples/cpp_hello_world/`
 - `examples/rust_hello_world/`
 
-(The original Python variant in `examples/hello_world/` remains available as a legacy/reference example.)
+(The Python example in `examples/python_hello_world/` is a workstation demo; use C or Rust for safety-related embedded projects.)
 
 ## 1) Quick start: build a reference example
 
@@ -21,8 +21,8 @@ From the repository root:
 
 ```bash
 poetry install
-poetry run sphinx-build -b html examples/c_hello_world _build/html/example
-open _build/html/example/index.html
+poetry run sphinx-build -b html examples/c_hello_world _build/html/examples/c
+open _build/html/examples/c/index.html
 ```
 
 If you prefer to run the full “test → docs → traceability” workflow from within an example:
@@ -60,7 +60,7 @@ The reference example uses a consistent chapter structure:
 
 OSQAr relies on **sphinx-needs**. The building block is the `.. need::` directive with an `:id:`.
 
-Example pattern (from `examples/hello_world/01_requirements.rst`):
+Example pattern (from `examples/tsim_docs/01_requirements.rst`):
 
 ```rst
 .. need:: (SR) The system shall detect when temperature exceeds the safe operating limit and report an unsafe state within 100ms.
@@ -97,7 +97,7 @@ This naming is domain-agnostic: you can reuse the same structure for medical, ma
 
 ### C) Add architecture diagrams (PlantUML) and link them to needs
 
-The example places PlantUML sources in `examples/hello_world/diagrams/` and includes them from `02_architecture.rst`.
+The examples place PlantUML sources in their language folder (e.g. `examples/c_hello_world/diagrams/`) and include them from `02_architecture.rst`.
 
 Typical include pattern:
 
@@ -125,7 +125,7 @@ In the example, the verification chapter is the source of truth for what is test
 
 Each example uses language-appropriate tooling to generate JUnit XML.
 
-For example, the legacy Python variant uses pytest with JUnit output:
+For example, the Python demo uses pytest with JUnit output:
 
 ```bash
 poetry run pytest tests/test_tsim.py -v --junit-xml=test_results.xml
@@ -173,7 +173,7 @@ At minimum, you need:
 - `sphinxcontrib.plantuml` enabled (architecture diagrams)
 - `needs_id_regex` set (ID discipline)
 
-The example configuration (see `examples/hello_world/conf.py`) also:
+The example configuration (see `examples/python_hello_world/conf.py`) also:
 
 - defaults to the `furo` theme but allows `OSQAR_SPHINX_THEME` override
 - renders PlantUML to `svg`
@@ -195,7 +195,7 @@ To create a smooth review experience:
 
 For deeper patterns and examples, see:
 
-- `examples/hello_world/LINKED_TRACEABILITY_GUIDE.md`
+- `examples/python_hello_world/LINKED_TRACEABILITY_GUIDE.md`
 
 ## 7) Test results in the docs: two practical options
 
@@ -232,7 +232,7 @@ If you want stricter mapping (TEST_* ↔ REQ_*), consider maintaining an explici
 
 ## 8) CI/CD and artifact packaging
 
-The example is already wired to publish HTML to GitHub Pages from `examples/hello_world`.
+The GitHub Pages workflow builds each example folder and publishes them under `/examples/`.
 
 A typical CI workflow for a documentation+compliance build is:
 

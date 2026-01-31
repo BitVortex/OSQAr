@@ -192,7 +192,7 @@ Per-Component Performance:
 
 ```bash
 # Navigate to example
-cd examples/hello_world
+cd examples/python_hello_world
 
 # Run the automated workflow
 ./build-and-test.sh

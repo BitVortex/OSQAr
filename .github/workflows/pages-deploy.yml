@@ -57,14 +57,7 @@ jobs:
 
       - name: Clean published example output dirs
         run: |
-          rm -rf _build/html/example
           rm -rf _build/html/examples/c _build/html/examples/cpp _build/html/examples/rust _build/html/examples/python
-
-      - name: Build example docs (default published under /example/)
-        env:
-          PLANTUML_JAR: ${{ github.workspace }}/.cache/plantuml/plantuml.jar
-        run: |
-          poetry run sphinx-build -b html examples/c_hello_world _build/html/example
 
       - name: Build additional examples (published under /examples/)
         env:
@@ -73,7 +66,7 @@ jobs:
           poetry run sphinx-build -b html examples/c_hello_world _build/html/examples/c
           poetry run sphinx-build -b html examples/cpp_hello_world _build/html/examples/cpp
           poetry run sphinx-build -b html examples/rust_hello_world _build/html/examples/rust
-          poetry run sphinx-build -b html examples/hello_world _build/html/examples/python
+          poetry run sphinx-build -b html examples/python_hello_world _build/html/examples/python
 
       - name: Deploy to GitHub Pages (push to gh-pages)
         uses: peaceiris/actions-gh-pages@v4

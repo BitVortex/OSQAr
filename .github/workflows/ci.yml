@@ -39,14 +39,14 @@ jobs:
 
     - name: Build documentation
       run: |
-        # Build the example docs (project root has no index.rst)
-        poetry run sphinx-build -b html examples/hello_world examples/hello_world/_build/html
+        # Build the Python demo example docs
+        poetry run sphinx-build -b html examples/python_hello_world examples/python_hello_world/_build/html
 
     - name: Upload documentation
       uses: actions/upload-artifact@v4
       with:
         name: documentation-${{ matrix.python-version }}
-        path: examples/hello_world/_build/html/
+        path: examples/python_hello_world/_build/html/
         retention-days: 30
 
   temperature-monitor-example:
@@ -74,13 +74,13 @@ jobs:
 
     - name: Run Temperature Monitor (TSIM) example
       run: |
-        cd examples/hello_world
+        cd examples/python_hello_world
         chmod +x build-and-test.sh
         ./build-and-test.sh
 
     - name: Verify documentation build
       run: |
-        cd examples/hello_world
+        cd examples/python_hello_world
         ls -la _build/html/index.html
         test -f _build/html/05_test_results.html
 
@@ -89,6 +89,6 @@ jobs:
       with:
         name: temperature-monitor-example
         path: |
-          examples/hello_world/_build/html/
-          examples/hello_world/test_results.xml
+          examples/python_hello_world/_build/html/
+          examples/python_hello_world/test_results.xml
         retention-days: 30

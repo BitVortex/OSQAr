@@ -27,7 +27,8 @@ exclude_patterns = [
     '_build',
     # The example projects are built separately.
     'examples/*_hello_world/**',
-    'examples/hello_world/**',
+    # Shared example chapter sources are included by example projects.
+    'examples/tsim_docs/**',
 ]
 
 

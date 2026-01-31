@@ -4,7 +4,9 @@ _build/
 .venv/
 *.pyc
 __pycache__/
+.pytest_cache/
 .DS_Store
+.DS_STORE
 
 # Example build artifacts
 examples/**/build/
