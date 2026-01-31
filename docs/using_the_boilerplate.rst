@@ -37,9 +37,9 @@ Build any example documentation directly:
 .. code-block:: bash
 
    poetry install
-   poetry run sphinx-build -b html examples/c_hello_world examples/c_hello_world/_build/html/example
-   poetry run sphinx-build -b html examples/cpp_hello_world examples/cpp_hello_world/_build/html/example
-   poetry run sphinx-build -b html examples/rust_hello_world examples/rust_hello_world/_build/html/example
+   poetry run sphinx-build -b html examples/c_hello_world _build/html/example
+   poetry run sphinx-build -b html examples/cpp_hello_world _build/html/examples/cpp
+   poetry run sphinx-build -b html examples/rust_hello_world _build/html/examples/rust
 
 Run an end-to-end workflow (native tests → docs) for an example:
 
@@ -115,6 +115,35 @@ A robust verification chapter typically contains:
 
 1) test requirements as needs objects (``TEST_*``)
 2) a traceability matrix mapping ``REQ_*``/``ARCH_*`` → ``TEST_*``
+
+Code complexity (optional)
+==========================
+
+OSQAr supports generating additional *engineering evidence* artifacts alongside test results.
+
+All reference examples include an optional **code complexity report** step that produces
+``complexity_report.txt``.
+
+- **C / C++ / Python**: `lizard <https://github.com/terryyin/lizard>`_ (Cyclomatic Complexity)
+   - Runs as part of the example scripts via ``poetry run lizard``.
+   - You can run it manually from the repository root, e.g.:
+
+      .. code-block:: bash
+
+          poetry install
+          poetry run lizard -C 10 examples/c_hello_world/src examples/c_hello_world/include
+
+- **Rust**: `cargo-cyclo <https://github.com/fz0/cargo-cyclo>`_ (Cyclomatic Complexity)
+   - Install once: ``cargo install cargo-cyclo``
+   - Then run from within the Rust example:
+
+      .. code-block:: bash
+
+          cd examples/rust_hello_world
+          cargo cyclo
+
+The example scripts treat complexity reporting as **best-effort** by default (they do not fail
+the workflow if the tool is not installed). For CI, you can tighten this to enforce thresholds.
 
 Troubleshooting
 ===============

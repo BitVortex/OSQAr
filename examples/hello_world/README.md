@@ -16,6 +16,7 @@ This example demonstrates the core capabilities of OSQAr through a simple, domai
 2. **ISO 26262 Compliance**: Structured requirement IDs, traceability matrices, and verification mapping
 3. **Architecture Documentation**: System diagrams with PlantUML
 4. **Test Mapping**: Requirements traced to test cases for verification
+5. **Optional Complexity Report**: Cyclomatic complexity report via `lizard`
 
 ## Files
 

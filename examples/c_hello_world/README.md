@@ -5,7 +5,8 @@ This example mirrors the Python `hello_world` documentation flow, but the implem
 ## Workflow
 
 1) Build and run native tests (generates `test_results.xml` in JUnit format)
-2) Build Sphinx documentation (imports `test_results.xml` via `sphinx-test-reports`)
+2) Generate a code complexity report (`complexity_report.txt` via `lizard`)
+3) Build Sphinx documentation (imports `test_results.xml` via `sphinx-test-reports`)
 
 ### Quick start
 

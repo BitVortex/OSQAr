@@ -37,7 +37,21 @@ else
   exit 1
 fi
 
-echo -e "\n${BLUE}Step 3: Build documentation${NC}"
+echo -e "\n${BLUE}Step 3: Code complexity report (lizard)${NC}"
+rm -f complexity_report.txt
+if command -v poetry >/dev/null 2>&1; then
+  # Cyclomatic complexity report (best-effort; does not fail the build)
+  poetry run lizard -C 10 src include tests > complexity_report.txt 2>&1 || true
+  if [ -f complexity_report.txt ]; then
+    echo -e "${GREEN}✓ Wrote complexity_report.txt${NC}"
+  else
+    echo -e "${RED}✗ complexity_report.txt not generated${NC}"
+  fi
+else
+  echo -e "${RED}✗ Poetry not found; skipping complexity report${NC}"
+fi
+
+echo -e "\n${BLUE}Step 4: Build documentation${NC}"
 if command -v poetry >/dev/null 2>&1; then
   rm -rf _build/html
   poetry install --no-interaction >/dev/null
@@ -50,3 +64,4 @@ fi
 echo -e "\n${GREEN}✅ Done${NC}"
 echo "- HTML: _build/html/index.html"
 echo "- JUnit: test_results.xml"
+echo "- Complexity: complexity_report.txt"

@@ -68,6 +68,16 @@ else
     exit 1
 fi
 
+# Step 3.5: Code complexity report (optional)
+echo -e "\n${BLUE}Step 3️⃣.5: Code Complexity Report (lizard)${NC}"
+rm -f complexity_report.txt
+poetry run lizard -C 10 src tests > complexity_report.txt 2>&1 || {
+    echo "  ⚠️  Complexity report skipped (lizard not available)"
+}
+if [ -f complexity_report.txt ]; then
+    echo -e "${GREEN}  ✓ Wrote complexity_report.txt${NC}"
+fi
+
 # Step 4: Build Documentation
 echo -e "\n${BLUE}Step 4️⃣: Build Documentation with Test Results${NC}"
 echo "  Running Sphinx..."
@@ -98,6 +108,7 @@ echo -e "\n${GREEN}✅ Compliance Artifact Generation Complete!${NC}"
 echo ""
 echo "📊 Artifact Summary:"
 echo "  - Test Results: test_results.xml (JUnit format)"
+echo "  - Complexity: complexity_report.txt"
 echo "  - Documentation: _build/html/index.html"
 echo "  - Test Report: _build/html/05_test_results.html"
 echo "  - Traceability Matrix: _build/html/03_verification.html"

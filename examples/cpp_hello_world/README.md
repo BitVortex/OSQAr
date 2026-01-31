@@ -2,6 +2,12 @@
 
 This example mirrors the reference documentation flow, but the implementation and tests are written in **C++**.
 
+## Workflow
+
+1) Build and run native tests (generates `test_results.xml` in JUnit format)
+2) Generate a code complexity report (`complexity_report.txt` via `lizard`)
+3) Build Sphinx documentation (imports `test_results.xml` via `sphinx-test-reports`)
+
 ## Quick start
 
 ```bash

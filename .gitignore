@@ -10,6 +10,7 @@ __pycache__/
 examples/**/build/
 examples/**/target/
 examples/**/test_results.xml
+examples/**/complexity_report.*
 
 # Editor settings
 .vscode/

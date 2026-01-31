@@ -29,7 +29,27 @@ else
   exit 1
 fi
 
-echo -e "\n${BLUE}Step 3: Build documentation${NC}"
+echo -e "\n${BLUE}Step 3: Code complexity report${NC}"
+rm -f complexity_report.txt
+
+if command -v cargo-cyclo >/dev/null 2>&1; then
+  cargo cyclo > complexity_report.txt 2>&1 || true
+  echo -e "${GREEN}✓ Wrote complexity_report.txt (cargo-cyclo)${NC}"
+elif command -v cargo >/dev/null 2>&1 && cargo cyclo --help >/dev/null 2>&1; then
+  cargo cyclo > complexity_report.txt 2>&1 || true
+  echo -e "${GREEN}✓ Wrote complexity_report.txt (cargo cyclo)${NC}"
+else
+  echo -e "${BLUE}i${NC} cargo-cyclo not installed; skipping Rust-specific complexity report"
+  echo "  Install with: cargo install cargo-cyclo"
+
+  # Optional: lizard can still provide a basic report for Rust sources.
+  if command -v poetry >/dev/null 2>&1; then
+    poetry run lizard -C 10 src > complexity_report.txt 2>&1 || true
+    echo -e "${GREEN}✓ Wrote complexity_report.txt (lizard fallback)${NC}"
+  fi
+fi
+
+echo -e "\n${BLUE}Step 4: Build documentation${NC}"
 if command -v poetry >/dev/null 2>&1; then
   rm -rf _build/html
   poetry install --no-interaction >/dev/null
@@ -42,3 +62,4 @@ fi
 echo -e "\n${GREEN}✅ Done${NC}"
 echo "- HTML: _build/html/index.html"
 echo "- JUnit: test_results.xml"
+echo "- Complexity: complexity_report.txt"
