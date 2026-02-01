@@ -103,6 +103,40 @@ poetry run sphinx-build -b html examples/python_hello_world _build/html/examples
 - `OSQAR_SPHINX_THEME`: override theme (e.g., `furo`, `alabaster`)
 - `PLANTUML_JAR`: point to a local `plantuml.jar` for offline PlantUML rendering
 
+## CLI
+
+OSQAr ships a small, stdlib-only CLI to speed up common workflows (project scaffolding, traceability checks, checksum manifests).
+
+Run it either via Poetry:
+
+```bash
+poetry run python -m tools.osqar_cli --help
+```
+
+Or via the convenience wrapper (repo root):
+
+```bash
+./osqar --help
+```
+
+Typical commands:
+
+```bash
+# Scaffold a new project from a language template
+poetry run python -m tools.osqar_cli new --language rust --name MySEooC --destination ./MySEooC
+
+# Verify traceability from a built example output
+poetry run python -m tools.osqar_cli traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json
+
+# Generate/verify shipment checksums
+poetry run python -m tools.osqar_cli checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS
+poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --manifest ./_build/html/SHA256SUMS
+```
+
+See the framework docs for the evidence “shipment” workflow:
+
+- https://bitvortex.github.io/OSQAr/ (Using the OSQAr Boilerplate)
+
 ## Start here
 
 If you are new to the repository:

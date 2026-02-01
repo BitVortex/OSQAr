@@ -60,6 +60,61 @@ A Python example remains available as a documentation reference variant:
    ./build-and-test.sh
    open _build/html/index.html
 
+OSQAr CLI
+=========
+
+OSQAr includes a small, stdlib-only CLI for common workflows:
+
+- scaffold a new project from a language template
+- validate traceability based on an exported ``needs.json``
+- generate/verify checksum manifests for a shipped evidence bundle
+
+Invocation
+----------
+
+Run via Poetry:
+
+.. code-block:: bash
+
+   poetry run python -m tools.osqar_cli --help
+
+Or via the repo-root convenience wrapper:
+
+.. code-block:: bash
+
+   ./osqar --help
+
+Scaffold a new project
+----------------------
+
+Create a new project folder based on one of the reference templates:
+
+.. code-block:: bash
+
+   poetry run python -m tools.osqar_cli new --language c --name MySEooC --destination ./MySEooC
+
+This copies the selected template while excluding build outputs (e.g., ``_build/``, ``target/``, ``__pycache__/``).
+
+Verify traceability
+-------------------
+
+Run traceability checks on an exported ``needs.json``:
+
+.. code-block:: bash
+
+   poetry run python -m tools.osqar_cli traceability ./_build/html/needs.json \
+     --json-report ./_build/html/traceability_report.json
+
+Checksum manifest (shipment integrity)
+--------------------------------------
+
+Generate and verify a checksum manifest (default: SHA-256) for a shipped directory:
+
+.. code-block:: bash
+
+   poetry run python -m tools.osqar_cli checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS
+   poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --manifest ./_build/html/SHA256SUMS
+
 Core workflow
 =============
 

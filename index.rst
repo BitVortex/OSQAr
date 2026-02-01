@@ -7,6 +7,8 @@ OSQAr is a Sphinx + sphinx-needs boilerplate for producing auditable safety/comp
 - architecture diagrams (PlantUML)
 - verification planning and traceability matrices
 
+OSQAr also includes a small CLI for scaffolding new projects and running traceability/checksum verification.
+
 Start here:
 
 .. toctree::
