@@ -10,7 +10,7 @@ Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boile
 - extensive lifecycle management support
 - multi-user collaboration workflows (branching/merging/CI strategies)
 
-**Version:** 0.2.2 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
+**Version:** 0.2.3 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
 
 For license terms see the `LICENSE` file (Apache License 2.0).
 

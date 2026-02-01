@@ -51,6 +51,12 @@ Actions:
 - rebuild docs
 - regenerate checksums
 
+Example commands (supplier, docs-only update)::
+
+  poetry run python -m tools.osqar_cli shipment build-docs --project examples/python_hello_world
+  poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html generate
+  poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
+
 Requirement changes
 -------------------
 
@@ -67,6 +73,13 @@ Actions:
 - re-run traceability checks
 - regenerate checksums
 
+Example commands (supplier, requirement change)::
+
+   poetry run python -m tools.osqar_cli supplier prepare \
+     --project examples/python_hello_world \
+     --clean \
+     --archive
+
 Implementation changes
 ----------------------
 
@@ -82,6 +95,13 @@ Actions:
 - rebuild docs (to import new test results)
 - re-run traceability and checksums
 
+Example commands (supplier, implementation change)::
+
+   poetry run python -m tools.osqar_cli supplier prepare \
+     --project examples/python_hello_world \
+     --clean \
+     --archive
+
 Toolchain changes
 -----------------
 
@@ -96,39 +116,6 @@ Actions:
 - rebuild and compare outputs
 - re-approve evidence baseline
 
-Recommended workflows
-=====================
-
-Supplier workflow (produce shipment)
-------------------------------------
-
-From the repository root (recommended)::
-
-   poetry run python -m tools.osqar_cli supplier prepare \
-     --project examples/python_hello_world \
-     --clean
-
-Notes:
-
-- Use the matching example directory (C/C++/Rust/Python) as ``--project``.
-- If the example includes a ``build-and-test.sh``, you can omit ``--skip-tests`` to run it.
-
-Integrator workflow (verify shipment)
--------------------------------------
-
-After unpacking a received shipment::
-
-   poetry run python -m tools.osqar_cli integrator verify \
-     --shipment /path/to/shipment \
-     --traceability
-
-Archiving and traceability continuity
-=====================================
-
-- Archive the shipment directory (or a signed archive) per version.
-- Keep need IDs stable; stable IDs make diffs and intake reviews possible.
-- If an ID must be replaced, document the mapping (old ↔ new) in release notes.
-
 Multi-language note
 ===================
 
@@ -138,37 +125,62 @@ To keep lifecycle management consistent:
 - keep the requirements and verification intent in the shared TSIM docs
 - keep language-specific implementation details in each example's implementation chapter
 - keep test IDs (``TEST_*``) stable even if underlying test framework differs
-Implementation changes
 
-Examples:
+Notes and pitfalls
+==================
 
+- Treat shipped HTML outputs as **immutable evidence**. If anything changes, create a new shipment.
+- Integrators should **verify** manifests, not regenerate them (regeneration defeats integrity checks).
+- Keep IDs stable (``REQ_*``, ``ARCH_*``, ``TEST_*``). If you truly must replace an ID, document the mapping.
+- Prefer additive changes over rewrites; it makes diffs reviewable and reduces merge conflicts.
 
-Actions:
+Worked example (requirement change)
+===================================
 
+Scenario:
 
-Toolchain changes
+- You tighten a threshold in a ``REQ_*`` need.
 
-Examples:
+Minimum actions:
 
+1. Update the requirement text and any assumptions.
+2. Update trace links (REQ ↔ ARCH ↔ TEST) if they no longer match.
+3. Update tests (or add a new test) and ensure the test ID remains stable.
+4. Run the end-to-end example workflow (tests → docs import → shipment integrity):
 
-Actions:
-
-
-Recommended workflows
-=====================
+   - Run the example's ``build-and-test.sh`` (if present).
+   - Rebuild docs.
+   - Re-run traceability checks.
+   - Regenerate checksums.
 
 Supplier workflow (produce shipment)
+====================================
 
 From the repository root (recommended)::
 
    poetry run python -m tools.osqar_cli supplier prepare \
      --project examples/python_hello_world \
-     --clean
+     --clean \
+     --archive
 
 Notes:
 
+- By default, OSQAr will run the example's ``build-and-test.sh`` *if it exists*.
+  Use ``--skip-tests`` to force skipping.
+- The shipment directory defaults to ``<project>/_build/html``.
+
+Optional: add supplier metadata to the shipment root (helps integrator intake)::
+
+   poetry run python -m tools.osqar_cli shipment metadata write \
+     --shipment examples/python_hello_world/_build/html \
+     --name "TSIM (Python)" \
+     --version "<your_version>" \
+     --url repository=https://example.com/repo.git \
+     --origin url=https://example.com/repo.git \
+     --origin revision=<commit>
 
 Integrator workflow (verify shipment)
+=====================================
 
 After unpacking a received shipment::
 
@@ -176,17 +188,18 @@ After unpacking a received shipment::
      --shipment /path/to/shipment \
      --traceability
 
+If you intake multiple shipments at once, prefer the batch workflow::
+
+   poetry run python -m tools.osqar_cli workspace intake \
+     --root /path/to/received \
+     --recursive \
+     --output /path/to/archive/<date> \
+     --traceability
+
 Archiving and traceability continuity
 =====================================
 
-
-Multi-language note
-===================
-
-This TSIM example exists in multiple implementation languages.
-To keep lifecycle management consistent:
-
-
-Supplier workflow (produce shipment)
-------------------------------------
+- Archive the shipment directory (or a signed archive) per version.
+- Keep need IDs stable; stable IDs make diffs and intake reviews possible.
+- If an ID must be replaced, document the mapping (old ↔ new) in release notes.
 

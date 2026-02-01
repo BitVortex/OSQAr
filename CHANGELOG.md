@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-02-01
+
 ### Added
 - Framework documentation on multi-user collaboration workflows (branching/merging strategies and conflict minimization)
+
+### Fixed
+- Cleaned up and expanded the shared TSIM lifecycle management chapter (removed duplicated content; added practical examples and actions)
 
 ## [0.2.2] - 2026-02-01
 

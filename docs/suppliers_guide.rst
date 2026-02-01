@@ -70,65 +70,65 @@ Recommended supplier procedure (per example)
 
 1. Build the example documentation (this emits HTML plus ``needs.json``)::
 
-			poetry run sphinx-build -b html \
-				examples/python_hello_world \
-				examples/python_hello_world/_build/html
+	poetry run sphinx-build -b html \
+		examples/python_hello_world \
+		examples/python_hello_world/_build/html
 
 2. Run traceability checks and write a JSON report::
 
-			poetry run python tools/traceability_check.py \
-				examples/python_hello_world/_build/html/needs.json \
-				--json-report examples/python_hello_world/_build/html/traceability_report.json
+	poetry run python tools/traceability_check.py \
+		examples/python_hello_world/_build/html/needs.json \
+		--json-report examples/python_hello_world/_build/html/traceability_report.json
 
 3. Generate a checksum manifest for the example build output directory and verify it immediately::
 
-			poetry run python tools/generate_checksums.py \
-				--root examples/python_hello_world/_build/html \
-				--output examples/python_hello_world/_build/html/SHA256SUMS
+	poetry run python tools/generate_checksums.py \
+		--root examples/python_hello_world/_build/html \
+		--output examples/python_hello_world/_build/html/SHA256SUMS
 
-			poetry run python tools/generate_checksums.py \
-				--root examples/python_hello_world/_build/html \
-				--verify examples/python_hello_world/_build/html/SHA256SUMS
+	poetry run python tools/generate_checksums.py \
+		--root examples/python_hello_world/_build/html \
+		--verify examples/python_hello_world/_build/html/SHA256SUMS
 
-	 Optional convenience: the same steps are available via the OSQAr CLI::
+Optional convenience: the same steps are available via the OSQAr CLI::
 
-			# One-shot supplier workflow (recommended)
-			poetry run python -m tools.osqar_cli supplier prepare \
-				--project examples/python_hello_world \
-				--clean \
-				--archive
+	# One-shot supplier workflow (recommended)
+	poetry run python -m tools.osqar_cli supplier prepare \
+		--project examples/python_hello_world \
+		--clean \
+		--archive
 
-			# Or run the individual shipment steps
-			poetry run python -m tools.osqar_cli shipment build-docs --project examples/python_hello_world
-			poetry run python -m tools.osqar_cli shipment traceability --shipment examples/python_hello_world/_build/html
-			poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html generate
-			poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
+	# Or run the individual shipment steps
+	poetry run python -m tools.osqar_cli shipment build-docs --project examples/python_hello_world
+	poetry run python -m tools.osqar_cli shipment traceability --shipment examples/python_hello_world/_build/html
+	poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html generate
+	poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
 
-			# Legacy equivalents (still supported)
+	# Legacy equivalents (still supported)
 
-			poetry run python -m tools.osqar_cli traceability examples/python_hello_world/_build/html/needs.json \
-				--json-report examples/python_hello_world/_build/html/traceability_report.json
+	poetry run python -m tools.osqar_cli traceability examples/python_hello_world/_build/html/needs.json \
+		--json-report examples/python_hello_world/_build/html/traceability_report.json
 
-			poetry run python -m tools.osqar_cli checksum generate \
-				--root examples/python_hello_world/_build/html \
-				--output examples/python_hello_world/_build/html/SHA256SUMS
+	poetry run python -m tools.osqar_cli checksum generate \
+		--root examples/python_hello_world/_build/html \
+		--output examples/python_hello_world/_build/html/SHA256SUMS
 
-			poetry run python -m tools.osqar_cli checksum verify \
-				--root examples/python_hello_world/_build/html \
-				--manifest examples/python_hello_world/_build/html/SHA256SUMS
+	poetry run python -m tools.osqar_cli checksum verify \
+		--root examples/python_hello_world/_build/html \
+		--manifest examples/python_hello_world/_build/html/SHA256SUMS
 
 4. Ship the example build output directory as an archive (ZIP/TAR), keeping ``SHA256SUMS`` at the root of
 	the shipped directory.
 
 Optional: add project metadata into the shipment directory (recommended for multi-project integrators)::
 
-			poetry run python -m tools.osqar_cli shipment metadata write \
-				--shipment examples/python_hello_world/_build/html \
-				--name "OSQAr Python Hello World" \
-				--version "0.2.2" \
-				--url repository=https://example.com/repo.git \
-				--origin url=https://example.com/repo.git \
-				--origin revision=<commit>
+	poetry run python -m tools.osqar_cli shipment metadata write \
+		--shipment examples/python_hello_world/_build/html \
+		--name "OSQAr Python Hello World" \
+		--version "0.2.3" \
+		--url repository=https://example.com/repo.git \
+		--origin url=https://example.com/repo.git \
+		--origin revision=<commit>
 
 Notes
 ^^^^^
