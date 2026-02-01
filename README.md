@@ -154,7 +154,7 @@ poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --mani
 ./osqar shipment metadata write \
 	--shipment examples/rust_hello_world/_build/html \
 	--name "Rust Hello World" \
-	--version "0.2.2" \
+	--version "0.2.3" \
 	--url repository=https://example.com/repo.git \
 	--origin url=https://example.com/repo.git \
 	--origin revision=<commit>
