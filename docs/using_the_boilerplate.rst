@@ -10,6 +10,9 @@ OSQAr is a **documentation-first** boilerplate for producing auditable safety/co
 - structured requirements and traceability (via ``sphinx-needs``)
 - architecture diagrams (via PlantUML)
 - verification planning and traceability (requirements ↔ architecture ↔ tests)
+- evidence “shipments” (rendered HTML + machine-readable exports) protected by checksum manifests
+- integrator-friendly multi-shipment intake and a consolidated **Subproject overview**
+- extensive lifecycle management guidance (framework-level and example-level)
 
 Quick start
 ===========
@@ -68,6 +71,8 @@ OSQAr includes a small, stdlib-only CLI for common workflows:
 - scaffold a new project from a language template
 - validate traceability based on an exported ``needs.json``
 - generate/verify checksum manifests for a shipped evidence bundle
+- supplier and integrator workflows (prepare, verify, intake)
+- optional shipment metadata (origin, URLs, descriptive info)
 
 Invocation
 ----------
@@ -182,6 +187,7 @@ Per shipped example output directory, OSQAr expects the following files to be pr
 - ``needs.json`` (export from ``sphinx-needs``)
 - ``traceability_report.json`` (result of the OSQAr traceability check)
 - ``SHA256SUMS`` (checksum manifest covering the full directory contents)
+- ``osqar_project.json`` (optional project metadata: description, URLs, origin)
 
 Supplier-side procedure (create the shipment)
 ---------------------------------------------
@@ -218,6 +224,24 @@ Optional convenience (same operations via the OSQAr CLI)::
     poetry run python -m tools.osqar_cli integrator verify \
        --shipment /path/to/shipment \
        --traceability
+
+      # Supplier: optionally add metadata into the shipment root
+      ./osqar shipment metadata write \
+         --shipment examples/python_hello_world/_build/html \
+         --name "OSQAr Python Hello World" \
+         --version "0.2.2" \
+         --url repository=https://example.com/repo.git \
+         --origin url=https://example.com/repo.git \
+         --origin revision=<commit>
+
+      # Integrator: intake multiple shipments and generate a Subproject overview
+      ./osqar workspace intake \
+         --root intake/received \
+         --recursive \
+         --output intake/archive/2026-02-01 \
+         --traceability
+
+For multi-project intake patterns, see :doc:`multi_project_workflows`.
 
     # Or run the individual shipment steps
     poetry run python -m tools.osqar_cli shipment build-docs --project examples/python_hello_world

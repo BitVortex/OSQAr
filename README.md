@@ -2,15 +2,28 @@
 
 # OSQAr
 
-Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boilerplate for building **auditable safety/compliance documentation** with:
+Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boilerplate for building **auditable, reuseable safety/compliance documentation** with:
 
 - requirements + traceability (sphinx-needs)
 - architecture diagrams (PlantUML)
 - verification planning and traceability matrices
+- extensive lifecycle management support
 
 **Version:** 0.2.2 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
 
 For license terms see the `LICENSE` file (Apache License 2.0).
+
+## What you can do with OSQAr
+
+OSQAr is documentation-first and aimed at producing **reviewable, exportable evidence** for safety- and compliance-related components (SEooC-style).
+
+- Author structured requirements, architecture and verification plans (REQ/ARCH/TEST) in reStructuredText
+- Generate traceability matrices and export the machine-readable trace graph (`needs.json`)
+- Import and publish test results (e.g., JUnit XML) into the documentation
+- Package an evidence “shipment” (rendered HTML + exports) and protect it with a `SHA256SUMS` integrity manifest
+- Validate traceability rules (locally and in CI)
+- As an integrator, intake multiple supplier shipments at once and get a consolidated **Subproject overview**
+- Optionally attach supplier-provided metadata (`osqar_project.json`) including descriptive info, origin and URLs
 
 ## Documentation (GitHub Pages)
 
@@ -105,7 +118,7 @@ poetry run sphinx-build -b html examples/python_hello_world _build/html/examples
 
 ## CLI
 
-OSQAr ships a small, stdlib-only CLI to speed up common workflows (project scaffolding, traceability checks, checksum manifests).
+OSQAr ships a small, stdlib-only CLI to speed up common workflows (project scaffolding, evidence shipments, and integrator intake).
 
 Run it either via Poetry:
 
@@ -131,6 +144,28 @@ poetry run python -m tools.osqar_cli traceability ./_build/html/needs.json --jso
 # Generate/verify shipment checksums
 poetry run python -m tools.osqar_cli checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS
 poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --manifest ./_build/html/SHA256SUMS
+
+# Supplier: one-shot evidence shipment preparation (build docs, traceability, checksums, optional archive)
+./osqar supplier prepare --project examples/rust_hello_world --clean --archive
+
+# Supplier: optionally add metadata (description, URLs, origin) into the shipment root
+./osqar shipment metadata write \
+	--shipment examples/rust_hello_world/_build/html \
+	--name "Rust Hello World" \
+	--version "0.2.2" \
+	--url repository=https://example.com/repo.git \
+	--origin url=https://example.com/repo.git \
+	--origin revision=<commit>
+
+# Integrator: verify a received shipment (checksums, and optionally traceability)
+./osqar integrator verify --shipment /path/to/received/shipment --traceability
+
+# Integrator: intake multiple shipments and generate a Subproject overview
+./osqar workspace intake \
+	--root intake/received \
+	--recursive \
+	--output intake/archive/2026-02-01 \
+	--traceability
 ```
 
 See the framework docs for the evidence “shipment” workflow:

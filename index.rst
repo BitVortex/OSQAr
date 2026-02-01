@@ -6,6 +6,9 @@ OSQAr is a Sphinx + sphinx-needs boilerplate for producing auditable safety/comp
 - requirements and traceability
 - architecture diagrams (PlantUML)
 - verification planning and traceability matrices
+- evidence shipment workflows (integrity via checksum manifests)
+- integrator-side multi-shipment intake with consolidated summaries
+- lifecycle management guidance
 
 OSQAr also includes a small CLI for scaffolding new projects and running traceability/checksum verification.
 
