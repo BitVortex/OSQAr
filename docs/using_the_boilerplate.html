@@ -306,6 +306,50 @@ open<span class="w"> </span>_build/html/index.html
 </pre></div>
 </div>
 </section>
+<section id="osqar-cli">
+<h2>OSQAr CLI<a class="headerlink" href="#osqar-cli" title="Link to this heading">¶</a></h2>
+<p>OSQAr includes a small, stdlib-only CLI for common workflows:</p>
+<ul class="simple">
+<li><p>scaffold a new project from a language template</p></li>
+<li><p>validate traceability based on an exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code></p></li>
+<li><p>generate/verify checksum manifests for a shipped evidence bundle</p></li>
+</ul>
+<section id="invocation">
+<h3>Invocation<a class="headerlink" href="#invocation" title="Link to this heading">¶</a></h3>
+<p>Run via Poetry:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>tools.osqar_cli<span class="w"> </span>--help
+</pre></div>
+</div>
+<p>Or via the repo-root convenience wrapper:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./osqar<span class="w"> </span>--help
+</pre></div>
+</div>
+</section>
+<section id="scaffold-a-new-project">
+<h3>Scaffold a new project<a class="headerlink" href="#scaffold-a-new-project" title="Link to this heading">¶</a></h3>
+<p>Create a new project folder based on one of the reference templates:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>tools.osqar_cli<span class="w"> </span>new<span class="w"> </span>--language<span class="w"> </span>c<span class="w"> </span>--name<span class="w"> </span>MySEooC<span class="w"> </span>--destination<span class="w"> </span>./MySEooC
+</pre></div>
+</div>
+<p>This copies the selected template while excluding build outputs (e.g., <code class="docutils literal notranslate"><span class="pre">_build/</span></code>, <code class="docutils literal notranslate"><span class="pre">target/</span></code>, <code class="docutils literal notranslate"><span class="pre">__pycache__/</span></code>).</p>
+</section>
+<section id="verify-traceability">
+<h3>Verify traceability<a class="headerlink" href="#verify-traceability" title="Link to this heading">¶</a></h3>
+<p>Run traceability checks on an exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>tools.osqar_cli<span class="w"> </span>traceability<span class="w"> </span>./_build/html/needs.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--json-report<span class="w"> </span>./_build/html/traceability_report.json
+</pre></div>
+</div>
+</section>
+<section id="checksum-manifest-shipment-integrity">
+<h3>Checksum manifest (shipment integrity)<a class="headerlink" href="#checksum-manifest-shipment-integrity" title="Link to this heading">¶</a></h3>
+<p>Generate and verify a checksum manifest (default: SHA-256) for a shipped directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>tools.osqar_cli<span class="w"> </span>checksum<span class="w"> </span>generate<span class="w"> </span>--root<span class="w"> </span>./_build/html<span class="w"> </span>--output<span class="w"> </span>./_build/html/SHA256SUMS
+poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>tools.osqar_cli<span class="w"> </span>checksum<span class="w"> </span>verify<span class="w"> </span>--root<span class="w"> </span>./_build/html<span class="w"> </span>--manifest<span class="w"> </span>./_build/html/SHA256SUMS
+</pre></div>
+</div>
+</section>
+</section>
 <section id="core-workflow">
 <h2>Core workflow<a class="headerlink" href="#core-workflow" title="Link to this heading">¶</a></h2>
 <p>OSQAr works best when you keep a consistent structure:</p>
@@ -535,6 +579,13 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
 <li><a class="reference internal" href="#quick-start">Quick start</a></li>
 <li><a class="reference internal" href="#reference-examples-c-c-rust">Reference examples (C/C++/Rust)</a></li>
 <li><a class="reference internal" href="#python-demo-reference">Python demo reference</a></li>
+<li><a class="reference internal" href="#osqar-cli">OSQAr CLI</a><ul>
+<li><a class="reference internal" href="#invocation">Invocation</a></li>
+<li><a class="reference internal" href="#scaffold-a-new-project">Scaffold a new project</a></li>
+<li><a class="reference internal" href="#verify-traceability">Verify traceability</a></li>
+<li><a class="reference internal" href="#checksum-manifest-shipment-integrity">Checksum manifest (shipment integrity)</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#core-workflow">Core workflow</a></li>
 <li><a class="reference internal" href="#writing-requirements-sphinx-needs">Writing requirements (sphinx-needs)</a></li>
 <li><a class="reference internal" href="#recommended-id-scheme">Recommended ID scheme</a></li>
