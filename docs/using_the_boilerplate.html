@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Integrator’s Guide" href="integrators_guide.html" /><link rel="prev" title="OSQAr (Open Safety Qualification Architecture)" href="../index.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Using the OSQAr Boilerplate - OSQAr documentation</title>
+        <title>Using the OSQAr Boilerplate - OSQAr 0.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr  documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.2.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr  documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.2.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -357,6 +357,74 @@ open<span class="w"> </span>_build/html/index.html
 <li><p>a traceability matrix mapping <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>/<code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code> → <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code></p></li>
 </ol>
 </section>
+<section id="shipment-verification-per-example-output">
+<h2>Shipment verification (per example output)<a class="headerlink" href="#shipment-verification-per-example-output" title="Link to this heading">¶</a></h2>
+<p>OSQAr treats each <strong>example build output directory</strong> as a shippable evidence bundle.
+This is the unit that is transferred, archived, and later verified (similar to a software shipment).</p>
+<p>Per shipped example output directory, OSQAr expects the following files to be present:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">needs.json</span></code> (export from <code class="docutils literal notranslate"><span class="pre">sphinx-needs</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">traceability_report.json</span></code> (result of the OSQAr traceability check)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> (checksum manifest covering the full directory contents)</p></li>
+</ul>
+<section id="supplier-side-procedure-create-the-shipment">
+<h3>Supplier-side procedure (create the shipment)<a class="headerlink" href="#supplier-side-procedure-create-the-shipment" title="Link to this heading">¶</a></h3>
+<p>Build the example documentation so that <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> is exported:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">b</span> <span class="n">html</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span>
+</pre></div>
+</div>
+<p>Run the traceability check (writes a machine-readable report):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">traceability_check</span><span class="o">.</span><span class="n">py</span> \
+   <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
+   <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Generate and verify checksums for the example build output directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">generate_checksums</span><span class="o">.</span><span class="n">py</span> \
+   <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+   <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">generate_checksums</span><span class="o">.</span><span class="n">py</span> \
+   <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+   <span class="o">--</span><span class="n">verify</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+</pre></div>
+</div>
+<p>Optional convenience (same operations via the OSQAr CLI):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">traceability</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
+   <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">json</span>
+
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">generate</span> \
+   <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+   <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">verify</span> \
+   <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+   <span class="o">--</span><span class="n">manifest</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+</pre></div>
+</div>
+<p>Then archive and ship the <strong>example output directory</strong> (not the framework docs built from the repo root).</p>
+</section>
+<section id="integrator-side-procedure-verify-a-received-shipment">
+<h3>Integrator-side procedure (verify a received shipment)<a class="headerlink" href="#integrator-side-procedure-verify-a-received-shipment" title="Link to this heading">¶</a></h3>
+<p>Verify the received directory against the provided manifest:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">generate_checksums</span><span class="o">.</span><span class="n">py</span> \
+   <span class="o">--</span><span class="n">root</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
+   <span class="o">--</span><span class="n">verify</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+</pre></div>
+</div>
+<p>Optionally re-run the traceability checks on the shipped <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">traceability_check</span><span class="o">.</span><span class="n">py</span> \
+   <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
+   <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>For role-specific guidance (including what to do on mismatches), see:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="suppliers_guide.html"><span class="doc">Supplier’s Guide</span></a></p></li>
+<li><p><a class="reference internal" href="integrators_guide.html"><span class="doc">Integrator’s Guide</span></a></p></li>
+</ul>
+</section>
+</section>
 <section id="code-complexity-optional">
 <h2>Code complexity (optional)<a class="headerlink" href="#code-complexity-optional" title="Link to this heading">¶</a></h2>
 <p>OSQAr supports generating additional <em>engineering evidence</em> artifacts alongside test results.</p>
@@ -472,6 +540,11 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
 <li><a class="reference internal" href="#recommended-id-scheme">Recommended ID scheme</a></li>
 <li><a class="reference internal" href="#architecture-diagrams-plantuml">Architecture diagrams (PlantUML)</a></li>
 <li><a class="reference internal" href="#verification-and-traceability">Verification and traceability</a></li>
+<li><a class="reference internal" href="#shipment-verification-per-example-output">Shipment verification (per example output)</a><ul>
+<li><a class="reference internal" href="#supplier-side-procedure-create-the-shipment">Supplier-side procedure (create the shipment)</a></li>
+<li><a class="reference internal" href="#integrator-side-procedure-verify-a-received-shipment">Integrator-side procedure (verify a received shipment)</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#code-complexity-optional">Code complexity (optional)</a></li>
 <li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
@@ -487,7 +560,7 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

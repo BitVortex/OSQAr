@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "counts": {
+      "arch_total": 14,
+      "needs_total": 39,
+      "req_total": 7,
+      "test_total": 14,
+      "violations_total": 0
+    },
+    "prefixes": {
+      "architecture": [
+        "ARCH_"
+      ],
+      "requirements": [
+        "REQ_"
+      ],
+      "tests": [
+        "TEST_"
+      ]
+    }
+  },
+  "violations": []
+}

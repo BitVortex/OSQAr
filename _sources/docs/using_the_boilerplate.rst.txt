@@ -116,6 +116,76 @@ A robust verification chapter typically contains:
 1) test requirements as needs objects (``TEST_*``)
 2) a traceability matrix mapping ``REQ_*``/``ARCH_*`` → ``TEST_*``
 
+Shipment verification (per example output)
+==========================================
+
+OSQAr treats each **example build output directory** as a shippable evidence bundle.
+This is the unit that is transferred, archived, and later verified (similar to a software shipment).
+
+Per shipped example output directory, OSQAr expects the following files to be present:
+
+- ``needs.json`` (export from ``sphinx-needs``)
+- ``traceability_report.json`` (result of the OSQAr traceability check)
+- ``SHA256SUMS`` (checksum manifest covering the full directory contents)
+
+Supplier-side procedure (create the shipment)
+---------------------------------------------
+
+Build the example documentation so that ``needs.json`` is exported::
+
+    poetry run sphinx-build -b html examples/python_hello_world examples/python_hello_world/_build/html
+
+Run the traceability check (writes a machine-readable report)::
+
+    poetry run python tools/traceability_check.py \
+       examples/python_hello_world/_build/html/needs.json \
+       --json-report examples/python_hello_world/_build/html/traceability_report.json
+
+Generate and verify checksums for the example build output directory::
+
+    poetry run python tools/generate_checksums.py \
+       --root examples/python_hello_world/_build/html \
+       --output examples/python_hello_world/_build/html/SHA256SUMS
+
+    poetry run python tools/generate_checksums.py \
+       --root examples/python_hello_world/_build/html \
+       --verify examples/python_hello_world/_build/html/SHA256SUMS
+
+Optional convenience (same operations via the OSQAr CLI)::
+
+    poetry run python -m tools.osqar_cli traceability examples/python_hello_world/_build/html/needs.json \
+       --json-report examples/python_hello_world/_build/html/traceability_report.json
+
+    poetry run python -m tools.osqar_cli checksum generate \
+       --root examples/python_hello_world/_build/html \
+       --output examples/python_hello_world/_build/html/SHA256SUMS
+
+    poetry run python -m tools.osqar_cli checksum verify \
+       --root examples/python_hello_world/_build/html \
+       --manifest examples/python_hello_world/_build/html/SHA256SUMS
+
+Then archive and ship the **example output directory** (not the framework docs built from the repo root).
+
+Integrator-side procedure (verify a received shipment)
+------------------------------------------------------
+
+Verify the received directory against the provided manifest::
+
+    poetry run python tools/generate_checksums.py \
+       --root /path/to/shipment \
+       --verify /path/to/shipment/SHA256SUMS
+
+Optionally re-run the traceability checks on the shipped ``needs.json``::
+
+    poetry run python tools/traceability_check.py \
+       /path/to/shipment/needs.json \
+       --json-report /path/to/shipment/traceability_report.integrator.json
+
+For role-specific guidance (including what to do on mismatches), see:
+
+- :doc:`suppliers_guide`
+- :doc:`integrators_guide`
+
 Code complexity (optional)
 ==========================
 

@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supplier’s Guide" href="suppliers_guide.html" /><link rel="prev" title="Using the OSQAr Boilerplate" href="using_the_boilerplate.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Integrator’s Guide - OSQAr documentation</title>
+        <title>Integrator’s Guide - OSQAr 0.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr  documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.2.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr  documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.2.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -322,6 +322,53 @@
 </li>
 </ul>
 </section>
+<section id="integrity-verification-of-a-supplier-shipment">
+<h3>Integrity verification of a supplier shipment<a class="headerlink" href="#integrity-verification-of-a-supplier-shipment" title="Link to this heading">¶</a></h3>
+<p>Treat each <strong>example build output directory</strong> you receive from a supplier as a controlled software shipment.
+The supplier should provide a checksum manifest file <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> at the root of that shipment.</p>
+<section id="recommended-integrator-procedure">
+<h4>Recommended integrator procedure<a class="headerlink" href="#recommended-integrator-procedure" title="Link to this heading">¶</a></h4>
+<ol class="arabic">
+<li><p>Unpack the shipment into a controlled location.</p></li>
+<li><p>Verify the checksum manifest using the OSQAr checksum tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">generate_checksums</span><span class="o">.</span><span class="n">py</span> \
+  <span class="o">--</span><span class="n">root</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
+  <span class="o">--</span><span class="n">verify</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+</pre></div>
+</div>
+<p>Optional convenience (same verification via OSQAr CLI):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">verify</span> \
+  <span class="o">--</span><span class="n">root</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
+  <span class="o">--</span><span class="n">manifest</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If verification reports <code class="docutils literal notranslate"><span class="pre">missing</span></code> or <code class="docutils literal notranslate"><span class="pre">mismatched</span></code> files, treat the shipment as corrupted or tampered
+with, and re-transfer the artifact.</p></li>
+<li><p>Do not regenerate <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> on the receiver side as a substitute for verification.</p></li>
+</ul>
+</li>
+<li><p>Verify traceability artifacts (machine-readable) as part of intake:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">needs.json</span></code>: the exported traceability graph</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">traceability_report.json</span></code>: the supplier’s check result</p></li>
+</ul>
+<p>You can re-run the checks locally to confirm the shipment content passes your intake gate:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">traceability_check</span><span class="o">.</span><span class="n">py</span> \
+  <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
+  <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Optional convenience (same check via OSQAr CLI):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">traceability</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
+  <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Store your integrator-side report alongside the shipped evidence.</p>
+</li>
+</ol>
+</section>
+</section>
 </section>
 <section id="how-to-tailor-the-reference-example">
 <h2>How to tailor the reference example<a class="headerlink" href="#how-to-tailor-the-reference-example" title="Link to this heading">¶</a></h2>
@@ -406,6 +453,10 @@
 <li><a class="reference internal" href="#interface-and-configuration-control">Interface and configuration control</a></li>
 <li><a class="reference internal" href="#verification-strategy">Verification strategy</a></li>
 <li><a class="reference internal" href="#evidence-packaging">Evidence packaging</a></li>
+<li><a class="reference internal" href="#integrity-verification-of-a-supplier-shipment">Integrity verification of a supplier shipment</a><ul>
+<li><a class="reference internal" href="#recommended-integrator-procedure">Recommended integrator procedure</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#how-to-tailor-the-reference-example">How to tailor the reference example</a></li>
@@ -423,7 +474,7 @@
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

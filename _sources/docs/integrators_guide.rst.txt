@@ -59,6 +59,51 @@ Evidence packaging
   - test results (e.g., JUnit XML)
   - tool versions and environment description
 
+Integrity verification of a supplier shipment
+---------------------------------------------
+
+Treat each **example build output directory** you receive from a supplier as a controlled software shipment.
+The supplier should provide a checksum manifest file ``SHA256SUMS`` at the root of that shipment.
+
+Recommended integrator procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Unpack the shipment into a controlled location.
+
+2. Verify the checksum manifest using the OSQAr checksum tool::
+
+      poetry run python tools/generate_checksums.py \
+        --root /path/to/shipment \
+        --verify /path/to/shipment/SHA256SUMS
+
+   Optional convenience (same verification via OSQAr CLI)::
+
+      poetry run python -m tools.osqar_cli checksum verify \
+        --root /path/to/shipment \
+        --manifest /path/to/shipment/SHA256SUMS
+
+   - If verification reports ``missing`` or ``mismatched`` files, treat the shipment as corrupted or tampered
+     with, and re-transfer the artifact.
+   - Do not regenerate ``SHA256SUMS`` on the receiver side as a substitute for verification.
+
+3. Verify traceability artifacts (machine-readable) as part of intake:
+
+   - ``needs.json``: the exported traceability graph
+   - ``traceability_report.json``: the supplier's check result
+
+   You can re-run the checks locally to confirm the shipment content passes your intake gate::
+
+      poetry run python tools/traceability_check.py \
+        /path/to/shipment/needs.json \
+        --json-report /path/to/shipment/traceability_report.integrator.json
+
+   Optional convenience (same check via OSQAr CLI)::
+
+      poetry run python -m tools.osqar_cli traceability /path/to/shipment/needs.json \
+        --json-report /path/to/shipment/traceability_report.integrator.json
+
+   Store your integrator-side report alongside the shipped evidence.
+
 How to tailor the reference example
 ===================================
 
