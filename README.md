@@ -8,6 +8,7 @@ Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boile
 - architecture diagrams (PlantUML)
 - verification planning and traceability matrices
 - extensive lifecycle management support
+- multi-user collaboration workflows (branching/merging/CI strategies)
 
 **Version:** 0.2.2 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
 
@@ -28,6 +29,7 @@ OSQAr is documentation-first and aimed at producing **reviewable, exportable evi
 ## Documentation (GitHub Pages)
 
 - Framework documentation (landing page): https://bitvortex.github.io/OSQAr/
+- Collaboration workflows guide: https://bitvortex.github.io/OSQAr/docs/collaboration_workflows.html
 - Examples index: https://bitvortex.github.io/OSQAr/examples/
 
 Published examples (built docs):
