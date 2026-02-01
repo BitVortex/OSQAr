@@ -2,8 +2,7 @@ Multi-project workflows (integrators)
 =====================================
 
 This section describes how to work with multiple supplier projects/shipments at once.
-The goal is to keep evidence intake scalable and repeatable, while preserving integrity
-and traceability.
+The goal is to keep evidence intake scalable and repeatable, while preserving integrity and traceability.
 
 Quick start (integrator)
 ------------------------
@@ -50,7 +49,7 @@ A simple layout that works well for multi-project intake:
 
 .. code-block:: text
 
-   intake/
+  intake/
   received/              # immutable: supplier-provided shipments
   archive/               # immutable: your frozen intake archive(s)
   working/               # mutable: scratch, analysis, combined views

@@ -117,8 +117,7 @@ Optional convenience: the same steps are available via the OSQAr CLI::
 		--root examples/python_hello_world/_build/html \
 		--manifest examples/python_hello_world/_build/html/SHA256SUMS
 
-4. Ship the example build output directory as an archive (ZIP/TAR), keeping ``SHA256SUMS`` at the root of
-	the shipped directory.
+4. Ship the example build output directory as an archive (ZIP/TAR), keeping ``SHA256SUMS`` at the root of the shipped directory.
 
 Optional: add project metadata into the shipment directory (recommended for multi-project integrators)::
 
@@ -133,11 +132,9 @@ Optional: add project metadata into the shipment directory (recommended for mult
 Notes
 ^^^^^
 
-- Generate checksums **per example build output**, not site-wide. The OSQAr framework docs (repo root build)
-	are not part of the example shipment.
+- Generate checksums **per example build output**, not site-wide. The OSQAr framework docs (repo root build) are not part of the example shipment.
 - Keep requirement IDs stable across releases; the exported artifacts are designed to be diffed and archived.
-- For higher assurance, sign ``SHA256SUMS`` externally (e.g., detached signature) and store it separately from
-	the shipment.
+- For higher assurance, sign ``SHA256SUMS`` externally (e.g., detached signature) and store it separately from the shipment.
 
 Change control and versioning
 =============================

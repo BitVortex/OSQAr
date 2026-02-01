@@ -261,8 +261,7 @@
           <section id="multi-project-workflows-integrators">
 <h1>Multi-project workflows (integrators)<a class="headerlink" href="#multi-project-workflows-integrators" title="Link to this heading">¶</a></h1>
 <p>This section describes how to work with multiple supplier projects/shipments at once.
-The goal is to keep evidence intake scalable and repeatable, while preserving integrity
-and traceability.</p>
+The goal is to keep evidence intake scalable and repeatable, while preserving integrity and traceability.</p>
 <section id="quick-start-integrator">
 <h2>Quick start (integrator)<a class="headerlink" href="#quick-start-integrator" title="Link to this heading">¶</a></h2>
 <p>This is the simplest repeatable workflow when you receive multiple shipments:</p>
@@ -301,7 +300,7 @@ In OSQAr, a shipment is typically the Sphinx HTML output directory
 <h2>Recommended folder layout (integrator)<a class="headerlink" href="#recommended-folder-layout-integrator" title="Link to this heading">¶</a></h2>
 <p>Keep supplier inputs immutable and separate from your integrator-side processing.
 A simple layout that works well for multi-project intake:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span> intake/
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>intake/
 received/              # immutable: supplier-provided shipments
 archive/               # immutable: your frozen intake archive(s)
 working/               # mutable: scratch, analysis, combined views
