@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-02-01
+
 ### Added
 - Complete Temperature Monitor (TSIM) example demonstrating OSQAr capabilities
 - Interactive traceability with 111 clickable requirement links
@@ -18,6 +20,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Poetry-based dependency management
 - GitHub Actions CI/CD template
 - Linked requirement IDs across all documentation
+- Export of machine-readable traceability (`needs.json`) for framework docs and examples
+- Traceability validation tool producing `traceability_report.json`
+- Shipment integrity tool to generate and verify `SHA256SUMS` for example build outputs
+- Supplier/integrator documentation for shipment-style evidence transfer and verification
+- Simple OSQAr CLI (`python -m tools.osqar_cli` and `./osqar`) for scaffolding and verification tasks
+
+### Changed
+- Version bumped to `0.2.0`
+- CI and Pages workflows now run traceability checks and generate checksums for published examples
+- Python compatibility constrained to `<3.14` due to upstream dependency support
+
+### Fixed
+- Root docs build no longer indexes `.venv` contents when building locally
 
 ### Changed
 - Enhanced traceability matrix with clickable links
@@ -34,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Core Sphinx configuration with sphinx-needs
 - Basic documentation boilerplate
 - Poetry project setup
-- MIT License
+- Apache-2.0 License
 
 ### Changed
 - N/A (initial release)

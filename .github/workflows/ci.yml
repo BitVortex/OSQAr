@@ -42,6 +42,22 @@ jobs:
         # Build the Python demo example docs
         poetry run sphinx-build -b html examples/python_hello_world examples/python_hello_world/_build/html
 
+    - name: Traceability checks (needs.json)
+      run: |
+        test -f examples/python_hello_world/_build/html/needs.json
+        poetry run python tools/traceability_check.py \
+          examples/python_hello_world/_build/html/needs.json \
+          --json-report examples/python_hello_world/_build/html/traceability_report.json
+
+    - name: Generate checksums for documentation dump
+      run: |
+        poetry run python tools/generate_checksums.py \
+          --root examples/python_hello_world/_build/html \
+          --output examples/python_hello_world/_build/html/SHA256SUMS
+        poetry run python tools/generate_checksums.py \
+          --root examples/python_hello_world/_build/html \
+          --verify examples/python_hello_world/_build/html/SHA256SUMS
+
     - name: Upload documentation
       uses: actions/upload-artifact@v4
       with:
@@ -83,6 +99,22 @@ jobs:
         cd examples/python_hello_world
         ls -la _build/html/index.html
         test -f _build/html/05_test_results.html
+
+    - name: Traceability checks (needs.json)
+      run: |
+        test -f examples/python_hello_world/_build/html/needs.json
+        poetry run python tools/traceability_check.py \
+          examples/python_hello_world/_build/html/needs.json \
+          --json-report examples/python_hello_world/_build/html/traceability_report.json
+
+    - name: Generate checksums for documentation dump
+      run: |
+        poetry run python tools/generate_checksums.py \
+          --root examples/python_hello_world/_build/html \
+          --output examples/python_hello_world/_build/html/SHA256SUMS
+        poetry run python tools/generate_checksums.py \
+          --root examples/python_hello_world/_build/html \
+          --verify examples/python_hello_world/_build/html/SHA256SUMS
 
     - name: Upload Temperature Monitor (TSIM) artifacts
       uses: actions/upload-artifact@v4

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -12,6 +13,37 @@ from pathlib import Path
 project = 'OSQAr'
 copyright = '2025, OSQAr Contributors'
 author = 'OSQAr Team'
+
+
+def _read_poetry_version() -> str | None:
+    """Extract OSQAr version from pyproject.toml without extra dependencies.
+
+    We intentionally avoid tomllib/tomli to keep compatibility with older Python
+    versions used in CI.
+    """
+
+    pyproject = Path(__file__).with_name('pyproject.toml')
+    if not pyproject.is_file():
+        return None
+
+    text = pyproject.read_text(encoding='utf-8')
+    start = text.find('[tool.poetry]')
+    if start == -1:
+        return None
+
+    # Search only within the [tool.poetry] section to avoid matching dependency
+    # version strings.
+    rest = text[start + len('[tool.poetry]') :]
+    next_section = rest.find('\n[')
+    section = rest if next_section == -1 else rest[:next_section]
+
+    m = re.search(r'^\s*version\s*=\s*"([^"]+)"\s*$', section, flags=re.MULTILINE)
+    return m.group(1) if m else None
+
+
+# Sphinx version string (shown by themes that display it).
+release = _read_poetry_version() or '0.0.0'
+version = '.'.join(release.split('.')[:2])
 
 
 # -- General configuration ---------------------------------------------------
@@ -25,6 +57,9 @@ extensions = [
 # treated as root Sphinx sources.
 exclude_patterns = [
     '_build',
+    # Local Poetry/virtualenv (otherwise Sphinx may index site-packages .rst files).
+    '.venv',
+    '.venv/**',
     # The example projects are built separately.
     'examples/*_hello_world/**',
     # Shared example chapter sources are included by example projects.
@@ -57,6 +92,11 @@ else:
 # -- sphinx-needs ------------------------------------------------------------
 needs_id_regex = '^[A-Z0-9_]{3,}'
 needs_css = 'modern.css'
+
+# Export a reproducible needs.json alongside the normal HTML build.
+# This is used by CI for traceability checks and for producing audit-friendly artifacts.
+needs_build_json = True
+needs_reproducible_json = True
 
 
 # -- PlantUML ----------------------------------------------------------------

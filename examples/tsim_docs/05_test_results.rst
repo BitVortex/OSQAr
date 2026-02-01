@@ -17,9 +17,9 @@ The traceability flow is:
          ↓
     Functional Requirement (REQ_FUNC_*, ARCH_*)
          ↓
-        Implementation Code (src/* with requirement IDs)
+    Implementation Code (src/* with requirement IDs)
          ↓
-        Unit Tests (tests/* with TEST_* IDs)
+    Unit Tests (tests/* with TEST_* IDs)
          ↓
     JUnit XML Test Results
          ↓

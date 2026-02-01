@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+"""Convenience wrapper for the OSQAr CLI.
+
+This repository is documentation-first (`package-mode = false`), so we provide a
+thin executable wrapper that invokes the stdlib-only CLI implementation.
+
+Usage:
+  ./osqar --help
+
+If you prefer Poetry-managed execution:
+  poetry run python -m tools.osqar_cli --help
+"""
+
+from __future__ import annotations
+
+from tools.osqar_cli import main
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -50,6 +50,10 @@ html_use_modindex = False
 needs_id_regex = '^[A-Z0-9_]{3,}'
 needs_css = 'modern.css'
 
+# Export a reproducible needs.json alongside HTML builds.
+needs_build_json = True
+needs_reproducible_json = True
+
 
 # Test results import (optional)
 #
