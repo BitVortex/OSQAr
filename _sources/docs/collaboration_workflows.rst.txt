@@ -8,6 +8,7 @@ This chapter describes practical branching/merging strategies and conventions th
 reduce merge conflicts and keep traceability stable for large teams.
 
 Principles
+----------
 
 - **Keep IDs stable**: requirement/architecture/test IDs (``REQ_*``, ``ARCH_*``, ``TEST_*``)
   are part of the contract. Never recycle IDs.
@@ -17,6 +18,7 @@ Principles
 - **Automate checks**: run docs builds and traceability checks in CI for every change.
 
 Repository layout for parallel work
+-----------------------------------
 
 To minimize conflicts, organize content so contributors naturally touch different files:
 
@@ -42,6 +44,7 @@ Typical pattern:
 Use a stable top-level toctree that rarely changes, and let subtrees grow.
 
 Branching strategies
+--------------------
 
 Two common approaches work well with OSQAr. Choose one and apply it consistently.
 
@@ -71,6 +74,7 @@ Guidelines:
 - Avoid large refactors on release branches.
 
 Merging strategies
+------------------
 
 - Prefer **merge by pull request**, not direct pushes to protected branches.
 - Use a consistent merge mode:
@@ -81,6 +85,7 @@ Merging strategies
 - Avoid rebasing shared branches after review starts (it rewrites history and complicates review).
 
 How to minimize merge conflicts
+-------------------------------
 
 RST (reStructuredText)
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -111,6 +116,7 @@ Generated artifacts
 - Treat shipments (rendered HTML outputs) as **immutable** after creation.
 
 Collaborating at scale
+----------------------
 
 Roles and review gates
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -137,6 +143,7 @@ When multiple teams produce shipments simultaneously:
 - Use ``./osqar workspace intake`` to archive and summarize received shipments.
 
 Change control tips
+-------------------
 
 - Record user-facing changes in ``CHANGELOG.md``.
 - Keep a stable requirement ID namespace and allocate ID ranges if multiple teams author requirements.

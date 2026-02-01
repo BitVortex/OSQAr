@@ -9,6 +9,7 @@ OSQAr is a Sphinx + sphinx-needs boilerplate for producing auditable safety/comp
 - evidence shipment workflows (integrity via checksum manifests)
 - integrator-side multi-shipment intake with consolidated summaries
 - lifecycle management guidance
+- collaboration workflows for large, multi-user teams
 
 OSQAr also includes a small CLI for scaffolding new projects and running traceability/checksum verification.
 

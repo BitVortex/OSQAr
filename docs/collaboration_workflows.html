@@ -264,7 +264,8 @@
 Sphinx sources as controlled engineering artifacts (not as free-form prose).</p>
 <p>This chapter describes practical branching/merging strategies and conventions that
 reduce merge conflicts and keep traceability stable for large teams.</p>
-<p>Principles</p>
+<section id="principles">
+<h2>Principles<a class="headerlink" href="#principles" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>Keep IDs stable</strong>: requirement/architecture/test IDs (<code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>, <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>)
 are part of the contract. Never recycle IDs.</p></li>
@@ -273,7 +274,9 @@ paragraphs.</p></li>
 <li><p><strong>Split work by files</strong>: parallel work scales when people do not edit the same <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files.</p></li>
 <li><p><strong>Automate checks</strong>: run docs builds and traceability checks in CI for every change.</p></li>
 </ul>
-<p>Repository layout for parallel work</p>
+</section>
+<section id="repository-layout-for-parallel-work">
+<h2>Repository layout for parallel work<a class="headerlink" href="#repository-layout-for-parallel-work" title="Link to this heading">¶</a></h2>
 <p>To minimize conflicts, organize content so contributors naturally touch different files:</p>
 <ul class="simple">
 <li><p>One chapter per concern (requirements / architecture / verification / lifecycle / collaboration).</p></li>
@@ -294,10 +297,12 @@ verification/
 </pre></div>
 </div>
 <p>Use a stable top-level toctree that rarely changes, and let subtrees grow.</p>
-<p>Branching strategies</p>
+</section>
+<section id="branching-strategies">
+<h2>Branching strategies<a class="headerlink" href="#branching-strategies" title="Link to this heading">¶</a></h2>
 <p>Two common approaches work well with OSQAr. Choose one and apply it consistently.</p>
 <section id="trunk-based-development-recommended-for-most-teams">
-<h2>Trunk-based development (recommended for most teams)<a class="headerlink" href="#trunk-based-development-recommended-for-most-teams" title="Link to this heading">¶</a></h2>
+<h3>Trunk-based development (recommended for most teams)<a class="headerlink" href="#trunk-based-development-recommended-for-most-teams" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> is always releasable.</p></li>
 <li><p>Developers branch from <code class="docutils literal notranslate"><span class="pre">main</span></code> and open small pull requests.</p></li>
@@ -311,7 +316,7 @@ verification/
 </ul>
 </section>
 <section id="release-branches-useful-when-multiple-releases-are-supported">
-<h2>Release branches (useful when multiple releases are supported)<a class="headerlink" href="#release-branches-useful-when-multiple-releases-are-supported" title="Link to this heading">¶</a></h2>
+<h3>Release branches (useful when multiple releases are supported)<a class="headerlink" href="#release-branches-useful-when-multiple-releases-are-supported" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> continues forward.</p></li>
 <li><p>Cut a branch <code class="docutils literal notranslate"><span class="pre">release/x.y</span></code> when you need stabilization.</p></li>
@@ -322,7 +327,10 @@ verification/
 <li><p>Tag releases (e.g., <code class="docutils literal notranslate"><span class="pre">v0.2.2</span></code>) and keep the shipped documentation reproducible.</p></li>
 <li><p>Avoid large refactors on release branches.</p></li>
 </ul>
-<p>Merging strategies</p>
+</section>
+</section>
+<section id="merging-strategies">
+<h2>Merging strategies<a class="headerlink" href="#merging-strategies" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Prefer <strong>merge by pull request</strong>, not direct pushes to protected branches.</p></li>
 <li><p>Use a consistent merge mode:</p>
@@ -333,10 +341,11 @@ verification/
 </li>
 <li><p>Avoid rebasing shared branches after review starts (it rewrites history and complicates review).</p></li>
 </ul>
-<p>How to minimize merge conflicts</p>
 </section>
+<section id="how-to-minimize-merge-conflicts">
+<h2>How to minimize merge conflicts<a class="headerlink" href="#how-to-minimize-merge-conflicts" title="Link to this heading">¶</a></h2>
 <section id="rst-restructuredtext">
-<h2>RST (reStructuredText)<a class="headerlink" href="#rst-restructuredtext" title="Link to this heading">¶</a></h2>
+<h3>RST (reStructuredText)<a class="headerlink" href="#rst-restructuredtext" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Avoid re-wrapping paragraphs for style changes; it causes noisy diffs.</p></li>
 <li><p>Keep lists stable: append items instead of reordering.</p></li>
@@ -344,7 +353,7 @@ verification/
 </ul>
 </section>
 <section id="sphinx-needs-objects">
-<h2>Sphinx-needs objects<a class="headerlink" href="#sphinx-needs-objects" title="Link to this heading">¶</a></h2>
+<h3>Sphinx-needs objects<a class="headerlink" href="#sphinx-needs-objects" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Treat IDs as immutable. If wording changes, keep the same <code class="docutils literal notranslate"><span class="pre">:id:</span></code>.</p></li>
 <li><p>Add new requirements as new needs; avoid “editing history into the same need” unless
@@ -353,7 +362,7 @@ it is truly the same requirement.</p></li>
 </ul>
 </section>
 <section id="diagrams-plantuml">
-<h2>Diagrams (PlantUML)<a class="headerlink" href="#diagrams-plantuml" title="Link to this heading">¶</a></h2>
+<h3>Diagrams (PlantUML)<a class="headerlink" href="#diagrams-plantuml" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Prefer one diagram per file.</p></li>
 <li><p>Avoid large diagram rewrites; add a new diagram revision (e.g., <code class="docutils literal notranslate"><span class="pre">03_context_v2.puml</span></code>)
@@ -361,15 +370,17 @@ if needed.</p></li>
 </ul>
 </section>
 <section id="generated-artifacts">
-<h2>Generated artifacts<a class="headerlink" href="#generated-artifacts" title="Link to this heading">¶</a></h2>
+<h3>Generated artifacts<a class="headerlink" href="#generated-artifacts" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Never commit build outputs (<code class="docutils literal notranslate"><span class="pre">_build/</span></code>, <code class="docutils literal notranslate"><span class="pre">target/</span></code>, <code class="docutils literal notranslate"><span class="pre">build/</span></code>).</p></li>
 <li><p>Treat shipments (rendered HTML outputs) as <strong>immutable</strong> after creation.</p></li>
 </ul>
-<p>Collaborating at scale</p>
 </section>
+</section>
+<section id="collaborating-at-scale">
+<h2>Collaborating at scale<a class="headerlink" href="#collaborating-at-scale" title="Link to this heading">¶</a></h2>
 <section id="roles-and-review-gates">
-<h2>Roles and review gates<a class="headerlink" href="#roles-and-review-gates" title="Link to this heading">¶</a></h2>
+<h3>Roles and review gates<a class="headerlink" href="#roles-and-review-gates" title="Link to this heading">¶</a></h3>
 <p>For industry-scale collaboration, define a simple set of gates:</p>
 <ul class="simple">
 <li><p><strong>Author</strong>: proposes change via PR.</p></li>
@@ -384,14 +395,17 @@ if needed.</p></li>
 </ul>
 </section>
 <section id="working-on-multiple-subprojects-in-parallel">
-<h2>Working on multiple subprojects in parallel<a class="headerlink" href="#working-on-multiple-subprojects-in-parallel" title="Link to this heading">¶</a></h2>
+<h3>Working on multiple subprojects in parallel<a class="headerlink" href="#working-on-multiple-subprojects-in-parallel" title="Link to this heading">¶</a></h3>
 <p>When multiple teams produce shipments simultaneously:</p>
 <ul class="simple">
 <li><p>Standardize naming for shipments: <code class="docutils literal notranslate"><span class="pre">&lt;supplier&gt;_&lt;component&gt;_&lt;version&gt;</span></code>.</p></li>
 <li><p>Include <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> in each shipment to record origin, URLs, and descriptive metadata.</p></li>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">intake</span></code> to archive and summarize received shipments.</p></li>
 </ul>
-<p>Change control tips</p>
+</section>
+</section>
+<section id="change-control-tips">
+<h2>Change control tips<a class="headerlink" href="#change-control-tips" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Record user-facing changes in <code class="docutils literal notranslate"><span class="pre">CHANGELOG.md</span></code>.</p></li>
 <li><p>Keep a stable requirement ID namespace and allocate ID ranges if multiple teams author requirements.</p></li>
@@ -456,14 +470,27 @@ if needed.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Collaboration workflows (multi-user)</a><ul>
+<li><a class="reference internal" href="#principles">Principles</a></li>
+<li><a class="reference internal" href="#repository-layout-for-parallel-work">Repository layout for parallel work</a></li>
+<li><a class="reference internal" href="#branching-strategies">Branching strategies</a><ul>
 <li><a class="reference internal" href="#trunk-based-development-recommended-for-most-teams">Trunk-based development (recommended for most teams)</a></li>
 <li><a class="reference internal" href="#release-branches-useful-when-multiple-releases-are-supported">Release branches (useful when multiple releases are supported)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#merging-strategies">Merging strategies</a></li>
+<li><a class="reference internal" href="#how-to-minimize-merge-conflicts">How to minimize merge conflicts</a><ul>
 <li><a class="reference internal" href="#rst-restructuredtext">RST (reStructuredText)</a></li>
 <li><a class="reference internal" href="#sphinx-needs-objects">Sphinx-needs objects</a></li>
 <li><a class="reference internal" href="#diagrams-plantuml">Diagrams (PlantUML)</a></li>
 <li><a class="reference internal" href="#generated-artifacts">Generated artifacts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#collaborating-at-scale">Collaborating at scale</a><ul>
 <li><a class="reference internal" href="#roles-and-review-gates">Roles and review gates</a></li>
 <li><a class="reference internal" href="#working-on-multiple-subprojects-in-parallel">Working on multiple subprojects in parallel</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#change-control-tips">Change control tips</a></li>
 </ul>
 </li>
 </ul>
