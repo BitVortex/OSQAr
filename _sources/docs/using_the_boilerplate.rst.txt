@@ -232,7 +232,7 @@ Optional convenience (same operations via the OSQAr CLI)::
       ./osqar shipment metadata write \
          --shipment examples/python_hello_world/_build/html \
          --name "OSQAr Python Hello World" \
-         --version "0.2.2" \
+         --version "0.2.3" \
          --url repository=https://example.com/repo.git \
          --origin url=https://example.com/repo.git \
          --origin revision=<commit>
