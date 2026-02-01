@@ -208,6 +208,25 @@ Generate and verify checksums for the example build output directory::
 
 Optional convenience (same operations via the OSQAr CLI)::
 
+    # Supplier: build a shippable evidence directory in one command
+    poetry run python -m tools.osqar_cli supplier prepare \
+       --project examples/python_hello_world \
+       --clean \
+       --archive
+
+    # Integrator: verify a received shipment (checksums + traceability)
+    poetry run python -m tools.osqar_cli integrator verify \
+       --shipment /path/to/shipment \
+       --traceability
+
+    # Or run the individual shipment steps
+    poetry run python -m tools.osqar_cli shipment build-docs --project examples/python_hello_world
+    poetry run python -m tools.osqar_cli shipment traceability --shipment examples/python_hello_world/_build/html
+    poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html generate
+    poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
+
+    # Legacy equivalents (still supported)
+
     poetry run python -m tools.osqar_cli traceability examples/python_hello_world/_build/html/needs.json \
        --json-report examples/python_hello_world/_build/html/traceability_report.json
 
@@ -240,6 +259,7 @@ For role-specific guidance (including what to do on mismatches), see:
 
 - :doc:`suppliers_guide`
 - :doc:`integrators_guide`
+- :doc:`lifecycle_management`
 
 Code complexity (optional)
 ==========================

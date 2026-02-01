@@ -8,7 +8,7 @@ Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boile
 - architecture diagrams (PlantUML)
 - verification planning and traceability matrices
 
-**Version:** 0.2.0 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
+**Version:** 0.2.2 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
 
 For license terms see the `LICENSE` file (Apache License 2.0).
 

@@ -2,6 +2,8 @@
 Integrator’s Guide
 ==================
 
+See also: :doc:`multi_project_workflows` for batch intake and multi-shipment verification patterns.
+
 Scope
 =====
 
@@ -82,6 +84,12 @@ Recommended integrator procedure
         --root /path/to/shipment \
         --manifest /path/to/shipment/SHA256SUMS
 
+   Recommended integrator one-shot workflow (CLI)::
+
+      poetry run python -m tools.osqar_cli integrator verify \
+        --shipment /path/to/shipment \
+        --traceability
+
    - If verification reports ``missing`` or ``mismatched`` files, treat the shipment as corrupted or tampered
      with, and re-transfer the artifact.
    - Do not regenerate ``SHA256SUMS`` on the receiver side as a substitute for verification.
@@ -103,6 +111,18 @@ Recommended integrator procedure
         --json-report /path/to/shipment/traceability_report.integrator.json
 
    Store your integrator-side report alongside the shipped evidence.
+
+Multi-shipment intake (recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you routinely integrate multiple supplier projects, archive them using the workspace intake command.
+This produces a single dated intake folder with a **Subproject overview** summary file::
+
+      ./osqar workspace intake \
+        --root intake/received \
+        --recursive \
+        --output intake/archive/2026-02-01 \
+        --traceability
 
 How to tailor the reference example
 ===================================

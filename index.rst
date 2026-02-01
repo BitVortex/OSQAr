@@ -16,8 +16,10 @@ Start here:
    :caption: Documentation
 
    docs/using_the_boilerplate
+   docs/lifecycle_management
    docs/integrators_guide
    docs/suppliers_guide
+   docs/multi_project_workflows
 
 .. toctree::
    :maxdepth: 1
