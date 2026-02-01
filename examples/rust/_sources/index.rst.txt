@@ -10,6 +10,7 @@ OSQAr Example (Rust): Temperature Monitor
    03_verification
    04_implementation
    05_test_results
+   06_lifecycle_management
 
 Overview
 ========

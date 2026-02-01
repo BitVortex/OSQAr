@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="search.html" /><link rel="next" title="Using the OSQAr Boilerplate" href="docs/using_the_boilerplate.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>OSQAr 0.2.0 documentation</title>
+        <title>OSQAr 0.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">OSQAr 0.2.0 documentation</div></a>
+      <a href="#"><div class="brand">OSQAr 0.2.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.2.0 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.2.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -208,8 +208,10 @@
   <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="docs/using_the_boilerplate.html">Using the OSQAr Boilerplate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/lifecycle_management.html">Lifecycle Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/integrators_guide.html">Integrator’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/suppliers_guide.html">Supplier’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/multi_project_workflows.html">Multi-project workflows (integrators)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
@@ -284,6 +286,23 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/using_the_boilerplate.html#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="docs/lifecycle_management.html">Lifecycle Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#scope">Scope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#definitions">Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#lifecycle-objectives">Lifecycle objectives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#versioning-baselines">Versioning &amp; baselines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#change-control">Change control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#configuration-management">Configuration management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#evidence-bundle-content-integrity">Evidence bundle content &amp; integrity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#supplier-vs-integrator-workflows">Supplier vs integrator workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#ci-cd-integration-framework-level">CI/CD integration (framework-level)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#handling-external-changes">Handling external changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#security-vulnerability-response">Security &amp; vulnerability response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#retention-archival">Retention &amp; archival</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/lifecycle_management.html#checklist-summaries">Checklist summaries</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="docs/integrators_guide.html">Integrator’s Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/integrators_guide.html#scope">Scope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/integrators_guide.html#integrator-responsibilities-checklist">Integrator responsibilities (checklist)</a></li>
@@ -297,6 +316,20 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/suppliers_guide.html#change-control-and-versioning">Change control and versioning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/suppliers_guide.html#how-to-use-osqar-as-a-supplier">How to use OSQAr as a supplier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/suppliers_guide.html#integrator-handoff">Integrator handoff</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="docs/multi_project_workflows.html">Multi-project workflows (integrators)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#quick-start-integrator">Quick start (integrator)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#concepts">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#recommended-folder-layout-integrator">Recommended folder layout (integrator)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#typical-process">Typical process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#what-the-intake-produces">What the intake produces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#batch-verification-cli">Batch verification (CLI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#intake-archiving-cli">Intake + archiving (CLI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#practical-naming-convention">Practical naming convention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#shipment-metadata-supplier-provided">Shipment metadata (supplier-provided)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#subproject-overview-integrator-output">Subproject overview (integrator output)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/multi_project_workflows.html#notes-and-good-practices">Notes and good practices</a></li>
 </ul>
 </li>
 </ul>
@@ -370,7 +403,7 @@
   </div>
 </div><script src="_static/jquery.js?v=5d32c60e"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/documentation_options.js?v=000c92bf"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>
