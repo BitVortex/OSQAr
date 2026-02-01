@@ -266,6 +266,9 @@
 <li><p>structured requirements and traceability (via <code class="docutils literal notranslate"><span class="pre">sphinx-needs</span></code>)</p></li>
 <li><p>architecture diagrams (via PlantUML)</p></li>
 <li><p>verification planning and traceability (requirements ↔ architecture ↔ tests)</p></li>
+<li><p>evidence “shipments” (rendered HTML + machine-readable exports) protected by checksum manifests</p></li>
+<li><p>integrator-friendly multi-shipment intake and a consolidated <strong>Subproject overview</strong></p></li>
+<li><p>extensive lifecycle management guidance (framework-level and example-level)</p></li>
 </ul>
 </section>
 <section id="quick-start">
@@ -315,6 +318,8 @@ open<span class="w"> </span>_build/html/index.html
 <li><p>scaffold a new project from a language template</p></li>
 <li><p>validate traceability based on an exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code></p></li>
 <li><p>generate/verify checksum manifests for a shipped evidence bundle</p></li>
+<li><p>supplier and integrator workflows (prepare, verify, intake)</p></li>
+<li><p>optional shipment metadata (origin, URLs, descriptive info)</p></li>
 </ul>
 <section id="invocation">
 <h3>Invocation<a class="headerlink" href="#invocation" title="Link to this heading">¶</a></h3>
@@ -412,6 +417,7 @@ This is the unit that is transferred, archived, and later verified (similar to a
 <li><p><code class="docutils literal notranslate"><span class="pre">needs.json</span></code> (export from <code class="docutils literal notranslate"><span class="pre">sphinx-needs</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">traceability_report.json</span></code> (result of the OSQAr traceability check)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> (checksum manifest covering the full directory contents)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> (optional project metadata: description, URLs, origin)</p></li>
 </ul>
 <section id="supplier-side-procedure-create-the-shipment">
 <h3>Supplier-side procedure (create the shipment)<a class="headerlink" href="#supplier-side-procedure-create-the-shipment" title="Link to this heading">¶</a></h3>
@@ -447,26 +453,40 @@ This is the unit that is transferred, archived, and later verified (similar to a
    <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
    <span class="o">--</span><span class="n">traceability</span>
 
-<span class="c1"># Or run the individual shipment steps</span>
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">build</span><span class="o">-</span><span class="n">docs</span> <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span>
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">traceability</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span>
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">generate</span>
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">verify</span>
+  <span class="c1"># Supplier: optionally add metadata into the shipment root</span>
+  <span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">metadata</span> <span class="n">write</span> \
+     <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+     <span class="o">--</span><span class="n">name</span> <span class="s2">&quot;OSQAr Python Hello World&quot;</span> \
+     <span class="o">--</span><span class="n">version</span> <span class="s2">&quot;0.2.2&quot;</span> \
+     <span class="o">--</span><span class="n">url</span> <span class="n">repository</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">git</span> \
+     <span class="o">--</span><span class="n">origin</span> <span class="n">url</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">git</span> \
+     <span class="o">--</span><span class="n">origin</span> <span class="n">revision</span><span class="o">=&lt;</span><span class="n">commit</span><span class="o">&gt;</span>
 
-<span class="c1"># Legacy equivalents (still supported)</span>
-
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">traceability</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
-   <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">json</span>
-
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">generate</span> \
-   <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-   <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
-
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">verify</span> \
-   <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-   <span class="o">--</span><span class="n">manifest</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+  <span class="c1"># Integrator: intake multiple shipments and generate a Subproject overview</span>
+  <span class="o">./</span><span class="n">osqar</span> <span class="n">workspace</span> <span class="n">intake</span> \
+     <span class="o">--</span><span class="n">root</span> <span class="n">intake</span><span class="o">/</span><span class="n">received</span> \
+     <span class="o">--</span><span class="n">recursive</span> \
+     <span class="o">--</span><span class="n">output</span> <span class="n">intake</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="mi">2026</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">01</span> \
+     <span class="o">--</span><span class="n">traceability</span>
 </pre></div>
 </div>
+<p>For multi-project intake patterns, see <a class="reference internal" href="multi_project_workflows.html"><span class="doc">Multi-project workflows (integrators)</span></a>.</p>
+<blockquote>
+<div><p># Or run the individual shipment steps
+poetry run python -m tools.osqar_cli shipment build-docs –project examples/python_hello_world
+poetry run python -m tools.osqar_cli shipment traceability –shipment examples/python_hello_world/_build/html
+poetry run python -m tools.osqar_cli shipment checksums –shipment examples/python_hello_world/_build/html generate
+poetry run python -m tools.osqar_cli shipment checksums –shipment examples/python_hello_world/_build/html verify</p>
+<p># Legacy equivalents (still supported)</p>
+<dl class="simple">
+<dt>poetry run python -m tools.osqar_cli traceability examples/python_hello_world/_build/html/needs.json </dt><dd><p>–json-report examples/python_hello_world/_build/html/traceability_report.json</p>
+</dd>
+<dt>poetry run python -m tools.osqar_cli checksum generate </dt><dd><p>–root examples/python_hello_world/_build/html –output examples/python_hello_world/_build/html/SHA256SUMS</p>
+</dd>
+<dt>poetry run python -m tools.osqar_cli checksum verify </dt><dd><p>–root examples/python_hello_world/_build/html –manifest examples/python_hello_world/_build/html/SHA256SUMS</p>
+</dd>
+</dl>
+</div></blockquote>
 <p>Then archive and ship the <strong>example output directory</strong> (not the framework docs built from the repo root).</p>
 </section>
 <section id="integrator-side-procedure-verify-a-received-shipment">
