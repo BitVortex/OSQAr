@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Multi-project workflows (integrators)" href="multi_project_workflows.html" /><link rel="prev" title="Integrator’s Guide" href="integrators_guide.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Supplier’s Guide - OSQAr 0.2.2 documentation</title>
+        <title>Supplier’s Guide - OSQAr 0.2.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.2.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.2.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.2.3 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -336,43 +336,45 @@ transferred to the integrator and stored as evidence.</p>
 </div>
 </li>
 <li><p>Generate a checksum manifest for the example build output directory and verify it immediately:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">generate_checksums</span><span class="o">.</span><span class="n">py</span> \
-                       <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-                       <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">generate_checksums</span><span class="o">.</span><span class="n">py</span> \
+        <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+        <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
 
-               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">generate_checksums</span><span class="o">.</span><span class="n">py</span> \
-                       <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-                       <span class="o">--</span><span class="n">verify</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
-
-<span class="n">Optional</span> <span class="n">convenience</span><span class="p">:</span> <span class="n">the</span> <span class="n">same</span> <span class="n">steps</span> <span class="n">are</span> <span class="n">available</span> <span class="n">via</span> <span class="n">the</span> <span class="n">OSQAr</span> <span class="n">CLI</span><span class="p">::</span>
-
-               <span class="c1"># One-shot supplier workflow (recommended)</span>
-               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">supplier</span> <span class="n">prepare</span> \
-                       <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
-                       <span class="o">--</span><span class="n">clean</span> \
-                       <span class="o">--</span><span class="n">archive</span>
-
-               <span class="c1"># Or run the individual shipment steps</span>
-               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">build</span><span class="o">-</span><span class="n">docs</span> <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span>
-               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">traceability</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span>
-               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">generate</span>
-               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">verify</span>
-
-               <span class="c1"># Legacy equivalents (still supported)</span>
-
-               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">traceability</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
-                       <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">json</span>
-
-               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">generate</span> \
-                       <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-                       <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
-
-               <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">verify</span> \
-                       <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-                       <span class="o">--</span><span class="n">manifest</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="n">tools</span><span class="o">/</span><span class="n">generate_checksums</span><span class="o">.</span><span class="n">py</span> \
+        <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+        <span class="o">--</span><span class="n">verify</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
 </pre></div>
 </div>
 </li>
+</ol>
+<p>Optional convenience: the same steps are available via the OSQAr CLI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># One-shot supplier workflow (recommended)</span>
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">supplier</span> <span class="n">prepare</span> \
+        <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
+        <span class="o">--</span><span class="n">clean</span> \
+        <span class="o">--</span><span class="n">archive</span>
+
+<span class="c1"># Or run the individual shipment steps</span>
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">build</span><span class="o">-</span><span class="n">docs</span> <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span>
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">traceability</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span>
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">generate</span>
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">verify</span>
+
+<span class="c1"># Legacy equivalents (still supported)</span>
+
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">traceability</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
+        <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">json</span>
+
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">generate</span> \
+        <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+        <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">verify</span> \
+        <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+        <span class="o">--</span><span class="n">manifest</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
 <li><dl class="simple">
 <dt>Ship the example build output directory as an archive (ZIP/TAR), keeping <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> at the root of</dt><dd><p>the shipped directory.</p>
 </dd>
@@ -383,7 +385,7 @@ transferred to the integrator and stored as evidence.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">metadata</span> <span class="n">write</span> \
         <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
         <span class="o">--</span><span class="n">name</span> <span class="s2">&quot;OSQAr Python Hello World&quot;</span> \
-        <span class="o">--</span><span class="n">version</span> <span class="s2">&quot;0.2.2&quot;</span> \
+        <span class="o">--</span><span class="n">version</span> <span class="s2">&quot;0.2.3&quot;</span> \
         <span class="o">--</span><span class="n">url</span> <span class="n">repository</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">git</span> \
         <span class="o">--</span><span class="n">origin</span> <span class="n">url</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">git</span> \
         <span class="o">--</span><span class="n">origin</span> <span class="n">revision</span><span class="o">=&lt;</span><span class="n">commit</span><span class="o">&gt;</span>
@@ -523,7 +525,7 @@ transferred to the integrator and stored as evidence.</p>
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=000c92bf"></script>
+    <script src="../_static/documentation_options.js?v=a47416a6"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

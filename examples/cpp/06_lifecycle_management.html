@@ -300,6 +300,12 @@
 <li><p>rebuild docs</p></li>
 <li><p>regenerate checksums</p></li>
 </ul>
+<p>Example commands (supplier, docs-only update):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">build</span><span class="o">-</span><span class="n">docs</span> <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span>
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">generate</span>
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">verify</span>
+</pre></div>
+</div>
 </section>
 <section id="requirement-changes">
 <h3>Requirement changes<a class="headerlink" href="#requirement-changes" title="Link to this heading">¶</a></h3>
@@ -316,6 +322,13 @@
 <li><p>re-run traceability checks</p></li>
 <li><p>regenerate checksums</p></li>
 </ul>
+<p>Example commands (supplier, requirement change):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">supplier</span> <span class="n">prepare</span> \
+  <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
+  <span class="o">--</span><span class="n">clean</span> \
+  <span class="o">--</span><span class="n">archive</span>
+</pre></div>
+</div>
 </section>
 <section id="implementation-changes">
 <h3>Implementation changes<a class="headerlink" href="#implementation-changes" title="Link to this heading">¶</a></h3>
@@ -331,6 +344,13 @@
 <li><p>rebuild docs (to import new test results)</p></li>
 <li><p>re-run traceability and checksums</p></li>
 </ul>
+<p>Example commands (supplier, implementation change):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">supplier</span> <span class="n">prepare</span> \
+  <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
+  <span class="o">--</span><span class="n">clean</span> \
+  <span class="o">--</span><span class="n">archive</span>
+</pre></div>
+</div>
 </section>
 <section id="toolchain-changes">
 <h3>Toolchain changes<a class="headerlink" href="#toolchain-changes" title="Link to this heading">¶</a></h3>
@@ -347,40 +367,6 @@
 </ul>
 </section>
 </section>
-<section id="recommended-workflows">
-<h2>Recommended workflows<a class="headerlink" href="#recommended-workflows" title="Link to this heading">¶</a></h2>
-<section id="supplier-workflow-produce-shipment">
-<h3>Supplier workflow (produce shipment)<a class="headerlink" href="#supplier-workflow-produce-shipment" title="Link to this heading">¶</a></h3>
-<p>From the repository root (recommended):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">supplier</span> <span class="n">prepare</span> \
-  <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
-  <span class="o">--</span><span class="n">clean</span>
-</pre></div>
-</div>
-<p>Notes:</p>
-<ul class="simple">
-<li><p>Use the matching example directory (C/C++/Rust/Python) as <code class="docutils literal notranslate"><span class="pre">--project</span></code>.</p></li>
-<li><p>If the example includes a <code class="docutils literal notranslate"><span class="pre">build-and-test.sh</span></code>, you can omit <code class="docutils literal notranslate"><span class="pre">--skip-tests</span></code> to run it.</p></li>
-</ul>
-</section>
-<section id="integrator-workflow-verify-shipment">
-<h3>Integrator workflow (verify shipment)<a class="headerlink" href="#integrator-workflow-verify-shipment" title="Link to this heading">¶</a></h3>
-<p>After unpacking a received shipment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">integrator</span> <span class="n">verify</span> \
-  <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
-  <span class="o">--</span><span class="n">traceability</span>
-</pre></div>
-</div>
-</section>
-</section>
-<section id="archiving-and-traceability-continuity">
-<h2>Archiving and traceability continuity<a class="headerlink" href="#archiving-and-traceability-continuity" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>Archive the shipment directory (or a signed archive) per version.</p></li>
-<li><p>Keep need IDs stable; stable IDs make diffs and intake reviews possible.</p></li>
-<li><p>If an ID must be replaced, document the mapping (old ↔ new) in release notes.</p></li>
-</ul>
-</section>
 <section id="multi-language-note">
 <h2>Multi-language note<a class="headerlink" href="#multi-language-note" title="Link to this heading">¶</a></h2>
 <p>This TSIM example exists in multiple implementation languages.
@@ -390,41 +376,87 @@ To keep lifecycle management consistent:</p>
 <li><p>keep language-specific implementation details in each example’s implementation chapter</p></li>
 <li><p>keep test IDs (<code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>) stable even if underlying test framework differs</p></li>
 </ul>
-<p>Implementation changes</p>
-<p>Examples:</p>
-<p>Actions:</p>
-<p>Toolchain changes</p>
-<p>Examples:</p>
-<p>Actions:</p>
 </section>
-<section id="id1">
-<h2>Recommended workflows<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<p>Supplier workflow (produce shipment)</p>
+<section id="notes-and-pitfalls">
+<h2>Notes and pitfalls<a class="headerlink" href="#notes-and-pitfalls" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Treat shipped HTML outputs as <strong>immutable evidence</strong>. If anything changes, create a new shipment.</p></li>
+<li><p>Integrators should <strong>verify</strong> manifests, not regenerate them (regeneration defeats integrity checks).</p></li>
+<li><p>Keep IDs stable (<code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>, <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>). If you truly must replace an ID, document the mapping.</p></li>
+<li><p>Prefer additive changes over rewrites; it makes diffs reviewable and reduces merge conflicts.</p></li>
+</ul>
+</section>
+<section id="worked-example-requirement-change">
+<h2>Worked example (requirement change)<a class="headerlink" href="#worked-example-requirement-change" title="Link to this heading">¶</a></h2>
+<p>Scenario:</p>
+<ul class="simple">
+<li><p>You tighten a threshold in a <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code> need.</p></li>
+</ul>
+<p>Minimum actions:</p>
+<ol class="arabic simple">
+<li><p>Update the requirement text and any assumptions.</p></li>
+<li><p>Update trace links (REQ ↔ ARCH ↔ TEST) if they no longer match.</p></li>
+<li><p>Update tests (or add a new test) and ensure the test ID remains stable.</p></li>
+<li><p>Run the end-to-end example workflow (tests → docs import → shipment integrity):</p>
+<ul class="simple">
+<li><p>Run the example’s <code class="docutils literal notranslate"><span class="pre">build-and-test.sh</span></code> (if present).</p></li>
+<li><p>Rebuild docs.</p></li>
+<li><p>Re-run traceability checks.</p></li>
+<li><p>Regenerate checksums.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="supplier-workflow-produce-shipment">
+<h2>Supplier workflow (produce shipment)<a class="headerlink" href="#supplier-workflow-produce-shipment" title="Link to this heading">¶</a></h2>
 <p>From the repository root (recommended):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">supplier</span> <span class="n">prepare</span> \
   <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
-  <span class="o">--</span><span class="n">clean</span>
+  <span class="o">--</span><span class="n">clean</span> \
+  <span class="o">--</span><span class="n">archive</span>
 </pre></div>
 </div>
 <p>Notes:</p>
-<p>Integrator workflow (verify shipment)</p>
+<ul class="simple">
+<li><p>By default, OSQAr will run the example’s <code class="docutils literal notranslate"><span class="pre">build-and-test.sh</span></code> <em>if it exists</em>.
+Use <code class="docutils literal notranslate"><span class="pre">--skip-tests</span></code> to force skipping.</p></li>
+<li><p>The shipment directory defaults to <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/_build/html</span></code>.</p></li>
+</ul>
+<p>Optional: add supplier metadata to the shipment root (helps integrator intake):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">metadata</span> <span class="n">write</span> \
+  <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
+  <span class="o">--</span><span class="n">name</span> <span class="s2">&quot;TSIM (Python)&quot;</span> \
+  <span class="o">--</span><span class="n">version</span> <span class="s2">&quot;&lt;your_version&gt;&quot;</span> \
+  <span class="o">--</span><span class="n">url</span> <span class="n">repository</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">git</span> \
+  <span class="o">--</span><span class="n">origin</span> <span class="n">url</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">repo</span><span class="o">.</span><span class="n">git</span> \
+  <span class="o">--</span><span class="n">origin</span> <span class="n">revision</span><span class="o">=&lt;</span><span class="n">commit</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="integrator-workflow-verify-shipment">
+<h2>Integrator workflow (verify shipment)<a class="headerlink" href="#integrator-workflow-verify-shipment" title="Link to this heading">¶</a></h2>
 <p>After unpacking a received shipment:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">integrator</span> <span class="n">verify</span> \
   <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
   <span class="o">--</span><span class="n">traceability</span>
 </pre></div>
 </div>
+<p>If you intake multiple shipments at once, prefer the batch workflow:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">workspace</span> <span class="n">intake</span> \
+  <span class="o">--</span><span class="n">root</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">received</span> \
+  <span class="o">--</span><span class="n">recursive</span> \
+  <span class="o">--</span><span class="n">output</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">archive</span><span class="o">/&lt;</span><span class="n">date</span><span class="o">&gt;</span> \
+  <span class="o">--</span><span class="n">traceability</span>
+</pre></div>
+</div>
 </section>
-<section id="id2">
-<h2>Archiving and traceability continuity<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
-</section>
-<section id="id3">
-<h2>Multi-language note<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
-<p>This TSIM example exists in multiple implementation languages.
-To keep lifecycle management consistent:</p>
-<section id="id4">
-<h3>Supplier workflow (produce shipment)<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
-</section>
+<section id="archiving-and-traceability-continuity">
+<h2>Archiving and traceability continuity<a class="headerlink" href="#archiving-and-traceability-continuity" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Archive the shipment directory (or a signed archive) per version.</p></li>
+<li><p>Keep need IDs stable; stable IDs make diffs and intake reviews possible.</p></li>
+<li><p>If an ID must be replaced, document the mapping (old ↔ new) in release notes.</p></li>
+</ul>
 </section>
 </section>
 
@@ -488,19 +520,12 @@ To keep lifecycle management consistent:</p>
 <li><a class="reference internal" href="#toolchain-changes">Toolchain changes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#recommended-workflows">Recommended workflows</a><ul>
+<li><a class="reference internal" href="#multi-language-note">Multi-language note</a></li>
+<li><a class="reference internal" href="#notes-and-pitfalls">Notes and pitfalls</a></li>
+<li><a class="reference internal" href="#worked-example-requirement-change">Worked example (requirement change)</a></li>
 <li><a class="reference internal" href="#supplier-workflow-produce-shipment">Supplier workflow (produce shipment)</a></li>
 <li><a class="reference internal" href="#integrator-workflow-verify-shipment">Integrator workflow (verify shipment)</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#archiving-and-traceability-continuity">Archiving and traceability continuity</a></li>
-<li><a class="reference internal" href="#multi-language-note">Multi-language note</a></li>
-<li><a class="reference internal" href="#id1">Recommended workflows</a></li>
-<li><a class="reference internal" href="#id2">Archiving and traceability continuity</a></li>
-<li><a class="reference internal" href="#id3">Multi-language note</a><ul>
-<li><a class="reference internal" href="#id4">Supplier workflow (produce shipment)</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>

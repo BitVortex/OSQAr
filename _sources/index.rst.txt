@@ -50,8 +50,3 @@ Reference examples:
 - `C++ example <examples/cpp/>`_
 - `Rust example <examples/rust/>`_
 - `Python demo example <examples/python/>`_
-
-- ``examples/c_hello_world``
-- ``examples/cpp_hello_world``
-- ``examples/rust_hello_world``
-- ``examples/python_hello_world``
