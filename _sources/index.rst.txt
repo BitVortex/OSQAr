@@ -20,6 +20,7 @@ Start here:
 
    docs/using_the_boilerplate
    docs/lifecycle_management
+   docs/collaboration_workflows
    docs/integrators_guide
    docs/suppliers_guide
    docs/multi_project_workflows

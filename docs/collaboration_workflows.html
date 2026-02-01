@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="search" title="Search" href="../search.html" /><link rel="prev" title="Multi-project workflows (integrators)" href="../docs/multi_project_workflows.html" />
+<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Integrator’s Guide" href="integrators_guide.html" /><link rel="prev" title="Lifecycle Management" href="lifecycle_management.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>OSQAr Examples - OSQAr 0.2.2 documentation</title>
+        <title>Collaboration workflows (multi-user) - OSQAr 0.2.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -185,7 +185,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -206,18 +206,18 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../docs/using_the_boilerplate.html">Using the OSQAr Boilerplate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../docs/lifecycle_management.html">Lifecycle Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../docs/collaboration_workflows.html">Collaboration workflows (multi-user)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../docs/integrators_guide.html">Integrator’s Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../docs/suppliers_guide.html">Supplier’s Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../docs/multi_project_workflows.html">Multi-project workflows (integrators)</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="using_the_boilerplate.html">Using the OSQAr Boilerplate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle_management.html">Lifecycle Management</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Collaboration workflows (multi-user)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="suppliers_guide.html">Supplier’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_project_workflows.html">Multi-project workflows (integrators)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">OSQAr Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#notes">Notes</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">OSQAr Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html#notes">Notes</a></li>
 </ul>
 
 </div>
@@ -238,7 +238,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../_sources/examples/index.rst.txt" title="View this page">
+  <a class="muted-link" href="../_sources/docs/collaboration_workflows.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -252,32 +252,152 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="osqar-examples">
-<h1>OSQAr Examples<a class="headerlink" href="#osqar-examples" title="Link to this heading">¶</a></h1>
-<p>This page links to the published reference examples.</p>
-<p>Language-specific examples (published under <code class="docutils literal notranslate"><span class="pre">/examples/</span></code>):</p>
+          <section id="collaboration-workflows-multi-user">
+<h1>Collaboration workflows (multi-user)<a class="headerlink" href="#collaboration-workflows-multi-user" title="Link to this heading">¶</a></h1>
+<p>OSQAr is <strong>documentation-first</strong>. That makes collaboration scalable <em>if</em> you treat the
+Sphinx sources as controlled engineering artifacts (not as free-form prose).</p>
+<p>This chapter describes practical branching/merging strategies and conventions that
+reduce merge conflicts and keep traceability stable for large teams.</p>
+<p>Principles</p>
 <ul class="simple">
-<li><p><a class="reference external" href="c/">C</a></p></li>
-<li><p><a class="reference external" href="cpp/">C++</a></p></li>
-<li><p><a class="reference external" href="rust/">Rust</a></p></li>
-<li><p><a class="reference external" href="python/">Python (workstation demo)</a></p></li>
+<li><p><strong>Keep IDs stable</strong>: requirement/architecture/test IDs (<code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>, <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>)
+are part of the contract. Never recycle IDs.</p></li>
+<li><p><strong>Prefer additive changes</strong>: add new needs and new sections instead of rewriting existing
+paragraphs.</p></li>
+<li><p><strong>Split work by files</strong>: parallel work scales when people do not edit the same <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files.</p></li>
+<li><p><strong>Automate checks</strong>: run docs builds and traceability checks in CI for every change.</p></li>
+</ul>
+<p>Repository layout for parallel work</p>
+<p>To minimize conflicts, organize content so contributors naturally touch different files:</p>
+<ul class="simple">
+<li><p>One chapter per concern (requirements / architecture / verification / lifecycle / collaboration).</p></li>
+<li><p>Split large chapters into multiple files and include them from a stable index page.</p></li>
+<li><p>Prefer “append-only” files for requirements lists (see below).</p></li>
+</ul>
+<p>Typical pattern:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>requirements/
+  safety_requirements.rst
+  functional_requirements.rst
+  interfaces.rst
+architecture/
+  system_context.rst
+  component_decomposition.rst
+verification/
+  verification_plan.rst
+  test_results.rst
+</pre></div>
+</div>
+<p>Use a stable top-level toctree that rarely changes, and let subtrees grow.</p>
+<p>Branching strategies</p>
+<p>Two common approaches work well with OSQAr. Choose one and apply it consistently.</p>
+<section id="trunk-based-development-recommended-for-most-teams">
+<h2>Trunk-based development (recommended for most teams)<a class="headerlink" href="#trunk-based-development-recommended-for-most-teams" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> is always releasable.</p></li>
+<li><p>Developers branch from <code class="docutils literal notranslate"><span class="pre">main</span></code> and open small pull requests.</p></li>
+<li><p>Merge frequently (at least daily) to reduce drift and conflicts.</p></li>
+</ul>
+<p>Guidelines:</p>
+<ul class="simple">
+<li><p>Keep PRs small (e.g., one feature or one document area).</p></li>
+<li><p>Prefer <strong>squash merge</strong> for clean history, unless you need full commit lineage.</p></li>
+<li><p>Use short-lived feature branches: <code class="docutils literal notranslate"><span class="pre">feature/&lt;topic&gt;</span></code>.</p></li>
 </ul>
 </section>
-<section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
+<section id="release-branches-useful-when-multiple-releases-are-supported">
+<h2>Release branches (useful when multiple releases are supported)<a class="headerlink" href="#release-branches-useful-when-multiple-releases-are-supported" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>These examples are separate Sphinx projects that get published into subfolders.</p></li>
-<li><p>For safety-related embedded projects, prefer <strong>C</strong> or <strong>Rust</strong>.</p></li>
-<li><p><strong>C++</strong> is widely used in industry, but is not recommended here as a starting point for safety-related embedded work.</p></li>
-<li><p>The <strong>Python</strong> example is an easy-to-run workstation demo of the traceability workflow, not an embedded implementation.</p></li>
-<li><p>If you are building locally, enter an example directory and run its <code class="docutils literal notranslate"><span class="pre">build-and-test.sh</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> continues forward.</p></li>
+<li><p>Cut a branch <code class="docutils literal notranslate"><span class="pre">release/x.y</span></code> when you need stabilization.</p></li>
+<li><p>Backport fixes via cherry-picks.</p></li>
 </ul>
+<p>Guidelines:</p>
+<ul class="simple">
+<li><p>Tag releases (e.g., <code class="docutils literal notranslate"><span class="pre">v0.2.2</span></code>) and keep the shipped documentation reproducible.</p></li>
+<li><p>Avoid large refactors on release branches.</p></li>
+</ul>
+<p>Merging strategies</p>
+<ul class="simple">
+<li><p>Prefer <strong>merge by pull request</strong>, not direct pushes to protected branches.</p></li>
+<li><p>Use a consistent merge mode:</p>
+<ul>
+<li><p><strong>Squash merge</strong>: good default; one commit per PR, easier audit trail.</p></li>
+<li><p><strong>Merge commit</strong>: useful when you want to preserve a topic branch structure.</p></li>
+</ul>
+</li>
+<li><p>Avoid rebasing shared branches after review starts (it rewrites history and complicates review).</p></li>
+</ul>
+<p>How to minimize merge conflicts</p>
+</section>
+<section id="rst-restructuredtext">
+<h2>RST (reStructuredText)<a class="headerlink" href="#rst-restructuredtext" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Avoid re-wrapping paragraphs for style changes; it causes noisy diffs.</p></li>
+<li><p>Keep lists stable: append items instead of reordering.</p></li>
+<li><p>If two people need to edit the same chapter, split it first.</p></li>
+</ul>
+</section>
+<section id="sphinx-needs-objects">
+<h2>Sphinx-needs objects<a class="headerlink" href="#sphinx-needs-objects" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Treat IDs as immutable. If wording changes, keep the same <code class="docutils literal notranslate"><span class="pre">:id:</span></code>.</p></li>
+<li><p>Add new requirements as new needs; avoid “editing history into the same need” unless
+it is truly the same requirement.</p></li>
+<li><p>Maintain consistent prefixes (<code class="docutils literal notranslate"><span class="pre">REQ_SAFETY_*</span></code>, <code class="docutils literal notranslate"><span class="pre">REQ_FUNC_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>, <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>).</p></li>
+</ul>
+</section>
+<section id="diagrams-plantuml">
+<h2>Diagrams (PlantUML)<a class="headerlink" href="#diagrams-plantuml" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Prefer one diagram per file.</p></li>
+<li><p>Avoid large diagram rewrites; add a new diagram revision (e.g., <code class="docutils literal notranslate"><span class="pre">03_context_v2.puml</span></code>)
+if needed.</p></li>
+</ul>
+</section>
+<section id="generated-artifacts">
+<h2>Generated artifacts<a class="headerlink" href="#generated-artifacts" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Never commit build outputs (<code class="docutils literal notranslate"><span class="pre">_build/</span></code>, <code class="docutils literal notranslate"><span class="pre">target/</span></code>, <code class="docutils literal notranslate"><span class="pre">build/</span></code>).</p></li>
+<li><p>Treat shipments (rendered HTML outputs) as <strong>immutable</strong> after creation.</p></li>
+</ul>
+<p>Collaborating at scale</p>
+</section>
+<section id="roles-and-review-gates">
+<h2>Roles and review gates<a class="headerlink" href="#roles-and-review-gates" title="Link to this heading">¶</a></h2>
+<p>For industry-scale collaboration, define a simple set of gates:</p>
+<ul class="simple">
+<li><p><strong>Author</strong>: proposes change via PR.</p></li>
+<li><p><strong>Reviewer</strong>: checks clarity, correctness, and traceability links.</p></li>
+<li><p><strong>Integrator</strong>: confirms evidence is consistent and reproducible.</p></li>
+</ul>
+<p>Recommended CI checks:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-W</span></code> to treat warnings as errors</p></li>
+<li><p>traceability check on exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code></p></li>
+<li><p>checksum generation/verification for example shipments (if you publish them)</p></li>
+</ul>
+</section>
+<section id="working-on-multiple-subprojects-in-parallel">
+<h2>Working on multiple subprojects in parallel<a class="headerlink" href="#working-on-multiple-subprojects-in-parallel" title="Link to this heading">¶</a></h2>
+<p>When multiple teams produce shipments simultaneously:</p>
+<ul class="simple">
+<li><p>Standardize naming for shipments: <code class="docutils literal notranslate"><span class="pre">&lt;supplier&gt;_&lt;component&gt;_&lt;version&gt;</span></code>.</p></li>
+<li><p>Include <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> in each shipment to record origin, URLs, and descriptive metadata.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">intake</span></code> to archive and summarize received shipments.</p></li>
+</ul>
+<p>Change control tips</p>
+<ul class="simple">
+<li><p>Record user-facing changes in <code class="docutils literal notranslate"><span class="pre">CHANGELOG.md</span></code>.</p></li>
+<li><p>Keep a stable requirement ID namespace and allocate ID ranges if multiple teams author requirements.</p></li>
+<li><p>For safety-relevant changes, require an explicit review and update lifecycle records accordingly.</p></li>
+</ul>
+</section>
 </section>
 
         </article>
@@ -285,15 +405,23 @@
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="../docs/multi_project_workflows.html">
+          <a class="next-page" href="integrators_guide.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Integrator’s Guide</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="lifecycle_management.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Multi-project workflows (integrators)</div>
+                <div class="title">Lifecycle Management</div>
                 
               </div>
             </a>
@@ -315,8 +443,34 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Collaboration workflows (multi-user)</a><ul>
+<li><a class="reference internal" href="#trunk-based-development-recommended-for-most-teams">Trunk-based development (recommended for most teams)</a></li>
+<li><a class="reference internal" href="#release-branches-useful-when-multiple-releases-are-supported">Release branches (useful when multiple releases are supported)</a></li>
+<li><a class="reference internal" href="#rst-restructuredtext">RST (reStructuredText)</a></li>
+<li><a class="reference internal" href="#sphinx-needs-objects">Sphinx-needs objects</a></li>
+<li><a class="reference internal" href="#diagrams-plantuml">Diagrams (PlantUML)</a></li>
+<li><a class="reference internal" href="#generated-artifacts">Generated artifacts</a></li>
+<li><a class="reference internal" href="#roles-and-review-gates">Roles and review gates</a></li>
+<li><a class="reference internal" href="#working-on-multiple-subprojects-in-parallel">Working on multiple subprojects in parallel</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

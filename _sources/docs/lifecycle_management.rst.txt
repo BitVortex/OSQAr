@@ -12,6 +12,8 @@ across releases.
 OSQAr is **documentation-first**: the primary lifecycle artifact is a controlled documentation set that
 links requirements ↔ architecture ↔ verification and can be shipped as an evidence bundle.
 
+For team-scale practices (branching, merging, conflict minimization), see :doc:`collaboration_workflows`.
+
 Scope
 =====
 

@@ -74,6 +74,9 @@ OSQAr includes a small, stdlib-only CLI for common workflows:
 - supplier and integrator workflows (prepare, verify, intake)
 - optional shipment metadata (origin, URLs, descriptive info)
 
+For guidance on large-team collaboration (branching, merging, conflict minimization), see
+:doc:`collaboration_workflows`.
+
 Invocation
 ----------
 
