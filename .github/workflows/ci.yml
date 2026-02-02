@@ -65,7 +65,8 @@ jobs:
         path: examples/python_hello_world/_build/html/
         retention-days: 30
 
-  temperature-monitor-example:
+  python-example-e2e:
+    name: Python example (E2E)
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -116,10 +117,10 @@ jobs:
           --root examples/python_hello_world/_build/html \
           --verify examples/python_hello_world/_build/html/SHA256SUMS
 
-    - name: Upload Temperature Monitor (TSIM) artifacts
+    - name: Upload Python example artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: temperature-monitor-example
+        name: python-example-e2e
         path: |
           examples/python_hello_world/_build/html/
           examples/python_hello_world/test_results.xml
