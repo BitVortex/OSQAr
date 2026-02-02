@@ -1,10 +1,14 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![CI](https://github.com/bitvortex/OSQAr/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bitvortex/OSQAr/actions/workflows/ci.yml)
+[![CI (Tests and Example Shipments)](https://github.com/bitvortex/OSQAr/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bitvortex/OSQAr/actions/workflows/ci.yml)
 [![Docs (GitHub Pages)](https://github.com/bitvortex/OSQAr/actions/workflows/pages-deploy.yml/badge.svg?branch=main)](https://github.com/bitvortex/OSQAr/actions/workflows/pages-deploy.yml)
 
 # OSQAr
 
-Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boilerplate for building **auditable, reusable safetycompliance documentation** with:
+Open Safety Qualification Architecture (OSQAr) — a documentation-first framework for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
+
+In practice, an “evidence shipment” is a reviewable bundle (typically rendered HTML docs + machine-readable traceability exports + verification outputs + integrity metadata) that can be handed from suppliers to integrators and archived.
+
+OSQAr is built on Sphinx + sphinx-needs and provides:
 
 - requirements + traceability (sphinx-needs)
 - architecture diagrams (PlantUML)
@@ -20,7 +24,7 @@ For license terms see the `LICENSE` file (Apache License 2.0).
 
 ## What you can do with OSQAr
 
-OSQAr is documentation-first and aimed at producing **reviewable, exportable evidence** for safety- and compliance-related components (SEooC-style).
+OSQAr is aimed at producing **auditable evidence shipments** for safety- and compliance-related components (SEooC-style), and supporting the end-to-end workflow: supplier creation → verification → integrator intake.
 
 - Author structured requirements, architecture and verification plans (REQ/ARCH/TEST) in reStructuredText
 - Export the machine-readable trace graph (`needs.json`) and build traceability tables/matrices using `sphinx-needs`

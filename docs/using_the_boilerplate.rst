@@ -5,7 +5,11 @@ Using the OSQAr Boilerplate
 Purpose
 =======
 
-OSQAr is a **documentation-first** boilerplate for producing auditable safety/compliance artifacts with:
+OSQAr is a **documentation-first framework** for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
+
+In OSQAr, an evidence shipment is the unit you transfer and archive (typically rendered HTML docs + machine-readable exports + verification outputs + integrity metadata).
+
+OSQAr provides:
 
 - structured requirements and traceability (via ``sphinx-needs``)
 - architecture diagrams (via PlantUML)
@@ -333,23 +337,21 @@ Optional convenience (same operations via the OSQAr CLI)::
        --shipment /path/to/shipment \
        --traceability
 
-      # Supplier: optionally add metadata into the shipment root
-      ./osqar shipment metadata write \
-         --shipment examples/python_hello_world/_build/html \
-         --name "OSQAr Python Hello World" \
-         --version "0.3.0" \
-         --url repository=https://example.com/repo.git \
-         --origin url=https://example.com/repo.git \
-         --origin revision=<commit>
+    # Supplier: optionally add metadata into the shipment root
+    ./osqar shipment metadata write \
+       --shipment examples/python_hello_world/_build/html \
+       --name "OSQAr Python Hello World" \
+       --version "0.3.0" \
+       --url repository=https://example.com/repo.git \
+       --origin url=https://example.com/repo.git \
+       --origin revision=<commit>
 
-      # Integrator: intake multiple shipments and generate a Subproject overview
-      ./osqar workspace intake \
-         --root intake/received \
-         --recursive \
-         --output intake/archive/2026-02-01 \
-         --traceability
-
-For multi-project intake patterns, see :doc:`multi_project_workflows`.
+    # Integrator: intake multiple shipments and generate a Subproject overview
+    ./osqar workspace intake \
+       --root intake/received \
+       --recursive \
+       --output intake/archive/2026-02-01 \
+       --traceability
 
     # Or run the individual shipment steps
     poetry run python -m tools.osqar_cli shipment build-docs --project examples/python_hello_world
@@ -358,7 +360,6 @@ For multi-project intake patterns, see :doc:`multi_project_workflows`.
     poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
 
     # Legacy equivalents (still supported)
-
     poetry run python -m tools.osqar_cli traceability examples/python_hello_world/_build/html/needs.json \
        --json-report examples/python_hello_world/_build/html/traceability_report.json
 
@@ -371,6 +372,8 @@ For multi-project intake patterns, see :doc:`multi_project_workflows`.
        --manifest examples/python_hello_world/_build/html/SHA256SUMS
 
 Then archive and ship the **example output directory** (not the framework docs built from the repo root).
+
+For multi-project intake patterns, see :doc:`multi_project_workflows`.
 
 Integrator-side procedure (verify a received shipment)
 ------------------------------------------------------
@@ -391,6 +394,9 @@ For role-specific guidance (including what to do on mismatches), see:
 
 - :doc:`suppliers_guide`
 - :doc:`integrators_guide`
+
+It's also recommended to be familiar with the following resource: 
+
 - :doc:`lifecycle_management`
 
 Code complexity (optional)

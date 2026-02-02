@@ -1,7 +1,11 @@
 OSQAr (Open Safety Qualification Architecture)
 ==============================================
 
-OSQAr is a Sphinx + sphinx-needs boilerplate for producing auditable safety/compliance documentation artifacts:
+OSQAr is a documentation-first framework for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
+
+In OSQAr, a shipment is a reviewable bundle (typically rendered HTML docs + machine-readable traceability exports + verification outputs + integrity metadata) that can be handed from suppliers to integrators and archived.
+
+OSQAr is built on Sphinx + sphinx-needs and provides:
 
 - requirements and traceability
 - architecture diagrams (PlantUML)
@@ -33,8 +37,8 @@ Start here:
 
    docs/suppliers_guide
    docs/integrators_guide
-   docs/multi_project_workflows
    docs/lifecycle_management
+   docs/multi_project_workflows
    docs/collaboration_workflows
 
 .. toctree::
