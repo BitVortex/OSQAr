@@ -12,7 +12,7 @@ This guide is for the **integrator** of a Safety Element out of Context (SEooC):
 - you integrate a reusable component into a product/system with specific context
 - you assign domain-specific integrity levels and complete the safety case
 
-OSQAr helps keep the traceability chain consistent, but it does not replace system engineering or certification.
+OSQAr helps you verify and intake auditable evidence shipments (and keep the traceability chain consistent), but it does not replace system engineering or certification.
 
 Integrator responsibilities (checklist)
 =======================================

@@ -5,7 +5,7 @@ Supplier’s Guide
 Scope
 =====
 
-This guide is for a **supplier** shipping a component/SEooC together with compliance-ready documentation.
+This guide is for a **supplier** producing an auditable evidence shipment for a component/SEooC (documentation + traceability + verification outputs + integrity metadata).
 
 The goal is to provide a package that allows an integrator to:
 
