@@ -11,7 +11,7 @@ Language-specific examples (published under ``/examples/``):
 - `Python (workstation demo) <python/>`_
 
 Notes
-=====
+-----
 
 - These examples are separate Sphinx projects that get published into subfolders.
 - For safety-related embedded projects, prefer **C** or **Rust**.
