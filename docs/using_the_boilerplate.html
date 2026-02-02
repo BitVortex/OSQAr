@@ -306,6 +306,82 @@ open<span class="w"> </span>_build/html/index.html
 </pre></div>
 </div>
 </section>
+<section id="reproducible-native-builds-c-c-rust">
+<h2>Reproducible native builds (C / C++ / Rust)<a class="headerlink" href="#reproducible-native-builds-c-c-rust" title="Link to this heading">¶</a></h2>
+<p>OSQAr’s documentation builds are already dependency-locked via Poetry.
+For <strong>native code</strong> (C/C++/Rust), OSQAr also provides a small “reproducible build” mode in the examples.</p>
+<p>The goals are:</p>
+<ul class="simple">
+<li><p>stable timestamps (via <code class="docutils literal notranslate"><span class="pre">SOURCE_DATE_EPOCH</span></code>)</p></li>
+<li><p>stable embedded source paths (via compiler path remapping)</p></li>
+<li><p>reduced build-environment noise (UTC timezone + stable locale)</p></li>
+</ul>
+<p>The example build scripts accept either the environment flag <code class="docutils literal notranslate"><span class="pre">OSQAR_REPRODUCIBLE=1</span></code> or the CLI flag <code class="docutils literal notranslate"><span class="pre">--reproducible</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use the latest git commit timestamp as a stable build time</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOURCE_DATE_EPOCH</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>git<span class="w"> </span>log<span class="w"> </span>-1<span class="w"> </span>--format<span class="o">=</span>%ct<span class="k">)</span><span class="s2">&quot;</span>
+
+<span class="c1"># C example</span>
+<span class="nb">cd</span><span class="w"> </span>examples/c_hello_world
+<span class="nv">OSQAR_REPRODUCIBLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./build-and-test.sh
+
+<span class="c1"># C++ example</span>
+<span class="nb">cd</span><span class="w"> </span>../cpp_hello_world
+<span class="nv">OSQAR_REPRODUCIBLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./build-and-test.sh
+
+<span class="c1"># Rust example</span>
+<span class="nb">cd</span><span class="w"> </span>../rust_hello_world
+<span class="nv">OSQAR_REPRODUCIBLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./build-and-test.sh
+</pre></div>
+</div>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>The reproducible mode is implemented as a small helper script (vendored into each example at <code class="docutils literal notranslate"><span class="pre">osqar_tools/reproducible_build_env.sh</span></code>) and is intentionally lightweight.</p></li>
+<li><p>The shipped <em>test report XML</em> in the examples does not include timestamps, so it is stable across runs.</p></li>
+</ul>
+<section id="optional-bazel-integration">
+<h3>Optional: Bazel integration<a class="headerlink" href="#optional-bazel-integration" title="Link to this heading">¶</a></h3>
+<p>If you prefer Bazel for a more “CI-native” workflow, the C, C++, and Rust examples include minimal Bazel files.</p>
+<p>Reproducible mode for Bazel is supported via the wrapper script in each example (it applies the same path remapping and stable environment as the non-Bazel scripts, and runs Bazel with <code class="docutils literal notranslate"><span class="pre">--config=reproducible</span></code>).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/c_hello_world
+<span class="c1"># Non-reproducible (default)</span>
+bazel<span class="w"> </span>build<span class="w"> </span>//...
+bazel<span class="w"> </span>run<span class="w"> </span>//:junit_tests<span class="w"> </span>--<span class="w"> </span>test_results.xml
+
+<span class="c1"># Reproducible</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOURCE_DATE_EPOCH</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>git<span class="w"> </span>log<span class="w"> </span>-1<span class="w"> </span>--format<span class="o">=</span>%ct<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nv">OSQAR_REPRODUCIBLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./bazel-build-and-test.sh
+
+<span class="nb">cd</span><span class="w"> </span>../cpp_hello_world
+bazel<span class="w"> </span>build<span class="w"> </span>//...
+bazel<span class="w"> </span>run<span class="w"> </span>//:junit_tests<span class="w"> </span>--<span class="w"> </span>test_results.xml
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOURCE_DATE_EPOCH</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>git<span class="w"> </span>log<span class="w"> </span>-1<span class="w"> </span>--format<span class="o">=</span>%ct<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nv">OSQAR_REPRODUCIBLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./bazel-build-and-test.sh
+
+<span class="nb">cd</span><span class="w"> </span>../rust_hello_world
+bazel<span class="w"> </span>build<span class="w"> </span>//...
+bazel<span class="w"> </span>run<span class="w"> </span>//:junit_tests<span class="w"> </span>--<span class="w"> </span>test_results.xml
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOURCE_DATE_EPOCH</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>git<span class="w"> </span>log<span class="w"> </span>-1<span class="w"> </span>--format<span class="o">=</span>%ct<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nv">OSQAR_REPRODUCIBLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./bazel-build-and-test.sh
+</pre></div>
+</div>
+</section>
+</section>
+<section id="ci-built-demo-shipments-downloadable">
+<h2>CI-built demo shipments (downloadable)<a class="headerlink" href="#ci-built-demo-shipments-downloadable" title="Link to this heading">¶</a></h2>
+<p>This repository’s CI builds <strong>downloadable, integrity-protected example shipments</strong> for the C, C++, and Rust examples.</p>
+<p>Each example shipment contains:</p>
+<ul class="simple">
+<li><p>rendered HTML documentation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">needs.json</span></code> (trace graph export)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">traceability_report.json</span></code> (OSQAr traceability validation output)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> (checksum manifest for the whole shipment directory)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_results.xml</span></code> (JUnit test report used by the example documentation)</p></li>
+</ul>
+<p>CI exports deterministic archives (<code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code>) for each example as well as a combined archive.
+In GitHub Actions, download the artifact named <code class="docutils literal notranslate"><span class="pre">osqar-example-shipments</span></code> from the <code class="docutils literal notranslate"><span class="pre">CI</span></code> workflow run.</p>
+</section>
 <section id="reference-examples">
 <h2>Reference examples<a class="headerlink" href="#reference-examples" title="Link to this heading">¶</a></h2>
 <p>OSQAr primarily targets <strong>C</strong>, <strong>C++</strong>, and <strong>Rust</strong> projects.</p>
@@ -649,6 +725,11 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
 <li><a class="reference internal" href="#recommended-reading-order">Recommended reading order</a></li>
 <li><a class="reference internal" href="#typical-workflow">Typical workflow</a></li>
 <li><a class="reference internal" href="#quick-start">Quick start</a></li>
+<li><a class="reference internal" href="#reproducible-native-builds-c-c-rust">Reproducible native builds (C / C++ / Rust)</a><ul>
+<li><a class="reference internal" href="#optional-bazel-integration">Optional: Bazel integration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ci-built-demo-shipments-downloadable">CI-built demo shipments (downloadable)</a></li>
 <li><a class="reference internal" href="#reference-examples">Reference examples</a><ul>
 <li><a class="reference internal" href="#python-demo-workstation-reference">Python demo (workstation reference)</a></li>
 </ul>

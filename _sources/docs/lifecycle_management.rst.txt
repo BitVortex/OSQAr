@@ -197,6 +197,8 @@ Recommended CI gates
 - generate checksums for the resulting shipment directory
 - publish artifacts (HTML + JSON + manifests) as CI outputs
 
+This OSQAr repository also demonstrates an end-to-end CI export of **deterministic example shipments** (C/C++/Rust) built with Bazel in reproducible mode, including test reports, full documentation builds, traceability reports, and checksum manifests.
+
 Policy knobs
 ------------
 
