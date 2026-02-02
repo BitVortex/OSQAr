@@ -17,13 +17,7 @@ OSQAr is built on Sphinx + sphinx-needs and provides:
 - reproducible native builds for the C/C++/Rust example implementations (including optional Bazel integration)
 - CI-produced demo shipments (documentation + traceability + implementation + tests + analysis reports + checksum manifests)
 
-.. note::
-
-   This repository is an example/boilerplate; large parts of the content were LLM-assisted/generated and must be reviewed and adapted before use in any real safety/compliance project.
-
 OSQAr also includes a small CLI for scaffolding new projects and running traceability/checksum verification.
-
-Start here:
 
 .. toctree::
    :maxdepth: 1
@@ -35,6 +29,7 @@ Start here:
    :maxdepth: 1
    :caption: Guides
 
+   docs/project_setup_from_scratch
    docs/suppliers_guide
    docs/integrators_guide
    docs/lifecycle_management

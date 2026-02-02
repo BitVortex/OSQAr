@@ -154,23 +154,27 @@ The following matrix demonstrates the complete traceability chain from requireme
 Automated Test Reporting
 ==========================
 
-The JUnit XML output from your test runner (pytest for the Python example, or a native runner for C/C++/Rust) is automatically processed by Sphinx:
+The JUnit XML output from your test runner (pytest for the Python example, or a native runner for C/C++/Rust) is processed by Sphinx and rendered directly in this chapter.
 
-.. code-block:: xml
+Imported JUnit results
+----------------------
 
-    <testsuite>
-      <testcase classname="tests.test_tsim.TestSensorDriver" 
-                 name="test_conversion_full_range" time="0.002">
-      </testcase>
-      <!-- mapped to TEST_CONVERSION_001 requirement -->
-    </testsuite>
+.. ifconfig:: 'sphinxcontrib.test_reports' in extensions
 
-This XML is parsed and linked to requirements using the test case names (mapped through docstrings to TEST_* IDs). The resulting HTML documentation includes:
+  .. test-results:: test_results.xml
 
-1. **Test Results Table**: Lists all test cases with pass/fail status
-2. **Requirement Links**: Each test linked to its corresponding requirement
-3. **Execution Metadata**: Timing, host, and result details
-4. **Traceability Queries**: Search and filter tests by requirement ID
+.. ifconfig:: 'sphinxcontrib.test_reports' not in extensions
+
+  .. note::
+
+    JUnit rendering is disabled because ``sphinx-test-reports`` is not installed.
+    Install it (e.g. via the OSQAr ``evidence`` dependency group) and rebuild to
+    embed a rendered test table here.
+
+Notes:
+
+- The build workflow generates ``test_results.xml``.
+- If tests are not executed, OSQAr generates a small placeholder file so docs builds stay robust.
 
 Code Coverage
 ==============
@@ -201,31 +205,10 @@ The complete compliance artifact package is generated via:
   #    - Searchable traceability matrix
   #    - Compliance documentation suitable for assessment/audit
 
-Domain-Agnostic Test Strategy
-=============================
-
-The test suite is designed to work across various domains:
-
-1. **Tests are functional, not domain-specific**: All tests verify sensor conversion, filtering, and threshold logic without domain assumptions
-2. **Safety requirements are domain-agnostic**: REQ_SAFETY_* and REQ_FUNC_* refer to generic overheat detection, not domain-specific hazards
-3. **Test coverage scales with domain**: Additional tests added per domain for specific failure modes (e.g., medical sensor calibration drift, automotive temperature shock resilience)
-
-Extending the Test Suite
-=========================
-
-To add domain-specific tests:
-
-1. **Create domain directory**: ``examples/<your_domain_or_product>/``
-2. **Implement tests** in the language of your product and ensure the runner emits JUnit XML.
-3. **Use stable IDs**: keep requirement IDs (``REQ_*``, ``ARCH_*``) and test IDs (``TEST_*``) consistent so the traceability graph remains intact.
-4. **Update documentation**: link domain-specific tests to domain-specific requirements (e.g., ``REQ_MEDICAL_SAFETY_001``).
-5. **Rebuild**: Sphinx imports results and updates traceability.
-
-
 Compliance Artifact Checklist
 =============================
 
-Use this checklist to verify complete traceability when qualifying per ISO 26262:
+Use this checklist to verify complete traceability:
 
 .. code-block:: text
 

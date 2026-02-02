@@ -24,11 +24,12 @@ Recommended reading order
 =========================
 
 1. You are here: build docs, understand the workflow, and explore examples.
-2. As a supplier, learn how to ship evidence bundles: :doc:`suppliers_guide`.
-3. As an integrator, learn how to verify and archive shipments: :doc:`integrators_guide`.
-4. If you work with many shipments, use: :doc:`multi_project_workflows`.
-5. For release/baseline discipline, see: :doc:`lifecycle_management`.
-6. For team-scale collaboration, see: :doc:`collaboration_workflows`.
+2. Set up and migrate a project: :doc:`project_setup_from_scratch`.
+3. As a supplier, learn how to ship evidence bundles: :doc:`suppliers_guide`.
+4. As an integrator, learn how to verify and archive shipments: :doc:`integrators_guide`.
+5. If you work with many shipments, use: :doc:`multi_project_workflows`.
+6. For release/baseline discipline, see: :doc:`lifecycle_management`.
+7. For team-scale collaboration, see: :doc:`collaboration_workflows`.
 
 Typical workflow
 ================
@@ -235,6 +236,8 @@ Scaffold a new project
 
 Create a new project folder based on one of the reference templates:
 
+For a step-by-step guide (including how to migrate existing sources and documentation, and how to ship a release with OSQAr evidence), see :doc:`project_setup_from_scratch`.
+
 .. code-block:: bash
 
    poetry run python -m tools.osqar_cli new --language c --name MySEooC --destination ./MySEooC
@@ -412,7 +415,7 @@ For role-specific guidance (including what to do on mismatches), see:
 - :doc:`suppliers_guide`
 - :doc:`integrators_guide`
 
-It's also recommended to be familiar with the following resource: 
+We also recommend getting familiar with suggestions on overall lifecycle management: 
 
 - :doc:`lifecycle_management`
 
