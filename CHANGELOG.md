@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated framework documentation and README to advertise reproducible builds and CI demo shipments
+- Reframed OSQAr as a framework for producing, verifying, and integrating auditable evidence shipments
 - Updated Copilot instructions to reflect Poetry-driven Sphinx builds and the shipment workflow
 - CI now builds example shipments in separate jobs (matrix) and combines them afterwards for faster, isolated feedback
 
