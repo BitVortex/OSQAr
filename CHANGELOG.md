@@ -7,23 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-02-02
+
 ### Added
 - Reproducible native build mode for the C/C++/Rust examples (`OSQAR_REPRODUCIBLE=1` + `SOURCE_DATE_EPOCH`)
 - Optional Bazel integration for the C/C++/Rust examples, including a reproducible `--config=reproducible` mode
-- CI job that builds deterministic example “shipments” (docs + `needs.json` + traceability report + checksums + test report) and uploads them as a downloadable artifact (`osqar-example-shipments`)
+- CI pipeline that builds deterministic example “shipments” (docs + `needs.json` + traceability report + checksums + test report) and uploads them as a downloadable artifact (`osqar-example-shipments`)
 
 ### Changed
 - Updated framework documentation and README to advertise reproducible builds and CI demo shipments
 - Updated Copilot instructions to reflect Poetry-driven Sphinx builds and the shipment workflow
+- CI now builds example shipments in separate jobs (matrix) and combines them afterwards for faster, isolated feedback
 
 ### Fixed
 - Fixed a reStructuredText formatting issue in the framework docs that broke the Bazel example code block
 - Fixed Bazel 9 compatibility for the C/C++ examples by explicitly loading `cc_*` rules from `rules_cc`
 - Fixed CI doc builds after Bazel runs by excluding `bazel-*` output trees from Sphinx source discovery (prevents duplicate need IDs)
 - Fixed Bazel wrapper scripts to write JUnit XML to a workspace path (prevents missing `test_results.xml` in CI)
-
-### Changed
-- CI now builds example shipments in separate jobs (matrix) and combines them afterwards for faster, isolated feedback
 
 ## [0.2.4] - 2026-02-02
 

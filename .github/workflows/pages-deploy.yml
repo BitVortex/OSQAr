@@ -1,4 +1,4 @@
-name: Build and Deploy docs to GitHub Pages
+name: GitHub Pages
 
 permissions:
   contents: write
