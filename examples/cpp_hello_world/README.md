@@ -16,6 +16,18 @@ cd examples/cpp_hello_world
 open _build/html/index.html
 ```
 
+## Reproducible builds (native)
+
+The example supports a reproducible build mode for the native binary.
+
+```bash
+cd examples/cpp_hello_world
+export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+OSQAR_REPRODUCIBLE=1 ./build-and-test.sh
+```
+
+This mode normalizes timestamps, locale/timezone, and compiler-embedded source paths.
+
 ## Native build only
 
 ```bash
@@ -29,4 +41,18 @@ cmake --build build
 c++ -std=c++17 -O2 -Iinclude -o build/junit_tests tests/test_tsim.cpp src/tsim.cpp
 
 ./build/junit_tests test_results.xml
+```
+
+## Bazel (optional)
+
+If you use Bazel, the example ships minimal Bazel build files:
+
+```bash
+cd examples/cpp_hello_world
+bazel build //...
+bazel run //:junit_tests -- test_results.xml
+
+# Reproducible Bazel build
+export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+OSQAR_REPRODUCIBLE=1 ./bazel-build-and-test.sh
 ```

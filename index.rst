@@ -10,6 +10,8 @@ OSQAr is a Sphinx + sphinx-needs boilerplate for producing auditable safety/comp
 - integrator-side multi-shipment intake with consolidated summaries
 - lifecycle management guidance
 - collaboration workflows for large, multi-user teams
+- reproducible native builds for the C/C++/Rust example implementations (including optional Bazel integration)
+- CI-produced demo shipments (HTML + machine-readable exports + checksum manifests)
 
 .. note::
 

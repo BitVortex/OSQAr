@@ -1,0 +1,17 @@
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library")
+
+rust_library(
+    name = "tsim",
+    srcs = ["src/lib.rs"],
+    crate_root = "src/lib.rs",
+    edition = "2021",
+    visibility = ["//visibility:public"],
+)
+
+rust_binary(
+    name = "junit_tests",
+    srcs = ["src/bin/junit_tests.rs"],
+    crate_root = "src/bin/junit_tests.rs",
+    edition = "2021",
+    deps = [":tsim"],
+)

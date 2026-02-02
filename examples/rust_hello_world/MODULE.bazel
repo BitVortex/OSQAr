@@ -1,0 +1,14 @@
+module(
+    name = "osqar_rust_hello_world",
+    version = "0.0.0",
+)
+
+# Optional Bazel integration for the Rust example.
+# Pinned via Bazel Central Registry for reproducibility.
+bazel_dep(name = "rules_rust", version = "0.68.1")
+
+# Register Rust toolchains (edition 2021).
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(edition = "2021")
+use_repo(rust, "rust_toolchains")
+register_toolchains("@rust_toolchains//:all")

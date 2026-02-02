@@ -1,0 +1,11 @@
+# Bazel defaults for this example.
+#
+# Reproducible mode:
+# - disables stamping (no VCS/timestamp metadata in outputs)
+# - keeps environment deterministic via SOURCE_DATE_EPOCH (if set)
+
+build:reproducible --stamp=false
+build:reproducible --action_env=SOURCE_DATE_EPOCH
+build:reproducible --action_env=TZ=UTC
+build:reproducible --action_env=LANG=C
+build:reproducible --action_env=LC_ALL=C

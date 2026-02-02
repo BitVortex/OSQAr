@@ -124,3 +124,134 @@ jobs:
           examples/python_hello_world/_build/html/
           examples/python_hello_world/test_results.xml
         retention-days: 30
+
+  bazel-example-shipments:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install system build tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          ca-certificates \
+          build-essential
+
+    - name: Set up Bazelisk
+      uses: bazelbuild/setup-bazelisk@v3
+      with:
+        bazelisk-version: "1.20.0"
+
+    - name: Install Poetry
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry
+
+    - name: Configure Poetry
+      run: |
+        poetry config virtualenvs.create true
+        poetry config virtualenvs.in-project true
+
+    - name: Install dependencies
+      run: poetry install
+
+    - name: Build reproducible Bazel shipments (C/C++/Rust)
+      run: |
+        set -euo pipefail
+        export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+
+        rm -rf _ci_shipments
+        mkdir -p _ci_shipments
+
+        build_one() {
+          local ex_dir="$1"
+          local ship_dir="$2"
+
+          echo "== Building ${ex_dir} (Bazel, reproducible)"
+          pushd "${ex_dir}" >/dev/null
+          chmod +x ./bazel-build-and-test.sh
+
+          # Native build + test report
+          OSQAR_REPRODUCIBLE=1 ./bazel-build-and-test.sh
+
+          # Docs build (imports test_results.xml)
+          rm -rf _build/html
+          poetry run sphinx-build -b html . _build/html
+
+          # Ensure test report is shipped alongside the HTML evidence directory
+          cp -f test_results.xml _build/html/test_results.xml
+
+          popd >/dev/null
+
+          # Traceability report + checksum manifest
+          poetry run python tools/traceability_check.py \
+            "${ex_dir}/_build/html/needs.json" \
+            --json-report "${ex_dir}/_build/html/traceability_report.json"
+
+          poetry run python tools/generate_checksums.py \
+            --root "${ex_dir}/_build/html" \
+            --output "${ex_dir}/_build/html/SHA256SUMS"
+
+          poetry run python tools/generate_checksums.py \
+            --root "${ex_dir}/_build/html" \
+            --verify "${ex_dir}/_build/html/SHA256SUMS"
+
+          rm -rf "${ship_dir}"
+          mkdir -p "${ship_dir}"
+          cp -a "${ex_dir}/_build/html/." "${ship_dir}/"
+        }
+
+        build_one "examples/c_hello_world" "_ci_shipments/c_hello_world"
+        build_one "examples/cpp_hello_world" "_ci_shipments/cpp_hello_world"
+        build_one "examples/rust_hello_world" "_ci_shipments/rust_hello_world"
+
+        archive_one() {
+          local name="$1"
+          local out="osqar_${name}_shipment.tar.gz"
+          rm -f "${out}" "${out}.sha256"
+          tar -c \
+            --sort=name \
+            --mtime=@"${SOURCE_DATE_EPOCH}" \
+            --owner=0 --group=0 --numeric-owner \
+            -C _ci_shipments \
+            "${name}" \
+            | gzip -n > "${out}"
+          sha256sum "${out}" > "${out}.sha256"
+        }
+
+        # Per-example shipment archives
+        archive_one "c_hello_world"
+        archive_one "cpp_hello_world"
+        archive_one "rust_hello_world"
+
+        # Deterministic archive for export (stable ordering + stable mtime + no gzip timestamp)
+        rm -f osqar_example_shipments.tar.gz
+        tar -c \
+          --sort=name \
+          --mtime=@"${SOURCE_DATE_EPOCH}" \
+          --owner=0 --group=0 --numeric-owner \
+          -C _ci_shipments \
+          c_hello_world cpp_hello_world rust_hello_world \
+          | gzip -n > osqar_example_shipments.tar.gz
+
+        sha256sum osqar_example_shipments.tar.gz > osqar_example_shipments.tar.gz.sha256
+
+    - name: Upload Bazel example shipments (archive)
+      uses: actions/upload-artifact@v4
+      with:
+        name: osqar-example-shipments
+        path: |
+          osqar_example_shipments.tar.gz
+          osqar_example_shipments.tar.gz.sha256
+          osqar_c_hello_world_shipment.tar.gz
+          osqar_c_hello_world_shipment.tar.gz.sha256
+          osqar_cpp_hello_world_shipment.tar.gz
+          osqar_cpp_hello_world_shipment.tar.gz.sha256
+          osqar_rust_hello_world_shipment.tar.gz
+          osqar_rust_hello_world_shipment.tar.gz.sha256
+        retention-days: 30

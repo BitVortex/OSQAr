@@ -38,21 +38,42 @@ This is a **documentation-first** architecture where `conf.py` is the project nu
 
 3. **Documentation content**: Lives in `.rst` files (not yet visible—would be created in `source/` or similar)
 
+   Documentation content lives in `.rst` files in the repo root (entrypoint: `index.rst`) and under `docs/` and `examples/`.
+
 ## Developer Workflows
 
 ### Build Documentation
 
 ```bash
 poetry install  # Install dependencies
-sphinx-build -b html . _build/html  # Build HTML output
+poetry run sphinx-build -b html . _build/html  # Build HTML output
 ```
 
 ### Run Tests
 
 ```bash
-pytest  # Run any tests (documentation tests or conf.py validation)
+poetry run pytest  # Run any tests (documentation tests or conf.py validation)
 black --check .  # Lint code style
 ```
+
+### Build Example Shipments (Reproducible)
+
+OSQAr also includes native-code examples (C/C++/Rust) that can be built in a reproducible mode.
+
+- Reproducible mode is enabled via `OSQAR_REPRODUCIBLE=1` and typically uses `SOURCE_DATE_EPOCH`.
+- Each example contains `build-and-test.sh` (native toolchain) and may contain `bazel-build-and-test.sh` (optional Bazel).
+
+```bash
+# Example (C)
+cd examples/c_hello_world
+export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+OSQAR_REPRODUCIBLE=1 ./build-and-test.sh
+
+# Optional Bazel path (if Bazel/Bazelisk is installed)
+OSQAR_REPRODUCIBLE=1 ./bazel-build-and-test.sh
+```
+
+CI also produces downloadable, integrity-protected “shipments” for the examples (docs + needs export + traceability report + checksums + test report).
 
 ### Expected Directory Structure (When Content Added)
 
@@ -61,9 +82,24 @@ OSQAr/
 ├── conf.py                 # Sphinx config (requirements ID enforcement)
 ├── pyproject.toml          # Poetry manifest
 ├── index.rst               # Documentation entry point
-├── requirements/           # .rst files with needs objects
-├── architecture/           # PlantUML diagrams
+├── docs/                   # Framework documentation pages
+├── examples/               # End-to-end example projects (C/C++/Rust/Python)
+├── tools/                  # Helper scripts (traceability checks, checksums, etc.)
 └── _build/                 # Generated output (do not commit)
+```
+
+## CI Artifacts (Shipments)
+
+The GitHub Actions workflow `CI` produces downloadable example “shipments” as build evidence bundles.
+
+- Artifact name: `osqar-example-shipments`
+- Contents: deterministic `.tar.gz` archives for each example plus a combined archive
+- Integrity: each archive has a corresponding `.sha256` file
+
+To verify an archive locally (macOS):
+
+```bash
+shasum -a 256 -c osqar_example_shipments.tar.gz.sha256
 ```
 
 ## Project-Specific Conventions
@@ -87,6 +123,7 @@ OSQAr/
 ## Integration Points & Dependencies
 
 - **sphinx-needs** integrates with reStructuredText directives (`.rst` files) to parse and link requirements
+
 ## Common Patterns to Apply
 
 1. **When adding requirements**: Use structured IDs and `needs_id_regex`-compliant naming
@@ -97,20 +134,43 @@ OSQAr/
    - Ensure test reports map to verification requirements for compliance artifact generation
 
 3. **When modifying conf.py**: Always test with `sphinx-build` to catch extension ordering issues
+
+   Prefer `poetry run sphinx-build ...` so the correct environment is used.
    - Validate that needs IDs follow `^[A-Z0-9_]{3,}` regex after changes
 
 4. **When adding diagrams**: Use PlantUML syntax in `.diagram` or `.uml` files referenced from `.rst`
    - Consider ASIL levels, failure modes, and architectural patterns applicable across domains
 
 5. **When documenting patterns**: Provide domain-agnostic examples (or multiple domain examples) to maintain cross-domain applicability
-- `poetry install`: Install all dependencies
-- `sphinx-build -b html . _build/html`: Build HTML documentation
-- `pytest`: Run tests
-- `black .`: Format code
 
-## Common Patterns to Apply
+## Traceability & Checksums (Local)
 
-1. **When adding requirements**: Use structured IDs and `needs_id_regex`-compliant naming
-2. **When linking test results**: Use sphinx-test-reports configuration in `conf.py`
-3. **When modifying conf.py**: Always test with `sphinx-build` to catch extension ordering issues
-4. **When adding diagrams**: Use PlantUML syntax in `.diagram` or `.uml` files referenced from `.rst`
+OSQAr ships two dependency-free helper tools (stdlib only):
+
+- `tools/traceability_check.py`: validates basic traceability rules from `needs.json` and can emit `traceability_report.json`
+- `tools/generate_checksums.py`: generates/verifies `SHA256SUMS` manifests for evidence directories
+
+Typical local workflow after building docs:
+
+```bash
+poetry run sphinx-build -b html . _build/html
+
+poetry run python tools/traceability_check.py \
+   _build/html/needs.json \
+   --json-report _build/html/traceability_report.json
+
+poetry run python tools/generate_checksums.py \
+   --root _build/html \
+   --output _build/html/SHA256SUMS
+
+poetry run python tools/generate_checksums.py \
+   --root _build/html \
+   --verify _build/html/SHA256SUMS
+```
+
+Quick command reminders:
+
+- `poetry install`
+- `poetry run sphinx-build -b html . _build/html`
+- `poetry run pytest`
+- `black .`

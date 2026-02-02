@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Reproducible native build mode for the C/C++/Rust examples (`OSQAR_REPRODUCIBLE=1` + `SOURCE_DATE_EPOCH`)
+- Optional Bazel integration for the C/C++/Rust examples, including a reproducible `--config=reproducible` mode
+- CI job that builds deterministic example “shipments” (docs + `needs.json` + traceability report + checksums + test report) and uploads them as a downloadable artifact (`osqar-example-shipments`)
+
+### Changed
+- Updated framework documentation and README to advertise reproducible builds and CI demo shipments
+- Updated Copilot instructions to reflect Poetry-driven Sphinx builds and the shipment workflow
+
+### Fixed
+- Fixed a reStructuredText formatting issue in the framework docs that broke the Bazel example code block
+
 ## [0.2.4] - 2026-02-02
 
 ### Changed

@@ -11,9 +11,38 @@ NC='\033[0m'
 
 echo -e "${BLUE}OSQAr example (Rust): Build & Traceability Workflow${NC}\n"
 
+REPRODUCIBLE="${OSQAR_REPRODUCIBLE:-0}"
+if [[ "${1:-}" == "--reproducible" ]]; then
+  REPRODUCIBLE=1
+  shift
+fi
+
+if [[ "${REPRODUCIBLE}" == "1" ]]; then
+  if [[ -f "${SCRIPT_DIR}/osqar_tools/reproducible_build_env.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "${SCRIPT_DIR}/osqar_tools/reproducible_build_env.sh"
+  elif [[ -f "${SCRIPT_DIR}/../../tools/reproducible_build_env.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "${SCRIPT_DIR}/../../tools/reproducible_build_env.sh"
+  else
+    echo -e "${RED}✗ Reproducible build helper not found${NC}" >&2
+    exit 1
+  fi
+  osqar_reproducible_setup "${SCRIPT_DIR}"
+
+  export CARGO_INCREMENTAL=0
+  EXTRA_RUSTFLAGS="$(osqar_rust_reproducible_flags)"
+  export RUSTFLAGS="${RUSTFLAGS:-} ${EXTRA_RUSTFLAGS}"
+fi
+
 echo -e "${BLUE}Step 1: Build native code${NC}"
 if command -v cargo >/dev/null 2>&1; then
-  cargo build >/dev/null
+  if [[ "${REPRODUCIBLE}" == "1" ]]; then
+    cargo clean >/dev/null 2>&1 || true
+    cargo build --locked --release >/dev/null
+  else
+    cargo build >/dev/null
+  fi
   echo -e "${GREEN}✓ Native build succeeded (cargo)${NC}"
 else
   echo -e "${RED}✗ cargo not found; install Rust via rustup${NC}"
@@ -21,7 +50,11 @@ else
 fi
 
 echo -e "\n${BLUE}Step 2: Run native tests (JUnit XML)${NC}"
-cargo run --quiet --bin junit_tests -- test_results.xml
+if [[ "${REPRODUCIBLE}" == "1" ]]; then
+  cargo run --quiet --locked --release --bin junit_tests -- test_results.xml
+else
+  cargo run --quiet --bin junit_tests -- test_results.xml
+fi
 if [ -f test_results.xml ]; then
   echo -e "${GREEN}✓ Wrote test_results.xml${NC}"
 else

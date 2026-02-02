@@ -1,0 +1,4 @@
+module(
+    name = "osqar_cpp_hello_world",
+    version = "0.0.0",
+)

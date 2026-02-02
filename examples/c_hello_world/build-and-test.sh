@@ -11,16 +11,46 @@ NC='\033[0m'
 
 echo -e "${BLUE}OSQAr example (C): Build & Traceability Workflow${NC}\n"
 
+REPRODUCIBLE="${OSQAR_REPRODUCIBLE:-0}"
+if [[ "${1:-}" == "--reproducible" ]]; then
+  REPRODUCIBLE=1
+  shift
+fi
+
+if [[ "${REPRODUCIBLE}" == "1" ]]; then
+  if [[ -f "${SCRIPT_DIR}/osqar_tools/reproducible_build_env.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "${SCRIPT_DIR}/osqar_tools/reproducible_build_env.sh"
+  elif [[ -f "${SCRIPT_DIR}/../../tools/reproducible_build_env.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "${SCRIPT_DIR}/../../tools/reproducible_build_env.sh"
+  else
+    echo -e "${RED}✗ Reproducible build helper not found${NC}" >&2
+    exit 1
+  fi
+  osqar_reproducible_setup "${SCRIPT_DIR}"
+
+  EXTRA_CFLAGS="$(osqar_cc_reproducible_flags)"
+  EXTRA_LDFLAGS="$(osqar_ld_reproducible_flags)"
+
+  export CFLAGS="${CFLAGS:-} ${EXTRA_CFLAGS}"
+  export LDFLAGS="${LDFLAGS:-} ${EXTRA_LDFLAGS}"
+fi
+
 echo -e "${BLUE}Step 1: Build native code${NC}"
+if [[ "${REPRODUCIBLE}" == "1" ]]; then
+  rm -rf build
+fi
 mkdir -p build
 
 if command -v cmake >/dev/null 2>&1; then
-  cmake -S . -B build >/dev/null
+  cmake -S . -B build -DCMAKE_BUILD_TYPE=Release >/dev/null
   cmake --build build >/dev/null
   echo -e "${GREEN}✓ Native build succeeded (CMake)${NC}"
 else
   if command -v cc >/dev/null 2>&1; then
-    cc -std=c11 -O2 -Iinclude -o build/junit_tests tests/test_tsim.c src/tsim.c
+    # Use env flags if present (including reproducible flags).
+    cc -std=c11 -O2 -g0 -Iinclude ${CFLAGS:-} ${LDFLAGS:-} -o build/junit_tests tests/test_tsim.c src/tsim.c
     echo -e "${GREEN}✓ Native build succeeded (cc)${NC}"
   else
     echo -e "${RED}✗ Neither cmake nor cc found; cannot build native code${NC}"

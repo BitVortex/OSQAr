@@ -1,0 +1,15 @@
+cc_library(
+    name = "tsim",
+    srcs = ["src/tsim.c"],
+    hdrs = ["include/tsim.h"],
+    includes = ["include"],
+    copts = ["-std=c11"],
+    visibility = ["//visibility:public"],
+)
+
+cc_binary(
+    name = "junit_tests",
+    srcs = ["tests/test_tsim.c"],
+    deps = [":tsim"],
+    copts = ["-std=c11"],
+)

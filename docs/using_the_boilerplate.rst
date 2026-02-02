@@ -46,6 +46,90 @@ Build the rendered HTML documentation from the repository root:
    poetry run sphinx-build -b html . _build/html
    open _build/html/index.html
 
+Reproducible native builds (C / C++ / Rust)
+===========================================
+
+OSQAr’s documentation builds are already dependency-locked via Poetry.
+For **native code** (C/C++/Rust), OSQAr also provides a small “reproducible build” mode in the examples.
+
+The goals are:
+
+- stable timestamps (via ``SOURCE_DATE_EPOCH``)
+- stable embedded source paths (via compiler path remapping)
+- reduced build-environment noise (UTC timezone + stable locale)
+
+The example build scripts accept either the environment flag ``OSQAR_REPRODUCIBLE=1`` or the CLI flag ``--reproducible``.
+
+.. code-block:: bash
+
+   # Use the latest git commit timestamp as a stable build time
+   export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+
+   # C example
+   cd examples/c_hello_world
+   OSQAR_REPRODUCIBLE=1 ./build-and-test.sh
+
+   # C++ example
+   cd ../cpp_hello_world
+   OSQAR_REPRODUCIBLE=1 ./build-and-test.sh
+
+   # Rust example
+   cd ../rust_hello_world
+   OSQAR_REPRODUCIBLE=1 ./build-and-test.sh
+
+Notes:
+
+- The reproducible mode is implemented as a small helper script (vendored into each example at ``osqar_tools/reproducible_build_env.sh``) and is intentionally lightweight.
+- The shipped *test report XML* in the examples does not include timestamps, so it is stable across runs.
+
+Optional: Bazel integration
+---------------------------
+
+If you prefer Bazel for a more “CI-native” workflow, the C, C++, and Rust examples include minimal Bazel files.
+
+Reproducible mode for Bazel is supported via the wrapper script in each example (it applies the same path remapping and stable environment as the non-Bazel scripts, and runs Bazel with ``--config=reproducible``).
+
+.. code-block:: bash
+
+   cd examples/c_hello_world
+   # Non-reproducible (default)
+   bazel build //...
+   bazel run //:junit_tests -- test_results.xml
+
+   # Reproducible
+   export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+   OSQAR_REPRODUCIBLE=1 ./bazel-build-and-test.sh
+
+   cd ../cpp_hello_world
+   bazel build //...
+   bazel run //:junit_tests -- test_results.xml
+
+   export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+   OSQAR_REPRODUCIBLE=1 ./bazel-build-and-test.sh
+
+   cd ../rust_hello_world
+   bazel build //...
+   bazel run //:junit_tests -- test_results.xml
+
+   export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+   OSQAR_REPRODUCIBLE=1 ./bazel-build-and-test.sh
+
+CI-built demo shipments (downloadable)
+======================================
+
+This repository’s CI builds **downloadable, integrity-protected example shipments** for the C, C++, and Rust examples.
+
+Each example shipment contains:
+
+- rendered HTML documentation
+- ``needs.json`` (trace graph export)
+- ``traceability_report.json`` (OSQAr traceability validation output)
+- ``SHA256SUMS`` (checksum manifest for the whole shipment directory)
+- ``test_results.xml`` (JUnit test report used by the example documentation)
+
+CI exports deterministic archives (``.tar.gz``) for each example as well as a combined archive.
+In GitHub Actions, download the artifact named ``osqar-example-shipments`` from the ``CI`` workflow run.
+
 Reference examples
 ==================
 
