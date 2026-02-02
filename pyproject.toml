@@ -16,18 +16,29 @@ sphinx-test-reports = "^1.0" # To import JUnit/TRF test results into Sphinx
 sphinxcontrib-plantuml = "^0.25" # For architecture diagrams
 
 # Theme
-sphinx-press-theme = "^0.8"
 furo = "^2024.8.6"
-
-# Extras
-esbonio = "^0.16" # LSP server (optional, helpful for VS Code autocomplete)
 
 [tool.poetry.group.dev.dependencies]
 # Tools for maintaining the boilerplate itself
 pytest = "^7.4"
 black = "^23.7"
+
+[tool.poetry.group.evidence]
+optional = true
+
+[tool.poetry.group.evidence.dependencies]
+# Optional tools for generating extra evidence artifacts (coverage/complexity).
+# The examples/scripts fall back gracefully when these are not installed.
 lizard = "^1.17.10"
 pytest-cov = "^7.0.0"
+gcovr = "^7.2"
+
+[tool.poetry.group.ide]
+optional = true
+
+[tool.poetry.group.ide.dependencies]
+# Optional LSP server for Sphinx projects (VS Code).
+esbonio = "^0.16"
 
 [build-system]
 requires = ["poetry-core"]

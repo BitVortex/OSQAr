@@ -81,6 +81,18 @@ test_results_file = Path(__file__).parent / 'test_results.xml'
 test_reports = ['test_results.xml'] if test_results_file.exists() else []
 
 
+# Coverage report (embedded in HTML via literalinclude)
+def _ensure_coverage_report() -> None:
+    report_path = Path(__file__).parent / 'coverage_report.txt'
+    if report_path.exists():
+        return
+    report_path.write_text(
+        'Code coverage report not generated in this build.\n'
+        'Run: ./build-and-test.sh\n',
+        encoding='utf-8',
+    )
+
+
 # Complexity report (embedded in HTML via literalinclude)
 def _write_complexity_report() -> None:
     report_path = Path(__file__).parent / 'complexity_report.txt'
@@ -105,6 +117,7 @@ def _write_complexity_report() -> None:
 
 
 _write_complexity_report()
+_ensure_coverage_report()
 
 
 # PlantUML

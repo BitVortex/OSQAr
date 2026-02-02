@@ -66,6 +66,7 @@ OSQAr also includes native-code examples (C/C++/Rust) that can be built in a rep
 ```bash
 # Example (C)
 cd examples/c_hello_world
+poetry install --with evidence
 export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
 OSQAR_REPRODUCIBLE=1 ./build-and-test.sh
 

@@ -229,6 +229,86 @@ def _copy_test_reports(project_dir: Path, shipment_dir: Path, *, dry_run: bool, 
     return 0
 
 
+def _copy_bundle_sources_and_reports(project_dir: Path, shipment_dir: Path, *, dry_run: bool) -> None:
+    """Copy non-doc evidence into a shipment directory.
+
+    Goal: make a shipment a reviewable evidence bundle (docs + traceability + implementation
+    + tests + analysis reports), not just a Sphinx HTML output directory.
+
+    This is intentionally conservative and template-agnostic.
+    """
+
+    project_dir = project_dir.resolve()
+    shipment_dir = shipment_dir.resolve()
+    shipment_dir.mkdir(parents=True, exist_ok=True)
+
+    impl_dir = shipment_dir / "implementation"
+    tests_dir = shipment_dir / "tests"
+    reports_dir = shipment_dir / "reports"
+
+    if not dry_run:
+        impl_dir.mkdir(parents=True, exist_ok=True)
+        tests_dir.mkdir(parents=True, exist_ok=True)
+        reports_dir.mkdir(parents=True, exist_ok=True)
+
+    def copy_file(src: Path, dest: Path) -> None:
+        if not src.is_file():
+            return
+        if dry_run:
+            print(f"DRY-RUN: would copy {src} -> {dest}")
+            return
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dest)
+
+    def copy_tree(src_dir: Path, dest_dir: Path) -> None:
+        if not src_dir.is_dir():
+            return
+        if dry_run:
+            print(f"DRY-RUN: would copy tree {src_dir} -> {dest_dir}")
+            return
+        shutil.copytree(src_dir, dest_dir, dirs_exist_ok=True)
+
+    # Implementation sources
+    copy_tree(project_dir / "src", impl_dir / "src")
+    copy_tree(project_dir / "include", impl_dir / "include")
+
+    # Tests
+    copy_tree(project_dir / "tests", tests_dir)
+
+    # Build descriptors (helpful for audit/reproduction)
+    for fname in (
+        "CMakeLists.txt",
+        "Cargo.toml",
+        "Cargo.lock",
+        "pyproject.toml",
+        "requirements.txt",
+        "BUILD.bazel",
+        "MODULE.bazel",
+        ".bazelrc",
+        "build-and-test.sh",
+        "bazel-build-and-test.sh",
+    ):
+        copy_file(project_dir / fname, impl_dir / fname)
+
+    # Analysis / verification reports (best-effort)
+    for fname in (
+        "test_results.xml",
+        "coverage_report.txt",
+        "coverage.xml",
+        "complexity_report.txt",
+    ):
+        copy_file(project_dir / fname, reports_dir / fname)
+
+    # Convenience copies at the shipment root (for quick browsing / common expectations)
+    for fname in (
+        "test_results.xml",
+        "coverage_report.txt",
+        "coverage.xml",
+        "complexity_report.txt",
+    ):
+        copy_file(project_dir / fname, shipment_dir / fname)
+
+
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
@@ -692,6 +772,9 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
     rc = _run_sphinx_build(project_dir, shipment_dir)
     if rc != 0:
         return rc
+
+    # Bundle content: include implementation, tests, and analysis reports alongside docs.
+    _copy_bundle_sources_and_reports(project_dir, shipment_dir, dry_run=bool(args.dry_run))
 
     # Copy raw test reports into the shipped directory (optional but recommended).
     _copy_test_reports(project_dir, shipment_dir, dry_run=bool(args.dry_run), globs=_DEFAULT_TEST_REPORT_GLOBS)

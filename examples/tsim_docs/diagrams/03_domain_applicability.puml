@@ -13,7 +13,7 @@ Ind --> Core
 Auto --> Core
 Rob --> Core
 
-note bottom
+note right of Core
 	Same TSIM core
 	reused across
 	all domains

@@ -6,7 +6,7 @@
 
 Open Safety Qualification Architecture (OSQAr) — a documentation-first framework for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
 
-In practice, an “evidence shipment” is a reviewable bundle (typically rendered HTML docs + machine-readable traceability exports + verification outputs + integrity metadata) that can be handed from suppliers to integrators and archived.
+In practice, an “evidence shipment” is a reviewable bundle that contains **Sphinx documentation with maintained traceability**, plus the **implementation**, **tests**, and **analysis/verification reports** needed to review and audit the evidence end-to-end.
 
 OSQAr is built on Sphinx + sphinx-needs and provides:
 
@@ -29,7 +29,7 @@ OSQAr is aimed at producing **auditable evidence shipments** for safety- and com
 - Author structured requirements, architecture and verification plans (REQ/ARCH/TEST) in reStructuredText
 - Export the machine-readable trace graph (`needs.json`) and build traceability tables/matrices using `sphinx-needs`
 - Validate traceability rules from `needs.json` (locally and in CI)
-- Package an evidence “shipment” (typically a Sphinx HTML output directory) and protect it with a `SHA256SUMS` integrity manifest
+- Package an evidence “shipment” bundle (docs + traceability exports + implementation + tests + analysis reports) and protect it with a `SHA256SUMS` integrity manifest
 - Optionally include test report XML in a shipment; the example projects can also import JUnit XML into the docs via `sphinx-test-reports`
 - As an integrator, intake multiple supplier shipments at once and get a consolidated **Subproject overview**
 - Optionally attach supplier-provided metadata (`osqar_project.json`) including descriptive info, origin and URLs
@@ -55,9 +55,9 @@ OSQAr supports **reproducible native builds** for the C/C++/Rust examples:
 - Native scripts: set `OSQAR_REPRODUCIBLE=1` (and preferably `SOURCE_DATE_EPOCH`) when running `./build-and-test.sh`.
 - Bazel scripts: set `OSQAR_REPRODUCIBLE=1` and use `./bazel-build-and-test.sh` (runs Bazel with `--config=reproducible`).
 
-The repository CI also publishes **ready-to-download example shipments** built from the C/C++/Rust examples using reproducible Bazel builds:
+The repository CI also publishes **ready-to-download example shipments** built from the C/C++/Rust examples using reproducible builds:
 
-- Each shipment contains: rendered HTML docs, `needs.json`, `traceability_report.json`, `SHA256SUMS`, and the JUnit `test_results.xml`.
+- Each shipment contains: rendered HTML docs (with traceability), implementation sources, tests, and analysis reports (JUnit XML, coverage summary, complexity report), plus integrity metadata (`SHA256SUMS`).
 - CI exports deterministic archives:
 	- `osqar_c_hello_world_shipment.tar.gz`
 	- `osqar_cpp_hello_world_shipment.tar.gz`
@@ -127,6 +127,9 @@ poetry run sphinx-build -b html examples/rust_hello_world _build/html/examples/r
 Run an end-to-end example workflow (native tests → docs):
 
 ```bash
+# For coverage/complexity evidence, include the optional tooling group:
+poetry install --with evidence
+
 cd examples/c_hello_world
 ./build-and-test.sh
 ```

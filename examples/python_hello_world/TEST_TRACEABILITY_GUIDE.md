@@ -155,6 +155,13 @@ Sphinx generates interactive HTML with:
 
 ## Running Tests & Generating Artifacts
 
+Recommended: run the end-to-end script (tests + coverage + docs) from this directory:
+
+```bash
+poetry install --with evidence
+./build-and-test.sh
+```
+
 ### Step 1: Run Unit Tests
 
 ```bash

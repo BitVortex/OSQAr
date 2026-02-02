@@ -19,8 +19,6 @@ Safety Requirements
    :status: active
    :tags: thermal, detection, timing
    :links: REQ_SAFETY_001, ARCH_FUNC_003, ARCH_SIGNAL_003
-
-   **ASIL**: QM (domain-agnostic; ASIL assigned by domain implementation)
    
    **Rationale**: Timely detection enables corrective action before damage occurs.
    

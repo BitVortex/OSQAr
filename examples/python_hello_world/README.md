@@ -39,6 +39,14 @@ poetry run sphinx-build -b html examples/python_hello_world _build/html/examples
 open _build/html/examples/python/index.html
 ```
 
+To generate a full evidence bundle (tests + coverage + docs):
+
+```bash
+poetry install --with evidence
+cd examples/python_hello_world
+./build-and-test.sh
+```
+
 ## Key Takeaways
 
 - Requirements use structured IDs: `REQ_SAFETY_*`, `REQ_FUNC_*`, `ARCH_*`, `TEST_*`

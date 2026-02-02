@@ -87,7 +87,7 @@ jobs:
         poetry config virtualenvs.in-project true
 
     - name: Install dependencies
-      run: poetry install
+      run: poetry install --with evidence
 
     - name: Run Temperature Monitor (TSIM) example
       run: |
@@ -124,6 +124,8 @@ jobs:
         path: |
           examples/python_hello_world/_build/html/
           examples/python_hello_world/test_results.xml
+          examples/python_hello_world/coverage_report.txt
+          examples/python_hello_world/coverage.xml
         retention-days: 30
 
   bazel-example-shipment:
@@ -166,7 +168,7 @@ jobs:
         poetry config virtualenvs.in-project true
 
     - name: Install dependencies
-      run: poetry install
+      run: poetry install --with evidence
 
     - name: Build reproducible Bazel shipment (${{ matrix.example }})
       run: |
@@ -179,7 +181,7 @@ jobs:
         out="osqar_${{ matrix.example }}_shipment.tar.gz"
 
         rm -rf "${ship_root}"
-        mkdir -p "${ship_dir}"
+        mkdir -p "${ship_dir}/implementation" "${ship_dir}/tests" "${ship_dir}/reports"
 
         echo "== Building ${ex_dir} (Bazel, reproducible)"
         pushd "${ex_dir}" >/dev/null
@@ -188,28 +190,112 @@ jobs:
         # Native build + test report
         OSQAR_REPRODUCIBLE=1 ./bazel-build-and-test.sh
 
+        # Coverage evidence (best-effort)
+        rm -f coverage_report.txt coverage.xml
+        case "${{ matrix.example }}" in
+          c_hello_world)
+            # Build with GCC coverage instrumentation (separate from Bazel build)
+            rm -rf _coverage_build
+            mkdir -p _coverage_build
+            cc --coverage -O0 -g -Iinclude -c src/tsim.c -o _coverage_build/tsim.o
+            cc --coverage -O0 -g -Iinclude -c tests/test_tsim.c -o _coverage_build/test_tsim.o
+            cc --coverage -o _coverage_build/junit_tests _coverage_build/tsim.o _coverage_build/test_tsim.o
+            ./_coverage_build/junit_tests test_results.xml
+            poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --print-summary > coverage_report.txt 2>&1 || true
+            poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --xml-pretty -o coverage.xml >/dev/null 2>&1 || true
+            ;;
+          cpp_hello_world)
+            rm -rf _coverage_build
+            mkdir -p _coverage_build
+            c++ --coverage -O0 -g -Iinclude -c src/tsim.cpp -o _coverage_build/tsim.o
+            c++ --coverage -O0 -g -Iinclude -c tests/test_tsim.cpp -o _coverage_build/test_tsim.o
+            c++ --coverage -o _coverage_build/junit_tests _coverage_build/tsim.o _coverage_build/test_tsim.o
+            ./_coverage_build/junit_tests test_results.xml
+            poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --print-summary > coverage_report.txt 2>&1 || true
+            poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --xml-pretty -o coverage.xml >/dev/null 2>&1 || true
+            ;;
+          rust_hello_world)
+            # Cargo-based coverage (implementation A). Bazel remains available as an alternative build path.
+            if ! command -v cargo >/dev/null 2>&1; then
+              curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+              # shellcheck source=/dev/null
+              source "$HOME/.cargo/env"
+            else
+              # shellcheck source=/dev/null
+              source "$HOME/.cargo/env" 2>/dev/null || true
+            fi
+
+            rustup component add llvm-tools-preview >/dev/null 2>&1 || true
+            cargo install cargo-llvm-cov --locked >/dev/null 2>&1 || true
+
+            # Exercise the same test binary under coverage instrumentation.
+            cargo llvm-cov run --locked --release --bin junit_tests -- test_results.xml >/dev/null 2>&1 || true
+            cargo llvm-cov report --locked --release --summary-only > coverage_report.txt 2>&1 || true
+            cargo llvm-cov report --locked --release --cobertura --output-path coverage.xml >/dev/null 2>&1 || true
+            ;;
+        esac
+
+        if [ ! -f coverage_report.txt ]; then
+          echo "Coverage report not generated." > coverage_report.txt
+        fi
+
         # Docs build (imports test_results.xml)
         rm -rf _build/html
         poetry run sphinx-build -b html . _build/html
 
         # Ensure test report is shipped alongside the HTML evidence directory
         cp -f test_results.xml _build/html/test_results.xml
+
+        # Ensure coverage evidence is shipped alongside the HTML evidence directory
+        cp -f coverage_report.txt _build/html/coverage_report.txt
+        if [ -f coverage.xml ]; then
+          cp -f coverage.xml _build/html/coverage.xml
+        fi
         popd >/dev/null
 
-        # Traceability report + checksum manifest
-        poetry run python tools/traceability_check.py \
-          "${ex_dir}/_build/html/needs.json" \
-          --json-report "${ex_dir}/_build/html/traceability_report.json"
-
-        poetry run python tools/generate_checksums.py \
-          --root "${ex_dir}/_build/html" \
-          --output "${ex_dir}/_build/html/SHA256SUMS"
-
-        poetry run python tools/generate_checksums.py \
-          --root "${ex_dir}/_build/html" \
-          --verify "${ex_dir}/_build/html/SHA256SUMS"
-
+        # Assemble a full evidence bundle (docs + implementation + tests + reports)
         cp -a "${ex_dir}/_build/html/." "${ship_dir}/"
+
+        if [ -d "${ex_dir}/src" ]; then
+          mkdir -p "${ship_dir}/implementation/src"
+          cp -a "${ex_dir}/src/." "${ship_dir}/implementation/src/"
+        fi
+        if [ -d "${ex_dir}/include" ]; then
+          mkdir -p "${ship_dir}/implementation/include"
+          cp -a "${ex_dir}/include/." "${ship_dir}/implementation/include/"
+        fi
+        if [ -d "${ex_dir}/tests" ]; then
+          mkdir -p "${ship_dir}/tests"
+          cp -a "${ex_dir}/tests/." "${ship_dir}/tests/"
+        fi
+
+        # Keep key build descriptors for review/reproduction
+        for f in CMakeLists.txt Cargo.toml Cargo.lock BUILD.bazel MODULE.bazel .bazelrc build-and-test.sh bazel-build-and-test.sh; do
+          if [ -f "${ex_dir}/${f}" ]; then
+            cp -a "${ex_dir}/${f}" "${ship_dir}/implementation/"
+          fi
+        done
+
+        # Analysis/verification reports
+        for f in test_results.xml coverage_report.txt coverage.xml complexity_report.txt; do
+          if [ -f "${ex_dir}/${f}" ]; then
+            cp -a "${ex_dir}/${f}" "${ship_dir}/reports/"
+          fi
+        done
+
+        # Traceability report for the shipped docs
+        poetry run python tools/traceability_check.py \
+          "${ship_dir}/needs.json" \
+          --json-report "${ship_dir}/reports/traceability_report.json"
+
+        # Bundle integrity: checksums over the full bundle directory
+        poetry run python tools/generate_checksums.py \
+          --root "${ship_dir}" \
+          --output "${ship_dir}/SHA256SUMS"
+
+        poetry run python tools/generate_checksums.py \
+          --root "${ship_dir}" \
+          --verify "${ship_dir}/SHA256SUMS"
 
         rm -f "${out}" "${out}.sha256"
         tar -c \

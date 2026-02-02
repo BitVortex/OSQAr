@@ -113,7 +113,7 @@ Generated artifacts
 ^^^^^^^^^^^^^^^^^^^
 
 - Never commit build outputs (``_build/``, ``target/``, ``build/``).
-- Treat shipments (rendered HTML outputs) as **immutable** after creation.
+- Treat shipments (evidence bundles) as **immutable** after creation.
 
 Collaborating at scale
 ----------------------

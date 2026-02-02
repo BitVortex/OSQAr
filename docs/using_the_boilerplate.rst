@@ -7,14 +7,14 @@ Purpose
 
 OSQAr is a **documentation-first framework** for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
 
-In OSQAr, an evidence shipment is the unit you transfer and archive (typically rendered HTML docs + machine-readable exports + verification outputs + integrity metadata).
+In OSQAr, an evidence shipment is the unit you transfer and archive: a bundle that contains **Sphinx documentation with maintained traceability**, plus the **implementation**, **tests**, and **analysis/verification reports** needed to review and audit the evidence end-to-end.
 
 OSQAr provides:
 
 - structured requirements and traceability (via ``sphinx-needs``)
 - architecture diagrams (via PlantUML)
 - verification planning and traceability (requirements ↔ architecture ↔ tests)
-- evidence “shipments” (rendered HTML + machine-readable exports) protected by checksum manifests
+- evidence “shipments” (documentation + traceability + implementation + tests + analysis reports) protected by checksum manifests
 - integrator-friendly multi-shipment intake and a consolidated **Subproject overview**
 - extensive lifecycle management guidance (framework-level and example-level)
 
@@ -41,6 +41,23 @@ Typical workflow
 
 Quick start
 ===========
+
+Install options
+---------------
+
+OSQAr keeps the default Python dependency footprint lean. Install additional tooling only if you need it:
+
+- Core docs + CLI (recommended default)::
+
+   poetry install
+
+- Evidence tooling (coverage/complexity generation used by example scripts)::
+
+   poetry install --with evidence
+
+- IDE tooling (optional Sphinx language server for VS Code)::
+
+   poetry install --with ide
 
 Build the rendered HTML documentation from the repository root:
 
@@ -125,11 +142,17 @@ This repository’s CI builds **downloadable, integrity-protected example shipme
 
 Each example shipment contains:
 
-- rendered HTML documentation
+- rendered HTML documentation (with maintained traceability)
+- implementation sources and tests
+- analysis/verification reports:
+
+   - ``test_results.xml`` (JUnit)
+   - ``coverage_report.txt`` (coverage summary; language-specific tooling)
+   - ``complexity_report.txt`` (complexity summary)
+
 - ``needs.json`` (trace graph export)
 - ``traceability_report.json`` (OSQAr traceability validation output)
-- ``SHA256SUMS`` (checksum manifest for the whole shipment directory)
-- ``test_results.xml`` (JUnit test report used by the example documentation)
+- ``SHA256SUMS`` (checksum manifest for the whole bundle directory)
 
 CI exports deterministic archives (``.tar.gz``) for each example as well as a combined archive.
 In GitHub Actions, download the artifact named ``osqar-example-shipments`` from the ``Tests and Example Shipments`` workflow run.
@@ -157,6 +180,9 @@ Run an end-to-end workflow (native tests → docs) for an example:
 
 .. code-block:: bash
 
+   # Optional: install extra tooling to generate coverage/complexity evidence
+   poetry install --with evidence
+
    cd examples/c_hello_world
    ./build-and-test.sh
    open _build/html/index.html
@@ -167,6 +193,9 @@ Python demo (workstation reference)
 A Python example remains available as a documentation reference variant:
 
 .. code-block:: bash
+
+   # Optional: install extra tooling to generate coverage/complexity evidence
+   poetry install --with evidence
 
    cd examples/python_hello_world
    ./build-and-test.sh
@@ -359,18 +388,6 @@ Optional convenience (same operations via the OSQAr CLI)::
     poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html generate
     poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
 
-    # Legacy equivalents (still supported)
-    poetry run python -m tools.osqar_cli traceability examples/python_hello_world/_build/html/needs.json \
-       --json-report examples/python_hello_world/_build/html/traceability_report.json
-
-    poetry run python -m tools.osqar_cli checksum generate \
-       --root examples/python_hello_world/_build/html \
-       --output examples/python_hello_world/_build/html/SHA256SUMS
-
-    poetry run python -m tools.osqar_cli checksum verify \
-       --root examples/python_hello_world/_build/html \
-       --manifest examples/python_hello_world/_build/html/SHA256SUMS
-
 Then archive and ship the **example output directory** (not the framework docs built from the repo root).
 
 For multi-project intake patterns, see :doc:`multi_project_workflows`.
@@ -413,7 +430,7 @@ All reference examples include an optional **code complexity report** step that 
 
       .. code-block:: bash
 
-          poetry install
+          poetry install --with evidence
           poetry run lizard -C 10 examples/c_hello_world/src examples/c_hello_world/include
 
 - **Rust**: `cargo-cyclo <https://github.com/fz0/cargo-cyclo>`_ (Cyclomatic Complexity)

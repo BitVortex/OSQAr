@@ -11,13 +11,13 @@ This is the simplest repeatable workflow when you receive multiple shipments:
 
 .. code-block:: bash
 
-  # 1) Put supplier shipments under intake/received/<name>/
-  # 2) Verify + archive them into a dated intake folder
-  ./osqar workspace intake \
-    --root intake/received \
-    --recursive \
-    --output intake/archive/2026-02-01 \
-    --traceability
+   # 1) Put supplier shipments under intake/received/<name>/
+   # 2) Verify + archive them into a dated intake folder
+   ./osqar workspace intake \
+     --root intake/received \
+     --recursive \
+     --output intake/archive/2026-02-01 \
+     --traceability
 
 Then open the generated overview:
 
@@ -33,13 +33,17 @@ Concepts
 
 **Shipment**
     A directory that a supplier provides to an integrator as an evidence bundle.
-    In OSQAr, a shipment is typically the Sphinx HTML output directory
-    (e.g. ``<project>/_build/html``) and contains:
+    In OSQAr, a shipment is an evidence bundle that contains Sphinx documentation with maintained traceability, plus implementation sources, tests, and analysis/verification reports.
 
+    Common bundle contents include:
+
+    - Documentation (rendered HTML)
     - ``needs.json`` (exported by ``sphinx-needs``)
     - ``SHA256SUMS`` (integrity manifest)
-    - ``traceability_report.json`` (optional but recommended)
-    - Optional test reports (e.g. JUnit XML)
+    - ``traceability_report.json`` (recommended)
+    - Raw test reports (e.g. JUnit XML)
+    - Coverage/analysis reports (e.g. coverage summary, complexity report)
+    - Implementation sources and tests (so evidence can be reviewed end-to-end)
 
 Recommended folder layout (integrator)
 --------------------------------------
@@ -150,7 +154,7 @@ Write metadata into a shipment directory:
 .. code-block:: bash
 
    ./osqar shipment metadata write \
-     --shipment <project>/_build/html \
+     --shipment <bundle_dir> \
      --name "My Component" \
      --version "1.2.3" \
      --description "Safety element out of context (SEooC)" \

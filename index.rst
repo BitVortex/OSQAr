@@ -3,7 +3,7 @@ OSQAr (Open Safety Qualification Architecture)
 
 OSQAr is a documentation-first framework for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
 
-In OSQAr, a shipment is a reviewable bundle (typically rendered HTML docs + machine-readable traceability exports + verification outputs + integrity metadata) that can be handed from suppliers to integrators and archived.
+In OSQAr, a shipment is a reviewable bundle that contains **Sphinx documentation with maintained traceability**, plus the **implementation**, **tests**, and **analysis/verification reports** needed to review and audit the evidence end-to-end.
 
 OSQAr is built on Sphinx + sphinx-needs and provides:
 
@@ -15,7 +15,7 @@ OSQAr is built on Sphinx + sphinx-needs and provides:
 - lifecycle management guidance
 - collaboration workflows for large, multi-user teams
 - reproducible native builds for the C/C++/Rust example implementations (including optional Bazel integration)
-- CI-produced demo shipments (HTML + machine-readable exports + checksum manifests)
+- CI-produced demo shipments (documentation + traceability + implementation + tests + analysis reports + checksum manifests)
 
 .. note::
 

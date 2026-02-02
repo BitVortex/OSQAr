@@ -26,7 +26,7 @@ echo -e "${BLUE}🔨 OSQAr example: Build & Traceability Workflow${NC}\n"
 echo -e "${BLUE}Step 1️⃣: Code Style Checks${NC}"
 if command -v poetry &> /dev/null; then
     echo "✓ Poetry found"
-    poetry install --no-interaction >/dev/null
+    poetry install --no-interaction --with evidence >/dev/null
     echo "  Running black code formatter checks..."
     poetry run black --check src tests 1>/dev/null
 else
@@ -37,12 +37,18 @@ fi
 # Step 2: Run Unit Tests
 echo -e "\n${BLUE}Step 2️⃣: Unit Tests with Coverage${NC}"
 echo "  Running 13 test cases..."
+rm -f coverage_report.txt coverage.xml
+
 poetry run pytest \
     -v \
     --junitxml=test_results.xml \
     --cov=src \
     --cov-report=term-missing \
+    --cov-report=xml:coverage.xml \
     tests/test_tsim.py
+
+# Create a stable, human-readable coverage summary for embedding in Sphinx.
+poetry run coverage report -m > coverage_report.txt
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}  ✓ All tests passed${NC}"
@@ -86,6 +92,18 @@ echo "  Running Sphinx..."
 rm -rf _build/html
 if poetry run sphinx-build -b html . _build/html 2>&1 | tail -5; then
     echo -e "${GREEN}  ✓ Documentation build succeeded${NC}"
+
+    # Ship raw evidence files alongside the HTML directory (for CI shipments / audits)
+    cp -f test_results.xml _build/html/test_results.xml >/dev/null 2>&1 || true
+    cp -f coverage_report.txt _build/html/coverage_report.txt >/dev/null 2>&1 || true
+    if [ -f coverage.xml ]; then
+        cp -f coverage.xml _build/html/coverage.xml >/dev/null 2>&1 || true
+    fi
+
+    # Ship implementation + tests alongside the docs (so a bundle can be reviewed end-to-end)
+    mkdir -p _build/html/implementation/src _build/html/tests
+    cp -a src/. _build/html/implementation/src/ >/dev/null 2>&1 || true
+    cp -a tests/. _build/html/tests/ >/dev/null 2>&1 || true
 else
     echo -e "${RED}  ✗ Documentation build failed${NC}"
     exit 1
@@ -119,6 +137,7 @@ echo -e "\n${GREEN}✅ Compliance Artifact Generation Complete!${NC}"
 echo ""
 echo "📊 Artifact Summary:"
 echo "  - Test Results: test_results.xml (JUnit format)"
+echo "  - Coverage: coverage_report.txt"
 echo "  - Complexity: complexity_report.txt"
 echo "  - Documentation: _build/html/index.html"
 echo "  - Test Report: _build/html/05_test_results.html"

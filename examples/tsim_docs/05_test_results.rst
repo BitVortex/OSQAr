@@ -172,6 +172,17 @@ This XML is parsed and linked to requirements using the test case names (mapped 
 3. **Execution Metadata**: Timing, host, and result details
 4. **Traceability Queries**: Search and filter tests by requirement ID
 
+Code Coverage
+==============
+
+OSQAr supports embedding **code coverage evidence** alongside the JUnit test report.
+
+- If coverage tooling is available for the selected language example, the build workflow generates a ``coverage_report.txt`` and embeds it here.
+- If coverage tooling is not available, a placeholder report is generated so documentation builds remain robust.
+
+.. literalinclude:: coverage_report.txt
+  :language: text
+
 Building Compliance Artifacts
 ==============================
 
@@ -193,18 +204,11 @@ The complete compliance artifact package is generated via:
 Domain-Agnostic Test Strategy
 =============================
 
-The test suite is designed to work across all supported domains (medical, automotive, robotics, industrial) because:
+The test suite is designed to work across various domains:
 
 1. **Tests are functional, not domain-specific**: All tests verify sensor conversion, filtering, and threshold logic without domain assumptions
 2. **Safety requirements are domain-agnostic**: REQ_SAFETY_* and REQ_FUNC_* refer to generic overheat detection, not domain-specific hazards
-3. **ASIL assignment is domain-specific**: The domain integrator assigns ASIL (Automotive Safety Integrity Level) or equivalent:
-   
-   - **Medical**: Critical → ASIL-C equivalent, requires fault injection testing
-   - **Automotive**: High → ASIL-C, requires functional safety manager review
-   - **Robotics**: Medium → ASIL-B equivalent, requires scenario testing
-   - **Industrial**: Low-Medium → ASIL-B equivalent, requires HAZOP analysis
-
-4. **Test coverage scales with domain**: Additional tests added per domain for specific failure modes (e.g., medical sensor calibration drift, automotive temperature shock resilience)
+3. **Test coverage scales with domain**: Additional tests added per domain for specific failure modes (e.g., medical sensor calibration drift, automotive temperature shock resilience)
 
 Extending the Test Suite
 =========================

@@ -4,6 +4,8 @@ project(osqar_tsim_cpp LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(OSQAR_COVERAGE "Enable code coverage instrumentation" OFF)
+
 add_library(tsim
     src/tsim.cpp
 )
@@ -17,3 +19,16 @@ add_executable(junit_tests
 )
 
 target_link_libraries(junit_tests PRIVATE tsim)
+
+if(OSQAR_COVERAGE)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        foreach(tgt tsim junit_tests)
+            target_compile_options(${tgt} PRIVATE -O0 -g --coverage)
+            if(COMMAND target_link_options)
+                target_link_options(${tgt} PRIVATE --coverage)
+            else()
+                target_link_libraries(${tgt} PRIVATE --coverage)
+            endif()
+        endforeach()
+    endif()
+endif()

@@ -43,7 +43,9 @@ This project follows a code of conduct to ensure a welcoming environment for all
 
 3. Set up the development environment:
    ```bash
-   poetry install
+   # Use the lean default install for docs/CLI only.
+   # Add `--with evidence` to run example scripts with coverage/complexity tooling.
+   poetry install --with evidence
    ```
 
 4. Run the Temperature Monitor (TSIM) example to verify setup:
