@@ -31,7 +31,9 @@ if [[ "${REPRODUCIBLE}" == "1" ]]; then
 fi
 
 bazel build //... "${BAZEL_ARGS[@]}"
-bazel run //:junit_tests "${BAZEL_ARGS[@]}" -- test_results.xml
+JUNIT_OUT="${SCRIPT_DIR}/test_results.xml"
+rm -f "${JUNIT_OUT}"
+bazel run //:junit_tests "${BAZEL_ARGS[@]}" -- "${JUNIT_OUT}"
 
 echo "✓ Bazel build completed"
-echo "- JUnit: test_results.xml"
+echo "- JUnit: ${JUNIT_OUT}"

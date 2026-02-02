@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed a reStructuredText formatting issue in the framework docs that broke the Bazel example code block
 - Fixed Bazel 9 compatibility for the C/C++ examples by explicitly loading `cc_*` rules from `rules_cc`
 - Fixed CI doc builds after Bazel runs by excluding `bazel-*` output trees from Sphinx source discovery (prevents duplicate need IDs)
+- Fixed Bazel wrapper scripts to write JUnit XML to a workspace path (prevents missing `test_results.xml` in CI)
+
+### Changed
+- CI now builds example shipments in separate jobs (matrix) and combines them afterwards for faster, isolated feedback
 
 ## [0.2.4] - 2026-02-02
 
