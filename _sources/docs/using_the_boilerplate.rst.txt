@@ -128,7 +128,7 @@ Each example shipment contains:
 - ``test_results.xml`` (JUnit test report used by the example documentation)
 
 CI exports deterministic archives (``.tar.gz``) for each example as well as a combined archive.
-In GitHub Actions, download the artifact named ``osqar-example-shipments`` from the ``CI`` workflow run.
+In GitHub Actions, download the artifact named ``osqar-example-shipments`` from the ``Tests and Example Shipments`` workflow run.
 
 Reference examples
 ==================
@@ -337,7 +337,7 @@ Optional convenience (same operations via the OSQAr CLI)::
       ./osqar shipment metadata write \
          --shipment examples/python_hello_world/_build/html \
          --name "OSQAr Python Hello World" \
-         --version "0.2.4" \
+         --version "0.3.0" \
          --url repository=https://example.com/repo.git \
          --origin url=https://example.com/repo.git \
          --origin revision=<commit>
