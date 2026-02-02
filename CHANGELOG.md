@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed a reStructuredText formatting issue in the framework docs that broke the Bazel example code block
+- Fixed Bazel 9 compatibility for the C/C++ examples by explicitly loading `cc_*` rules from `rules_cc`
 
 ## [0.2.4] - 2026-02-02
 
