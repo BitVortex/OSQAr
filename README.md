@@ -2,7 +2,7 @@
 
 # OSQAr
 
-Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boilerplate for building **auditable, reuseable safety/compliance documentation** with:
+Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boilerplate for building **auditable, reusable safety/compliance documentation** with:
 
 - requirements + traceability (sphinx-needs)
 - architecture diagrams (PlantUML)
@@ -10,7 +10,9 @@ Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boile
 - extensive lifecycle management support
 - multi-user collaboration workflows (branching/merging/CI strategies)
 
-**Version:** 0.2.3 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
+Note: This repository is an example/boilerplate; large parts of the content were LLM-assisted/generated and must be reviewed and adapted before use in any real safety/compliance project.
+
+**Version:** 0.2.4 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
 
 For license terms see the `LICENSE` file (Apache License 2.0).
 
@@ -19,10 +21,10 @@ For license terms see the `LICENSE` file (Apache License 2.0).
 OSQAr is documentation-first and aimed at producing **reviewable, exportable evidence** for safety- and compliance-related components (SEooC-style).
 
 - Author structured requirements, architecture and verification plans (REQ/ARCH/TEST) in reStructuredText
-- Generate traceability matrices and export the machine-readable trace graph (`needs.json`)
-- Import and publish test results (e.g., JUnit XML) into the documentation
-- Package an evidence “shipment” (rendered HTML + exports) and protect it with a `SHA256SUMS` integrity manifest
-- Validate traceability rules (locally and in CI)
+- Export the machine-readable trace graph (`needs.json`) and build traceability tables/matrices using `sphinx-needs`
+- Validate traceability rules from `needs.json` (locally and in CI)
+- Package an evidence “shipment” (typically a Sphinx HTML output directory) and protect it with a `SHA256SUMS` integrity manifest
+- Optionally include test report XML in a shipment; the example projects can also import JUnit XML into the docs via `sphinx-test-reports`
 - As an integrator, intake multiple supplier shipments at once and get a consolidated **Subproject overview**
 - Optionally attach supplier-provided metadata (`osqar_project.json`) including descriptive info, origin and URLs
 
@@ -153,7 +155,7 @@ poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --mani
 ./osqar shipment metadata write \
 	--shipment examples/rust_hello_world/_build/html \
 	--name "Rust Hello World" \
-	--version "0.2.3" \
+	--version "0.2.4" \
 	--url repository=https://example.com/repo.git \
 	--origin url=https://example.com/repo.git \
 	--origin revision=<commit>
@@ -183,4 +185,4 @@ If you are new to the repository:
 
 ## Notes
 
-The file `docs/BOILERPLATE_USAGE.md` is a GitHub-readable overview. The authoritative framework documentation lives in `index.rst` and `docs/*.rst` and is what gets published to GitHub Pages.
+The authoritative framework documentation lives in `index.rst` and `docs/*.rst` and is what gets published to GitHub Pages.

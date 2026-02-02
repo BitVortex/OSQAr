@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.4] - 2026-02-02
+
+### Changed
+- Simplified and restructured the framework documentation entry points to reduce hierarchy and redundancy
+- Removed Markdown boilerplate docs under `docs/` in favor of the published Sphinx documentation
+- Aligned README and framework docs feature descriptions with implemented tooling and configuration
+
+### Added
+- Prominent note that this repository is an example/boilerplate with LLM-assisted/generated content
+
 ## [0.2.3] - 2026-02-01
 
 ### Added

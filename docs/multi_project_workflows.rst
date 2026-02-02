@@ -1,5 +1,5 @@
-Multi-project workflows (integrators)
-=====================================
+Multi-project workflows
+=======================
 
 This section describes how to work with multiple supplier projects/shipments at once.
 The goal is to keep evidence intake scalable and repeatable, while preserving integrity and traceability.
@@ -134,8 +134,8 @@ Good patterns:
 
 Avoid ambiguous names like ``shipment/`` or ``output/``.
 
-Shipment metadata (supplier-provided)
--------------------------------------
+Shipment metadata (supplier)
+----------------------------
 
 Suppliers can include a machine-readable metadata file in the shipment root:
 

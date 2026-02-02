@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "osqar"
-version = "0.2.3"
+version = "0.2.4"
 description = "Open Safety Qualification Architecture - A Sphinx-Needs boilerplate for safety-related systems."
 authors = ["Jan Toennemann <jan@toennemann.net>"]
 readme = "README.md"
