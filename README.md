@@ -2,15 +2,15 @@
 
 # OSQAr
 
-Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boilerplate for building **auditable, reusable safety/compliance documentation** with:
+Open Safety Qualification Architecture (OSQAr) — a Sphinx + sphinx-needs boilerplate for building **auditable, reusable safetycompliance documentation** with:
 
 - requirements + traceability (sphinx-needs)
 - architecture diagrams (PlantUML)
-- verification planning and traceability matrices
+- verification planning, test report integration and traceability matrices
 - extensive lifecycle management support
 - multi-user collaboration workflows (branching/merging/CI strategies)
 
-Note: This repository is an example/boilerplate; large parts of the content were LLM-assisted/generated and must be reviewed and adapted before use in any real safety/compliance project.
+Note: This repository is a boilerplate only; large parts of the content were LLM-assisted/generated and must be reviewed and adapted before use in any real safety/compliance project.
 
 **Version:** 0.2.4 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
 
@@ -44,7 +44,7 @@ GitHub Pages is built automatically on pushes to `main` via `.github/workflows/p
 
 The docs default to the `furo` theme (with built-in light/dark mode). To force a fallback theme, set `OSQAR_SPHINX_THEME=alabaster`.
 
-## Language guidance (examples)
+## Language guidance
 
 - For safety-related embedded projects, prefer **C** or **Rust** as a starting point.
 - **C++** is common in industry, but is usually harder to constrain and qualify for safety.
@@ -171,17 +171,10 @@ poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --mani
 	--traceability
 ```
 
-See the framework docs for the evidence “shipment” workflow:
+See the framework docs for the generic overview as well as the example shipment workflow:
 
-- https://bitvortex.github.io/OSQAr/ (Using the OSQAr Boilerplate)
-
-## Start here
-
-If you are new to the repository:
-
-1. Open the framework docs: https://bitvortex.github.io/OSQAr/
-2. Then explore the examples index: https://bitvortex.github.io/OSQAr/examples/
-3. Pick an example language (guidance above): C/Rust preferred for safety-related embedded; Python is workstation-only.
+- https://bitvortex.github.io/OSQAr/docs/using_the_boilerplate.html#osqar-cli
+- https://bitvortex.github.io/OSQAr/docs/using_the_boilerplate.html#shipment-verification-per-example-output
 
 ## Notes
 
