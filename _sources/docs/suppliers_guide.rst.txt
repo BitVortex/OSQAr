@@ -124,7 +124,7 @@ Optional: add project metadata into the shipment directory (recommended for mult
 	poetry run python -m tools.osqar_cli shipment metadata write \
 		--shipment examples/python_hello_world/_build/html \
 		--name "OSQAr Python Hello World" \
-		--version "0.2.3" \
+		--version "0.2.4" \
 		--url repository=https://example.com/repo.git \
 		--origin url=https://example.com/repo.git \
 		--origin revision=<commit>

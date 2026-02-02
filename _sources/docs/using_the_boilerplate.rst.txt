@@ -1,6 +1,6 @@
-=============================
+===========================
 Using the OSQAr Boilerplate
-=============================
+===========================
 
 Purpose
 =======
@@ -14,6 +14,27 @@ OSQAr is a **documentation-first** boilerplate for producing auditable safety/co
 - integrator-friendly multi-shipment intake and a consolidated **Subproject overview**
 - extensive lifecycle management guidance (framework-level and example-level)
 
+This chapter is the main entrypoint. It gives you the mental model and the first commands to run.
+
+Recommended reading order
+=========================
+
+1. You are here: build docs, understand the workflow, and explore examples.
+2. As a supplier, learn how to ship evidence bundles: :doc:`suppliers_guide`.
+3. As an integrator, learn how to verify and archive shipments: :doc:`integrators_guide`.
+4. If you work with many shipments, use: :doc:`multi_project_workflows`.
+5. For release/baseline discipline, see: :doc:`lifecycle_management`.
+6. For team-scale collaboration, see: :doc:`collaboration_workflows`.
+
+Typical workflow
+================
+
+1. Author needs objects (REQ/ARCH/TEST) in RST with stable IDs.
+2. Build HTML docs and export machine-readable artifacts (e.g. ``needs.json``).
+3. Run traceability checks and store the report.
+4. Generate a checksum manifest (e.g. ``SHA256SUMS``) for integrity.
+5. Transfer/archive the shipment; integrators verify checksums and (optionally) re-run checks.
+
 Quick start
 ===========
 
@@ -25,15 +46,15 @@ Build the rendered HTML documentation from the repository root:
    poetry run sphinx-build -b html . _build/html
    open _build/html/index.html
 
-Reference examples (C/C++/Rust)
-===============================
+Reference examples
+==================
 
 OSQAr primarily targets **C**, **C++**, and **Rust** projects.
 
 Each example produces:
 
 - native test results as `test_results.xml` (JUnit)
-- rendered HTML documentation that can import the JUnit results (via `sphinx-test-reports`)
+- rendered HTML documentation; the examples can optionally import JUnit XML into the docs via `sphinx-test-reports`
 
 Build any example documentation directly:
 
@@ -52,8 +73,8 @@ Run an end-to-end workflow (native tests → docs) for an example:
    ./build-and-test.sh
    open _build/html/index.html
 
-Python demo reference
-=====================
+Python demo (workstation reference)
+-----------------------------------
 
 A Python example remains available as a documentation reference variant:
 
@@ -123,18 +144,18 @@ Generate and verify a checksum manifest (default: SHA-256) for a shipped directo
    poetry run python -m tools.osqar_cli checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS
    poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --manifest ./_build/html/SHA256SUMS
 
-Core workflow
-=============
+Core authoring workflow
+=======================
 
 OSQAr works best when you keep a consistent structure:
 
 - define requirements and constraints as ``.. need::`` objects with stable IDs
 - link requirements ↔ architecture ↔ tests using ``:links:`` and ``:need:`ID``` references
 - keep architecture diagrams in PlantUML sources under version control
-- define verification requirements (``TEST_*``) and provide a traceability matrix
+- define verification requirements (``TEST_*``) and include traceability tables/matrices (e.g. via ``sphinx-needs`` directives)
 
 Writing requirements (sphinx-needs)
-===================================
+-----------------------------------
 
 A requirement is defined using a ``.. need::`` directive with a stable ``:id:``.
 
@@ -150,7 +171,7 @@ A requirement is defined using a ``.. need::`` directive with a stable ``:id:``.
       **Tests**: :need:`TEST_END_TO_END_001`
 
 Recommended ID scheme
-=====================
+---------------------
 
 The boilerplate enforces ID discipline via ``needs_id_regex``.
 
@@ -162,7 +183,7 @@ A practical scheme is:
 - ``TEST_*``: verification requirements / test specifications
 
 Architecture diagrams (PlantUML)
-================================
+--------------------------------
 
 PlantUML sources live in ``diagrams/`` and are included from RST:
 
@@ -172,7 +193,7 @@ PlantUML sources live in ``diagrams/`` and are included from RST:
       :caption: Data flow (budget: :need:`REQ_SAFETY_002`) — Architecture: :need:`ARCH_FUNC_001`, :need:`ARCH_FUNC_002`, :need:`ARCH_FUNC_003`
 
 Verification and traceability
-=============================
+-----------------------------
 
 A robust verification chapter typically contains:
 
@@ -232,7 +253,7 @@ Optional convenience (same operations via the OSQAr CLI)::
       ./osqar shipment metadata write \
          --shipment examples/python_hello_world/_build/html \
          --name "OSQAr Python Hello World" \
-         --version "0.2.3" \
+         --version "0.2.4" \
          --url repository=https://example.com/repo.git \
          --origin url=https://example.com/repo.git \
          --origin revision=<commit>

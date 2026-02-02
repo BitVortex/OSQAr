@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="search" title="Search" href="../search.html" /><link rel="next" title="OSQAr Examples" href="../examples/index.html" /><link rel="prev" title="Supplier’s Guide" href="suppliers_guide.html" />
+<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Lifecycle Management" href="lifecycle_management.html" /><link rel="prev" title="Integrator’s Guide" href="integrators_guide.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Multi-project workflows (integrators) - OSQAr 0.2.3 documentation</title>
+        <title>Multi-project workflows - OSQAr 0.2.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.2.3 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.2.4 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.2.3 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.2.4 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -205,14 +205,17 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+  <p class="caption" role="heading"><span class="caption-text">Framework</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="using_the_boilerplate.html">Using the OSQAr Boilerplate</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="suppliers_guide.html">Supplier’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Multi-project workflows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lifecycle_management.html">Lifecycle Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="collaboration_workflows.html">Collaboration workflows (multi-user)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="suppliers_guide.html">Supplier’s Guide</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Multi-project workflows (integrators)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
@@ -258,8 +261,8 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="multi-project-workflows-integrators">
-<h1>Multi-project workflows (integrators)<a class="headerlink" href="#multi-project-workflows-integrators" title="Link to this heading">¶</a></h1>
+          <section id="multi-project-workflows">
+<h1>Multi-project workflows<a class="headerlink" href="#multi-project-workflows" title="Link to this heading">¶</a></h1>
 <p>This section describes how to work with multiple supplier projects/shipments at once.
 The goal is to keep evidence intake scalable and repeatable, while preserving integrity and traceability.</p>
 <section id="quick-start-integrator">
@@ -379,8 +382,8 @@ Good patterns:</p>
 </ul>
 <p>Avoid ambiguous names like <code class="docutils literal notranslate"><span class="pre">shipment/</span></code> or <code class="docutils literal notranslate"><span class="pre">output/</span></code>.</p>
 </section>
-<section id="shipment-metadata-supplier-provided">
-<h2>Shipment metadata (supplier-provided)<a class="headerlink" href="#shipment-metadata-supplier-provided" title="Link to this heading">¶</a></h2>
+<section id="shipment-metadata-supplier">
+<h2>Shipment metadata (supplier)<a class="headerlink" href="#shipment-metadata-supplier" title="Link to this heading">¶</a></h2>
 <p>Suppliers can include a machine-readable metadata file in the shipment root:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code></p></li>
@@ -434,23 +437,23 @@ have less context about origin/URLs.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../examples/index.html">
+          <a class="next-page" href="lifecycle_management.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">OSQAr Examples</div>
+                <div class="title">Lifecycle Management</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="suppliers_guide.html">
+          <a class="prev-page" href="integrators_guide.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Supplier’s Guide</div>
+                <div class="title">Integrator’s Guide</div>
                 
               </div>
             </a>
@@ -484,7 +487,7 @@ have less context about origin/URLs.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Multi-project workflows (integrators)</a><ul>
+<li><a class="reference internal" href="#">Multi-project workflows</a><ul>
 <li><a class="reference internal" href="#quick-start-integrator">Quick start (integrator)</a></li>
 <li><a class="reference internal" href="#concepts">Concepts</a></li>
 <li><a class="reference internal" href="#recommended-folder-layout-integrator">Recommended folder layout (integrator)</a></li>
@@ -493,7 +496,7 @@ have less context about origin/URLs.</p>
 <li><a class="reference internal" href="#batch-verification-cli">Batch verification (CLI)</a></li>
 <li><a class="reference internal" href="#intake-archiving-cli">Intake + archiving (CLI)</a></li>
 <li><a class="reference internal" href="#practical-naming-convention">Practical naming convention</a></li>
-<li><a class="reference internal" href="#shipment-metadata-supplier-provided">Shipment metadata (supplier-provided)</a></li>
+<li><a class="reference internal" href="#shipment-metadata-supplier">Shipment metadata (supplier)</a></li>
 <li><a class="reference internal" href="#subproject-overview-integrator-output">Subproject overview (integrator output)</a></li>
 <li><a class="reference internal" href="#notes-and-good-practices">Notes and good practices</a></li>
 </ul>
@@ -509,7 +512,7 @@ have less context about origin/URLs.</p>
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=a47416a6"></script>
+    <script src="../_static/documentation_options.js?v=6ffd866b"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

@@ -11,20 +11,29 @@ OSQAr is a Sphinx + sphinx-needs boilerplate for producing auditable safety/comp
 - lifecycle management guidance
 - collaboration workflows for large, multi-user teams
 
+.. note::
+
+   This repository is an example/boilerplate; large parts of the content were LLM-assisted/generated and must be reviewed and adapted before use in any real safety/compliance project.
+
 OSQAr also includes a small CLI for scaffolding new projects and running traceability/checksum verification.
 
 Start here:
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Documentation
+   :maxdepth: 1
+   :caption: Framework
 
    docs/using_the_boilerplate
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Guides
+
+   docs/suppliers_guide
+   docs/integrators_guide
+   docs/multi_project_workflows
    docs/lifecycle_management
    docs/collaboration_workflows
-   docs/integrators_guide
-   docs/suppliers_guide
-   docs/multi_project_workflows
 
 .. toctree::
    :maxdepth: 1
