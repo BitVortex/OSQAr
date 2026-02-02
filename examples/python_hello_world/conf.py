@@ -46,6 +46,21 @@ html_domain_indices = False
 html_use_modindex = False
 
 
+# Prevent Bazel (and other build tools) from polluting the Sphinx source tree.
+# Bazel creates `bazel-*` symlinks/directories in the workspace which may
+# contain a full copy of the source tree, causing duplicate documents/need IDs.
+exclude_patterns = [
+    '_build',
+    'build',
+    '.venv',
+    '__pycache__',
+    'bazel-*',
+    'bazel-bin',
+    'bazel-out',
+    'bazel-testlogs',
+]
+
+
 # sphinx-needs
 needs_id_regex = '^[A-Z0-9_]{3,}'
 needs_css = 'modern.css'
