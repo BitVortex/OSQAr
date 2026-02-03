@@ -411,8 +411,8 @@ open<span class="w"> </span>_build/html/index.html
 <section id="imported-junit-results">
 <h3>Imported JUnit results<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
 <h3>tsim_rust<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
-<p>Tests: 3, Failures: 0, Errors: -1, Skips: -1</p>
-<p>Time: -1.0</p>
+<p>Tests: 3, Failures: 0, Errors: 0, Skips: 0</p>
+<p>Time: 0.0</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -461,9 +461,11 @@ open<span class="w"> </span>_build/html/index.html
 <li><p>If coverage tooling is available for the selected language example, the build workflow generates a <code class="docutils literal notranslate"><span class="pre">coverage_report.txt</span></code> and embeds it here.</p></li>
 <li><p>If coverage tooling is not available, a placeholder report is generated so documentation builds remain robust.</p></li>
 </ul>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Code coverage report not generated in this build.
-If you want Rust code coverage evidence, install cargo-llvm-cov and run:
-  OSQAR_COVERAGE=1 ./build-and-test.sh
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Filename                                                               Regions    Missed Regions     Cover   Functions  Missed Functions  Executed       Lines      Missed Lines     Cover    Branches   Missed Branches     Cover
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/home/runner/work/OSQAr/OSQAr/examples/rust_hello_world/src/lib.rs          54                 2    96.30%           5                 0   100.00%          53                 2    96.23%           0                 0         -
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                       54                 2    96.30%           5                 0   100.00%          53                 2    96.23%           0                 0         -
 </pre></div>
 </div>
 </section>
@@ -514,10 +516,35 @@ If you want Rust code coverage evidence, install cargo-llvm-cov and run:
 <section id="complexity-report">
 <h2>Complexity report<a class="headerlink" href="#complexity-report" title="Link to this heading">¶</a></h2>
 <p>This report is generated during the build and embedded as evidence.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>No complexity tool is available in this environment.
-Install one of:
-- poetry install (dev deps)  # provides lizard
-- cargo install cargo-cyclo
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>================================================
+  NLOC    CCN   token  PARAM  length  location  
+------------------------------------------------
+       3      1     29      1       3 pass@14-16@src/bin/junit_tests.rs
+       3      1     37      2       3 fail@18-20@src/bin/junit_tests.rs
+      18      4    104      0      21 test_conversion_full_range@22-42@src/bin/junit_tests.rs
+      19      7    132      0      24 test_filter_noise_rejection@44-67@src/bin/junit_tests.rs
+      19      6    127      0      26 test_threshold_and_hysteresis@69-94@src/bin/junit_tests.rs
+      26     10    173      3      29 write_junit@96-124@src/bin/junit_tests.rs
+       7      1     48      1       7 xml_escape@126-132@src/bin/junit_tests.rs
+      18      3    153      0      22 main@134-155@src/bin/junit_tests.rs
+      13      3     83      1      18 adc_to_temp_x10@20-37@src/lib.rs
+       8      1     31      0       8 new@48-55@src/lib.rs
+      15      2    133      2      17 update@58-74@src/lib.rs
+       7      1     28      2       7 new@85-91@src/lib.rs
+      15      4     68      2      15 evaluate@93-107@src/lib.rs
+2 file analyzed.
+==============================================================
+NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
+--------------------------------------------------------------
+    123      14.1     4.1      100.4         8     src/bin/junit_tests.rs
+     79      11.6     2.2       68.6         5     src/lib.rs
+
+===============================================================================================================
+No thresholds exceeded (cyclomatic_complexity &gt; 10 or length &gt; 1000 or nloc &gt; 1000000 or parameter_count &gt; 100)
+==========================================================================================
+Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
+------------------------------------------------------------------------------------------
+       202      13.2     3.4       88.2       13            0      0.00    0.00
 </pre></div>
 </div>
 </section>

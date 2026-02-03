@@ -1,0 +1,14 @@
+[package]
+name = "osqar_tsim_rust"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "tsim"
+path = "src/lib.rs"
+
+[[bin]]
+name = "junit_tests"
+path = "src/bin/junit_tests.rs"
+
+[dependencies]

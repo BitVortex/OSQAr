@@ -1,0 +1,29 @@
+================================================
+  NLOC    CCN   token  PARAM  length  location  
+------------------------------------------------
+      10      2     76      1      14 tsim_adc_to_temp_x10@8-21@src/tsim.cpp
+       6      1     26      0       6 tsim_filter_t::reset@23-28@src/tsim.cpp
+      16      2    109      2      18 tsim_filter_t::update@30-47@src/tsim.cpp
+       5      1     26      2       5 tsim_sm_t::init@49-53@src/tsim.cpp
+      12      4     53      1      13 tsim_sm_t::evaluate@55-67@src/tsim.cpp
+       3      1     31      3       3 fail_msg@9-11@tests/test_tsim.cpp
+       4      1     45      2       4 set_fail@19-22@tests/test_tsim.cpp
+      20      4    176      0      24 test_conversion_full_range@24-47@tests/test_tsim.cpp
+      24      7    150      0      30 test_filter_noise_rejection@49-78@tests/test_tsim.cpp
+      26      6    154      0      34 test_threshold_and_hysteresis@80-113@tests/test_tsim.cpp
+      28      7    198      2      32 write_junit@115-146@tests/test_tsim.cpp
+      16      4    127      2      20 main@148-167@tests/test_tsim.cpp
+3 file analyzed.
+==============================================================
+NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
+--------------------------------------------------------------
+     51       9.8     2.0       58.0         5     src/tsim.cpp
+     23       0.0     0.0        0.0         0     include/tsim.hpp
+    132      17.3     4.3      125.9         7     tests/test_tsim.cpp
+
+===============================================================================================================
+No thresholds exceeded (cyclomatic_complexity > 10 or length > 1000 or nloc > 1000000 or parameter_count > 100)
+==========================================================================================
+Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
+------------------------------------------------------------------------------------------
+       206      14.2     3.3       97.6       12            0      0.00    0.00
