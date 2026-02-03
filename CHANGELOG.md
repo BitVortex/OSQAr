@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-02-03
+
+### Added
+- Embedded JUnit test tables in example documentation (`test-results`), with CI/Pages generating per-example `test_results.xml` before Sphinx builds
+- Embedded per-example code coverage evidence (`coverage_report.txt`) in CI/Pages builds
+- Embedded per-example complexity evidence (`complexity_report.txt`) adjacent to coverage in the shared test results chapter
+
+### Fixed
+- Normalized C/C++/Rust JUnit XML writers to include `errors`, `skipped`, and `time` attributes (prevents `-1` values in rendered summaries)
+
 ## [0.3.0] - 2026-02-02
 
 ### Added

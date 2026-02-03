@@ -18,7 +18,7 @@ OSQAr is built on Sphinx + sphinx-needs and provides:
 
 Note: This repository is a boilerplate only; large parts of the content were LLM-assisted/generated and must be reviewed and adapted before use in any real safety/compliance project.
 
-**Version:** 0.3.0 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
+**Version:** 0.3.1 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
 
 For license terms see the `LICENSE` file (Apache License 2.0).
 
@@ -182,7 +182,7 @@ poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --mani
 ./osqar shipment metadata write \
 	--shipment examples/rust_hello_world/_build/html \
 	--name "Rust Hello World" \
-	--version "0.3.0" \
+	--version "0.3.1" \
 	--url repository=https://example.com/repo.git \
 	--origin url=https://example.com/repo.git \
 	--origin revision=<commit>

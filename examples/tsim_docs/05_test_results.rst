@@ -187,6 +187,14 @@ OSQAr supports embedding **code coverage evidence** alongside the JUnit test rep
 .. literalinclude:: coverage_report.txt
   :language: text
 
+Complexity report
+=================
+
+The build workflow generates a cyclomatic complexity report (``complexity_report.txt``) and embeds it here.
+
+.. literalinclude:: complexity_report.txt
+  :language: text
+
 Building Compliance Artifacts
 ==============================
 
