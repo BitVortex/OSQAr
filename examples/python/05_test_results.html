@@ -412,7 +412,7 @@ open<span class="w"> </span>_build/html/index.html
 <h3>Imported JUnit results<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
 <h3>pytest<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
 <p>Tests: 13, Failures: 0, Errors: 0, Skips: 0</p>
-<p>Time: 0.106</p>
+<p>Time: 0.108</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -540,53 +540,9 @@ TOTAL                95      1    99%
 </pre></div>
 </div>
 </section>
-<section id="building-compliance-artifacts">
-<h2>Building Compliance Artifacts<a class="headerlink" href="#building-compliance-artifacts" title="Link to this heading">¶</a></h2>
-<p>The complete compliance artifact package is generated via:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Run tests, emit JUnit XML, build docs</span>
-<span class="nb">cd</span><span class="w"> </span>examples/&lt;language&gt;_hello_world
-./build-and-test.sh
-
-<span class="c1"># 2. Output contains:</span>
-<span class="c1">#    - Linked requirements and tests</span>
-<span class="c1">#    - Architecture diagrams with PlantUML</span>
-<span class="c1">#    - Test results integrated into HTML</span>
-<span class="c1">#    - Searchable traceability matrix</span>
-<span class="c1">#    - Compliance documentation suitable for assessment/audit</span>
-</pre></div>
-</div>
-</section>
-<section id="compliance-artifact-checklist">
-<h2>Compliance Artifact Checklist<a class="headerlink" href="#compliance-artifact-checklist" title="Link to this heading">¶</a></h2>
-<p>Use this checklist to verify complete traceability:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[✓] Requirements documented with needs IDs (REQ_*, ARCH_*)
-[✓] Architecture diagrams with PlantUML (SVG format)
-[✓] Implementation code with requirement docstrings
-[✓] Test suite with TEST_* IDs mapped to requirements
-[✓] JUnit XML test results generated
-[✓] Sphinx imports test results into documentation
-[✓] HTML documentation includes traceability matrix
-[✓] All requirements have ≥1 test case
-[✓] All test cases linked to ≥1 requirement
-[✓] No orphaned requirements (untested, unimplemented)
-[✓] No orphaned tests (unlinked to requirements)
-[✓] Build succeeds without errors
-[✓] HTML documentation is searchable and indexed
-</pre></div>
-</div>
-</section>
-<section id="next-steps">
-<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
-<ol class="arabic simple">
-<li><p><strong>Configure CI/CD</strong>: Add GitHub Actions to auto-run tests and rebuild documentation on commits</p></li>
-<li><p><strong>Add Domain Examples</strong>: Create medical_device, automotive, robotics subdirectories with domain-specific requirements</p></li>
-<li><p><strong>Extend Test Coverage</strong>: Add performance benchmarks, fault injection tests, environmental stress tests</p></li>
-<li><p><strong>Implement Requirements Gateway</strong>: Create automated checks that fail builds if requirements lack tests</p></li>
-</ol>
-</section>
 <section id="complexity-report">
 <h2>Complexity report<a class="headerlink" href="#complexity-report" title="Link to this heading">¶</a></h2>
-<p>The Python demo build generates a cyclomatic complexity report (<code class="docutils literal notranslate"><span class="pre">complexity_report.txt</span></code>) and embeds it here.</p>
+<p>The build workflow generates a cyclomatic complexity report (<code class="docutils literal notranslate"><span class="pre">complexity_report.txt</span></code>) and embeds it here.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>================================================
   NLOC    CCN   token  PARAM  length  location  
 ------------------------------------------------
@@ -631,6 +587,50 @@ Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc 
        263       8.5     2.2       59.2       24            0      0.00    0.00
 </pre></div>
 </div>
+</section>
+<section id="building-compliance-artifacts">
+<h2>Building Compliance Artifacts<a class="headerlink" href="#building-compliance-artifacts" title="Link to this heading">¶</a></h2>
+<p>The complete compliance artifact package is generated via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Run tests, emit JUnit XML, build docs</span>
+<span class="nb">cd</span><span class="w"> </span>examples/&lt;language&gt;_hello_world
+./build-and-test.sh
+
+<span class="c1"># 2. Output contains:</span>
+<span class="c1">#    - Linked requirements and tests</span>
+<span class="c1">#    - Architecture diagrams with PlantUML</span>
+<span class="c1">#    - Test results integrated into HTML</span>
+<span class="c1">#    - Searchable traceability matrix</span>
+<span class="c1">#    - Compliance documentation suitable for assessment/audit</span>
+</pre></div>
+</div>
+</section>
+<section id="compliance-artifact-checklist">
+<h2>Compliance Artifact Checklist<a class="headerlink" href="#compliance-artifact-checklist" title="Link to this heading">¶</a></h2>
+<p>Use this checklist to verify complete traceability:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[✓] Requirements documented with needs IDs (REQ_*, ARCH_*)
+[✓] Architecture diagrams with PlantUML (SVG format)
+[✓] Implementation code with requirement docstrings
+[✓] Test suite with TEST_* IDs mapped to requirements
+[✓] JUnit XML test results generated
+[✓] Sphinx imports test results into documentation
+[✓] HTML documentation includes traceability matrix
+[✓] All requirements have ≥1 test case
+[✓] All test cases linked to ≥1 requirement
+[✓] No orphaned requirements (untested, unimplemented)
+[✓] No orphaned tests (unlinked to requirements)
+[✓] Build succeeds without errors
+[✓] HTML documentation is searchable and indexed
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Configure CI/CD</strong>: Add GitHub Actions to auto-run tests and rebuild documentation on commits</p></li>
+<li><p><strong>Add Domain Examples</strong>: Create medical_device, automotive, robotics subdirectories with domain-specific requirements</p></li>
+<li><p><strong>Extend Test Coverage</strong>: Add performance benchmarks, fault injection tests, environmental stress tests</p></li>
+<li><p><strong>Implement Requirements Gateway</strong>: Create automated checks that fail builds if requirements lack tests</p></li>
+</ol>
 </section>
 </section>
 
@@ -700,10 +700,10 @@ Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc 
 </ul>
 </li>
 <li><a class="reference internal" href="#code-coverage">Code Coverage</a></li>
+<li><a class="reference internal" href="#complexity-report">Complexity report</a></li>
 <li><a class="reference internal" href="#building-compliance-artifacts">Building Compliance Artifacts</a></li>
 <li><a class="reference internal" href="#compliance-artifact-checklist">Compliance Artifact Checklist</a></li>
 <li><a class="reference internal" href="#next-steps">Next Steps</a></li>
-<li><a class="reference internal" href="#complexity-report">Complexity report</a></li>
 </ul>
 </li>
 </ul>
