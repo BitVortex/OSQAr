@@ -14,7 +14,7 @@ root_dir = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(root_dir))
 
 
-project = 'OSQAr: Temperature Monitor'
+project = 'OSQAr: Temperature Monitor (Python)'
 copyright = '2025, OSQAr Contributors'
 author = 'OSQAr Team'
 

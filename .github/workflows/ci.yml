@@ -39,6 +39,12 @@ jobs:
 
     - name: Build documentation
       run: |
+        # Generate example JUnit XML first (otherwise the Sphinx build would
+        # fall back to the placeholder 0-tests report).
+        pushd examples/python_hello_world >/dev/null
+        poetry run pytest -q --junitxml=test_results.xml tests/test_tsim.py
+        popd >/dev/null
+
         # Build the Python demo example docs
         poetry run sphinx-build -b html examples/python_hello_world examples/python_hello_world/_build/html
 

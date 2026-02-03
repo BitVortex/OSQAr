@@ -30,7 +30,16 @@ jobs:
       - name: Install Graphviz (for PlantUML)
         run: |
           sudo apt-get update
-          sudo apt-get install -y graphviz
+          sudo apt-get install -y graphviz build-essential cmake
+
+      - name: Set up Rust (for Rust example tests)
+        run: |
+          if ! command -v cargo >/dev/null 2>&1; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+          fi
+          # shellcheck source=/dev/null
+          source "$HOME/.cargo/env"
+          cargo --version
 
       - name: Download PlantUML jar
         run: |
@@ -63,6 +72,34 @@ jobs:
         env:
           PLANTUML_JAR: ${{ github.workspace }}/.cache/plantuml/plantuml.jar
         run: |
+          # Generate per-example JUnit XML first so the embedded test tables
+          # show real counts (instead of the placeholder 0-tests report).
+          pushd examples/c_hello_world >/dev/null
+          rm -rf build
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DOSQAR_COVERAGE=OFF
+          cmake --build build
+          ./build/junit_tests test_results.xml
+          popd >/dev/null
+
+          pushd examples/cpp_hello_world >/dev/null
+          rm -rf build
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DOSQAR_COVERAGE=OFF
+          cmake --build build
+          ./build/junit_tests test_results.xml
+          popd >/dev/null
+
+          # Rust: run the JUnit writer binary.
+          # shellcheck source=/dev/null
+          source "$HOME/.cargo/env"
+          pushd examples/rust_hello_world >/dev/null
+          cargo run --quiet --bin junit_tests -- test_results.xml
+          popd >/dev/null
+
+          # Python: generate JUnit XML (no coverage tooling needed for Pages).
+          pushd examples/python_hello_world >/dev/null
+          poetry run pytest -q --junitxml=test_results.xml tests/test_tsim.py
+          popd >/dev/null
+
           poetry run sphinx-build -b html examples/c_hello_world _build/html/examples/c
           poetry run sphinx-build -b html examples/cpp_hello_world _build/html/examples/cpp
           poetry run sphinx-build -b html examples/rust_hello_world _build/html/examples/rust
