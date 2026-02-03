@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="search.html" /><link rel="next" title="Lifecycle Management" href="06_lifecycle_management.html" /><link rel="prev" title="Implementation &amp; Test Code" href="04_implementation.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Test Results &amp; Traceability - OSQAr: Temperature Monitor documentation</title>
+        <title>Test Results &amp; Traceability - OSQAr: Temperature Monitor (Python) documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -174,7 +174,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">OSQAr: Temperature Monitor  documentation</div></a>
+      <a href="index.html"><div class="brand">OSQAr: Temperature Monitor (Python)  documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -198,7 +198,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr: Temperature Monitor  documentation</span>
+  <span class="sidebar-brand-text">OSQAr: Temperature Monitor (Python)  documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -410,9 +410,9 @@ open<span class="w"> </span>_build/html/index.html
 <p>The JUnit XML output from your test runner (pytest for the Python example, or a native runner for C/C++/Rust) is processed by Sphinx and rendered directly in this chapter.</p>
 <section id="imported-junit-results">
 <h3>Imported JUnit results<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
-<h3>tests<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
-<p>Tests: 0, Failures: 0, Errors: 0, Skips: 0</p>
-<p>Time: 0.0</p>
+<h3>pytest<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
+<p>Tests: 13, Failures: 0, Errors: 0, Skips: 0</p>
+<p>Time: 0.043</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -423,6 +423,97 @@ open<span class="w"> </span>_build/html/index.html
 </tr>
 </thead>
 <tbody>
+<tr class="tr_passed row-even"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestSensorDriver</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_conversion_full_range</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-odd"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestSensorDriver</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_conversion_accuracy</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-even"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestTemperatureFilter</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_filter_noise_rejection</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-odd"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestTemperatureFilter</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_filter_stabilization</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-even"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestStateMachine</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_threshold_detection</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-odd"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestStateMachine</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_hysteresis_deadband</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-even"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestStateMachine</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_state_output_bit</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-odd"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestTSIMIntegration</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_end_to_end_latency</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-even"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestTSIMIntegration</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_detection_within_100ms</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-odd"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestTSIMIntegration</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_safe_state_recovery</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-even"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestTSIMIntegration</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_error_recovery</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-odd"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestTSIMIntegration</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_fail_safe_on_persistent_errors</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-even"><td class="tr_passed class"><p class="tr_passed">tests.test_tsim.TestConfiguration</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_hysteresis_constraint</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
 </tbody>
 </table>
 </div>
