@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Integrator’s Guide" href="integrators_guide.html" /><link rel="prev" title="Using the OSQAr Boilerplate" href="using_the_boilerplate.html" />
+<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Integrator’s Guide" href="integrators_guide.html" /><link rel="prev" title="Setting Up A Project From Scratch" href="project_setup_from_scratch.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
         <title>Supplier’s Guide - OSQAr 0.3.0 documentation</title>
@@ -211,6 +211,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Supplier’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lifecycle_management.html">Lifecycle Management</a></li>
@@ -264,7 +265,7 @@
 <h1>Supplier’s Guide<a class="headerlink" href="#suppliers-guide" title="Link to this heading">¶</a></h1>
 <section id="scope">
 <h2>Scope<a class="headerlink" href="#scope" title="Link to this heading">¶</a></h2>
-<p>This guide is for a <strong>supplier</strong> producing an auditable evidence shipment for a component/SEooC (documentation + traceability + verification outputs + integrity metadata).</p>
+<p>This guide is for a <strong>supplier</strong> producing an auditable evidence shipment for a component/SEooC (documentation + traceability + implementation + tests + analysis/verification reports + integrity metadata).</p>
 <p>The goal is to provide a package that allows an integrator to:</p>
 <ul class="simple">
 <li><p>understand intended use and limitations</p></li>
@@ -323,10 +324,10 @@ transferred to the integrator and stored as evidence.</p>
 <section id="recommended-supplier-procedure-per-example">
 <h4>Recommended supplier procedure (per example)<a class="headerlink" href="#recommended-supplier-procedure-per-example" title="Link to this heading">¶</a></h4>
 <ol class="arabic">
-<li><p>Build the example documentation (this emits HTML plus <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">b</span> <span class="n">html</span> \
-        <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
-        <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span>
+<li><p>Run the example end-to-end workflow (tests → reports → docs). This produces a shippable bundle directory (by default: <code class="docutils literal notranslate"><span class="pre">examples/python_hello_world/_build/html</span></code>) that contains documentation with traceability, plus implementation/tests and analysis reports:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span>
+<span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">build</span><span class="o">-</span><span class="ow">and</span><span class="o">-</span><span class="n">test</span><span class="o">.</span><span class="n">sh</span>
+<span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="ow">and</span><span class="o">-</span><span class="n">test</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 </li>
@@ -361,19 +362,6 @@ transferred to the integrator and stored as evidence.</p>
 <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">traceability</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span>
 <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">generate</span>
 <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">verify</span>
-
-<span class="c1"># Legacy equivalents (still supported)</span>
-
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">traceability</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
-        <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">json</span>
-
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">generate</span> \
-        <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-        <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
-
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">verify</span> \
-        <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-        <span class="o">--</span><span class="n">manifest</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
@@ -444,14 +432,14 @@ transferred to the integrator and stored as evidence.</p>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="using_the_boilerplate.html">
+          <a class="prev-page" href="project_setup_from_scratch.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Using the OSQAr Boilerplate</div>
+                <div class="title">Setting Up A Project From Scratch</div>
                 
               </div>
             </a>

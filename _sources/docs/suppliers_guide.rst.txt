@@ -5,7 +5,7 @@ Supplier’s Guide
 Scope
 =====
 
-This guide is for a **supplier** producing an auditable evidence shipment for a component/SEooC (documentation + traceability + verification outputs + integrity metadata).
+This guide is for a **supplier** producing an auditable evidence shipment for a component/SEooC (documentation + traceability + implementation + tests + analysis/verification reports + integrity metadata).
 
 The goal is to provide a package that allows an integrator to:
 
@@ -68,11 +68,11 @@ For each shipped example output, include the following files **inside the shippe
 Recommended supplier procedure (per example)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. Build the example documentation (this emits HTML plus ``needs.json``)::
+1. Run the example end-to-end workflow (tests → reports → docs). This produces a shippable bundle directory (by default: ``examples/python_hello_world/_build/html``) that contains documentation with traceability, plus implementation/tests and analysis reports::
 
-	poetry run sphinx-build -b html \
-		examples/python_hello_world \
-		examples/python_hello_world/_build/html
+	cd examples/python_hello_world
+	chmod +x build-and-test.sh
+	./build-and-test.sh
 
 2. Run traceability checks and write a JSON report::
 
@@ -103,19 +103,6 @@ Optional convenience: the same steps are available via the OSQAr CLI::
 	poetry run python -m tools.osqar_cli shipment traceability --shipment examples/python_hello_world/_build/html
 	poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html generate
 	poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
-
-	# Legacy equivalents (still supported)
-
-	poetry run python -m tools.osqar_cli traceability examples/python_hello_world/_build/html/needs.json \
-		--json-report examples/python_hello_world/_build/html/traceability_report.json
-
-	poetry run python -m tools.osqar_cli checksum generate \
-		--root examples/python_hello_world/_build/html \
-		--output examples/python_hello_world/_build/html/SHA256SUMS
-
-	poetry run python -m tools.osqar_cli checksum verify \
-		--root examples/python_hello_world/_build/html \
-		--manifest examples/python_hello_world/_build/html/SHA256SUMS
 
 4. Ship the example build output directory as an archive (ZIP/TAR), keeping ``SHA256SUMS`` at the root of the shipped directory.
 

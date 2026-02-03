@@ -211,6 +211,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="docs/project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/suppliers_guide.html">Supplier’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/integrators_guide.html">Integrator’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/lifecycle_management.html">Lifecycle Management</a></li>
@@ -263,7 +264,7 @@
           <section id="osqar-open-safety-qualification-architecture">
 <h1>OSQAr (Open Safety Qualification Architecture)<a class="headerlink" href="#osqar-open-safety-qualification-architecture" title="Link to this heading">¶</a></h1>
 <p>OSQAr is a documentation-first framework for producing, verifying, and integrating <strong>auditable evidence shipments</strong> for safety/compliance work.</p>
-<p>In OSQAr, a shipment is a reviewable bundle (typically rendered HTML docs + machine-readable traceability exports + verification outputs + integrity metadata) that can be handed from suppliers to integrators and archived.</p>
+<p>In OSQAr, a shipment is a reviewable bundle that contains <strong>Sphinx documentation with maintained traceability</strong>, plus the <strong>implementation</strong>, <strong>tests</strong>, and <strong>analysis/verification reports</strong> needed to review and audit the evidence end-to-end.</p>
 <p>OSQAr is built on Sphinx + sphinx-needs and provides:</p>
 <ul class="simple">
 <li><p>requirements and traceability</p></li>
@@ -274,14 +275,9 @@
 <li><p>lifecycle management guidance</p></li>
 <li><p>collaboration workflows for large, multi-user teams</p></li>
 <li><p>reproducible native builds for the C/C++/Rust example implementations (including optional Bazel integration)</p></li>
-<li><p>CI-produced demo shipments (HTML + machine-readable exports + checksum manifests)</p></li>
+<li><p>CI-produced demo shipments (documentation + traceability + implementation + tests + analysis reports + checksum manifests)</p></li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This repository is an example/boilerplate; large parts of the content were LLM-assisted/generated and must be reviewed and adapted before use in any real safety/compliance project.</p>
-</div>
 <p>OSQAr also includes a small CLI for scaffolding new projects and running traceability/checksum verification.</p>
-<p>Start here:</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Framework</span></p>
 <ul>
@@ -291,6 +287,7 @@
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="docs/project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/suppliers_guide.html">Supplier’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/integrators_guide.html">Integrator’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/lifecycle_management.html">Lifecycle Management</a></li>

@@ -407,22 +407,44 @@ open<span class="w"> </span>_build/html/index.html
 </section>
 <section id="automated-test-reporting">
 <h2>Automated Test Reporting<a class="headerlink" href="#automated-test-reporting" title="Link to this heading">¶</a></h2>
-<p>The JUnit XML output from your test runner (pytest for the Python example, or a native runner for C/C++/Rust) is automatically processed by Sphinx:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;testsuite&gt;</span>
-<span class="w">  </span><span class="nt">&lt;testcase</span><span class="w"> </span><span class="na">classname=</span><span class="s">&quot;tests.test_tsim.TestSensorDriver&quot;</span>
-<span class="w">             </span><span class="na">name=</span><span class="s">&quot;test_conversion_full_range&quot;</span><span class="w"> </span><span class="na">time=</span><span class="s">&quot;0.002&quot;</span><span class="nt">&gt;</span>
-<span class="w">  </span><span class="nt">&lt;/testcase&gt;</span>
-<span class="w">  </span><span class="cm">&lt;!-- mapped to TEST_CONVERSION_001 requirement --&gt;</span>
-<span class="nt">&lt;/testsuite&gt;</span>
+<p>The JUnit XML output from your test runner (pytest for the Python example, or a native runner for C/C++/Rust) is processed by Sphinx and rendered directly in this chapter.</p>
+<section id="imported-junit-results">
+<h3>Imported JUnit results<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
+<h3>tests<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
+<p>Tests: 0, Failures: 0, Errors: 0, Skips: 0</p>
+<p>Time: 0.0</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>class</p></th>
+<th class="head"><p>name</p></th>
+<th class="head"><p>status</p></th>
+<th class="head"><p>reason</p></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>The build workflow generates <code class="docutils literal notranslate"><span class="pre">test_results.xml</span></code>.</p></li>
+<li><p>If tests are not executed, OSQAr generates a small placeholder file so docs builds stay robust.</p></li>
+</ul>
+</section>
+</section>
+<section id="code-coverage">
+<h2>Code Coverage<a class="headerlink" href="#code-coverage" title="Link to this heading">¶</a></h2>
+<p>OSQAr supports embedding <strong>code coverage evidence</strong> alongside the JUnit test report.</p>
+<ul class="simple">
+<li><p>If coverage tooling is available for the selected language example, the build workflow generates a <code class="docutils literal notranslate"><span class="pre">coverage_report.txt</span></code> and embeds it here.</p></li>
+<li><p>If coverage tooling is not available, a placeholder report is generated so documentation builds remain robust.</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Code coverage report not generated in this build.
+If you want Rust code coverage evidence, install cargo-llvm-cov and run:
+  OSQAR_COVERAGE=1 ./build-and-test.sh
 </pre></div>
 </div>
-<p>This XML is parsed and linked to requirements using the test case names (mapped through docstrings to TEST_* IDs). The resulting HTML documentation includes:</p>
-<ol class="arabic simple">
-<li><p><strong>Test Results Table</strong>: Lists all test cases with pass/fail status</p></li>
-<li><p><strong>Requirement Links</strong>: Each test linked to its corresponding requirement</p></li>
-<li><p><strong>Execution Metadata</strong>: Timing, host, and result details</p></li>
-<li><p><strong>Traceability Queries</strong>: Search and filter tests by requirement ID</p></li>
-</ol>
 </section>
 <section id="building-compliance-artifacts">
 <h2>Building Compliance Artifacts<a class="headerlink" href="#building-compliance-artifacts" title="Link to this heading">¶</a></h2>
@@ -440,37 +462,9 @@ open<span class="w"> </span>_build/html/index.html
 </pre></div>
 </div>
 </section>
-<section id="domain-agnostic-test-strategy">
-<h2>Domain-Agnostic Test Strategy<a class="headerlink" href="#domain-agnostic-test-strategy" title="Link to this heading">¶</a></h2>
-<p>The test suite is designed to work across all supported domains (medical, automotive, robotics, industrial) because:</p>
-<ol class="arabic simple">
-<li><p><strong>Tests are functional, not domain-specific</strong>: All tests verify sensor conversion, filtering, and threshold logic without domain assumptions</p></li>
-<li><p><strong>Safety requirements are domain-agnostic</strong>: REQ_SAFETY_* and REQ_FUNC_* refer to generic overheat detection, not domain-specific hazards</p></li>
-<li><p><strong>ASIL assignment is domain-specific</strong>: The domain integrator assigns ASIL (Automotive Safety Integrity Level) or equivalent:</p>
-<ul class="simple">
-<li><p><strong>Medical</strong>: Critical → ASIL-C equivalent, requires fault injection testing</p></li>
-<li><p><strong>Automotive</strong>: High → ASIL-C, requires functional safety manager review</p></li>
-<li><p><strong>Robotics</strong>: Medium → ASIL-B equivalent, requires scenario testing</p></li>
-<li><p><strong>Industrial</strong>: Low-Medium → ASIL-B equivalent, requires HAZOP analysis</p></li>
-</ul>
-</li>
-<li><p><strong>Test coverage scales with domain</strong>: Additional tests added per domain for specific failure modes (e.g., medical sensor calibration drift, automotive temperature shock resilience)</p></li>
-</ol>
-</section>
-<section id="extending-the-test-suite">
-<h2>Extending the Test Suite<a class="headerlink" href="#extending-the-test-suite" title="Link to this heading">¶</a></h2>
-<p>To add domain-specific tests:</p>
-<ol class="arabic simple">
-<li><p><strong>Create domain directory</strong>: <code class="docutils literal notranslate"><span class="pre">examples/&lt;your_domain_or_product&gt;/</span></code></p></li>
-<li><p><strong>Implement tests</strong> in the language of your product and ensure the runner emits JUnit XML.</p></li>
-<li><p><strong>Use stable IDs</strong>: keep requirement IDs (<code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>) and test IDs (<code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>) consistent so the traceability graph remains intact.</p></li>
-<li><p><strong>Update documentation</strong>: link domain-specific tests to domain-specific requirements (e.g., <code class="docutils literal notranslate"><span class="pre">REQ_MEDICAL_SAFETY_001</span></code>).</p></li>
-<li><p><strong>Rebuild</strong>: Sphinx imports results and updates traceability.</p></li>
-</ol>
-</section>
 <section id="compliance-artifact-checklist">
 <h2>Compliance Artifact Checklist<a class="headerlink" href="#compliance-artifact-checklist" title="Link to this heading">¶</a></h2>
-<p>Use this checklist to verify complete traceability when qualifying per ISO 26262:</p>
+<p>Use this checklist to verify complete traceability:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[✓] Requirements documented with needs IDs (REQ_*, ARCH_*)
 [✓] Architecture diagrams with PlantUML (SVG format)
 [✓] Implementation code with requirement docstrings
@@ -499,35 +493,10 @@ open<span class="w"> </span>_build/html/index.html
 <section id="complexity-report">
 <h2>Complexity report<a class="headerlink" href="#complexity-report" title="Link to this heading">¶</a></h2>
 <p>This report is generated during the build and embedded as evidence.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>================================================
-  NLOC    CCN   token  PARAM  length  location  
-------------------------------------------------
-       3      1     29      1       3 pass@14-16@src/bin/junit_tests.rs
-       3      1     37      2       3 fail@18-20@src/bin/junit_tests.rs
-      18      4    104      0      21 test_conversion_full_range@22-42@src/bin/junit_tests.rs
-      19      7    132      0      24 test_filter_noise_rejection@44-67@src/bin/junit_tests.rs
-      19      6    127      0      26 test_threshold_and_hysteresis@69-94@src/bin/junit_tests.rs
-      21     10    173      3      24 write_junit@96-119@src/bin/junit_tests.rs
-       7      1     48      1       7 xml_escape@121-127@src/bin/junit_tests.rs
-      18      3    153      0      22 main@129-150@src/bin/junit_tests.rs
-      13      3     83      1      18 adc_to_temp_x10@20-37@src/lib.rs
-       8      1     31      0       8 new@48-55@src/lib.rs
-      15      2    133      2      17 update@58-74@src/lib.rs
-       7      1     28      2       7 new@85-91@src/lib.rs
-      15      4     68      2      15 evaluate@93-107@src/lib.rs
-2 file analyzed.
-==============================================================
-NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
---------------------------------------------------------------
-    118      13.5     4.1      100.4         8     src/bin/junit_tests.rs
-     79      11.6     2.2       68.6         5     src/lib.rs
-
-===============================================================================================================
-No thresholds exceeded (cyclomatic_complexity &gt; 10 or length &gt; 1000 or nloc &gt; 1000000 or parameter_count &gt; 100)
-==========================================================================================
-Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
-------------------------------------------------------------------------------------------
-       197      12.8     3.4       88.2       13            0      0.00    0.00
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>No complexity tool is available in this environment.
+Install one of:
+- poetry install (dev deps)  # provides lizard
+- cargo install cargo-cyclo
 </pre></div>
 </div>
 </section>
@@ -594,10 +563,12 @@ Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc 
 <li><a class="reference internal" href="#test-configuration-file">Test Configuration File</a></li>
 <li><a class="reference internal" href="#test-requirements-mapping">Test Requirements Mapping</a></li>
 <li><a class="reference internal" href="#traceability-matrix">Traceability Matrix</a></li>
-<li><a class="reference internal" href="#automated-test-reporting">Automated Test Reporting</a></li>
+<li><a class="reference internal" href="#automated-test-reporting">Automated Test Reporting</a><ul>
+<li><a class="reference internal" href="#imported-junit-results">Imported JUnit results</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code-coverage">Code Coverage</a></li>
 <li><a class="reference internal" href="#building-compliance-artifacts">Building Compliance Artifacts</a></li>
-<li><a class="reference internal" href="#domain-agnostic-test-strategy">Domain-Agnostic Test Strategy</a></li>
-<li><a class="reference internal" href="#extending-the-test-suite">Extending the Test Suite</a></li>
 <li><a class="reference internal" href="#compliance-artifact-checklist">Compliance Artifact Checklist</a></li>
 <li><a class="reference internal" href="#next-steps">Next Steps</a></li>
 <li><a class="reference internal" href="#complexity-report">Complexity report</a></li>

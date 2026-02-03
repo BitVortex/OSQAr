@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supplier’s Guide" href="suppliers_guide.html" /><link rel="prev" title="OSQAr (Open Safety Qualification Architecture)" href="../index.html" />
+<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Setting Up A Project From Scratch" href="project_setup_from_scratch.html" /><link rel="prev" title="OSQAr (Open Safety Qualification Architecture)" href="../index.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
         <title>Using the OSQAr Boilerplate - OSQAr 0.3.0 documentation</title>
@@ -211,6 +211,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="suppliers_guide.html">Supplier’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lifecycle_management.html">Lifecycle Management</a></li>
@@ -265,13 +266,13 @@
 <section id="purpose">
 <h2>Purpose<a class="headerlink" href="#purpose" title="Link to this heading">¶</a></h2>
 <p>OSQAr is a <strong>documentation-first framework</strong> for producing, verifying, and integrating <strong>auditable evidence shipments</strong> for safety/compliance work.</p>
-<p>In OSQAr, an evidence shipment is the unit you transfer and archive (typically rendered HTML docs + machine-readable exports + verification outputs + integrity metadata).</p>
+<p>In OSQAr, an evidence shipment is the unit you transfer and archive: a bundle that contains <strong>Sphinx documentation with maintained traceability</strong>, plus the <strong>implementation</strong>, <strong>tests</strong>, and <strong>analysis/verification reports</strong> needed to review and audit the evidence end-to-end.</p>
 <p>OSQAr provides:</p>
 <ul class="simple">
 <li><p>structured requirements and traceability (via <code class="docutils literal notranslate"><span class="pre">sphinx-needs</span></code>)</p></li>
 <li><p>architecture diagrams (via PlantUML)</p></li>
 <li><p>verification planning and traceability (requirements ↔ architecture ↔ tests)</p></li>
-<li><p>evidence “shipments” (rendered HTML + machine-readable exports) protected by checksum manifests</p></li>
+<li><p>evidence “shipments” (documentation + traceability + implementation + tests + analysis reports) protected by checksum manifests</p></li>
 <li><p>integrator-friendly multi-shipment intake and a consolidated <strong>Subproject overview</strong></p></li>
 <li><p>extensive lifecycle management guidance (framework-level and example-level)</p></li>
 </ul>
@@ -281,6 +282,7 @@
 <h2>Recommended reading order<a class="headerlink" href="#recommended-reading-order" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>You are here: build docs, understand the workflow, and explore examples.</p></li>
+<li><p>Set up and migrate a project: <a class="reference internal" href="project_setup_from_scratch.html"><span class="doc">Setting Up A Project From Scratch</span></a>.</p></li>
 <li><p>As a supplier, learn how to ship evidence bundles: <a class="reference internal" href="suppliers_guide.html"><span class="doc">Supplier’s Guide</span></a>.</p></li>
 <li><p>As an integrator, learn how to verify and archive shipments: <a class="reference internal" href="integrators_guide.html"><span class="doc">Integrator’s Guide</span></a>.</p></li>
 <li><p>If you work with many shipments, use: <a class="reference internal" href="multi_project_workflows.html"><span class="doc">Multi-project workflows</span></a>.</p></li>
@@ -300,12 +302,33 @@
 </section>
 <section id="quick-start">
 <h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
+<section id="install-options">
+<h3>Install options<a class="headerlink" href="#install-options" title="Link to this heading">¶</a></h3>
+<p>OSQAr keeps the default Python dependency footprint lean. Install additional tooling only if you need it:</p>
+<ul>
+<li><p>Core docs + CLI (recommended default):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span>
+</pre></div>
+</div>
+</li>
+<li><p>Evidence tooling (coverage/complexity generation used by example scripts):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span> <span class="o">--</span><span class="k">with</span> <span class="n">evidence</span>
+</pre></div>
+</div>
+</li>
+<li><p>IDE tooling (optional Sphinx language server for VS Code):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span> <span class="o">--</span><span class="k">with</span> <span class="n">ide</span>
+</pre></div>
+</div>
+</li>
+</ul>
 <p>Build the rendered HTML documentation from the repository root:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install
 poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>.<span class="w"> </span>_build/html
 open<span class="w"> </span>_build/html/index.html
 </pre></div>
 </div>
+</section>
 </section>
 <section id="reproducible-native-builds-c-c-rust">
 <h2>Reproducible native builds (C / C++ / Rust)<a class="headerlink" href="#reproducible-native-builds-c-c-rust" title="Link to this heading">¶</a></h2>
@@ -373,12 +396,21 @@ bazel<span class="w"> </span>run<span class="w"> </span>//:junit_tests<span clas
 <h2>CI-built demo shipments (downloadable)<a class="headerlink" href="#ci-built-demo-shipments-downloadable" title="Link to this heading">¶</a></h2>
 <p>This repository’s CI builds <strong>downloadable, integrity-protected example shipments</strong> for the C, C++, and Rust examples.</p>
 <p>Each example shipment contains:</p>
-<ul class="simple">
-<li><p>rendered HTML documentation</p></li>
+<ul>
+<li><p>rendered HTML documentation (with maintained traceability)</p></li>
+<li><p>implementation sources and tests</p></li>
+<li><p>analysis/verification reports:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test_results.xml</span></code> (JUnit)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coverage_report.txt</span></code> (coverage summary; language-specific tooling)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">complexity_report.txt</span></code> (complexity summary)</p></li>
+</ul>
+</div></blockquote>
+</li>
 <li><p><code class="docutils literal notranslate"><span class="pre">needs.json</span></code> (trace graph export)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">traceability_report.json</span></code> (OSQAr traceability validation output)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> (checksum manifest for the whole shipment directory)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">test_results.xml</span></code> (JUnit test report used by the example documentation)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> (checksum manifest for the whole bundle directory)</p></li>
 </ul>
 <p>CI exports deterministic archives (<code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code>) for each example as well as a combined archive.
 In GitHub Actions, download the artifact named <code class="docutils literal notranslate"><span class="pre">osqar-example-shipments</span></code> from the <code class="docutils literal notranslate"><span class="pre">Tests</span> <span class="pre">and</span> <span class="pre">Example</span> <span class="pre">Shipments</span></code> workflow run.</p>
@@ -399,7 +431,10 @@ poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class
 </pre></div>
 </div>
 <p>Run an end-to-end workflow (native tests → docs) for an example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/c_hello_world
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Optional: install extra tooling to generate coverage/complexity evidence</span>
+poetry<span class="w"> </span>install<span class="w"> </span>--with<span class="w"> </span>evidence
+
+<span class="nb">cd</span><span class="w"> </span>examples/c_hello_world
 ./build-and-test.sh
 open<span class="w"> </span>_build/html/index.html
 </pre></div>
@@ -407,7 +442,10 @@ open<span class="w"> </span>_build/html/index.html
 <section id="python-demo-workstation-reference">
 <h3>Python demo (workstation reference)<a class="headerlink" href="#python-demo-workstation-reference" title="Link to this heading">¶</a></h3>
 <p>A Python example remains available as a documentation reference variant:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/python_hello_world
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Optional: install extra tooling to generate coverage/complexity evidence</span>
+poetry<span class="w"> </span>install<span class="w"> </span>--with<span class="w"> </span>evidence
+
+<span class="nb">cd</span><span class="w"> </span>examples/python_hello_world
 ./build-and-test.sh
 open<span class="w"> </span>_build/html/index.html
 </pre></div>
@@ -440,6 +478,7 @@ open<span class="w"> </span>_build/html/index.html
 <section id="scaffold-a-new-project">
 <h3>Scaffold a new project<a class="headerlink" href="#scaffold-a-new-project" title="Link to this heading">¶</a></h3>
 <p>Create a new project folder based on one of the reference templates:</p>
+<p>For a step-by-step guide (including how to migrate existing sources and documentation, and how to ship a release with OSQAr evidence), see <a class="reference internal" href="project_setup_from_scratch.html"><span class="doc">Setting Up A Project From Scratch</span></a>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>tools.osqar_cli<span class="w"> </span>new<span class="w"> </span>--language<span class="w"> </span>c<span class="w"> </span>--name<span class="w"> </span>MySEooC<span class="w"> </span>--destination<span class="w"> </span>./MySEooC
 </pre></div>
 </div>
@@ -579,18 +618,6 @@ This is the unit that is transferred, archived, and later verified (similar to a
 <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">traceability</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span>
 <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">generate</span>
 <span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">shipment</span> <span class="n">checksums</span> <span class="o">--</span><span class="n">shipment</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> <span class="n">verify</span>
-
-<span class="c1"># Legacy equivalents (still supported)</span>
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">traceability</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
-   <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">json</span>
-
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">generate</span> \
-   <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-   <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
-
-<span class="n">poetry</span> <span class="n">run</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">tools</span><span class="o">.</span><span class="n">osqar_cli</span> <span class="n">checksum</span> <span class="n">verify</span> \
-   <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-   <span class="o">--</span><span class="n">manifest</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span>
 </pre></div>
 </div>
 <p>Then archive and ship the <strong>example output directory</strong> (not the framework docs built from the repo root).</p>
@@ -615,7 +642,7 @@ This is the unit that is transferred, archived, and later verified (similar to a
 <li><p><a class="reference internal" href="suppliers_guide.html"><span class="doc">Supplier’s Guide</span></a></p></li>
 <li><p><a class="reference internal" href="integrators_guide.html"><span class="doc">Integrator’s Guide</span></a></p></li>
 </ul>
-<p>It’s also recommended to be familiar with the following resource:</p>
+<p>We also recommend getting familiar with suggestions on overall lifecycle management:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="lifecycle_management.html"><span class="doc">Lifecycle Management</span></a></p></li>
 </ul>
@@ -632,7 +659,7 @@ This is the unit that is transferred, archived, and later verified (similar to a
 <li><p>Runs as part of the example scripts via <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">lizard</span></code>.</p></li>
 <li><p>You can run it manually from the repository root, e.g.:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install<span class="w"> </span>--with<span class="w"> </span>evidence
 poetry<span class="w"> </span>run<span class="w"> </span>lizard<span class="w"> </span>-C<span class="w"> </span><span class="m">10</span><span class="w"> </span>examples/c_hello_world/src<span class="w"> </span>examples/c_hello_world/include
 </pre></div>
 </div>
@@ -676,12 +703,12 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="suppliers_guide.html">
+          <a class="next-page" href="project_setup_from_scratch.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Supplier’s Guide</div>
+                <div class="title">Setting Up A Project From Scratch</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -730,7 +757,10 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
 <li><a class="reference internal" href="#purpose">Purpose</a></li>
 <li><a class="reference internal" href="#recommended-reading-order">Recommended reading order</a></li>
 <li><a class="reference internal" href="#typical-workflow">Typical workflow</a></li>
-<li><a class="reference internal" href="#quick-start">Quick start</a></li>
+<li><a class="reference internal" href="#quick-start">Quick start</a><ul>
+<li><a class="reference internal" href="#install-options">Install options</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#reproducible-native-builds-c-c-rust">Reproducible native builds (C / C++ / Rust)</a><ul>
 <li><a class="reference internal" href="#optional-bazel-integration">Optional: Bazel integration</a></li>
 </ul>

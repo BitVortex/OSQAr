@@ -1730,7 +1730,7 @@
                     "content_id": "REQ_SAFETY_002",
                     "created_at": "",
                     "delete": null,
-                    "description": "**ASIL**: QM (domain-agnostic; ASIL assigned by domain implementation)\n\n**Rationale**: Timely detection enables corrective action before damage occurs.\n\n**Architecture**: :need:`ARCH_FUNC_003`\n\n**Tests**: :need:`TEST_END_TO_END_001`",
+                    "description": "**Rationale**: Timely detection enables corrective action before damage occurs.\n\n**Architecture**: :need:`ARCH_FUNC_003`\n\n**Tests**: :need:`TEST_END_TO_END_001`",
                     "docname": "01_requirements",
                     "doctype": ".rst",
                     "duration": "",

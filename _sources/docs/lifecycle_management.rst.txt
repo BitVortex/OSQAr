@@ -27,9 +27,8 @@ Definitions
 ===========
 
 **Shipment (evidence bundle)**
-  A directory that an organization transfers and archives as evidence. In OSQAr this is typically the
-  **Sphinx HTML output directory** (e.g. ``<project>/_build/html``) augmented with machine-readable
-  artifacts and integrity protection.
+  A directory that an organization transfers and archives as evidence.
+  In OSQAr, a shipment is an evidence bundle that contains **Sphinx documentation with maintained traceability**, plus the **implementation**, **tests**, and **analysis/verification reports** required to review evidence end-to-end, protected by integrity metadata.
 
 **Supplier**
   The party producing the SEooC and its evidence package.
@@ -133,10 +132,13 @@ Expected files in a shipment directory
 
 OSQAr treats a shipped evidence bundle as a directory that contains:
 
+- Documentation (rendered HTML)
 - ``needs.json`` (exported traceability graph)
 - ``traceability_report.json`` (traceability check output)
 - ``SHA256SUMS`` (checksum manifest for the directory)
-- optional: raw test report XML (e.g. ``test_results.xml``)
+- Raw test report XML (e.g. ``test_results.xml``)
+- Coverage/analysis reports (e.g. coverage summary, complexity report)
+- Implementation sources and tests (so evidence can be reviewed end-to-end)
 
 Integrity workflow
 ------------------
@@ -167,7 +169,7 @@ Recommended one-shot workflow (per shipment project)::
 
 This performs:
 
-- docs build to ``<project_dir>/_build/html``
+- documentation build into the shipment directory (defaults to ``<project_dir>/_build/html`` unless you pass ``--shipment``)
 - traceability export + validation
 - checksum generation + verification
 - optional archive creation (``.tar.gz``)

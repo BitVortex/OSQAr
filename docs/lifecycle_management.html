@@ -211,6 +211,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="suppliers_guide.html">Supplier’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Lifecycle Management</a></li>
@@ -283,9 +284,8 @@ links requirements ↔ architecture ↔ verification and can be shipped as an ev
 <section id="definitions">
 <h2>Definitions<a class="headerlink" href="#definitions" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt><strong>Shipment (evidence bundle)</strong></dt><dd><p>A directory that an organization transfers and archives as evidence. In OSQAr this is typically the
-<strong>Sphinx HTML output directory</strong> (e.g. <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/_build/html</span></code>) augmented with machine-readable
-artifacts and integrity protection.</p>
+<dt><strong>Shipment (evidence bundle)</strong></dt><dd><p>A directory that an organization transfers and archives as evidence.
+In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx documentation with maintained traceability</strong>, plus the <strong>implementation</strong>, <strong>tests</strong>, and <strong>analysis/verification reports</strong> required to review evidence end-to-end, protected by integrity metadata.</p>
 </dd>
 <dt><strong>Supplier</strong></dt><dd><p>The party producing the SEooC and its evidence package.</p>
 </dd>
@@ -390,10 +390,13 @@ artifacts and integrity protection.</p>
 <h3>Expected files in a shipment directory<a class="headerlink" href="#expected-files-in-a-shipment-directory" title="Link to this heading">¶</a></h3>
 <p>OSQAr treats a shipped evidence bundle as a directory that contains:</p>
 <ul class="simple">
+<li><p>Documentation (rendered HTML)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">needs.json</span></code> (exported traceability graph)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">traceability_report.json</span></code> (traceability check output)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> (checksum manifest for the directory)</p></li>
-<li><p>optional: raw test report XML (e.g. <code class="docutils literal notranslate"><span class="pre">test_results.xml</span></code>)</p></li>
+<li><p>Raw test report XML (e.g. <code class="docutils literal notranslate"><span class="pre">test_results.xml</span></code>)</p></li>
+<li><p>Coverage/analysis reports (e.g. coverage summary, complexity report)</p></li>
+<li><p>Implementation sources and tests (so evidence can be reviewed end-to-end)</p></li>
 </ul>
 </section>
 <section id="integrity-workflow">
@@ -424,7 +427,7 @@ artifacts and integrity protection.</p>
 </div>
 <p>This performs:</p>
 <ul class="simple">
-<li><p>docs build to <code class="docutils literal notranslate"><span class="pre">&lt;project_dir&gt;/_build/html</span></code></p></li>
+<li><p>documentation build into the shipment directory (defaults to <code class="docutils literal notranslate"><span class="pre">&lt;project_dir&gt;/_build/html</span></code> unless you pass <code class="docutils literal notranslate"><span class="pre">--shipment</span></code>)</p></li>
 <li><p>traceability export + validation</p></li>
 <li><p>checksum generation + verification</p></li>
 <li><p>optional archive creation (<code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code>)</p></li>
