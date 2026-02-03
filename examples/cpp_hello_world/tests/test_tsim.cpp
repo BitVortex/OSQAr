@@ -125,10 +125,15 @@ static void write_junit(const char* path, const std::vector<test_result_t>& resu
     }
 
     std::fprintf(f, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    std::fprintf(f, "<testsuite name=\"tsim_cpp\" tests=\"%zu\" failures=\"%zu\">\n", results.size(), failures);
+    std::fprintf(
+        f,
+        "<testsuite name=\"tsim_cpp\" tests=\"%zu\" failures=\"%zu\" errors=\"0\" skipped=\"0\" time=\"0\">\n",
+        results.size(),
+        failures
+    );
 
     for (const auto& r : results) {
-        std::fprintf(f, "  <testcase classname=\"tsim_cpp\" name=\"%s\">\n", r.name);
+        std::fprintf(f, "  <testcase classname=\"tsim_cpp\" name=\"%s\" time=\"0\">\n", r.name);
         if (!r.passed) {
             const char* msg = (r.message[0] ? r.message : "failed");
             std::fprintf(f, "    <failure message=\"%s\"/>\n", msg);

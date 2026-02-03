@@ -122,10 +122,15 @@ static void write_junit(const char* path, const test_result_t* results, size_t c
     }
 
     fprintf(f, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    fprintf(f, "<testsuite name=\"tsim_c\" tests=\"%zu\" failures=\"%zu\">\n", count, failures);
+    fprintf(
+        f,
+        "<testsuite name=\"tsim_c\" tests=\"%zu\" failures=\"%zu\" errors=\"0\" skipped=\"0\" time=\"0\">\n",
+        count,
+        failures
+    );
 
     for (size_t i = 0; i < count; i++) {
-        fprintf(f, "  <testcase classname=\"tsim_c\" name=\"%s\">\n", results[i].name);
+        fprintf(f, "  <testcase classname=\"tsim_c\" name=\"%s\" time=\"0\">\n", results[i].name);
         if (!results[i].passed) {
             fprintf(f, "    <failure message=\"%s\"/>\n", results[i].message[0] ? results[i].message : "failed");
         }

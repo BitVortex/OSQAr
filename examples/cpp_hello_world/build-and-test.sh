@@ -140,6 +140,7 @@ if command -v poetry >/dev/null 2>&1; then
   # Ship raw evidence files alongside the HTML directory (for CI shipments / audits)
   cp -f test_results.xml _build/html/test_results.xml >/dev/null 2>&1 || true
   cp -f coverage_report.txt _build/html/coverage_report.txt >/dev/null 2>&1 || true
+  cp -f complexity_report.txt _build/html/complexity_report.txt >/dev/null 2>&1 || true
   if [ -f coverage.xml ]; then
     cp -f coverage.xml _build/html/coverage.xml >/dev/null 2>&1 || true
   fi

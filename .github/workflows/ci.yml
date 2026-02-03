@@ -32,7 +32,7 @@ jobs:
         poetry config virtualenvs.in-project true
 
     - name: Install dependencies
-      run: poetry install
+      run: poetry install --with evidence
 
     - name: Run tests
       run: poetry run pytest --tb=short --strict-markers
@@ -42,7 +42,14 @@ jobs:
         # Generate example JUnit XML first (otherwise the Sphinx build would
         # fall back to the placeholder 0-tests report).
         pushd examples/python_hello_world >/dev/null
-        poetry run pytest -q --junitxml=test_results.xml tests/test_tsim.py
+        rm -f coverage_report.txt coverage.xml
+        poetry run pytest -q \
+          --junitxml=test_results.xml \
+          --cov=src \
+          --cov-report=term-missing \
+          --cov-report=xml:coverage.xml \
+          tests/test_tsim.py
+        poetry run coverage report -m > coverage_report.txt
         popd >/dev/null
 
         # Build the Python demo example docs

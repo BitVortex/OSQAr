@@ -99,14 +99,19 @@ fn write_junit(mut w: impl Write, suite: &str, results: &[TestResult]) -> io::Re
     writeln!(w, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")?;
     writeln!(
         w,
-        "<testsuite name=\"{}\" tests=\"{}\" failures=\"{}\">",
+        "<testsuite name=\"{}\" tests=\"{}\" failures=\"{}\" errors=\"0\" skipped=\"0\" time=\"0\">",
         suite,
         results.len(),
         failures
     )?;
 
     for r in results {
-        writeln!(w, "  <testcase classname=\"{}\" name=\"{}\">", suite, r.name)?;
+        writeln!(
+            w,
+            "  <testcase classname=\"{}\" name=\"{}\" time=\"0\">",
+            suite,
+            r.name
+        )?;
         if !r.passed {
             let msg = if r.message.is_empty() { "failed" } else { r.message.as_str() };
             writeln!(w, "    <failure message=\"{}\"/>", xml_escape(msg))?;

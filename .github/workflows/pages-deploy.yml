@@ -41,6 +41,10 @@ jobs:
           source "$HOME/.cargo/env"
           cargo --version
 
+          # Best-effort: enable Rust coverage evidence generation.
+          rustup component add llvm-tools-preview >/dev/null 2>&1 || true
+          cargo install cargo-llvm-cov --locked >/dev/null 2>&1 || true
+
       - name: Download PlantUML jar
         run: |
           mkdir -p .cache/plantuml
@@ -56,7 +60,7 @@ jobs:
           poetry config virtualenvs.in-project true
 
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --with evidence
 
       - name: Build framework docs
         env:
@@ -72,38 +76,42 @@ jobs:
         env:
           PLANTUML_JAR: ${{ github.workspace }}/.cache/plantuml/plantuml.jar
         run: |
-          # Generate per-example JUnit XML first so the embedded test tables
-          # show real counts (instead of the placeholder 0-tests report).
+          # Run the full example workflows so each published example includes:
+          # - rendered JUnit test table (from test_results.xml)
+          # - embedded coverage evidence (coverage_report.txt)
+          # - shipped raw evidence files alongside HTML
+
+          export PLANTUML_JAR
+
           pushd examples/c_hello_world >/dev/null
-          rm -rf build
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DOSQAR_COVERAGE=OFF
-          cmake --build build
-          ./build/junit_tests test_results.xml
+          chmod +x ./build-and-test.sh
+          OSQAR_COVERAGE=1 ./build-and-test.sh
           popd >/dev/null
 
           pushd examples/cpp_hello_world >/dev/null
-          rm -rf build
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DOSQAR_COVERAGE=OFF
-          cmake --build build
-          ./build/junit_tests test_results.xml
+          chmod +x ./build-and-test.sh
+          OSQAR_COVERAGE=1 ./build-and-test.sh
           popd >/dev/null
 
-          # Rust: run the JUnit writer binary.
           # shellcheck source=/dev/null
           source "$HOME/.cargo/env"
           pushd examples/rust_hello_world >/dev/null
-          cargo run --quiet --bin junit_tests -- test_results.xml
+          chmod +x ./build-and-test.sh
+          OSQAR_COVERAGE=1 ./build-and-test.sh
           popd >/dev/null
 
-          # Python: generate JUnit XML (no coverage tooling needed for Pages).
           pushd examples/python_hello_world >/dev/null
-          poetry run pytest -q --junitxml=test_results.xml tests/test_tsim.py
+          chmod +x ./build-and-test.sh
+          OSQAR_COVERAGE=1 ./build-and-test.sh
           popd >/dev/null
 
-          poetry run sphinx-build -b html examples/c_hello_world _build/html/examples/c
-          poetry run sphinx-build -b html examples/cpp_hello_world _build/html/examples/cpp
-          poetry run sphinx-build -b html examples/rust_hello_world _build/html/examples/rust
-          poetry run sphinx-build -b html examples/python_hello_world _build/html/examples/python
+          rm -rf _build/html/examples/c _build/html/examples/cpp _build/html/examples/rust _build/html/examples/python
+          mkdir -p _build/html/examples/c _build/html/examples/cpp _build/html/examples/rust _build/html/examples/python
+
+          cp -a examples/c_hello_world/_build/html/. _build/html/examples/c/
+          cp -a examples/cpp_hello_world/_build/html/. _build/html/examples/cpp/
+          cp -a examples/rust_hello_world/_build/html/. _build/html/examples/rust/
+          cp -a examples/python_hello_world/_build/html/. _build/html/examples/python/
 
       - name: Traceability checks (exported needs.json)
         run: |
