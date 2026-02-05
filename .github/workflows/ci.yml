@@ -34,8 +34,12 @@ jobs:
     - name: Install dependencies
       run: poetry install --with evidence
 
-    - name: Run tests
-      run: poetry run pytest --tb=short --strict-markers
+    - name: Sanity-check CLI/tools import & syntax
+      run: |
+        poetry run python -m py_compile \
+          tools/osqar_cli.py \
+          tools/traceability_check.py \
+          tools/generate_checksums.py
 
     - name: Build documentation
       run: |

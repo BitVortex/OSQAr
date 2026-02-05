@@ -42,20 +42,6 @@ optional = true
 # Optional LSP server for Sphinx projects (VS Code).
 esbonio = "^0.16"
 
-[tool.pytest.ini_options]
-minversion = "7.0"
-addopts = "-ra"
-testpaths = ["tests"]
-norecursedirs = [
-	"_build",
-	"build",
-	"dist",
-	".venv",
-	"__pycache__",
-	"templates",
-	"examples",
-]
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

@@ -330,8 +330,22 @@ jobs:
         with:
           generate_release_notes: true
           files: |
-            dist/*.tar.gz
-            dist/*.sha256
-            dist/*.zip
+            # Framework tooling first
+            dist/osqar_framework_bundle_${{ github.ref_name }}.tar.gz
+            dist/osqar_framework_bundle_${{ github.ref_name }}.tar.gz.sha256
+            dist/osqar_framework_bundle_${{ github.ref_name }}.zip
+            dist/osqar_framework_bundle_${{ github.ref_name }}.zip.sha256
+
+            # Combined shipments next
+            dist/osqar_example_shipments.tar.gz
+            dist/osqar_example_shipments.tar.gz.sha256
+
+            # Per-example shipments last
+            dist/osqar_c_hello_world_shipment.tar.gz
+            dist/osqar_c_hello_world_shipment.tar.gz.sha256
+            dist/osqar_cpp_hello_world_shipment.tar.gz
+            dist/osqar_cpp_hello_world_shipment.tar.gz.sha256
+            dist/osqar_rust_hello_world_shipment.tar.gz
+            dist/osqar_rust_hello_world_shipment.tar.gz.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
