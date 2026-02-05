@@ -31,6 +31,8 @@ If you are new to OSQAr, a good first pass is:
    - Supplier: :doc:`docs/suppliers_guide`
    - Integrator: :doc:`docs/integrators_guide`
 
+Additional guides are linked in the sidebar.
+
 .. toctree::
    :maxdepth: 1
    :caption: Framework

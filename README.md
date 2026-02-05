@@ -22,6 +22,12 @@ A shipment is a reviewable bundle that contains **Sphinx documentation with main
 - Run reproducible native builds for the C/C++/Rust reference examples (optional Bazel integration)
 - Use CI-produced demo shipments and downloadable release bundles as a starting point for your own project setup
 
+## Docs and examples
+
+- Framework docs (published): https://bitvortex.github.io/OSQAr/
+- Examples index (published): https://bitvortex.github.io/OSQAr/examples/
+- Download pre-built bundles (framework docs + tooling, example shipments): https://github.com/bitvortex/OSQAr/releases
+
 ## Quickstart
 
 Dependencies:
@@ -66,14 +72,3 @@ Notes:
 - The `./osqar` wrapper is intended to be run from the OSQAr repo root.
 - On Windows, use `osqar.cmd` or `osqar.ps1` from the repo root.
 - Fallback (no wrapper): `poetry run python -m tools.osqar_cli ...`
-
-## Docs and examples
-
-- Framework docs (published): https://bitvortex.github.io/OSQAr/
-- Examples index (published): https://bitvortex.github.io/OSQAr/examples/
-- Download pre-built bundles (framework docs + tooling, example shipments): https://github.com/bitvortex/OSQAr/releases
-- CI setup (reproducible builds + example shipments): [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
-- CI setup (publishing to GitHub Pages): [`.github/workflows/pages-deploy.yml`](.github/workflows/pages-deploy.yml)
-- Docs sources in this repo: `index.rst` and `docs/`
-- Example projects in this repo: `examples/`
-- Changes: [CHANGELOG.md](CHANGELOG.md)

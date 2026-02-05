@@ -41,7 +41,9 @@ def _read_project_version() -> str | None:
         m = re.search(r'^\s*version\s*=\s*"([^"]+)"\s*$', section, flags=re.MULTILINE)
         return m.group(1) if m else None
 
-    return find_version_in_section("[project]") or find_version_in_section("[tool.poetry]")
+    return find_version_in_section("[project]") or find_version_in_section(
+        "[tool.poetry]"
+    )
 
 
 # Sphinx version string (shown by themes that display it).
