@@ -15,8 +15,11 @@ copyright = "2025, OSQAr Contributors"
 author = "OSQAr Team"
 
 
-def _read_poetry_version() -> str | None:
+def _read_project_version() -> str | None:
     """Extract OSQAr version from pyproject.toml without extra dependencies.
+
+    Prefers the PEP 621 ``[project]`` table. Falls back to legacy
+    ``[tool.poetry]`` for compatibility.
 
     We intentionally avoid tomllib/tomli to keep compatibility with older Python
     versions used in CI.
@@ -27,22 +30,22 @@ def _read_poetry_version() -> str | None:
         return None
 
     text = pyproject.read_text(encoding="utf-8")
-    start = text.find("[tool.poetry]")
-    if start == -1:
-        return None
 
-    # Search only within the [tool.poetry] section to avoid matching dependency
-    # version strings.
-    rest = text[start + len("[tool.poetry]") :]
-    next_section = rest.find("\n[")
-    section = rest if next_section == -1 else rest[:next_section]
+    def find_version_in_section(section_name: str) -> str | None:
+        start = text.find(section_name)
+        if start == -1:
+            return None
+        rest = text[start + len(section_name) :]
+        next_section = rest.find("\n[")
+        section = rest if next_section == -1 else rest[:next_section]
+        m = re.search(r'^\s*version\s*=\s*"([^"]+)"\s*$', section, flags=re.MULTILINE)
+        return m.group(1) if m else None
 
-    m = re.search(r'^\s*version\s*=\s*"([^"]+)"\s*$', section, flags=re.MULTILINE)
-    return m.group(1) if m else None
+    return find_version_in_section("[project]") or find_version_in_section("[tool.poetry]")
 
 
 # Sphinx version string (shown by themes that display it).
-release = _read_poetry_version() or "0.0.0"
+release = _read_project_version() or "0.0.0"
 version = ".".join(release.split(".")[:2])
 
 
