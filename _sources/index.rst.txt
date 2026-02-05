@@ -34,6 +34,7 @@ If you are new to OSQAr, a good first pass is:
 .. toctree::
    :maxdepth: 1
    :caption: Framework
+   :hidden:
 
    docs/using_the_boilerplate
    docs/project_setup_from_scratch
@@ -42,6 +43,7 @@ If you are new to OSQAr, a good first pass is:
 .. toctree::
    :maxdepth: 1
    :caption: Guides
+   :hidden:
 
    docs/suppliers_guide
    docs/integrators_guide
@@ -52,6 +54,7 @@ If you are new to OSQAr, a good first pass is:
 .. toctree::
    :maxdepth: 1
    :caption: Examples
+   :hidden:
 
    examples/index
 
