@@ -44,7 +44,9 @@ def _load_needs(path: Path) -> list[dict[str, Any]]:
         if "versions" in data and isinstance(data.get("versions"), dict):
             versions = data["versions"]
             current_version = data.get("current_version", "")
-            if current_version in versions and isinstance(versions[current_version], dict):
+            if current_version in versions and isinstance(
+                versions[current_version], dict
+            ):
                 needs = versions[current_version].get("needs")
                 if isinstance(needs, list):
                     return [n for n in needs if isinstance(n, dict)]
@@ -205,8 +207,12 @@ def _run_checks(
 
 
 def cli(argv: list[str]) -> int:
-    parser = argparse.ArgumentParser(description="Validate traceability rules from a sphinx-needs needs.json export")
-    parser.add_argument("needs_json", type=Path, help="Path to needs.json produced by sphinx-needs")
+    parser = argparse.ArgumentParser(
+        description="Validate traceability rules from a sphinx-needs needs.json export"
+    )
+    parser.add_argument(
+        "needs_json", type=Path, help="Path to needs.json produced by sphinx-needs"
+    )
     parser.add_argument(
         "--json-report",
         type=Path,
@@ -293,7 +299,9 @@ def cli(argv: list[str]) -> int:
             "violations": [v.__dict__ for v in violations],
         }
         args.json_report.parent.mkdir(parents=True, exist_ok=True)
-        args.json_report.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        args.json_report.write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
 
     counts = meta["counts"]
     print(

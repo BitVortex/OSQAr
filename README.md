@@ -4,205 +4,76 @@
 
 # OSQAr
 
-Open Safety Qualification Architecture (OSQAr) — a documentation-first framework for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
+Open Safety Qualification Architecture (OSQAr) is a documentation-first framework for producing and integrating **auditable evidence shipments** for safety/compliance work.
 
-In practice, a shipment is a reviewable bundle that contains **Sphinx documentation with maintained traceability**, plus the **implementation**, **tests**, and **analysis/verification reports** needed to review and audit the evidence end-to-end.
+A shipment is a reviewable bundle that contains **Sphinx documentation with maintained traceability**, plus the **implementation**, **tests**, and **analysis/verification reports** needed to audit the evidence end-to-end.
 
-OSQAr is built on Sphinx + sphinx-needs and provides:
+## Features / use cases
 
-- requirements + traceability (sphinx-needs)
-- architecture diagrams (PlantUML)
-- verification planning, test report integration and traceability matrices
-- extensive lifecycle management support
-- multi-user collaboration workflows (branching/merging/CI strategies)
+- Write structured requirements, architecture and verification plans in reStructuredText (traceability via `sphinx-needs`)
+- Render architecture diagrams with PlantUML (embedded in the docs)
+- Export machine-readable traceability (`needs.json`) alongside HTML
+- Generate traceability views (e.g., matrices) and keep verification coverage reviewable
+- Verify traceability rules and produce audit-friendly reports
+- Package documentation + evidence artifacts and protect them with checksum manifests
+- Integrate multiple supplier shipments as an integrator (multi-project intake workflows)
+- Scaffold new projects from minimal templates (C/C++/Rust/Python) via the OSQAr CLI
+- Use lifecycle management and collaboration workflows for multi-user teams
+- Run reproducible native builds for the C/C++/Rust reference examples (optional Bazel integration)
+- Use CI-produced demo shipments and downloadable release bundles as a starting point for your own project setup
 
-Note: This repository is a boilerplate only; large parts of the content were LLM-assisted/generated and must be reviewed and adapted before use in any real safety/compliance project.
+## Quickstart
 
-**Version:** 0.3.1 (see [CHANGELOG.md](CHANGELOG.md); versioning: https://semver.org/)
+Dependencies:
 
-For license terms see the `LICENSE` file (Apache License 2.0).
+- Python `>=3.9` (see `pyproject.toml`)
+- Poetry: https://python-poetry.org/
+- Optional for offline PlantUML rendering: Java and/or PlantUML (`PLANTUML_JAR` also works). If neither is available, the build falls back to the public PlantUML web service (requires internet).
 
-## What you can do with OSQAr
-
-OSQAr is aimed at producing **auditable evidence shipments** for safety- and compliance-related components (SEooC-style), and supporting the end-to-end workflow: supplier creation → verification → integrator intake.
-
-- Author structured requirements, architecture and verification plans (REQ/ARCH/TEST) in reStructuredText
-- Export the machine-readable trace graph (`needs.json`) and build traceability tables/matrices using `sphinx-needs`
-- Validate traceability rules from `needs.json` (locally and in CI)
-- Package an evidence “shipment” bundle (docs + traceability exports + implementation + tests + analysis reports) and protect it with a `SHA256SUMS` integrity manifest
-- Optionally include test report XML in a shipment; the example projects can also import JUnit XML into the docs via `sphinx-test-reports`
-- As an integrator, intake multiple supplier shipments at once and get a consolidated **Subproject overview**
-- Optionally attach supplier-provided metadata (`osqar_project.json`) including descriptive info, origin and URLs
-
-## Documentation (GitHub Pages)
-
-- Framework documentation (landing page): https://bitvortex.github.io/OSQAr/
-- Examples index: https://bitvortex.github.io/OSQAr/examples/
-
-Published examples (built docs):
-
-- C example: https://bitvortex.github.io/OSQAr/examples/c/
-- Rust example: https://bitvortex.github.io/OSQAr/examples/rust/
-- C++ example: https://bitvortex.github.io/OSQAr/examples/cpp/
-- Python demo example (workstation): https://bitvortex.github.io/OSQAr/examples/python/
-
-GitHub Pages is built automatically on pushes to `main` via `.github/workflows/pages-deploy.yml`.
-
-## Reproducible builds & CI demo shipments
-
-OSQAr supports **reproducible native builds** for the C/C++/Rust examples:
-
-- Native scripts: set `OSQAR_REPRODUCIBLE=1` (and preferably `SOURCE_DATE_EPOCH`) when running `./build-and-test.sh`.
-- Bazel scripts: set `OSQAR_REPRODUCIBLE=1` and use `./bazel-build-and-test.sh` (runs Bazel with `--config=reproducible`).
-
-The repository CI also publishes **ready-to-download example shipments** built from the C/C++/Rust examples using reproducible builds:
-
-- Each shipment contains: rendered HTML docs (with traceability), implementation sources, tests, and analysis reports (JUnit XML, coverage summary, complexity report), plus integrity metadata (`SHA256SUMS`).
-- CI exports deterministic archives:
-	- `osqar_c_hello_world_shipment.tar.gz`
-	- `osqar_cpp_hello_world_shipment.tar.gz`
-	- `osqar_rust_hello_world_shipment.tar.gz`
-	- plus a combined `osqar_example_shipments.tar.gz`
-
-To download these, open the GitHub Actions run for the `Tests and Example Shipments` workflow and fetch the `osqar-example-shipments` artifact (generated by the `bazel-example-shipments` job in `.github/workflows/ci.yml`).
-
-The docs default to the `furo` theme (with built-in light/dark mode). To force a fallback theme, set `OSQAR_SPHINX_THEME=alabaster`.
-
-## Language guidance
-
-- For safety-related embedded projects, prefer **C** or **Rust** as a starting point.
-- **C++** is common in industry, but is usually harder to constrain and qualify for safety.
-- The **Python** example is a workstation demo to make the workflow easy to run; it is not intended for embedded targets.
-
-## Repository structure
-
-- Framework documentation (general guides):
-	- `index.rst` (Sphinx source for the framework landing page)
-	- `docs/` (Sphinx sources for guides such as integrator/supplier usage)
-	- `conf.py` (root Sphinx configuration; intentionally excludes `examples/**`)
-
-
-- Reference implementations (example projects):
-	- `examples/c_hello_world/` (source for the C example → published at https://bitvortex.github.io/OSQAr/examples/c/)
-	- `examples/rust_hello_world/` (source for the Rust example → published at https://bitvortex.github.io/OSQAr/examples/rust/)
-	- `examples/cpp_hello_world/` (source for the C++ example → published at https://bitvortex.github.io/OSQAr/examples/cpp/)
-	- `examples/python_hello_world/` (source for the Python workstation demo → published at https://bitvortex.github.io/OSQAr/examples/python/)
-	- `examples/tsim_docs/` (shared TSIM chapter sources included by all example projects)
-
-
-- Styling:
-	- `_static/` (root static assets for framework docs)
-	- `examples/*/_static/` (example-specific tweaks)
-
-## Build locally
-
-If you just want to read the docs, prefer the published site:
-
-- Framework docs: https://bitvortex.github.io/OSQAr/
-- Examples index: https://bitvortex.github.io/OSQAr/examples/
-
-### Framework documentation (repo root)
+Build the framework documentation (repo root):
 
 ```bash
 poetry install
-poetry run sphinx-build -b html . _build/html
+./osqar build-docs
 ```
 
-### Reference example documentation
-
-Build one of the language-specific examples (pick the language that matches your product):
+Build an example’s documentation (choose one):
 
 ```bash
-poetry install
-poetry run sphinx-build -b html examples/c_hello_world _build/html/examples/c
+./osqar build-docs --project examples/c_hello_world
+./osqar build-docs --project examples/cpp_hello_world
+./osqar build-docs --project examples/rust_hello_world
+./osqar build-docs --project examples/python_hello_world
 ```
 
-Or build the C++ / Rust variants:
+Run an example end-to-end (tests → docs), including optional evidence tooling:
 
 ```bash
-poetry run sphinx-build -b html examples/cpp_hello_world _build/html/examples/cpp
-poetry run sphinx-build -b html examples/rust_hello_world _build/html/examples/rust
-```
-
-Run an end-to-end example workflow (native tests → docs):
-
-```bash
-# For coverage/complexity evidence, include the optional tooling group:
 poetry install --with evidence
-
 cd examples/c_hello_world
 ./build-and-test.sh
 ```
 
-### Python demo example (published under `/examples/python/`)
+Create a new project (minimal template scaffold):
 
 ```bash
-poetry install
-poetry run sphinx-build -b html examples/python_hello_world _build/html/examples/python
+# Default template profile is "basic" (lean scaffold)
+./osqar new --language c --name MySEooC --destination ../MySEooC
 ```
 
-### Optional environment variables
+Notes:
 
-- `OSQAR_SPHINX_THEME`: override theme (e.g., `furo`, `alabaster`)
-- `PLANTUML_JAR`: point to a local `plantuml.jar` for offline PlantUML rendering
+- The `./osqar` wrapper is intended to be run from the OSQAr repo root.
+- On Windows, use `osqar.cmd` or `osqar.ps1` from the repo root.
+- Fallback (no wrapper): `poetry run python -m tools.osqar_cli ...`
 
-## CLI
+## Docs and examples
 
-OSQAr ships a small, stdlib-only CLI to speed up common workflows (project scaffolding, evidence shipments, and integrator intake).
-
-Run it either via Poetry:
-
-```bash
-poetry run python -m tools.osqar_cli --help
-```
-
-Or via the convenience wrapper (repo root):
-
-```bash
-./osqar --help
-```
-
-Typical commands:
-
-```bash
-# Scaffold a new project from a language template
-poetry run python -m tools.osqar_cli new --language rust --name MySEooC --destination ./MySEooC
-
-# Verify traceability from a built example output
-poetry run python -m tools.osqar_cli traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json
-
-# Generate/verify shipment checksums
-poetry run python -m tools.osqar_cli checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS
-poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --manifest ./_build/html/SHA256SUMS
-
-# Supplier: one-shot evidence shipment preparation (build docs, traceability, checksums, optional archive)
-./osqar supplier prepare --project examples/rust_hello_world --clean --archive
-
-# Supplier: optionally add metadata (description, URLs, origin) into the shipment root
-./osqar shipment metadata write \
-	--shipment examples/rust_hello_world/_build/html \
-	--name "Rust Hello World" \
-	--version "0.3.1" \
-	--url repository=https://example.com/repo.git \
-	--origin url=https://example.com/repo.git \
-	--origin revision=<commit>
-
-# Integrator: verify a received shipment (checksums, and optionally traceability)
-./osqar integrator verify --shipment /path/to/received/shipment --traceability
-
-# Integrator: intake multiple shipments and generate a Subproject overview
-./osqar workspace intake \
-	--root intake/received \
-	--recursive \
-	--output intake/archive/2026-02-01 \
-	--traceability
-```
-
-See the framework docs for the generic overview as well as the example shipment workflow:
-
-- https://bitvortex.github.io/OSQAr/docs/using_the_boilerplate.html#osqar-cli
-- https://bitvortex.github.io/OSQAr/docs/using_the_boilerplate.html#shipment-verification-per-example-output
-
-## Notes
-
-The authoritative framework documentation lives in `index.rst` and `docs/*.rst` and is what gets published to GitHub Pages.
+- Framework docs (published): https://bitvortex.github.io/OSQAr/
+- Examples index (published): https://bitvortex.github.io/OSQAr/examples/
+- Download pre-built bundles (framework docs + tooling, example shipments): https://github.com/bitvortex/OSQAr/releases
+- CI setup (reproducible builds + example shipments): [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+- CI setup (publishing to GitHub Pages): [`.github/workflows/pages-deploy.yml`](.github/workflows/pages-deploy.yml)
+- Docs sources in this repo: `index.rst` and `docs/`
+- Example projects in this repo: `examples/`
+- Changes: [CHANGELOG.md](CHANGELOG.md)

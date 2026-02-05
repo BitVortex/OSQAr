@@ -211,7 +211,7 @@ poetry run pytest tests/test_tsim.py \
     --cov=src
 
 # Step 2: Build documentation
-poetry run sphinx-build -b html . _build/html
+poetry run python -m sphinx -b html . _build/html
 
 # Step 3: View results
 open _build/html/index.html

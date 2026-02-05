@@ -28,12 +28,25 @@ from tools.generate_checksums import cli as checksums_cli
 from tools.traceability_check import cli as traceability_cli
 
 
-TEMPLATES: dict[str, Path] = {
+TEMPLATES_BASIC: dict[str, Path] = {
+    "c": Path("templates/basic/c"),
+    "cpp": Path("templates/basic/cpp"),
+    "python": Path("templates/basic/python"),
+    "rust": Path("templates/basic/rust"),
+}
+
+TEMPLATE_BASIC_SHARED = Path("templates/basic/shared")
+
+# Legacy templates: full example projects.
+TEMPLATES_EXAMPLE: dict[str, Path] = {
     "c": Path("examples/c_hello_world"),
     "cpp": Path("examples/cpp_hello_world"),
     "python": Path("examples/python_hello_world"),
     "rust": Path("examples/rust_hello_world"),
 }
+
+# Used for CLI choices.
+TEMPLATES: dict[str, Path] = dict(TEMPLATES_BASIC)
 
 
 DEFAULT_BUILD_DIR = Path("_build/html")
@@ -79,16 +92,24 @@ def _detect_language(project_dir: Path) -> str:
     # Heuristics only; do not require a specific template layout.
     if (project_dir / "Cargo.toml").is_file():
         return "rust"
-    if (project_dir / "pyproject.toml").is_file() or (project_dir / "requirements.txt").is_file():
+    if (project_dir / "pyproject.toml").is_file() or (
+        project_dir / "requirements.txt"
+    ).is_file():
         return "python"
     for probe in (project_dir / "src", project_dir / "tests"):
-        if probe.is_dir() and any(p.suffix == ".py" for p in probe.rglob("*") if p.is_file()):
+        if probe.is_dir() and any(
+            p.suffix == ".py" for p in probe.rglob("*") if p.is_file()
+        ):
             return "python"
     if (project_dir / "CMakeLists.txt").is_file():
         # Try to disambiguate C vs C++ based on sources.
         src_root = project_dir / "src"
         if src_root.is_dir():
-            has_cpp = any(p.suffix in {".cpp", ".cc", ".cxx"} for p in src_root.rglob("*") if p.is_file())
+            has_cpp = any(
+                p.suffix in {".cpp", ".cc", ".cxx"}
+                for p in src_root.rglob("*")
+                if p.is_file()
+            )
             if has_cpp:
                 return "cpp"
         return "c"
@@ -140,11 +161,46 @@ def _run(cmd: list[str], *, cwd: Path, env: Optional[Dict[str, str]] = None) -> 
     return int(proc.returncode)
 
 
+def _poetry_available() -> bool:
+    return shutil.which("poetry") is not None
+
+
+def _project_uses_poetry(project_dir: Path) -> bool:
+    pyproject = project_dir / "pyproject.toml"
+    if not pyproject.is_file():
+        return False
+    try:
+        content = pyproject.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return False
+    # Conservative: only opt into Poetry if it looks like a Poetry-managed project.
+    return "[tool.poetry]" in content
+
+
 def _run_sphinx_build(project_dir: Path, output_dir: Path) -> int:
     project_dir = project_dir.resolve()
     output_dir = output_dir.resolve()
     output_dir.parent.mkdir(parents=True, exist_ok=True)
 
+    # Prefer running Sphinx inside the *project's* Poetry environment.
+    # This keeps dependencies locked per project (poetry.lock) and allows an installed
+    # `osqar` to remain lightweight (no Sphinx required in the CLI environment).
+    if _project_uses_poetry(project_dir) and _poetry_available():
+        print("Using Poetry environment for docs build (poetry.lock)")
+        cmd = [
+            "poetry",
+            "run",
+            "python",
+            "-m",
+            "sphinx",
+            "-b",
+            "html",
+            ".",
+            str(output_dir),
+        ]
+        return _run(cmd, cwd=project_dir)
+
+    # Fallback: run in the current interpreter environment.
     # Use `python -m sphinx` to avoid relying on a shell-resolved `sphinx-build`.
     cmd = [sys.executable, "-m", "sphinx", "-b", "html", ".", str(output_dir)]
     return _run(cmd, cwd=project_dir)
@@ -192,7 +248,9 @@ def _iter_test_report_files(project_dir: Path, globs: tuple[str, ...]) -> list[P
     return sorted(matches)
 
 
-def _copy_test_reports(project_dir: Path, shipment_dir: Path, *, dry_run: bool, globs: tuple[str, ...]) -> int:
+def _copy_test_reports(
+    project_dir: Path, shipment_dir: Path, *, dry_run: bool, globs: tuple[str, ...]
+) -> int:
     reports = _iter_test_report_files(project_dir, globs)
     if not reports:
         print("No test report XML files found.")
@@ -229,7 +287,9 @@ def _copy_test_reports(project_dir: Path, shipment_dir: Path, *, dry_run: bool, 
     return 0
 
 
-def _copy_bundle_sources_and_reports(project_dir: Path, shipment_dir: Path, *, dry_run: bool) -> None:
+def _copy_bundle_sources_and_reports(
+    project_dir: Path, shipment_dir: Path, *, dry_run: bool
+) -> None:
     """Copy non-doc evidence into a shipment directory.
 
     Goal: make a shipment a reviewable evidence bundle (docs + traceability + implementation
@@ -352,7 +412,9 @@ def _read_project_metadata(shipment_dir: Path) -> Optional[dict]:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:  # noqa: BLE001 - keep stdlib-only and robust
-        print(f"WARNING: failed to read project metadata: {path} ({exc})", file=sys.stderr)
+        print(
+            f"WARNING: failed to read project metadata: {path} ({exc})", file=sys.stderr
+        )
         return None
 
 
@@ -364,7 +426,10 @@ def _read_needs_summary_from_shipment(shipment_dir: Path) -> Optional[dict[str, 
     try:
         data = json.loads(needs_json.read_text(encoding="utf-8"))
     except Exception as exc:  # noqa: BLE001
-        print(f"WARNING: failed to parse needs.json: {needs_json} ({exc})", file=sys.stderr)
+        print(
+            f"WARNING: failed to parse needs.json: {needs_json} ({exc})",
+            file=sys.stderr,
+        )
         return None
 
     needs_list: list[dict] = []
@@ -375,7 +440,9 @@ def _read_needs_summary_from_shipment(shipment_dir: Path) -> Optional[dict[str, 
         elif isinstance(data.get("versions"), dict):
             versions = data.get("versions")
             current_version = data.get("current_version", "")
-            if current_version in versions and isinstance(versions[current_version], dict):
+            if current_version in versions and isinstance(
+                versions[current_version], dict
+            ):
                 v = versions[current_version]
                 needs = v.get("needs")
                 if isinstance(needs, list):
@@ -404,12 +471,16 @@ def _read_needs_summary_from_shipment(shipment_dir: Path) -> Optional[dict[str, 
     }
 
 
-def _write_project_metadata(shipment_dir: Path, metadata: dict, *, overwrite: bool, dry_run: bool) -> int:
+def _write_project_metadata(
+    shipment_dir: Path, metadata: dict, *, overwrite: bool, dry_run: bool
+) -> int:
     shipment_dir = shipment_dir.resolve()
     shipment_dir.mkdir(parents=True, exist_ok=True)
     path = shipment_dir / DEFAULT_PROJECT_METADATA
     if path.exists() and not overwrite:
-        print(f"ERROR: metadata already exists (use --overwrite): {path}", file=sys.stderr)
+        print(
+            f"ERROR: metadata already exists (use --overwrite): {path}", file=sys.stderr
+        )
         return 2
 
     payload = json.dumps(metadata, indent=2, sort_keys=True) + "\n"
@@ -462,6 +533,36 @@ def _copytree(src: Path, dst: Path, *, force: bool) -> None:
     shutil.copytree(src, dst, ignore=_ignore)
 
 
+def _copytree_merge(src: Path, dst: Path) -> None:
+    ignore_names = {
+        "_build",
+        "build",
+        "target",
+        "__pycache__",
+        ".pytest_cache",
+        "_diagrams",
+    }
+
+    def _ignore(directory: str, names: list[str]) -> set[str]:
+        ignored: set[str] = set()
+        for name in names:
+            if name in ignore_names:
+                ignored.add(name)
+            if name.endswith(".pyc"):
+                ignored.add(name)
+            if name == ".DS_Store":
+                ignored.add(name)
+        return ignored
+
+    dst.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(src, dst, ignore=_ignore, dirs_exist_ok=True)
+
+
+def _repo_root() -> Path:
+    # Resolve relative paths independent of current working directory.
+    return Path(__file__).resolve().parents[1]
+
+
 def _rewrite_conf_project(conf_path: Path, project_title: str) -> None:
     if not conf_path.is_file():
         return
@@ -494,24 +595,56 @@ def _rewrite_readme_title(readme_path: Path, name: str) -> None:
 
 
 def cmd_new(args: argparse.Namespace) -> int:
-    template = TEMPLATES.get(args.language)
+    template_kind = getattr(args, "template", "basic")
+    templates = TEMPLATES_BASIC if template_kind == "basic" else TEMPLATES_EXAMPLE
+
+    template = templates.get(args.language)
     if template is None:
         print(f"ERROR: Unsupported language: {args.language}", file=sys.stderr)
         return 2
 
-    repo_root = Path.cwd()
-    src = (repo_root / template).resolve()
-    if not src.is_dir():
-        print(f"ERROR: Template directory not found: {src}", file=sys.stderr)
-        return 2
+    repo_root = _repo_root()
+    dest = (
+        Path(args.destination).resolve()
+        if args.destination
+        else (repo_root / args.name).resolve()
+    )
 
-    dest = Path(args.destination).resolve() if args.destination else (repo_root / args.name).resolve()
+    if dest.exists():
+        if not args.force:
+            print(f"ERROR: Destination already exists: {dest}", file=sys.stderr)
+            return 2
+        shutil.rmtree(dest)
 
-    try:
-        _copytree(src, dest, force=args.force)
-    except FileExistsError as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
-        return 2
+    if template_kind == "basic":
+        shared_src = (repo_root / TEMPLATE_BASIC_SHARED).resolve()
+        lang_src = (repo_root / template).resolve()
+
+        if not shared_src.is_dir():
+            print(
+                f"ERROR: Shared template directory not found: {shared_src}",
+                file=sys.stderr,
+            )
+            return 2
+        if not lang_src.is_dir():
+            print(f"ERROR: Template directory not found: {lang_src}", file=sys.stderr)
+            return 2
+
+        dest.mkdir(parents=True, exist_ok=True)
+        _copytree_merge(shared_src, dest)
+        _copytree_merge(lang_src, dest)
+
+        src = lang_src
+    else:
+        src = (repo_root / template).resolve()
+        if not src.is_dir():
+            print(f"ERROR: Template directory not found: {src}", file=sys.stderr)
+            return 2
+        try:
+            _copytree(src, dest, force=args.force)
+        except FileExistsError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
 
     # Light customization (best-effort)
     project_title = f"OSQAr: {args.name} ({args.language})"
@@ -519,7 +652,7 @@ def cmd_new(args: argparse.Namespace) -> int:
     _rewrite_readme_title(dest / "README.md", args.name)
 
     print(f"Created OSQAr project at: {dest}")
-    print(f"Template: {src}")
+    print(f"Template: {src} ({template_kind})")
     return 0
 
 
@@ -560,7 +693,9 @@ def cmd_shipment_list(args: argparse.Namespace) -> int:
     for candidate in _iter_project_dirs(root, recursive=args.recursive):
         if not _is_shipment_project_dir(candidate):
             continue
-        projects.append(ShipmentProject(path=candidate, language=_detect_language(candidate)))
+        projects.append(
+            ShipmentProject(path=candidate, language=_detect_language(candidate))
+        )
 
     if args.format == "paths":
         for p in projects:
@@ -579,10 +714,17 @@ def cmd_shipment_list(args: argparse.Namespace) -> int:
 def cmd_shipment_build_docs(args: argparse.Namespace) -> int:
     project_dir = Path(args.project).resolve()
     if not _is_shipment_project_dir(project_dir):
-        print(f"ERROR: not a shipment project directory (missing conf.py/index.rst): {project_dir}", file=sys.stderr)
+        print(
+            f"ERROR: not a shipment project directory (missing conf.py/index.rst): {project_dir}",
+            file=sys.stderr,
+        )
         return 2
 
-    output_dir = Path(args.output).resolve() if args.output else _default_shipment_dir(project_dir)
+    output_dir = (
+        Path(args.output).resolve()
+        if args.output
+        else _default_shipment_dir(project_dir)
+    )
     print(f"Building Sphinx HTML: {project_dir} -> {output_dir}")
     return _run_sphinx_build(project_dir, output_dir)
 
@@ -639,12 +781,22 @@ def cmd_shipment_clean(args: argparse.Namespace) -> int:
 
 def cmd_shipment_traceability(args: argparse.Namespace) -> int:
     shipment_dir = Path(args.shipment).resolve()
-    needs_json = Path(args.needs_json).resolve() if args.needs_json else _find_needs_json(shipment_dir)
+    needs_json = (
+        Path(args.needs_json).resolve()
+        if args.needs_json
+        else _find_needs_json(shipment_dir)
+    )
     if needs_json is None or not needs_json.is_file():
-        print(f"ERROR: needs.json not found in shipment: {shipment_dir}", file=sys.stderr)
+        print(
+            f"ERROR: needs.json not found in shipment: {shipment_dir}", file=sys.stderr
+        )
         return 2
 
-    json_report = Path(args.json_report).resolve() if args.json_report else (shipment_dir / DEFAULT_TRACEABILITY_REPORT)
+    json_report = (
+        Path(args.json_report).resolve()
+        if args.json_report
+        else (shipment_dir / DEFAULT_TRACEABILITY_REPORT)
+    )
 
     argv = [str(needs_json), "--json-report", str(json_report)]
     if args.enforce_req_has_test:
@@ -659,7 +811,11 @@ def cmd_shipment_traceability(args: argparse.Namespace) -> int:
 
 def cmd_shipment_checksums(args: argparse.Namespace) -> int:
     shipment_dir = Path(args.shipment).resolve()
-    manifest = Path(args.manifest).resolve() if args.manifest else (shipment_dir / DEFAULT_CHECKSUM_MANIFEST)
+    manifest = (
+        Path(args.manifest).resolve()
+        if args.manifest
+        else (shipment_dir / DEFAULT_CHECKSUM_MANIFEST)
+    )
 
     if args.mode == "generate":
         argv = ["--root", str(shipment_dir), "--output", str(manifest)]
@@ -675,9 +831,15 @@ def cmd_shipment_checksums(args: argparse.Namespace) -> int:
 
 def cmd_shipment_copy_test_reports(args: argparse.Namespace) -> int:
     project_dir = Path(args.project).resolve()
-    shipment_dir = Path(args.shipment).resolve() if args.shipment else _default_shipment_dir(project_dir)
+    shipment_dir = (
+        Path(args.shipment).resolve()
+        if args.shipment
+        else _default_shipment_dir(project_dir)
+    )
     globs = tuple(args.glob) if args.glob else _DEFAULT_TEST_REPORT_GLOBS
-    return _copy_test_reports(project_dir, shipment_dir, dry_run=bool(args.dry_run), globs=globs)
+    return _copy_test_reports(
+        project_dir, shipment_dir, dry_run=bool(args.dry_run), globs=globs
+    )
 
 
 def cmd_shipment_package(args: argparse.Namespace) -> int:
@@ -686,7 +848,11 @@ def cmd_shipment_package(args: argparse.Namespace) -> int:
         print(f"ERROR: shipment directory not found: {shipment_dir}", file=sys.stderr)
         return 2
 
-    out = Path(args.output).resolve() if args.output else shipment_dir.with_suffix(".tar.gz")
+    out = (
+        Path(args.output).resolve()
+        if args.output
+        else shipment_dir.with_suffix(".tar.gz")
+    )
     root_name = shipment_dir.name
 
     if args.dry_run:
@@ -749,13 +915,24 @@ def cmd_shipment_metadata_write(args: argparse.Namespace) -> int:
 def cmd_supplier_prepare(args: argparse.Namespace) -> int:
     project_dir = Path(args.project).resolve()
     if not _is_shipment_project_dir(project_dir):
-        print(f"ERROR: not a shipment project directory (missing conf.py/index.rst): {project_dir}", file=sys.stderr)
+        print(
+            f"ERROR: not a shipment project directory (missing conf.py/index.rst): {project_dir}",
+            file=sys.stderr,
+        )
         return 2
 
-    shipment_dir = Path(args.shipment).resolve() if args.shipment else _default_shipment_dir(project_dir)
+    shipment_dir = (
+        Path(args.shipment).resolve()
+        if args.shipment
+        else _default_shipment_dir(project_dir)
+    )
 
     if args.clean:
-        rc = cmd_shipment_clean(argparse.Namespace(project=str(project_dir), dry_run=args.dry_run, aggressive=False))
+        rc = cmd_shipment_clean(
+            argparse.Namespace(
+                project=str(project_dir), dry_run=args.dry_run, aggressive=False
+            )
+        )
         if rc != 0:
             return rc
 
@@ -763,7 +940,9 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
         # Best-effort: if no script exists, continue (some shipments are docs-only).
         script = project_dir / (args.script or "build-and-test.sh")
         if script.is_file():
-            rc = cmd_shipment_run_tests(argparse.Namespace(project=str(project_dir), script=str(script.name)))
+            rc = cmd_shipment_run_tests(
+                argparse.Namespace(project=str(project_dir), script=str(script.name))
+            )
             if rc != 0:
                 return rc
         else:
@@ -774,10 +953,17 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
         return rc
 
     # Bundle content: include implementation, tests, and analysis reports alongside docs.
-    _copy_bundle_sources_and_reports(project_dir, shipment_dir, dry_run=bool(args.dry_run))
+    _copy_bundle_sources_and_reports(
+        project_dir, shipment_dir, dry_run=bool(args.dry_run)
+    )
 
     # Copy raw test reports into the shipped directory (optional but recommended).
-    _copy_test_reports(project_dir, shipment_dir, dry_run=bool(args.dry_run), globs=_DEFAULT_TEST_REPORT_GLOBS)
+    _copy_test_reports(
+        project_dir,
+        shipment_dir,
+        dry_run=bool(args.dry_run),
+        globs=_DEFAULT_TEST_REPORT_GLOBS,
+    )
 
     # Traceability report into shipment root.
     rc = cmd_shipment_traceability(
@@ -818,7 +1004,11 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
 
     if args.archive:
         rc = cmd_shipment_package(
-            argparse.Namespace(shipment=str(shipment_dir), output=args.archive_output, dry_run=args.dry_run)
+            argparse.Namespace(
+                shipment=str(shipment_dir),
+                output=args.archive_output,
+                dry_run=args.dry_run,
+            )
         )
         if rc != 0:
             return rc
@@ -833,19 +1023,32 @@ def cmd_integrator_verify(args: argparse.Namespace) -> int:
         print(f"ERROR: shipment directory not found: {shipment_dir}", file=sys.stderr)
         return 2
 
-    manifest = Path(args.manifest).resolve() if args.manifest else (shipment_dir / DEFAULT_CHECKSUM_MANIFEST)
+    manifest = (
+        Path(args.manifest).resolve()
+        if args.manifest
+        else (shipment_dir / DEFAULT_CHECKSUM_MANIFEST)
+    )
     if not manifest.is_file():
         print(f"ERROR: checksum manifest not found: {manifest}", file=sys.stderr)
         return 2
 
     rc = cmd_shipment_checksums(
-        argparse.Namespace(shipment=str(shipment_dir), manifest=str(manifest), mode="verify", exclude=args.exclude)
+        argparse.Namespace(
+            shipment=str(shipment_dir),
+            manifest=str(manifest),
+            mode="verify",
+            exclude=args.exclude,
+        )
     )
     if rc != 0:
         return rc
 
     if args.traceability:
-        report = Path(args.json_report).resolve() if args.json_report else (shipment_dir / "traceability_report.integrator.json")
+        report = (
+            Path(args.json_report).resolve()
+            if args.json_report
+            else (shipment_dir / "traceability_report.integrator.json")
+        )
         rc = cmd_shipment_traceability(
             argparse.Namespace(
                 shipment=str(shipment_dir),
@@ -960,11 +1163,15 @@ def cmd_workspace_verify(args: argparse.Namespace) -> int:
             "successes": successes,
             "failures": failures,
         }
-        report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        report_path.write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
         print(f"\nWrote workspace report: {report_path}")
 
     if failures:
-        print(f"\nWorkspace verify FAILED: {len(failures)} / {len(successes) + len(failures)}")
+        print(
+            f"\nWorkspace verify FAILED: {len(failures)} / {len(successes) + len(failures)}"
+        )
         return 1
 
     print(f"\nWorkspace verify OK: {len(successes)}")
@@ -990,7 +1197,10 @@ def cmd_workspace_intake(args: argparse.Namespace) -> int:
 
     if output_dir.exists():
         if not args.force:
-            print(f"ERROR: output already exists (use --force to overwrite): {output_dir}", file=sys.stderr)
+            print(
+                f"ERROR: output already exists (use --force to overwrite): {output_dir}",
+                file=sys.stderr,
+            )
             return 2
         try:
             _safe_rmtree(output_dir, dry_run=bool(args.dry_run))
@@ -1082,7 +1292,9 @@ def cmd_workspace_intake(args: argparse.Namespace) -> int:
                     "metadata": _read_project_metadata(dest),
                     "needs_summary": _read_needs_summary_from_shipment(dest),
                     "docs_entrypoint": (
-                        f"shipments/{name}/index.html" if (dest / "index.html").is_file() else None
+                        f"shipments/{name}/index.html"
+                        if (dest / "index.html").is_file()
+                        else None
                     ),
                 }
             )
@@ -1113,7 +1325,9 @@ def cmd_workspace_intake(args: argparse.Namespace) -> int:
         "shipments": items,
         "failures": any_failures,
     }
-    intake_report_path.write_text(json.dumps(intake_report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    intake_report_path.write_text(
+        json.dumps(intake_report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(f"\nWrote intake report: {intake_report_path}")
 
     overview = {
@@ -1122,7 +1336,9 @@ def cmd_workspace_intake(args: argparse.Namespace) -> int:
         "output": str(output_dir),
         "projects": items,
     }
-    overview_json_path.write_text(json.dumps(overview, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    overview_json_path.write_text(
+        json.dumps(overview, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
     def _md_escape(s: str) -> str:
         return s.replace("|", "\\|").replace("\n", " ")
@@ -1130,7 +1346,9 @@ def cmd_workspace_intake(args: argparse.Namespace) -> int:
     lines: list[str] = []
     lines.append("# Subproject overview\n")
     lines.append(f"Generated at: {overview['generated_at']}\n\n")
-    lines.append("| Project | Version | Origin | URLs | Needs | REQ | ARCH | TEST | Checksums | Traceability |\n")
+    lines.append(
+        "| Project | Version | Origin | URLs | Needs | REQ | ARCH | TEST | Checksums | Traceability |\n"
+    )
     lines.append("|---|---|---|---|---:|---:|---:|---:|---:|---:|\n")
     for it in items:
         md = it.get("metadata") or {}
@@ -1145,7 +1363,14 @@ def cmd_workspace_intake(args: argparse.Namespace) -> int:
         origin_val = ""
         origin = md.get("origin")
         if isinstance(origin, dict):
-            origin_val = _md_escape(str(origin.get("url") or origin.get("repo") or origin.get("source") or ""))
+            origin_val = _md_escape(
+                str(
+                    origin.get("url")
+                    or origin.get("repo")
+                    or origin.get("source")
+                    or ""
+                )
+            )
         urls_val = ""
         urls = md.get("urls")
         if isinstance(urls, dict) and urls:
@@ -1183,100 +1408,238 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="osqar", description="OSQAr helper CLI")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_new = sub.add_parser("new", help="Create a new OSQAr project from a language template")
+    p_build_docs = sub.add_parser(
+        "build-docs",
+        help="Build Sphinx HTML output (shorthand for 'shipment build-docs')",
+    )
+    p_build_docs.add_argument(
+        "--project",
+        default=".",
+        help="Shipment project directory (default: .; must contain conf.py/index.rst)",
+    )
+    p_build_docs.add_argument(
+        "--output",
+        default=None,
+        help="Output directory (default: <project>/_build/html)",
+    )
+    p_build_docs.set_defaults(func=cmd_shipment_build_docs)
+
+    p_new = sub.add_parser(
+        "new", help="Create a new OSQAr project from a language template"
+    )
     p_new.add_argument("--language", choices=sorted(TEMPLATES.keys()), required=True)
-    p_new.add_argument("--name", required=True, help="Project name (used for folder name by default)")
-    p_new.add_argument("--destination", default=None, help="Destination directory (default: ./<name>)")
-    p_new.add_argument("--force", action="store_true", help="Overwrite destination if it exists")
+    p_new.add_argument(
+        "--name", required=True, help="Project name (used for folder name by default)"
+    )
+    p_new.add_argument(
+        "--destination", default=None, help="Destination directory (default: ./<name>)"
+    )
+    p_new.add_argument(
+        "--template",
+        choices=["basic", "example"],
+        default="basic",
+        help="Template profile (default: basic; 'example' copies the full reference examples)",
+    )
+    p_new.add_argument(
+        "--force", action="store_true", help="Overwrite destination if it exists"
+    )
     p_new.set_defaults(func=cmd_new)
 
-    p_tr = sub.add_parser("traceability", help="Run traceability checks on an exported needs.json")
+    p_tr = sub.add_parser(
+        "traceability", help="Run traceability checks on an exported needs.json"
+    )
     p_tr.add_argument("needs_json", type=Path, help="Path to needs.json")
-    p_tr.add_argument("--json-report", type=Path, default=None, help="Write JSON report to this path")
-    p_tr.add_argument("--enforce-req-has-test", action="store_true", help="Also enforce REQ_* → TEST_* coverage")
-    p_tr.add_argument("--enforce-arch-traces-req", action="store_true", help="Also enforce ARCH_* → REQ_* coverage")
-    p_tr.add_argument("--enforce-test-traces-req", action="store_true", help="Also enforce TEST_* → REQ_* coverage")
+    p_tr.add_argument(
+        "--json-report", type=Path, default=None, help="Write JSON report to this path"
+    )
+    p_tr.add_argument(
+        "--enforce-req-has-test",
+        action="store_true",
+        help="Also enforce REQ_* → TEST_* coverage",
+    )
+    p_tr.add_argument(
+        "--enforce-arch-traces-req",
+        action="store_true",
+        help="Also enforce ARCH_* → REQ_* coverage",
+    )
+    p_tr.add_argument(
+        "--enforce-test-traces-req",
+        action="store_true",
+        help="Also enforce TEST_* → REQ_* coverage",
+    )
     p_tr.set_defaults(func=cmd_traceability)
 
-    p_sum = sub.add_parser("checksum", help="Generate or verify shipment checksum manifests")
+    p_sum = sub.add_parser(
+        "checksum", help="Generate or verify shipment checksum manifests"
+    )
     sum_sub = p_sum.add_subparsers(dest="checksum_cmd", required=True)
 
     p_gen = sum_sub.add_parser("generate", help="Generate SHA256SUMS for a directory")
     p_gen.add_argument("--root", type=Path, required=True)
     p_gen.add_argument("--output", type=Path, required=True)
-    p_gen.add_argument("--exclude", action="append", default=[], help="Exclude glob (repeatable)")
+    p_gen.add_argument(
+        "--exclude", action="append", default=[], help="Exclude glob (repeatable)"
+    )
     p_gen.set_defaults(func=cmd_checksums_generate)
 
     p_ver = sum_sub.add_parser("verify", help="Verify a directory against SHA256SUMS")
     p_ver.add_argument("--root", type=Path, required=True)
     p_ver.add_argument("--manifest", type=Path, required=True)
-    p_ver.add_argument("--exclude", action="append", default=[], help="Exclude glob (repeatable)")
+    p_ver.add_argument(
+        "--exclude", action="append", default=[], help="Exclude glob (repeatable)"
+    )
     p_ver.set_defaults(func=cmd_checksums_verify)
 
-    p_ship = sub.add_parser("shipment", help="Work with shippable evidence bundles (build, clean, verify)")
+    p_ship = sub.add_parser(
+        "shipment", help="Work with shippable evidence bundles (build, clean, verify)"
+    )
     ship_sub = p_ship.add_subparsers(dest="shipment_cmd", required=True)
 
-    p_list = ship_sub.add_parser("list", help="Discover shipment projects under a directory")
-    p_list.add_argument("--root", default=".", help="Root directory to scan (default: .)")
-    p_list.add_argument("--recursive", action="store_true", help="Recursively scan for conf.py")
+    p_list = ship_sub.add_parser(
+        "list", help="Discover shipment projects under a directory"
+    )
+    p_list.add_argument(
+        "--root", default=".", help="Root directory to scan (default: .)"
+    )
+    p_list.add_argument(
+        "--recursive", action="store_true", help="Recursively scan for conf.py"
+    )
     p_list.add_argument("--format", choices=["pretty", "paths"], default="pretty")
     p_list.set_defaults(func=cmd_shipment_list)
 
-    p_build = ship_sub.add_parser("build-docs", help="Build Sphinx HTML output for a shipment project")
-    p_build.add_argument("--project", required=True, help="Shipment project directory (contains conf.py/index.rst)")
-    p_build.add_argument("--output", default=None, help="Output directory (default: <project>/_build/html)")
+    p_build = ship_sub.add_parser(
+        "build-docs", help="Build Sphinx HTML output for a shipment project"
+    )
+    p_build.add_argument(
+        "--project",
+        default=".",
+        help="Shipment project directory (default: .; must contain conf.py/index.rst)",
+    )
+    p_build.add_argument(
+        "--output",
+        default=None,
+        help="Output directory (default: <project>/_build/html)",
+    )
     p_build.set_defaults(func=cmd_shipment_build_docs)
 
-    p_tests = ship_sub.add_parser("run-tests", help="Run a shipment's build-and-test script")
+    p_tests = ship_sub.add_parser(
+        "run-tests", help="Run a shipment's build-and-test script"
+    )
     p_tests.add_argument("--project", required=True, help="Shipment project directory")
-    p_tests.add_argument("--script", default=None, help="Script name (default: build-and-test.sh)")
+    p_tests.add_argument(
+        "--script", default=None, help="Script name (default: build-and-test.sh)"
+    )
     p_tests.set_defaults(func=cmd_shipment_run_tests)
 
-    p_clean = ship_sub.add_parser("clean", help="Remove generated outputs (conservative by default)")
+    p_clean = ship_sub.add_parser(
+        "clean", help="Remove generated outputs (conservative by default)"
+    )
     p_clean.add_argument("--project", required=True, help="Shipment project directory")
-    p_clean.add_argument("--dry-run", action="store_true", help="Print what would be removed")
-    p_clean.add_argument("--aggressive", action="store_true", help="Also remove 'diagrams/' if present")
+    p_clean.add_argument(
+        "--dry-run", action="store_true", help="Print what would be removed"
+    )
+    p_clean.add_argument(
+        "--aggressive", action="store_true", help="Also remove 'diagrams/' if present"
+    )
     p_clean.set_defaults(func=cmd_shipment_clean)
 
-    p_tr2 = ship_sub.add_parser("traceability", help="Run traceability checks for a built shipment directory")
-    p_tr2.add_argument("--shipment", required=True, help="Shipment directory (usually <project>/_build/html)")
-    p_tr2.add_argument("--needs-json", default=None, help="Override needs.json path (default: <shipment>/needs.json)")
-    p_tr2.add_argument("--json-report", default=None, help="Write JSON report (default: <shipment>/traceability_report.json)")
+    p_tr2 = ship_sub.add_parser(
+        "traceability", help="Run traceability checks for a built shipment directory"
+    )
+    p_tr2.add_argument(
+        "--shipment",
+        required=True,
+        help="Shipment directory (usually <project>/_build/html)",
+    )
+    p_tr2.add_argument(
+        "--needs-json",
+        default=None,
+        help="Override needs.json path (default: <shipment>/needs.json)",
+    )
+    p_tr2.add_argument(
+        "--json-report",
+        default=None,
+        help="Write JSON report (default: <shipment>/traceability_report.json)",
+    )
     p_tr2.add_argument("--enforce-req-has-test", action="store_true")
     p_tr2.add_argument("--enforce-arch-traces-req", action="store_true")
     p_tr2.add_argument("--enforce-test-traces-req", action="store_true")
     p_tr2.set_defaults(func=cmd_shipment_traceability)
 
-    p_cs = ship_sub.add_parser("checksums", help="Generate or verify checksum manifests for a shipment directory")
+    p_cs = ship_sub.add_parser(
+        "checksums",
+        help="Generate or verify checksum manifests for a shipment directory",
+    )
     p_cs.add_argument("--shipment", required=True, help="Shipment directory")
-    p_cs.add_argument("--manifest", default=None, help="Manifest path (default: <shipment>/SHA256SUMS)")
-    p_cs.add_argument("--exclude", action="append", default=[], help="Exclude glob (repeatable)")
+    p_cs.add_argument(
+        "--manifest",
+        default=None,
+        help="Manifest path (default: <shipment>/SHA256SUMS)",
+    )
+    p_cs.add_argument(
+        "--exclude", action="append", default=[], help="Exclude glob (repeatable)"
+    )
     p_cs.add_argument("mode", choices=["generate", "verify"], help="Operation")
     p_cs.set_defaults(func=cmd_shipment_checksums)
 
-    p_rep = ship_sub.add_parser("copy-test-reports", help="Copy raw JUnit XML into the shipment directory")
+    p_rep = ship_sub.add_parser(
+        "copy-test-reports", help="Copy raw JUnit XML into the shipment directory"
+    )
     p_rep.add_argument("--project", required=True, help="Shipment project directory")
-    p_rep.add_argument("--shipment", default=None, help="Shipment directory (default: <project>/_build/html)")
-    p_rep.add_argument("--glob", action="append", default=[], help="Glob to match report files (repeatable)")
+    p_rep.add_argument(
+        "--shipment",
+        default=None,
+        help="Shipment directory (default: <project>/_build/html)",
+    )
+    p_rep.add_argument(
+        "--glob",
+        action="append",
+        default=[],
+        help="Glob to match report files (repeatable)",
+    )
     p_rep.add_argument("--dry-run", action="store_true")
     p_rep.set_defaults(func=cmd_shipment_copy_test_reports)
 
-    p_pkg = ship_sub.add_parser("package", help="Archive a shipment directory into a .tar.gz")
+    p_pkg = ship_sub.add_parser(
+        "package", help="Archive a shipment directory into a .tar.gz"
+    )
     p_pkg.add_argument("--shipment", required=True, help="Shipment directory")
-    p_pkg.add_argument("--output", default=None, help="Archive output path (default: <shipment>.tar.gz)")
+    p_pkg.add_argument(
+        "--output",
+        default=None,
+        help="Archive output path (default: <shipment>.tar.gz)",
+    )
     p_pkg.add_argument("--dry-run", action="store_true")
     p_pkg.set_defaults(func=cmd_shipment_package)
 
-    p_meta = ship_sub.add_parser("metadata", help="Add project metadata (descriptive info, URLs, origin) to a shipment")
+    p_meta = ship_sub.add_parser(
+        "metadata",
+        help="Add project metadata (descriptive info, URLs, origin) to a shipment",
+    )
     meta_sub = p_meta.add_subparsers(dest="metadata_cmd", required=True)
-    p_meta_write = meta_sub.add_parser("write", help="Write osqar_project.json into a shipment directory")
+    p_meta_write = meta_sub.add_parser(
+        "write", help="Write osqar_project.json into a shipment directory"
+    )
     p_meta_write.add_argument("--shipment", required=True, help="Shipment directory")
-    p_meta_write.add_argument("--name", default=None, help="Human-friendly project name")
-    p_meta_write.add_argument("--id", dest="project_id", default=None, help="Stable project identifier")
-    p_meta_write.add_argument("--version", default=None, help="Project/shipment version")
+    p_meta_write.add_argument(
+        "--name", default=None, help="Human-friendly project name"
+    )
+    p_meta_write.add_argument(
+        "--id", dest="project_id", default=None, help="Stable project identifier"
+    )
+    p_meta_write.add_argument(
+        "--version", default=None, help="Project/shipment version"
+    )
     p_meta_write.add_argument("--description", default=None, help="Short description")
-    p_meta_write.add_argument("--url", action="append", default=[], help="URL as KEY=VALUE (repeatable)")
-    p_meta_write.add_argument("--origin", action="append", default=[], help="Origin as KEY=VALUE (repeatable), e.g. url=... revision=...")
+    p_meta_write.add_argument(
+        "--url", action="append", default=[], help="URL as KEY=VALUE (repeatable)"
+    )
+    p_meta_write.add_argument(
+        "--origin",
+        action="append",
+        default=[],
+        help="Origin as KEY=VALUE (repeatable), e.g. url=... revision=...",
+    )
     p_meta_write.add_argument(
         "--set",
         action="append",
@@ -1293,67 +1656,166 @@ def build_parser() -> argparse.ArgumentParser:
         "prepare",
         help="Build docs, run traceability + checksums, and optionally archive a shippable evidence bundle",
     )
-    p_prepare.add_argument("--project", required=True, help="Shipment project directory")
-    p_prepare.add_argument("--shipment", default=None, help="Shipment output directory (default: <project>/_build/html)")
-    p_prepare.add_argument("--clean", action="store_true", help="Clean generated outputs before building")
-    p_prepare.add_argument("--dry-run", action="store_true", help="Print destructive ops without executing")
-    p_prepare.add_argument("--script", default=None, help="Test/build script name (default: build-and-test.sh)")
-    p_prepare.add_argument("--skip-tests", action="store_true", help="Skip running the test/build script")
-    p_prepare.add_argument("--exclude", action="append", default=[], help="Exclude glob(s) for checksum generation")
+    p_prepare.add_argument(
+        "--project", required=True, help="Shipment project directory"
+    )
+    p_prepare.add_argument(
+        "--shipment",
+        default=None,
+        help="Shipment output directory (default: <project>/_build/html)",
+    )
+    p_prepare.add_argument(
+        "--clean", action="store_true", help="Clean generated outputs before building"
+    )
+    p_prepare.add_argument(
+        "--dry-run", action="store_true", help="Print destructive ops without executing"
+    )
+    p_prepare.add_argument(
+        "--script",
+        default=None,
+        help="Test/build script name (default: build-and-test.sh)",
+    )
+    p_prepare.add_argument(
+        "--skip-tests", action="store_true", help="Skip running the test/build script"
+    )
+    p_prepare.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help="Exclude glob(s) for checksum generation",
+    )
     p_prepare.add_argument("--enforce-req-has-test", action="store_true")
     p_prepare.add_argument("--enforce-arch-traces-req", action="store_true")
     p_prepare.add_argument("--enforce-test-traces-req", action="store_true")
-    p_prepare.add_argument("--archive", action="store_true", help="Also create a .tar.gz of the shipment directory")
-    p_prepare.add_argument("--archive-output", default=None, help="Archive output path (default: <shipment>.tar.gz)")
+    p_prepare.add_argument(
+        "--archive",
+        action="store_true",
+        help="Also create a .tar.gz of the shipment directory",
+    )
+    p_prepare.add_argument(
+        "--archive-output",
+        default=None,
+        help="Archive output path (default: <shipment>.tar.gz)",
+    )
     p_prepare.set_defaults(func=cmd_supplier_prepare)
 
-    p_int = sub.add_parser("integrator", help="Integrator-focused shipment intake workflows")
+    p_int = sub.add_parser(
+        "integrator", help="Integrator-focused shipment intake workflows"
+    )
     int_sub = p_int.add_subparsers(dest="integrator_cmd", required=True)
-    p_verify = int_sub.add_parser("verify", help="Verify checksum manifest and optionally re-run traceability checks")
-    p_verify.add_argument("--shipment", required=True, help="Received shipment directory")
-    p_verify.add_argument("--manifest", default=None, help="Checksum manifest (default: <shipment>/SHA256SUMS)")
-    p_verify.add_argument("--exclude", action="append", default=[], help="Exclude glob(s) for checksum verify")
-    p_verify.add_argument("--traceability", action="store_true", help="Also validate needs.json traceability")
+    p_verify = int_sub.add_parser(
+        "verify",
+        help="Verify checksum manifest and optionally re-run traceability checks",
+    )
+    p_verify.add_argument(
+        "--shipment", required=True, help="Received shipment directory"
+    )
+    p_verify.add_argument(
+        "--manifest",
+        default=None,
+        help="Checksum manifest (default: <shipment>/SHA256SUMS)",
+    )
+    p_verify.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help="Exclude glob(s) for checksum verify",
+    )
+    p_verify.add_argument(
+        "--traceability",
+        action="store_true",
+        help="Also validate needs.json traceability",
+    )
     p_verify.add_argument("--needs-json", default=None, help="Override needs.json path")
-    p_verify.add_argument("--json-report", default=None, help="Write integrator-side traceability report")
+    p_verify.add_argument(
+        "--json-report", default=None, help="Write integrator-side traceability report"
+    )
     p_verify.add_argument("--enforce-req-has-test", action="store_true")
     p_verify.add_argument("--enforce-arch-traces-req", action="store_true")
     p_verify.add_argument("--enforce-test-traces-req", action="store_true")
     p_verify.set_defaults(func=cmd_integrator_verify)
 
-    p_ws = sub.add_parser("workspace", help="Operate on multiple shipments/projects in a directory")
+    p_ws = sub.add_parser(
+        "workspace", help="Operate on multiple shipments/projects in a directory"
+    )
     ws_sub = p_ws.add_subparsers(dest="workspace_cmd", required=True)
 
-    p_wv = ws_sub.add_parser("verify", help="Verify many shipments (discover by scanning for SHA256SUMS)")
-    p_wv.add_argument("--root", default=".", help="Root directory containing received shipments")
-    p_wv.add_argument("--recursive", action="store_true", help="Recursively scan for SHA256SUMS")
-    p_wv.add_argument("--exclude", action="append", default=[], help="Exclude glob(s) for checksum verify")
-    p_wv.add_argument("--traceability", action="store_true", help="Also validate needs.json traceability")
+    p_wv = ws_sub.add_parser(
+        "verify", help="Verify many shipments (discover by scanning for SHA256SUMS)"
+    )
+    p_wv.add_argument(
+        "--root", default=".", help="Root directory containing received shipments"
+    )
+    p_wv.add_argument(
+        "--recursive", action="store_true", help="Recursively scan for SHA256SUMS"
+    )
+    p_wv.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help="Exclude glob(s) for checksum verify",
+    )
+    p_wv.add_argument(
+        "--traceability",
+        action="store_true",
+        help="Also validate needs.json traceability",
+    )
     p_wv.add_argument("--needs-json", default=None, help="Override needs.json path")
     p_wv.add_argument("--enforce-req-has-test", action="store_true")
     p_wv.add_argument("--enforce-arch-traces-req", action="store_true")
     p_wv.add_argument("--enforce-test-traces-req", action="store_true")
-    p_wv.add_argument("--continue-on-error", action="store_true", help="Continue verifying after a failure")
-    p_wv.add_argument("--json-report", default=None, help="Write a workspace JSON summary report")
+    p_wv.add_argument(
+        "--continue-on-error",
+        action="store_true",
+        help="Continue verifying after a failure",
+    )
+    p_wv.add_argument(
+        "--json-report", default=None, help="Write a workspace JSON summary report"
+    )
     p_wv.set_defaults(func=cmd_workspace_verify)
 
     p_wi = ws_sub.add_parser(
         "intake",
         help="Verify and archive multiple shipments into a single intake directory (copies remain byte-identical)",
     )
-    p_wi.add_argument("shipments", nargs="*", help="Explicit shipment directories (optional if using --root)")
-    p_wi.add_argument("--root", default=None, help="Root directory to scan for shipments (by SHA256SUMS)")
-    p_wi.add_argument("--recursive", action="store_true", help="Recursively scan for SHA256SUMS")
+    p_wi.add_argument(
+        "shipments",
+        nargs="*",
+        help="Explicit shipment directories (optional if using --root)",
+    )
+    p_wi.add_argument(
+        "--root",
+        default=None,
+        help="Root directory to scan for shipments (by SHA256SUMS)",
+    )
+    p_wi.add_argument(
+        "--recursive", action="store_true", help="Recursively scan for SHA256SUMS"
+    )
     p_wi.add_argument("--output", required=True, help="Output intake archive directory")
-    p_wi.add_argument("--force", action="store_true", help="Overwrite output directory if it exists")
+    p_wi.add_argument(
+        "--force", action="store_true", help="Overwrite output directory if it exists"
+    )
     p_wi.add_argument("--dry-run", action="store_true")
-    p_wi.add_argument("--exclude", action="append", default=[], help="Exclude glob(s) for checksum verify")
-    p_wi.add_argument("--traceability", action="store_true", help="Also generate integrator-side traceability reports")
+    p_wi.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help="Exclude glob(s) for checksum verify",
+    )
+    p_wi.add_argument(
+        "--traceability",
+        action="store_true",
+        help="Also generate integrator-side traceability reports",
+    )
     p_wi.add_argument("--needs-json", default=None, help="Override needs.json path")
     p_wi.add_argument("--enforce-req-has-test", action="store_true")
     p_wi.add_argument("--enforce-arch-traces-req", action="store_true")
     p_wi.add_argument("--enforce-test-traces-req", action="store_true")
-    p_wi.add_argument("--continue-on-error", action="store_true", help="Continue intaking after a failure")
+    p_wi.add_argument(
+        "--continue-on-error",
+        action="store_true",
+        help="Continue intaking after a failure",
+    )
     p_wi.set_defaults(func=cmd_workspace_intake)
 
     return parser

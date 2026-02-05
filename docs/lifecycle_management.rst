@@ -162,7 +162,7 @@ Supplier (produce + ship)
 
 Recommended one-shot workflow (per shipment project)::
 
-   poetry run python -m tools.osqar_cli supplier prepare \
+  ./osqar supplier prepare \
      --project <project_dir> \
      --clean \
      --archive
@@ -179,7 +179,7 @@ Integrator (receive + verify)
 
 Recommended intake workflow::
 
-   poetry run python -m tools.osqar_cli integrator verify \
+  ./osqar integrator verify \
      --shipment /path/to/shipment \
      --traceability
 

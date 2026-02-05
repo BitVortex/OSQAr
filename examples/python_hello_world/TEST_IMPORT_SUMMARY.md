@@ -119,7 +119,7 @@ poetry run pytest tests/test_tsim.py \
     --junit-xml=test_results.xml \
     --cov=src
 
-poetry run sphinx-build -b html . _build/html
+poetry run python -m sphinx -b html . _build/html
 
 # View results
 open _build/html/index.html

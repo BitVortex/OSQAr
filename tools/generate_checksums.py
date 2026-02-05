@@ -50,7 +50,9 @@ def _matches_any_glob(relpath: str, globs: list[str]) -> bool:
     return any(fnmatch.fnmatch(rel, g) for g in globs)
 
 
-def _write_manifest(root: Path, output: Path, algorithm: str, exclude_globs: list[str]) -> list[Entry]:
+def _write_manifest(
+    root: Path, output: Path, algorithm: str, exclude_globs: list[str]
+) -> list[Entry]:
     root = root.resolve()
     output = output.resolve()
 
@@ -96,7 +98,9 @@ def _read_manifest(manifest: Path) -> list[Entry]:
     return entries
 
 
-def _verify_manifest(root: Path, manifest: Path, algorithm: str) -> tuple[list[str], list[str], list[str]]:
+def _verify_manifest(
+    root: Path, manifest: Path, algorithm: str
+) -> tuple[list[str], list[str], list[str]]:
     root = root.resolve()
     entries = _read_manifest(manifest)
 
@@ -119,8 +123,12 @@ def _verify_manifest(root: Path, manifest: Path, algorithm: str) -> tuple[list[s
 
 
 def cli(argv: list[str]) -> int:
-    parser = argparse.ArgumentParser(description="Generate or verify checksum manifests")
-    parser.add_argument("--root", type=Path, required=True, help="Root directory to hash")
+    parser = argparse.ArgumentParser(
+        description="Generate or verify checksum manifests"
+    )
+    parser.add_argument(
+        "--root", type=Path, required=True, help="Root directory to hash"
+    )
     parser.add_argument(
         "--algorithm",
         default="sha256",
@@ -146,11 +154,15 @@ def cli(argv: list[str]) -> int:
     try:
         hashlib.new(args.algorithm)
     except Exception as exc:  # noqa: BLE001
-        print(f"ERROR: unsupported algorithm '{args.algorithm}': {exc}", file=sys.stderr)
+        print(
+            f"ERROR: unsupported algorithm '{args.algorithm}': {exc}", file=sys.stderr
+        )
         return 2
 
     if args.output is not None:
-        entries = _write_manifest(args.root, args.output, args.algorithm, list(args.exclude))
+        entries = _write_manifest(
+            args.root, args.output, args.algorithm, list(args.exclude)
+        )
         print(f"Wrote {len(entries)} checksums to {args.output}")
         return 0
 
@@ -160,7 +172,9 @@ def cli(argv: list[str]) -> int:
         return 2
 
     ok, missing, mismatched = _verify_manifest(args.root, manifest, args.algorithm)
-    print(f"Verified manifest: ok={len(ok)} missing={len(missing)} mismatched={len(mismatched)}")
+    print(
+        f"Verified manifest: ok={len(ok)} missing={len(missing)} mismatched={len(mismatched)}"
+    )
 
     if missing:
         print("Missing files:")

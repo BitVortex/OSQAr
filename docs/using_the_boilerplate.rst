@@ -20,6 +20,41 @@ OSQAr provides:
 
 This chapter is the main entrypoint. It gives you the mental model and the first commands to run.
 
+Start here
+==========
+
+.. note::
+
+    The examples below use the repo-root wrapper ``./osqar`` (Linux/macOS) or
+    ``osqar.cmd`` / ``osqar.ps1`` (Windows).
+
+    - Requirement: you must run the command from the OSQAr repository root (where the wrapper lives)
+       and have installed dependencies via Poetry.
+    - Fallback: if you prefer not to use the wrapper, run the equivalent command via Poetry:
+       ``poetry run python -m tools.osqar_cli ...``
+
+1. Install the framework dependencies (Poetry environment).
+2. Build the framework documentation (repo root).
+3. Create a minimal project scaffold (so you can try the workflow in your own repo layout).
+4. In the generated project, build the docs and inspect the outputs (HTML + ``needs.json``).
+
+.. code-block:: bash
+
+   # 1) Install dependencies
+   poetry install
+
+   # 2) Build framework docs (this repo)
+   ./osqar build-docs
+
+   # 3) Scaffold a minimal project next to the framework repo
+   ./osqar new --language c --name MySEooC --destination ../MySEooC
+
+   # 4) Build the scaffolded project docs
+   ./osqar build-docs --project ../MySEooC
+
+Windows note: prefer the repo-root wrappers (``osqar.cmd`` / ``osqar.ps1``). If you want to run
+``*.sh`` example scripts unchanged, use WSL2.
+
 Recommended reading order
 =========================
 
@@ -65,8 +100,17 @@ Build the rendered HTML documentation from the repository root:
 .. code-block:: bash
 
    poetry install
-   poetry run sphinx-build -b html . _build/html
+   ./osqar build-docs
    open _build/html/index.html
+
+By default, ``build-docs`` uses ``--project .`` and writes HTML to ``./_build/html``.
+
+Download (optional)
+-------------------
+
+If you want a pre-built bundle (framework HTML docs + CLI tooling) without building locally, use the GitHub Releases assets:
+
+- https://github.com/bitvortex/OSQAr/releases
 
 Reproducible native builds (C / C++ / Rust)
 ===========================================
@@ -158,6 +202,8 @@ Each example shipment contains:
 CI exports deterministic archives (``.tar.gz``) for each example as well as a combined archive.
 In GitHub Actions, download the artifact named ``osqar-example-shipments`` from the ``Tests and Example Shipments`` workflow run.
 
+For the repository’s CI configuration (including reproducible build settings), see :ref:`ci-setup`.
+
 Reference examples
 ==================
 
@@ -165,17 +211,17 @@ OSQAr primarily targets **C**, **C++**, and **Rust** projects.
 
 Each example produces:
 
-- native test results as `test_results.xml` (JUnit)
-- rendered HTML documentation; the examples can optionally import JUnit XML into the docs via `sphinx-test-reports`
+- native test results as ``test_results.xml`` (JUnit)
+- rendered HTML documentation; the examples can optionally import JUnit XML into the docs via ``sphinx-test-reports``
 
 Build any example documentation directly:
 
 .. code-block:: bash
 
    poetry install
-   poetry run sphinx-build -b html examples/c_hello_world _build/html/examples/c
-   poetry run sphinx-build -b html examples/cpp_hello_world _build/html/examples/cpp
-   poetry run sphinx-build -b html examples/rust_hello_world _build/html/examples/rust
+   ./osqar build-docs --project examples/c_hello_world
+   ./osqar build-docs --project examples/cpp_hello_world
+   ./osqar build-docs --project examples/rust_hello_world
 
 Run an end-to-end workflow (native tests → docs) for an example:
 
@@ -216,20 +262,87 @@ OSQAr includes a small, stdlib-only CLI for common workflows:
 For guidance on large-team collaboration (branching, merging, conflict minimization), see
 :doc:`collaboration_workflows`.
 
-Invocation
-----------
+Full command reference (all subcommands and flags): :doc:`cli_reference`.
 
-Run via Poetry:
+Shell scripts and Windows support
+---------------------------------
+
+OSQAr includes a number of shell scripts (primarily ``*.sh``) across the repository.
+They exist for two reasons:
+
+- **Example automation and CI parity**: the example projects (C/C++/Rust/Python) ship
+   end-to-end scripts (tests → evidence files → docs) so users can reproduce what the
+   CI and GitHub Pages workflows do.
+- **Developer convenience**: a small number of scripts help with local workflows.
+
+Design decision (pragmatic cross-platform support)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This repository intentionally does **not** try to provide a Windows-native equivalent
+for every ``.sh`` script.
+
+Reasons:
+
+- Many scripts assume a POSIX shell and common Unix tooling (Bash, coreutils, path
+   conventions, executable bits).
+- Reproducible-build packaging is much harder to keep consistent across platforms
+   (e.g., deterministic ``tar.gz`` creation, stable file ordering, stable timestamps).
+
+Instead, OSQAr uses:
+
+- A **cross-platform primary entry point**: the Python CLI (``python -m tools.osqar_cli``).
+- **Thin Windows wrappers** for the CLI at repo root (``osqar.cmd`` and ``osqar.ps1``).
+- A documented fallback for running example scripts on Windows: **WSL2** (recommended)
+   or a POSIX-like environment such as Git Bash.
+
+What this means in practice
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- If you are on Windows and want the supplier/integrator workflows, prefer the CLI.
+  It covers the common steps (build docs, run traceability checks, generate/verify
+  checksums, archive shipments).
+- If you specifically want to run the example ``build-and-test.sh`` scripts unchanged,
+  run them in WSL2.
+
+Support matrix
+^^^^^^^^^^^^^^
+
+.. list-table:: Support matrix (recommended expectations)
+   :header-rows: 1
+   :widths: 34 22 22 22
+
+   * - Workflow
+     - Linux/macOS
+     - Windows (native)
+     - Windows (WSL2)
+   * - Run OSQAr CLI workflows (scaffold, traceability, checksums, supplier/integrator)
+     - Supported
+     - Supported (recommended)
+     - Supported
+   * - Run example ``build-and-test.sh`` scripts unchanged
+     - Supported
+     - Not supported (use CLI, or run under WSL2)
+     - Supported (recommended)
+   * - Reproducible builds and deterministic shipment archives
+     - Supported (CI reference)
+     - Best-effort (tooling differences)
+     - Supported (closest to CI)
+
+Windows-friendly equivalents (recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following are intended as portable alternatives to the example scripts:
 
 .. code-block:: bash
 
-   poetry run python -m tools.osqar_cli --help
+    # Build docs and prepare an evidence shipment via the CLI
+   ./osqar supplier prepare \
+       --project examples/python_hello_world \
+       --clean \
+       --archive
 
-Or via the repo-root convenience wrapper:
-
-.. code-block:: bash
-
-   ./osqar --help
+For more context on the CI workflows and how these scripts are used in automation,
+see :ref:`ci-setup`.
 
 Scaffold a new project
 ----------------------
@@ -240,7 +353,7 @@ For a step-by-step guide (including how to migrate existing sources and document
 
 .. code-block:: bash
 
-   poetry run python -m tools.osqar_cli new --language c --name MySEooC --destination ./MySEooC
+   ./osqar new --language c --name MySEooC --destination ./MySEooC
 
 This copies the selected template while excluding build outputs (e.g., ``_build/``, ``target/``, ``__pycache__/``).
 
@@ -251,7 +364,7 @@ Run traceability checks on an exported ``needs.json``:
 
 .. code-block:: bash
 
-   poetry run python -m tools.osqar_cli traceability ./_build/html/needs.json \
+    ./osqar traceability ./_build/html/needs.json \
      --json-report ./_build/html/traceability_report.json
 
 Checksum manifest (shipment integrity)
@@ -261,8 +374,8 @@ Generate and verify a checksum manifest (default: SHA-256) for a shipped directo
 
 .. code-block:: bash
 
-   poetry run python -m tools.osqar_cli checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS
-   poetry run python -m tools.osqar_cli checksum verify --root ./_build/html --manifest ./_build/html/SHA256SUMS
+   ./osqar checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS
+   ./osqar checksum verify --root ./_build/html --manifest ./_build/html/SHA256SUMS
 
 Core authoring workflow
 =======================
@@ -338,7 +451,7 @@ Supplier-side procedure (create the shipment)
 
 Build the example documentation so that ``needs.json`` is exported::
 
-    poetry run sphinx-build -b html examples/python_hello_world examples/python_hello_world/_build/html
+   ./osqar build-docs --project examples/python_hello_world
 
 Run the traceability check (writes a machine-readable report)::
 
@@ -359,13 +472,13 @@ Generate and verify checksums for the example build output directory::
 Optional convenience (same operations via the OSQAr CLI)::
 
     # Supplier: build a shippable evidence directory in one command
-    poetry run python -m tools.osqar_cli supplier prepare \
+   ./osqar supplier prepare \
        --project examples/python_hello_world \
        --clean \
        --archive
 
     # Integrator: verify a received shipment (checksums + traceability)
-    poetry run python -m tools.osqar_cli integrator verify \
+   ./osqar integrator verify \
        --shipment /path/to/shipment \
        --traceability
 
@@ -373,7 +486,7 @@ Optional convenience (same operations via the OSQAr CLI)::
     ./osqar shipment metadata write \
        --shipment examples/python_hello_world/_build/html \
        --name "OSQAr Python Hello World" \
-       --version "0.3.1" \
+       --version "0.4.0" \
        --url repository=https://example.com/repo.git \
        --origin url=https://example.com/repo.git \
        --origin revision=<commit>
@@ -386,10 +499,10 @@ Optional convenience (same operations via the OSQAr CLI)::
        --traceability
 
     # Or run the individual shipment steps
-    poetry run python -m tools.osqar_cli shipment build-docs --project examples/python_hello_world
-    poetry run python -m tools.osqar_cli shipment traceability --shipment examples/python_hello_world/_build/html
-    poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html generate
-    poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
+   ./osqar build-docs --project examples/python_hello_world
+   ./osqar shipment traceability --shipment examples/python_hello_world/_build/html
+   ./osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
+   ./osqar shipment checksums --shipment examples/python_hello_world/_build/html verify
 
 Then archive and ship the **example output directory** (not the framework docs built from the repo root).
 

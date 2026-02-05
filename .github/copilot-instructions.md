@@ -46,7 +46,7 @@ This is a **documentation-first** architecture where `conf.py` is the project nu
 
 ```bash
 poetry install  # Install dependencies
-poetry run sphinx-build -b html . _build/html  # Build HTML output
+./osqar build-docs  # Build HTML output
 ```
 
 ### Run Tests
@@ -136,7 +136,7 @@ shasum -a 256 -c osqar_example_shipments.tar.gz.sha256
 
 3. **When modifying conf.py**: Always test with `sphinx-build` to catch extension ordering issues
 
-   Prefer `poetry run sphinx-build ...` so the correct environment is used.
+   Prefer `./osqar build-docs` so the correct environment is used.
    - Validate that needs IDs follow `^[A-Z0-9_]{3,}` regex after changes
 
 4. **When adding diagrams**: Use PlantUML syntax in `.diagram` or `.uml` files referenced from `.rst`
@@ -154,7 +154,7 @@ OSQAr ships two dependency-free helper tools (stdlib only):
 Typical local workflow after building docs:
 
 ```bash
-poetry run sphinx-build -b html . _build/html
+./osqar build-docs
 
 poetry run python tools/traceability_check.py \
    _build/html/needs.json \
@@ -172,6 +172,6 @@ poetry run python tools/generate_checksums.py \
 Quick command reminders:
 
 - `poetry install`
-- `poetry run sphinx-build -b html . _build/html`
+- `./osqar build-docs`
 - `poetry run pytest`
 - `black .`

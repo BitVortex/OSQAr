@@ -193,8 +193,8 @@ Maintain high test coverage, especially for:
 ### Building Documentation
 
 ```bash
-# Build HTML documentation
-poetry run sphinx-build -b html . _build/html
+# Build HTML documentation (preferred: OSQAr CLI wrapper)
+./osqar build-docs
 
 # Build with auto-reload (development)
 poetry run sphinx-autobuild -b html . _build/html
@@ -239,7 +239,7 @@ Project Documentation/
 
 4. **Test Documentation Build**:
    ```bash
-   poetry run sphinx-build -b html . _build/html
+   ./osqar build-docs
    ```
 
 ### Creating a Pull Request

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - Unreleased
+
+### Added
+- Central CLI reference documentation and reduced CLI duplication across guides
+- Cross-platform `osqar` wrapper scripts (`osqar`, `osqar.cmd`, `osqar.ps1`) and a shorthand `build-docs` command
+- Minimal “basic” project templates (C/C++/Rust/Python) with shared template overlays
+- Poetry-managed scaffolds (shared `pyproject.toml` + `poetry.lock`) for fixed documentation/tooling dependencies
+
+### Changed
+- Documentation now prefers `./osqar build-docs` over raw `sphinx-build` invocations
+- `osqar build-docs` prefers running Sphinx inside the target project’s Poetry environment when available
+- Documentation navigation: moved CLI reference and project setup under the Framework section
+
+### Fixed
+- Migrated project metadata to PEP 621 (`[project]`) to avoid Poetry deprecation warnings
+
 ## [0.3.1] - 2026-02-03
 
 ### Added

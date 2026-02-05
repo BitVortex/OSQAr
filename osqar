@@ -7,14 +7,43 @@ thin executable wrapper that invokes the stdlib-only CLI implementation.
 Usage:
   ./osqar --help
 
-If you prefer Poetry-managed execution:
+This wrapper prefers Poetry-managed execution when available.
+
+Fallback:
   poetry run python -m tools.osqar_cli --help
 """
 
 from __future__ import annotations
 
-from tools.osqar_cli import main
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+
+def _run(argv: list[str]) -> int:
+  try:
+    return int(subprocess.run(argv).returncode)
+  except FileNotFoundError as exc:
+    print(f"ERROR: command not found: {argv[0]} ({exc})", file=sys.stderr)
+    return 127
 
 
 if __name__ == "__main__":
+  repo_root = Path(__file__).resolve().parent
+  os.chdir(repo_root)
+
+  # If we're already running inside `poetry run`, avoid spawning Poetry again.
+  if os.environ.get("POETRY_ACTIVE") == "1":
+    from tools.osqar_cli import main
+
     raise SystemExit(main())
+
+  if shutil.which("poetry"):
+    raise SystemExit(
+      _run(["poetry", "run", "python", "-m", "tools.osqar_cli", *sys.argv[1:]])
+    )
+
+  # Last resort: run in the current interpreter environment.
+  raise SystemExit(_run([sys.executable, "-m", "tools.osqar_cli", *sys.argv[1:]]))

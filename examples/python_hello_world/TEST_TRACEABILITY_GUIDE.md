@@ -179,7 +179,7 @@ generated xml file: test_results.xml
 ### Step 2: Build Documentation
 
 ```bash
-poetry run sphinx-build -b html . _build/html
+poetry run python -m sphinx -b html . _build/html
 ```
 
 **Output**:
@@ -264,7 +264,7 @@ jobs:
       - name: Build documentation (auto-imports test results)
         run: |
           cd examples/python_hello_world
-          poetry run sphinx-build -b html . _build/html
+          poetry run python -m sphinx -b html . _build/html
       
       - name: Deploy compliance artifacts
         uses: actions/upload-artifact@v3
@@ -294,7 +294,7 @@ poetry run pytest tests/test_tsim.py \
   --cov-report=term-missing
 
 echo "📚 Building documentation..."
-poetry run sphinx-build -b html . _build/html
+poetry run python -m sphinx -b html . _build/html
 
 echo "✅ All checks passed!"
 echo "📖 Documentation: _build/html/index.html"
@@ -334,7 +334,7 @@ Generate domain-specific compliance artifacts:
 ```bash
 cd examples/medical_device
 poetry run pytest tests/ --junit-xml=test_results_medical.xml
-poetry run sphinx-build -b html . _build/html
+poetry run python -m sphinx -b html . _build/html
 ```
 
 ## Test Traceability Metrics

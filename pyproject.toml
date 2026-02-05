@@ -1,22 +1,24 @@
-[tool.poetry]
+[project]
 name = "osqar"
-version = "0.3.1"
+version = "0.4.0"
 description = "Open Safety Qualification Architecture - A Sphinx-Needs boilerplate for safety-related systems."
-authors = ["Jan Toennemann <jan@toennemann.net>"]
 readme = "README.md"
-package-mode = false
 license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [
+	{ name = "Jan Toennemann", email = "jan@toennemann.net" },
+]
+requires-python = ">=3.9,<3.14"
+dependencies = [
+	"Sphinx==7.2.*",
+	"sphinx-needs>=2.0",
+	"sphinx-test-reports>=1.0",
+	"sphinxcontrib-plantuml>=0.25",
+	"furo>=2024.8.6",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.9,<3.14"
-# Core Documentation Tools
-Sphinx = "7.2.*"
-sphinx-needs = "^2.0"  # The engine for requirements & traceability
-sphinx-test-reports = "^1.0" # To import JUnit/TRF test results into Sphinx
-sphinxcontrib-plantuml = "^0.25" # For architecture diagrams
-
-# Theme
-furo = "^2024.8.6"
+[tool.poetry]
+package-mode = false
 
 [tool.poetry.group.dev.dependencies]
 # Tools for maintaining the boilerplate itself
@@ -39,6 +41,20 @@ optional = true
 [tool.poetry.group.ide.dependencies]
 # Optional LSP server for Sphinx projects (VS Code).
 esbonio = "^0.16"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra"
+testpaths = ["tests"]
+norecursedirs = [
+	"_build",
+	"build",
+	"dist",
+	".venv",
+	"__pycache__",
+	"templates",
+	"examples",
+]
 
 [build-system]
 requires = ["poetry-core"]

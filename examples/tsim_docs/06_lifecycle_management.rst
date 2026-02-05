@@ -53,9 +53,9 @@ Actions:
 
 Example commands (supplier, docs-only update)::
 
-  poetry run python -m tools.osqar_cli shipment build-docs --project examples/python_hello_world
-  poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html generate
-  poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
+  ./osqar build-docs --project examples/python_hello_world
+  ./osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
+  ./osqar shipment checksums --shipment examples/python_hello_world/_build/html verify
 
 Requirement changes
 -------------------
@@ -75,7 +75,7 @@ Actions:
 
 Example commands (supplier, requirement change)::
 
-   poetry run python -m tools.osqar_cli supplier prepare \
+  ./osqar supplier prepare \
      --project examples/python_hello_world \
      --clean \
      --archive
@@ -97,7 +97,7 @@ Actions:
 
 Example commands (supplier, implementation change)::
 
-   poetry run python -m tools.osqar_cli supplier prepare \
+  ./osqar supplier prepare \
      --project examples/python_hello_world \
      --clean \
      --archive
@@ -158,7 +158,7 @@ Supplier workflow (produce shipment)
 
 From the repository root (recommended)::
 
-   poetry run python -m tools.osqar_cli supplier prepare \
+  ./osqar supplier prepare \
      --project examples/python_hello_world \
      --clean \
      --archive
@@ -171,7 +171,7 @@ Notes:
 
 Optional: add supplier metadata to the shipment root (helps integrator intake)::
 
-   poetry run python -m tools.osqar_cli shipment metadata write \
+  ./osqar shipment metadata write \
      --shipment examples/python_hello_world/_build/html \
      --name "TSIM (Python)" \
      --version "<your_version>" \
@@ -184,13 +184,13 @@ Integrator workflow (verify shipment)
 
 After unpacking a received shipment::
 
-   poetry run python -m tools.osqar_cli integrator verify \
+  ./osqar integrator verify \
      --shipment /path/to/shipment \
      --traceability
 
 If you intake multiple shipments at once, prefer the batch workflow::
 
-   poetry run python -m tools.osqar_cli workspace intake \
+  ./osqar workspace intake \
      --root /path/to/received \
      --recursive \
      --output /path/to/archive/<date> \
