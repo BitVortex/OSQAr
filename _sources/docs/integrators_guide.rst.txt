@@ -2,6 +2,8 @@
 Integrator’s Guide
 ==================
 
+If you are new to OSQAr, start with :doc:`using_the_boilerplate` and :doc:`project_setup_from_scratch`.
+
 See also: :doc:`multi_project_workflows` for batch intake and multi-shipment verification patterns.
 
 Scope
@@ -11,6 +13,8 @@ This guide is for the **integrator** of a Safety Element out of Context (SEooC):
 
 - you integrate a reusable component into a product/system with specific context
 - you assign domain-specific integrity levels and complete the safety case
+
+For a full CLI command/option reference, see :doc:`cli_reference`.
 
 OSQAr helps you verify and intake auditable evidence shipments (and keep the traceability chain consistent), but it does not replace system engineering or certification.
 
@@ -80,13 +84,13 @@ Recommended integrator procedure
 
    Optional convenience (same verification via OSQAr CLI)::
 
-      poetry run python -m tools.osqar_cli checksum verify \
+      ./osqar checksum verify \
         --root /path/to/shipment \
         --manifest /path/to/shipment/SHA256SUMS
 
    Recommended integrator one-shot workflow (CLI)::
 
-      poetry run python -m tools.osqar_cli integrator verify \
+      ./osqar integrator verify \
         --shipment /path/to/shipment \
         --traceability
 
@@ -107,7 +111,7 @@ Recommended integrator procedure
 
    Optional convenience (same check via OSQAr CLI)::
 
-      poetry run python -m tools.osqar_cli traceability /path/to/shipment/needs.json \
+      ./osqar traceability /path/to/shipment/needs.json \
         --json-report /path/to/shipment/traceability_report.integrator.json
 
    Store your integrator-side report alongside the shipped evidence.

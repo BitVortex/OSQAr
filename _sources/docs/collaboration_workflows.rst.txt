@@ -133,6 +133,45 @@ Recommended CI checks:
 - traceability check on exported ``needs.json``
 - checksum generation/verification for example shipments (if you publish them)
 
+.. _ci-setup:
+
+CI setup (GitHub Actions)
+-------------------------
+
+This repository uses GitHub Actions to continuously validate the boilerplate and to
+demonstrate “evidence shipment” generation.
+
+Workflow definitions:
+
+- ``.github/workflows/ci.yml`` (Tests and Example Shipments)
+- ``.github/workflows/pages-deploy.yml`` (GitHub Pages)
+
+What the CI runs
+^^^^^^^^^^^^^^^^
+
+- Python checks (matrix): install via Poetry, run ``pytest``, build the Python demo example docs.
+- Traceability validation: run ``tools/traceability_check.py`` on the exported ``needs.json``.
+- Integrity metadata: generate and verify ``SHA256SUMS`` manifests for built documentation outputs.
+
+Reproducible example shipments
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The CI workflow builds deterministic archives for the native examples (C/C++/Rust):
+
+- Sets ``SOURCE_DATE_EPOCH`` (using the latest git commit timestamp).
+- Enables reproducible mode via ``OSQAR_REPRODUCIBLE=1``.
+- Produces per-example shipment archives and a combined archive, each with a ``.sha256`` file.
+
+In GitHub Actions, download the artifact named ``osqar-example-shipments`` from the
+``Tests and Example Shipments`` workflow run.
+
+GitHub Pages publishing
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The Pages workflow builds the framework docs and publishes rendered examples under ``/examples/``.
+It also runs the example end-to-end scripts (tests → evidence files → docs) so the published site
+includes embedded test results and evidence snapshots.
+
 Working on multiple subprojects in parallel
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

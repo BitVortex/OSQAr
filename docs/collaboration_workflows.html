@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="OSQAr Examples" href="../examples/index.html" /><link rel="prev" title="Multi-project workflows" href="multi_project_workflows.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Collaboration workflows (multi-user) - OSQAr 0.3.1 documentation</title>
+        <title>Collaboration workflows (multi-user) - OSQAr 0.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.3.1 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.0.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.3.1 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.0.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -208,10 +208,11 @@
   <p class="caption" role="heading"><span class="caption-text">Framework</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="using_the_boilerplate.html">Using the OSQAr Boilerplate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_reference.html">CLI Reference</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="suppliers_guide.html">Supplier’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lifecycle_management.html">Lifecycle Management</a></li>
@@ -397,6 +398,41 @@ if needed.</p></li>
 <li><p>checksum generation/verification for example shipments (if you publish them)</p></li>
 </ul>
 </section>
+</section>
+<section id="ci-setup-github-actions">
+<span id="ci-setup"></span><h2>CI setup (GitHub Actions)<a class="headerlink" href="#ci-setup-github-actions" title="Link to this heading">¶</a></h2>
+<p>This repository uses GitHub Actions to continuously validate the boilerplate and to
+demonstrate “evidence shipment” generation.</p>
+<p>Workflow definitions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/ci.yml</span></code> (Tests and Example Shipments)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/pages-deploy.yml</span></code> (GitHub Pages)</p></li>
+</ul>
+<section id="what-the-ci-runs">
+<h3>What the CI runs<a class="headerlink" href="#what-the-ci-runs" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Python checks (matrix): install via Poetry, run <code class="docutils literal notranslate"><span class="pre">pytest</span></code>, build the Python demo example docs.</p></li>
+<li><p>Traceability validation: run <code class="docutils literal notranslate"><span class="pre">tools/traceability_check.py</span></code> on the exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>.</p></li>
+<li><p>Integrity metadata: generate and verify <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> manifests for built documentation outputs.</p></li>
+</ul>
+</section>
+<section id="reproducible-example-shipments">
+<h3>Reproducible example shipments<a class="headerlink" href="#reproducible-example-shipments" title="Link to this heading">¶</a></h3>
+<p>The CI workflow builds deterministic archives for the native examples (C/C++/Rust):</p>
+<ul class="simple">
+<li><p>Sets <code class="docutils literal notranslate"><span class="pre">SOURCE_DATE_EPOCH</span></code> (using the latest git commit timestamp).</p></li>
+<li><p>Enables reproducible mode via <code class="docutils literal notranslate"><span class="pre">OSQAR_REPRODUCIBLE=1</span></code>.</p></li>
+<li><p>Produces per-example shipment archives and a combined archive, each with a <code class="docutils literal notranslate"><span class="pre">.sha256</span></code> file.</p></li>
+</ul>
+<p>In GitHub Actions, download the artifact named <code class="docutils literal notranslate"><span class="pre">osqar-example-shipments</span></code> from the
+<code class="docutils literal notranslate"><span class="pre">Tests</span> <span class="pre">and</span> <span class="pre">Example</span> <span class="pre">Shipments</span></code> workflow run.</p>
+</section>
+<section id="github-pages-publishing">
+<h3>GitHub Pages publishing<a class="headerlink" href="#github-pages-publishing" title="Link to this heading">¶</a></h3>
+<p>The Pages workflow builds the framework docs and publishes rendered examples under <code class="docutils literal notranslate"><span class="pre">/examples/</span></code>.
+It also runs the example end-to-end scripts (tests → evidence files → docs) so the published site
+includes embedded test results and evidence snapshots.</p>
+</section>
 <section id="working-on-multiple-subprojects-in-parallel">
 <h3>Working on multiple subprojects in parallel<a class="headerlink" href="#working-on-multiple-subprojects-in-parallel" title="Link to this heading">¶</a></h3>
 <p>When multiple teams produce shipments simultaneously:</p>
@@ -490,6 +526,12 @@ if needed.</p></li>
 </li>
 <li><a class="reference internal" href="#collaborating-at-scale">Collaborating at scale</a><ul>
 <li><a class="reference internal" href="#roles-and-review-gates">Roles and review gates</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ci-setup-github-actions">CI setup (GitHub Actions)</a><ul>
+<li><a class="reference internal" href="#what-the-ci-runs">What the CI runs</a></li>
+<li><a class="reference internal" href="#reproducible-example-shipments">Reproducible example shipments</a></li>
+<li><a class="reference internal" href="#github-pages-publishing">GitHub Pages publishing</a></li>
 <li><a class="reference internal" href="#working-on-multiple-subprojects-in-parallel">Working on multiple subprojects in parallel</a></li>
 </ul>
 </li>
@@ -507,7 +549,7 @@ if needed.</p></li>
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=4621528c"></script>
+    <script src="../_static/documentation_options.js?v=7026087e"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

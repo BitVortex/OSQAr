@@ -74,4 +74,4 @@ Then build the documentation (imports `test_results.xml`):
 
 .. code-block:: bash
 
-   poetry run sphinx-build -b html . _build/html
+   ./osqar build-docs --project examples/c_hello_world

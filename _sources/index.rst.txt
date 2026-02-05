@@ -19,17 +19,30 @@ OSQAr is built on Sphinx + sphinx-needs and provides:
 
 OSQAr also includes a small CLI for scaffolding new projects and running traceability/checksum verification.
 
+Start here
+==========
+
+If you are new to OSQAr, a good first pass is:
+
+1. Read the main entrypoint: :doc:`docs/using_the_boilerplate`.
+2. Scaffold a minimal project and try a full build: :doc:`docs/project_setup_from_scratch`.
+3. Then pick your role-specific workflow:
+
+   - Supplier: :doc:`docs/suppliers_guide`
+   - Integrator: :doc:`docs/integrators_guide`
+
 .. toctree::
    :maxdepth: 1
    :caption: Framework
 
    docs/using_the_boilerplate
+   docs/project_setup_from_scratch
+   docs/cli_reference
 
 .. toctree::
    :maxdepth: 1
    :caption: Guides
 
-   docs/project_setup_from_scratch
    docs/suppliers_guide
    docs/integrators_guide
    docs/lifecycle_management

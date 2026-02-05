@@ -53,7 +53,7 @@ From the OSQAr repository root:
 .. code-block:: bash
 
    # Example: create a new C-based component project
-   poetry run python -m tools.osqar_cli new \
+   ./osqar new \
      --language c \
      --name OpenThermoLib \
      --destination ../OpenThermoLib
@@ -80,6 +80,12 @@ Typical layout (simplified)::
      include/
      tests/
      build-and-test.sh
+
+.. note::
+
+    Some templates and examples use ``build-and-test.sh`` for end-to-end automation.
+    On Windows, prefer the Python CLI workflows (documented in :doc:`using_the_boilerplate`)
+    or run the shell scripts under WSL2.
 
 Step 2 — Copy your existing sources and tests
 =============================================
@@ -199,7 +205,7 @@ If you prefer the CLI one-shot flow:
 
 .. code-block:: bash
 
-   poetry run python -m tools.osqar_cli supplier prepare \
+   ./osqar supplier prepare \
      --project . \
      --clean \
      --archive

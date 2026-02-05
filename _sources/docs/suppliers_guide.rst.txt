@@ -27,6 +27,8 @@ Provide a structured documentation set:
 - verification requirements and methods (``TEST_*``)
 - traceability matrices demonstrating coverage
 
+For a full CLI command/option reference, see :doc:`cli_reference`.
+
 Operational assumptions (critical)
 ----------------------------------
 
@@ -68,11 +70,18 @@ For each shipped example output, include the following files **inside the shippe
 Recommended supplier procedure (per example)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. Run the example end-to-end workflow (tests → reports → docs). This produces a shippable bundle directory (by default: ``examples/python_hello_world/_build/html``) that contains documentation with traceability, plus implementation/tests and analysis reports::
+1. Run the example end-to-end workflow (tests → reports → docs). This produces a shippable bundle directory (by default: ``examples/python_hello_world/_build/html``) that contains documentation with traceability, plus implementation/tests and analysis reports.
+
+   On macOS/Linux (native shell script)::
 
 	cd examples/python_hello_world
-	chmod +x build-and-test.sh
 	./build-and-test.sh
+
+   On Windows, prefer the cross-platform CLI flow (or run the shell script under WSL2)::
+
+	./osqar supplier prepare \
+		--project examples/python_hello_world \
+		--clean
 
 2. Run traceability checks and write a JSON report::
 
@@ -93,25 +102,25 @@ Recommended supplier procedure (per example)
 Optional convenience: the same steps are available via the OSQAr CLI::
 
 	# One-shot supplier workflow (recommended)
-	poetry run python -m tools.osqar_cli supplier prepare \
+	./osqar supplier prepare \
 		--project examples/python_hello_world \
 		--clean \
 		--archive
 
 	# Or run the individual shipment steps
-	poetry run python -m tools.osqar_cli shipment build-docs --project examples/python_hello_world
-	poetry run python -m tools.osqar_cli shipment traceability --shipment examples/python_hello_world/_build/html
-	poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html generate
-	poetry run python -m tools.osqar_cli shipment checksums --shipment examples/python_hello_world/_build/html verify
+	./osqar build-docs --project examples/python_hello_world
+	./osqar shipment traceability --shipment examples/python_hello_world/_build/html
+	./osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
+	./osqar shipment checksums --shipment examples/python_hello_world/_build/html verify
 
 4. Ship the example build output directory as an archive (ZIP/TAR), keeping ``SHA256SUMS`` at the root of the shipped directory.
 
 Optional: add project metadata into the shipment directory (recommended for multi-project integrators)::
 
-	poetry run python -m tools.osqar_cli shipment metadata write \
+	./osqar shipment metadata write \
 		--shipment examples/python_hello_world/_build/html \
 		--name "OSQAr Python Hello World" \
-		--version "0.3.1" \
+		--version "0.4.0" \
 		--url repository=https://example.com/repo.git \
 		--origin url=https://example.com/repo.git \
 		--origin revision=<commit>
