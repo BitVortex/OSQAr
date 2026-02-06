@@ -15,7 +15,7 @@ OSQAr provides:
 - architecture diagrams (via PlantUML)
 - verification planning and traceability (requirements ↔ architecture ↔ tests)
 - evidence “shipments” (documentation + traceability + implementation + tests + analysis reports) protected by checksum manifests
-- integrator-friendly multi-shipment intake and a consolidated **Subproject overview**
+- workspace-friendly multi-shipment inventory/intake and a consolidated **Subproject overview** (Markdown/JSON and theme-aligned HTML)
 - extensive lifecycle management guidance (framework-level and example-level)
 
 This chapter is the main entrypoint. It gives you the mental model and the first commands to run.
@@ -485,7 +485,7 @@ Optional convenience (higher-level workflows in one command)::
    ./osqar shipment metadata write \
       --shipment examples/python_hello_world/_build/html \
       --name "OSQAr Python Hello World" \
-      --version "0.4.1" \
+      --version "0.4.2" \
       --url repository=https://example.com/repo.git \
       --origin url=https://example.com/repo.git \
       --origin revision=<commit>
@@ -501,6 +501,13 @@ Optional convenience (higher-level workflows in one command)::
    ./osqar workspace open \
       --root intake/received \
       --recursive
+
+   # Show explicit checksums/traceability status in the HTML overview
+   ./osqar workspace open \
+      --root intake/received \
+      --recursive \
+      --checksums \
+      --traceability
 
    # Or run the individual shipment steps
    ./osqar build-docs --project examples/python_hello_world

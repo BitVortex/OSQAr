@@ -167,7 +167,7 @@ Common subcommands:
 
 - ``workspace list``: discover shipments under a root directory (by scanning for ``SHA256SUMS``)
 - ``workspace report``: generate a Subproject overview (Markdown + JSON) without copying shipments
-- ``workspace open``: generate a Subproject overview and open an HTML version built via Sphinx
+- ``workspace open``: generate a Subproject overview and open an HTML version built via Sphinx (theme-aligned and shows OK/FAIL/skipped status for enabled checks)
 - ``workspace diff``: diff two workspace reports (e.g., ``subproject_overview.json``)
 - ``workspace verify``: verify many shipments (checksums and optionally traceability)
 - ``workspace intake``: ingest multiple shipments into an archive directory and generate a consolidated overview
@@ -180,6 +180,7 @@ Workspace examples:
 - Generate an overview without copying: ``./osqar workspace report --root intake/received --recursive --output intake/overview``
 - Generate an overview and also verify checksums + traceability: ``./osqar workspace report --root intake/received --recursive --output intake/overview --checksums --traceability``
 - Generate and open an HTML overview: ``./osqar workspace open --root intake/received --recursive``
+- Generate/open and also show checksums + traceability status: ``./osqar workspace open --root intake/received --recursive --checksums --traceability``
 - Diff two overviews: ``./osqar workspace diff intake/overview/subproject_overview.json intake/overview_new/subproject_overview.json``
 
 Per-project build command
