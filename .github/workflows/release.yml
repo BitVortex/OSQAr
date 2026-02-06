@@ -218,9 +218,14 @@ jobs:
             fi
           done
 
+          # Supplier metadata (shipped)
+          if [ -f "${ex_dir}/osqar_project.json" ]; then
+            cp -a "${ex_dir}/osqar_project.json" "${ship_dir}/osqar_project.json"
+          fi
+
           chmod +x ./osqar
           ./osqar traceability "${ship_dir}/needs.json" \
-            --json-report "${ship_dir}/reports/traceability_report.json"
+            --json-report "${ship_dir}/traceability_report.json"
 
           ./osqar checksum generate --root "${ship_dir}" --output "${ship_dir}/SHA256SUMS"
           ./osqar checksum verify --root "${ship_dir}" --manifest "${ship_dir}/SHA256SUMS"
@@ -243,6 +248,24 @@ jobs:
     needs: bazel-example-shipment
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+
+      - name: Configure Poetry
+        run: |
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+
+      - name: Install dependencies
+        run: poetry install
 
       - name: Download per-example shipments
         uses: actions/download-artifact@v4
