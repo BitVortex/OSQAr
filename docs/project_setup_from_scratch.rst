@@ -48,12 +48,12 @@ Step 1 — Choose a template and scaffold
 
 OSQAr ships a CLI that can copy a language template into a new project folder.
 
-From the OSQAr repository root:
+Install OSQAr via pipx (recommended): ``pipx install osqar``
 
 .. code-block:: bash
 
    # Example: create a new C-based component project
-   ./osqar new \
+   osqar new \
      --language c \
      --name OpenThermoLib \
      --destination ../OpenThermoLib
@@ -205,7 +205,7 @@ If you prefer the CLI one-shot flow:
 
 .. code-block:: bash
 
-   ./osqar shipment prepare \
+   osqar shipment prepare \
      --project . \
      --clean \
      --archive
@@ -254,14 +254,14 @@ Release checklist (supplier)
 
 .. code-block:: bash
 
-    ./osqar traceability _build/html/needs.json \
+    osqar traceability _build/html/needs.json \
        --json-report _build/html/traceability_report.json
 
-    ./osqar checksum generate \
+    osqar checksum generate \
        --root _build/html \
        --output _build/html/SHA256SUMS
 
-    ./osqar checksum verify \
+    osqar checksum verify \
        --root _build/html \
        --manifest _build/html/SHA256SUMS
 
@@ -271,7 +271,7 @@ Release checklist (supplier)
 .. code-block:: bash
 
    # Example naming convention
-   ./osqar shipment package \
+   osqar shipment package \
       --shipment _build/html \
       --output OpenThermoLib_v1.4.0_evidence_shipment.zip
 
@@ -304,11 +304,11 @@ Example:
 
 .. code-block:: bash
 
-    ./osqar checksum verify \
+   osqar checksum verify \
        --root /path/to/OpenThermoLib_shipment \
        --manifest /path/to/OpenThermoLib_shipment/SHA256SUMS
 
-    ./osqar traceability \
+   osqar traceability \
        /path/to/OpenThermoLib_shipment/needs.json \
        --json-report /path/to/OpenThermoLib_shipment/traceability_report.integrator.json
 

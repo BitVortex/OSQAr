@@ -13,7 +13,7 @@ This is the simplest repeatable workflow when you receive multiple shipments:
 
    # 1) Put supplier shipments under intake/received/<name>/
    # 2) Verify + archive them into a dated intake folder
-   ./osqar workspace intake \
+   osqar workspace intake \
      --root intake/received \
      --recursive \
      --output intake/archive/2026-02-01 \
@@ -104,12 +104,12 @@ They discover shipment directories by scanning for ``SHA256SUMS``.
 .. code-block:: bash
 
    # Verify all shipments under a folder
-   ./osqar workspace verify \
+   osqar workspace verify \
      --root intake/received \
      --recursive
 
    # Also run traceability checks (writes integrator-side reports alongside your archive/intake output)
-   ./osqar workspace verify \
+   osqar workspace verify \
      --root intake/received \
      --recursive \
      --traceability
@@ -122,7 +122,7 @@ operations, place an ``osqar_workspace.json`` in a trusted workspace root and pa
 
 For example::
 
-  ./osqar workspace verify --root intake/received --recursive --config ./osqar_workspace.json
+  osqar workspace verify --root intake/received --recursive --config osqar_workspace.json
 
 See :doc:`configuration_and_hooks` for details.
 
@@ -133,7 +133,7 @@ To create an immutable intake archive from multiple shipments:
 
 .. code-block:: bash
 
-   ./osqar workspace intake \
+  osqar workspace intake \
      --root intake/received \
      --recursive \
      --output intake/archive/2026-02-01 \
@@ -169,7 +169,7 @@ Write metadata into a shipment directory:
 
 .. code-block:: bash
 
-   ./osqar shipment metadata write \
+  osqar shipment metadata write \
      --shipment <bundle_dir> \
      --name "My Component" \
      --version "1.2.3" \

@@ -233,7 +233,7 @@ To add more domains or features:
 2. **Update architecture** in `02_architecture.rst` and `diagrams/`
 3. **Extend implementation** in `src/tsim.py` with domain-specific code
 4. **Add tests** in `tests/test_tsim.py` mapped to new test requirements
-5. **Rebuild documentation** (from the OSQAr repo root): ``./osqar build-docs --project examples/python_hello_world``
+5. **Rebuild documentation**: ``osqar build-docs --project examples/python_hello_world``
 6. **Run tests**: `pytest tests/ --junit-xml=test_results.xml`
 7. **Verify traceability**: Check generated HTML matrix
 

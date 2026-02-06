@@ -63,17 +63,17 @@ Build the framework documentation (repo root):
 
 ```bash
 poetry install
-./osqar build-docs
-./osqar open-docs
+osqar build-docs
+osqar open-docs
 ```
 
 Build an example’s documentation (choose one):
 
 ```bash
-./osqar build-docs --project examples/c_hello_world
-./osqar build-docs --project examples/cpp_hello_world
-./osqar build-docs --project examples/rust_hello_world
-./osqar build-docs --project examples/python_hello_world
+osqar build-docs --project examples/c_hello_world
+osqar build-docs --project examples/cpp_hello_world
+osqar build-docs --project examples/rust_hello_world
+osqar build-docs --project examples/python_hello_world
 ```
 
 Run an example end-to-end (tests → docs), including optional evidence tooling:
@@ -88,13 +88,12 @@ Create a new project (minimal template scaffold):
 
 ```bash
 # Default template profile is "basic" (lean scaffold)
-./osqar new --language c --name MySEooC --destination ../MySEooC
+osqar new --language c --name MySEooC --destination ../MySEooC
 ```
 
 Notes:
 
-- The `./osqar` wrapper is intended to be run from the OSQAr repo root.
-- On Windows, use `osqar.cmd` or `osqar.ps1` from the repo root.
+- If you are working from a git clone and did not install the CLI via pipx, you can run the repo-root wrappers instead: `./osqar` (Linux/macOS) or `osqar.cmd` / `osqar.ps1` (Windows).
 
 ## Extensibility (custom commands + hooks)
 

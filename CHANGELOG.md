@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.3] - 2026-02-06
+
+### Changed
+- Documentation now prefers the PyPI/pipx-installed CLI invocation (``osqar ...``) over repo-root wrappers.
+
+### Fixed
+- Regenerated ``poetry.lock`` to match ``pyproject.toml`` (fixes CI lockfile consistency checks).
+
 ## [0.5.2] - 2026-02-06
 
 ### Added

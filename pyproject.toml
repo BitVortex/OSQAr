@@ -1,6 +1,6 @@
 [project]
 name = "osqar"
-version = "0.5.2"
+version = "0.5.3"
 description = "Open Safety Qualification Architecture - A Sphinx-Needs boilerplate for safety-related systems."
 readme = "README.md"
 license = "Apache-2.0"

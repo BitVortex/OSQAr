@@ -11,20 +11,24 @@ see :doc:`using_the_boilerplate`.
 Invocation
 ==========
 
-Recommended (repo root)
------------------------
+Recommended (PyPI / pipx)
+-------------------------
+
+Install and run OSQAr as a normal CLI tool:
+
+- Install: ``pipx install osqar``
+- Invoke: ``osqar <command> ...``
+
+When building docs, OSQAr will automatically use a project’s Poetry environment (``poetry run ...``)
+if it detects a Poetry-managed project and ``poetry`` is available.
+
+Repo-root wrappers (contributors)
+--------------------------------
+
+If you are working from a git clone and have not installed OSQAr via pipx, you can use the repo-root wrappers:
 
 - Linux/macOS: ``./osqar <command> ...``
 - Windows: ``.\osqar.cmd <command> ...`` or ``.\osqar.ps1 <command> ...``
-
-The wrapper prefers Poetry-managed execution when available.
-
-Fallback (run wrapper via Python)
----------------------------------
-
-If you cannot use the wrapper as an executable (e.g., missing execute bit), run it via Python:
-
-- ``python ./osqar <command> ...``
 
 Common defaults
 ===============
@@ -118,9 +122,9 @@ Arguments:
 
 Examples:
 
-- Build docs for the current project: ``./osqar build-docs``
-- Build docs for an example: ``./osqar build-docs --project examples/c_hello_world``
-- Build and open immediately: ``./osqar build-docs --open``
+- Build docs for the current project: ``osqar build-docs``
+- Build docs for an example: ``osqar build-docs --project examples/c_hello_world``
+- Build and open immediately: ``osqar build-docs --open``
 
 open-docs
 ---------
@@ -133,9 +137,9 @@ Defaults:
 
 Examples:
 
-- Open the current project docs: ``./osqar open-docs``
-- Open an example’s docs: ``./osqar open-docs --project examples/python_hello_world``
-- Open a specific shipment directory: ``./osqar open-docs --shipment examples/python_hello_world/_build/html``
+- Open the current project docs: ``osqar open-docs``
+- Open an example’s docs: ``osqar open-docs --project examples/python_hello_world``
+- Open a specific shipment directory: ``osqar open-docs --shipment examples/python_hello_world/_build/html``
 
 doctor
 ------
@@ -160,10 +164,10 @@ Machine-readable output:
 
 Examples:
 
-- Check the current project: ``./osqar doctor``
-- Check an example: ``./osqar doctor --project examples/python_hello_world``
-- Also check traceability if a built ``needs.json`` is present: ``./osqar doctor --traceability``
-- Diagnose a received shipment directory (skip environment checks): ``./osqar doctor --shipment /path/to/shipment --skip-env-checks --json-report doctor_report.json``
+- Check the current project: ``osqar doctor``
+- Check an example: ``osqar doctor --project examples/python_hello_world``
+- Also check traceability if a built ``needs.json`` is present: ``osqar doctor --traceability``
+- Diagnose a received shipment directory (skip environment checks): ``osqar doctor --shipment /path/to/shipment --skip-env-checks --json-report doctor_report.json``
 
 new
 ---
@@ -183,7 +187,7 @@ Optional arguments:
 
 Example:
 
-- ``./osqar new --language c --name MySEooC --destination ../MySEooC``
+- ``osqar new --language c --name MySEooC --destination ../MySEooC``
 
 traceability
 ------------
@@ -203,7 +207,7 @@ Optional arguments:
 
 Example:
 
-- ``./osqar traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json``
+- ``osqar traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json``
 
 code-trace
 ----------
@@ -224,11 +228,11 @@ Examples:
 
 - Generate a report (non-failing):
 
-  - ``./osqar code-trace --root . --needs-json ./_build/html/needs.json --json-report ./_build/html/code_trace_report.json``
+  - ``osqar code-trace --root . --needs-json ./_build/html/needs.json --json-report ./_build/html/code_trace_report.json``
 
 - Enforce “REQ/ARCH appear in implementation, TEST appears in tests”:
 
-  - ``./osqar code-trace --root . --needs-json ./_build/html/needs.json --enforce-req-in-impl --enforce-arch-in-impl --enforce-test-in-tests``
+  - ``osqar code-trace --root . --needs-json ./_build/html/needs.json --enforce-req-in-impl --enforce-arch-in-impl --enforce-test-in-tests``
 
 checksum
 --------
@@ -246,7 +250,7 @@ Optional arguments (both subcommands):
 
 Example:
 
-- ``./osqar checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS``
+- ``osqar checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS``
 
 Shipment commands
 =================
@@ -285,17 +289,17 @@ For CI/non-interactive usage:
 
 - Use ``workspace report`` (without ``--open``) to avoid opening a browser and only print the built ``index.html`` path.
 
-Use ``./osqar <command> --help`` to see the full set of options for these workflows.
+Use ``osqar <command> --help`` to see the full set of options for these workflows.
 
 Workspace examples:
 
-- List shipments under a folder: ``./osqar workspace list --root intake/received --recursive``
-- Generate an overview without copying: ``./osqar workspace report --root intake/received --recursive --output intake/overview``
-- Generate an overview and also verify checksums + traceability: ``./osqar workspace report --root intake/received --recursive --output intake/overview --checksums --traceability``
-- Generate and open an HTML overview: ``./osqar workspace report --root intake/received --recursive --output intake/overview --open``
-- Generate/open and also show checksums + traceability status: ``./osqar workspace report --root intake/received --recursive --output intake/overview --checksums --traceability --open``
-- Run with an explicit workspace config: ``./osqar workspace report --root intake/received --config ./osqar_workspace.json --output intake/overview``
-- Diff two overviews: ``./osqar workspace diff intake/overview/subproject_overview.json intake/overview_new/subproject_overview.json``
+- List shipments under a folder: ``osqar workspace list --root intake/received --recursive``
+- Generate an overview without copying: ``osqar workspace report --root intake/received --recursive --output intake/overview``
+- Generate an overview and also verify checksums + traceability: ``osqar workspace report --root intake/received --recursive --output intake/overview --checksums --traceability``
+- Generate and open an HTML overview: ``osqar workspace report --root intake/received --recursive --output intake/overview --open``
+- Generate/open and also show checksums + traceability status: ``osqar workspace report --root intake/received --recursive --output intake/overview --checksums --traceability --open``
+- Run with an explicit workspace config: ``osqar workspace report --root intake/received --config osqar_workspace.json --output intake/overview``
+- Diff two overviews: ``osqar workspace diff intake/overview/subproject_overview.json intake/overview_new/subproject_overview.json``
 
 Per-project build command
 =========================
@@ -308,4 +312,4 @@ Configure it by placing an ``osqar_project.json`` in the **project root** (not t
 
 Example:
 
-- ``./osqar shipment run-build --project examples/python_hello_world``
+- ``osqar shipment run-build --project examples/python_hello_world``

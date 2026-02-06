@@ -53,9 +53,9 @@ Actions:
 
 Example commands (supplier, docs-only update)::
 
-  ./osqar build-docs --project examples/python_hello_world
-  ./osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
-  ./osqar shipment checksums --shipment examples/python_hello_world/_build/html verify
+  osqar build-docs --project examples/python_hello_world
+  osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
+  osqar shipment checksums --shipment examples/python_hello_world/_build/html verify
 
 Requirement changes
 -------------------
@@ -75,7 +75,7 @@ Actions:
 
 Example commands (supplier, requirement change)::
 
-  ./osqar shipment prepare \
+  osqar shipment prepare \
      --project examples/python_hello_world \
      --clean \
      --archive
@@ -97,7 +97,7 @@ Actions:
 
 Example commands (supplier, implementation change)::
 
-  ./osqar shipment prepare \
+  osqar shipment prepare \
      --project examples/python_hello_world \
      --clean \
      --archive
@@ -158,7 +158,7 @@ Supplier workflow (produce shipment)
 
 From the repository root (recommended)::
 
-  ./osqar shipment prepare \
+  osqar shipment prepare \
      --project examples/python_hello_world \
      --clean \
      --archive
@@ -171,7 +171,7 @@ Notes:
 
 Optional: add supplier metadata to the shipment root (helps integrator intake)::
 
-  ./osqar shipment metadata write \
+  osqar shipment metadata write \
      --shipment examples/python_hello_world/_build/html \
      --name "TSIM (Python)" \
      --version "<your_version>" \
@@ -184,14 +184,14 @@ Integrator workflow (verify shipment)
 
 After unpacking a received shipment::
 
-  ./osqar shipment verify \
+  osqar shipment verify \
      --shipment /path/to/shipment \
      --traceability \
      --json-report /path/to/shipment/traceability_report.integrator.json
 
 If you intake multiple shipments at once, prefer the batch workflow::
 
-  ./osqar workspace intake \
+  osqar workspace intake \
      --root /path/to/received \
      --recursive \
      --output /path/to/archive/<date> \
