@@ -338,6 +338,7 @@ see <a class="reference internal" href="using_the_boilerplate.html"><span class=
 <ul class="simple">
 <li><p>Check the current project: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">doctor</span></code></p></li>
 <li><p>Check an example: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">doctor</span> <span class="pre">--project</span> <span class="pre">examples/python_hello_world</span></code></p></li>
+<li><p>Also check traceability if a built <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> is present: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">doctor</span> <span class="pre">--traceability</span></code></p></li>
 </ul>
 </section>
 <section id="new">
@@ -417,12 +418,23 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <li><p>Integrator: <code class="docutils literal notranslate"><span class="pre">integrator</span> <span class="pre">verify</span></code> (verify checksums and/or traceability)</p></li>
 <li><p>Workspace: <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">intake</span></code> (ingest multiple shipments and generate a consolidated overview)</p></li>
 </ul>
+<p>Additional workspace helpers:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">list</span></code> (discover shipments under a root directory)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code> (generate a Subproject overview without copying shipments)</p></li>
+</ul>
 <p>The supplier/integrator workflows are aliases of the generalized shipment workflows:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">supplier</span> <span class="pre">prepare</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">prepare</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">integrator</span> <span class="pre">verify</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">verify</span></code></p></li>
 </ul>
 <p>Use <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">&lt;command&gt;</span> <span class="pre">--help</span></code> to see the full set of options for these workflows.</p>
+<p>Workspace examples:</p>
+<ul class="simple">
+<li><p>List shipments under a folder: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">list</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span></code></p></li>
+<li><p>Generate an overview without copying: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">report</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span> <span class="pre">--output</span> <span class="pre">intake/overview</span></code></p></li>
+<li><p>Generate an overview and also verify checksums + traceability: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">report</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span> <span class="pre">--output</span> <span class="pre">intake/overview</span> <span class="pre">--checksums</span> <span class="pre">--traceability</span></code></p></li>
+</ul>
 </section>
 </section>
 

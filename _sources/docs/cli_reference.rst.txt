@@ -83,6 +83,7 @@ Examples:
 
 - Check the current project: ``./osqar doctor``
 - Check an example: ``./osqar doctor --project examples/python_hello_world``
+- Also check traceability if a built ``needs.json`` is present: ``./osqar doctor --traceability``
 
 new
 ---
@@ -165,9 +166,20 @@ OSQAr also provides higher-level workflows:
 - Integrator: ``integrator verify`` (verify checksums and/or traceability)
 - Workspace: ``workspace intake`` (ingest multiple shipments and generate a consolidated overview)
 
+Additional workspace helpers:
+
+- ``workspace list`` (discover shipments under a root directory)
+- ``workspace report`` (generate a Subproject overview without copying shipments)
+
 The supplier/integrator workflows are aliases of the generalized shipment workflows:
 
 - ``supplier prepare`` is equivalent to ``shipment prepare``
 - ``integrator verify`` is equivalent to ``shipment verify``
 
 Use ``./osqar <command> --help`` to see the full set of options for these workflows.
+
+Workspace examples:
+
+- List shipments under a folder: ``./osqar workspace list --root intake/received --recursive``
+- Generate an overview without copying: ``./osqar workspace report --root intake/received --recursive --output intake/overview``
+- Generate an overview and also verify checksums + traceability: ``./osqar workspace report --root intake/received --recursive --output intake/overview --checksums --traceability``
