@@ -887,7 +887,299 @@ def cmd_doctor(args: argparse.Namespace) -> int:
             "no PlantUML command or PLANTUML_JAR detected; builds may fall back to the public PlantUML server (internet required)"
         )
 
+    if getattr(args, "traceability", False):
+        needs_json: Optional[Path]
+        if getattr(args, "needs_json", None):
+            needs_json = Path(args.needs_json).expanduser().resolve()
+        else:
+            default_shipment_dir = (project_dir / DEFAULT_BUILD_DIR).resolve()
+            needs_json = (
+                _find_needs_json(default_shipment_dir)
+                if default_shipment_dir.is_dir()
+                else None
+            )
+
+        if needs_json is None or not needs_json.is_file():
+            warn(
+                "traceability check requested but needs.json not found; build docs first (osqar build-docs) or pass --needs-json"
+            )
+        else:
+            # If the project has no needs at all (e.g., framework docs without REQ_/ARCH_/TEST
+            # directives), the traceability tool is not meaningful. Treat this as a warning
+            # and skip the check.
+            try:
+                data = json.loads(needs_json.read_text(encoding="utf-8"))
+            except Exception as exc:  # noqa: BLE001
+                bad(f"failed to parse needs.json: {needs_json} ({exc})")
+                return 2
+
+            has_any_needs = False
+            if isinstance(data, dict):
+                if isinstance(data.get("needs"), list) and data.get("needs"):
+                    has_any_needs = True
+                elif isinstance(data.get("versions"), dict):
+                    versions = data.get("versions")
+                    current_version = data.get("current_version", "")
+                    if (
+                        current_version in versions
+                        and isinstance(versions[current_version], dict)
+                        and versions[current_version].get("needs")
+                    ):
+                        has_any_needs = True
+
+            if not has_any_needs:
+                warn(
+                    f"needs.json contains no needs; skipping traceability check: {needs_json}"
+                )
+                return 0 if ok else 1
+
+            argv = [str(needs_json)]
+            if getattr(args, "enforce_req_has_test", False):
+                argv += ["--enforce-req-has-test"]
+            if getattr(args, "enforce_arch_traces_req", False):
+                argv += ["--enforce-arch-traces-req"]
+            if getattr(args, "enforce_test_traces_req", False):
+                argv += ["--enforce-test-traces-req"]
+
+            rc = traceability_cli(argv)
+            if rc == 0:
+                good(f"traceability OK: {needs_json}")
+            else:
+                bad(f"traceability FAILED (rc={rc}): {needs_json}")
+
     return 0 if ok else 1
+
+
+def _relpath(from_dir: Path, to_path: Path) -> str:
+    try:
+        return os.path.relpath(os.fspath(to_path), start=os.fspath(from_dir))
+    except Exception:
+        return os.fspath(to_path)
+
+
+def cmd_workspace_list(args: argparse.Namespace) -> int:
+    root = Path(args.root).resolve()
+    shipments = _iter_shipment_dirs(root, recursive=bool(args.recursive))
+    if not shipments:
+        print(f"No shipments found under: {root}")
+        return 1
+
+    items: list[dict[str, object]] = []
+    for shipment_dir in shipments:
+        shipment_dir = shipment_dir.resolve()
+        md = _read_project_metadata(shipment_dir)
+        needs = _read_needs_summary_from_shipment(shipment_dir)
+        entry = {
+            "shipment": str(shipment_dir),
+            "metadata": md,
+            "needs_summary": needs,
+            "has_docs": bool((shipment_dir / "index.html").is_file()),
+        }
+        items.append(entry)
+
+    fmt = getattr(args, "format", "table")
+    if fmt == "paths":
+        for it in items:
+            print(it["shipment"])
+        return 0
+
+    if fmt == "json":
+        payload = json.dumps(items, indent=2, sort_keys=True) + "\n"
+        if getattr(args, "json_report", None):
+            out = Path(args.json_report).resolve()
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(payload, encoding="utf-8")
+            print(f"Wrote workspace list: {out}")
+            return 0
+        print(payload, end="")
+        return 0
+
+    for it in items:
+        md = it.get("metadata") or {}
+        name = md.get("name") if isinstance(md, dict) else None
+        version = md.get("version") if isinstance(md, dict) else None
+        needs = it.get("needs_summary") or {}
+        n_total = needs.get("needs_total") if isinstance(needs, dict) else None
+        suffix = []
+        if name:
+            suffix.append(f"name={name}")
+        if version:
+            suffix.append(f"version={version}")
+        if n_total is not None:
+            suffix.append(f"needs={n_total}")
+        if it.get("has_docs"):
+            suffix.append("docs=yes")
+        else:
+            suffix.append("docs=no")
+        print(f"- {it['shipment']}  ({', '.join(suffix)})")
+
+    return 0
+
+
+def cmd_workspace_report(args: argparse.Namespace) -> int:
+    root = Path(args.root).resolve()
+    shipments = _iter_shipment_dirs(root, recursive=bool(args.recursive))
+    if not shipments:
+        print(f"No shipments found under: {root}")
+        return 1
+
+    output_dir = Path(args.output).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    items: list[dict[str, object]] = []
+    any_failures = False
+
+    for shipment_dir in shipments:
+        shipment_dir = shipment_dir.resolve()
+        print(f"\n== Inspecting shipment: {shipment_dir}")
+
+        checksums_rc: Optional[int] = None
+        if getattr(args, "checksums", False):
+            manifest = shipment_dir / DEFAULT_CHECKSUM_MANIFEST
+            if not manifest.is_file():
+                checksums_rc = 2
+            else:
+                argv = ["--root", str(shipment_dir), "--verify", str(manifest)]
+                for ex in args.exclude:
+                    argv += ["--exclude", ex]
+                checksums_rc = int(checksums_cli(argv))
+            if checksums_rc != 0:
+                any_failures = True
+                if not args.continue_on_error:
+                    # Still record entry below.
+                    pass
+
+        trace_rc: Optional[int] = None
+        if getattr(args, "traceability", False):
+            needs_json = (
+                Path(args.needs_json).resolve()
+                if getattr(args, "needs_json", None)
+                else _find_needs_json(shipment_dir)
+            )
+            if needs_json is None or not needs_json.is_file():
+                trace_rc = 2
+            else:
+                argv = [str(needs_json)]
+                if getattr(args, "enforce_req_has_test", False):
+                    argv += ["--enforce-req-has-test"]
+                if getattr(args, "enforce_arch_traces_req", False):
+                    argv += ["--enforce-arch-traces-req"]
+                if getattr(args, "enforce_test_traces_req", False):
+                    argv += ["--enforce-test-traces-req"]
+                trace_rc = int(traceability_cli(argv))
+
+            if trace_rc != 0:
+                any_failures = True
+
+        index = shipment_dir / "index.html"
+        docs_link = (
+            _relpath(output_dir, index) if index.is_file() else None
+        )
+
+        items.append(
+            {
+                "shipment": str(shipment_dir),
+                "checksums_rc": checksums_rc,
+                "traceability_rc": trace_rc,
+                "metadata": _read_project_metadata(shipment_dir),
+                "needs_summary": _read_needs_summary_from_shipment(shipment_dir),
+                "docs_entrypoint": docs_link,
+            }
+        )
+
+        if any_failures and not args.continue_on_error:
+            # Stop after the first failure if requested.
+            if (checksums_rc not in (None, 0)) or (trace_rc not in (None, 0)):
+                break
+
+    overview = {
+        "title": "Subproject overview",
+        "generated_at": _utc_now_iso(),
+        "root": str(root),
+        "recursive": bool(args.recursive),
+        "checksums": bool(args.checksums),
+        "traceability": bool(args.traceability),
+        "projects": items,
+        "failures": bool(any_failures),
+    }
+
+    overview_json_path = output_dir / "subproject_overview.json"
+    overview_md_path = output_dir / "subproject_overview.md"
+
+    overview_json_path.write_text(
+        json.dumps(overview, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+    def _md_escape(s: str) -> str:
+        return s.replace("|", "\\|").replace("\n", " ")
+
+    lines: list[str] = []
+    lines.append("# Subproject overview\n\n")
+    lines.append(f"Generated at: {overview['generated_at']}\n\n")
+    lines.append(f"Root: {_md_escape(str(root))}\n\n")
+    lines.append(
+        "| Project | Version | Origin | URLs | Needs | REQ | ARCH | TEST | Checksums | Traceability |\n"
+    )
+    lines.append("|---|---|---|---|---:|---:|---:|---:|---:|---:|\n")
+
+    for it in items:
+        md = it.get("metadata") or {}
+        shipment = str(it.get("shipment") or "")
+        display_name = shipment
+        if isinstance(md, dict) and md.get("name"):
+            display_name = str(md.get("name"))
+
+        docs_link = it.get("docs_entrypoint")
+        if isinstance(docs_link, str) and docs_link:
+            project_cell = f"[{_md_escape(display_name)}]({docs_link})"
+        else:
+            project_cell = _md_escape(display_name)
+
+        version = _md_escape(str(md.get("version") or "")) if isinstance(md, dict) else ""
+
+        origin_val = ""
+        if isinstance(md, dict) and isinstance(md.get("origin"), dict):
+            origin = md.get("origin")
+            origin_val = _md_escape(
+                str(
+                    origin.get("url")
+                    or origin.get("repo")
+                    or origin.get("source")
+                    or ""
+                )
+            )
+
+        urls_val = ""
+        if isinstance(md, dict) and isinstance(md.get("urls"), dict) and md.get("urls"):
+            parts = []
+            for k, v in sorted(md["urls"].items()):
+                parts.append(f"{_md_escape(str(k))}: {_md_escape(str(v))}")
+            urls_val = "<br>".join(parts)
+
+        needs = it.get("needs_summary") or {}
+        n_total = needs.get("needs_total", "") if isinstance(needs, dict) else ""
+        n_req = needs.get("req_total", "") if isinstance(needs, dict) else ""
+        n_arch = needs.get("arch_total", "") if isinstance(needs, dict) else ""
+        n_test = needs.get("test_total", "") if isinstance(needs, dict) else ""
+
+        lines.append(
+            f"| {project_cell} | {version} | {origin_val} | {urls_val} | {n_total} | {n_req} | {n_arch} | {n_test} | {it.get('checksums_rc') if it.get('checksums_rc') is not None else ''} | {it.get('traceability_rc') if it.get('traceability_rc') is not None else ''} |\n"
+        )
+
+    overview_md_path.write_text("".join(lines), encoding="utf-8")
+
+    if getattr(args, "json_report", None):
+        report_path = Path(args.json_report).resolve()
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(
+            json.dumps(overview, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        print(f"\nWrote workspace report: {report_path}")
+
+    print(f"\nWrote Subproject overview: {overview_md_path}")
+    _print_open_hint(overview_md_path)
+
+    return 0 if not any_failures else 1
 
 
 def cmd_shipment_list(args: argparse.Namespace) -> int:
@@ -1311,10 +1603,15 @@ def _iter_shipment_dirs(root: Path, *, recursive: bool) -> list[Path]:
 
     results: set[Path] = set()
 
+    # Workspace operations typically target built shipment directories, which by
+    # default live under `<project>/_build/html`. Do not exclude `_build`/`build`/`target`
+    # here, otherwise the default layout becomes undiscoverable.
+    ignored_scan_names = _IGNORED_DIR_NAMES - {"_build", "build", "target"}
+
     def consider(candidate: Path) -> None:
         if not candidate.is_dir():
             return
-        if any(part in _IGNORED_DIR_NAMES for part in candidate.parts):
+        if any(part in ignored_scan_names for part in candidate.parts):
             return
         manifest = candidate / DEFAULT_CHECKSUM_MANIFEST
         if manifest.is_file():
@@ -1703,6 +2000,19 @@ def build_parser() -> argparse.ArgumentParser:
         default=".",
         help="Project directory to check (default: .)",
     )
+    p_doc.add_argument(
+        "--traceability",
+        action="store_true",
+        help="Also run traceability checks if needs.json is available (non-writing)",
+    )
+    p_doc.add_argument(
+        "--needs-json",
+        default=None,
+        help="Override needs.json path for --traceability",
+    )
+    p_doc.add_argument("--enforce-req-has-test", action="store_true")
+    p_doc.add_argument("--enforce-arch-traces-req", action="store_true")
+    p_doc.add_argument("--enforce-test-traces-req", action="store_true")
     p_doc.set_defaults(func=cmd_doctor)
 
     p_new = sub.add_parser(
@@ -2104,6 +2414,74 @@ def build_parser() -> argparse.ArgumentParser:
         "workspace", help="Operate on multiple shipments/projects in a directory"
     )
     ws_sub = p_ws.add_subparsers(dest="workspace_cmd", required=True)
+
+    p_wl = ws_sub.add_parser(
+        "list",
+        help="List discovered shipments (discover by scanning for SHA256SUMS)",
+    )
+    p_wl.add_argument(
+        "--root", default=".", help="Root directory containing received shipments"
+    )
+    p_wl.add_argument(
+        "--recursive", action="store_true", help="Recursively scan for SHA256SUMS"
+    )
+    p_wl.add_argument(
+        "--format",
+        choices=["table", "paths", "json"],
+        default="table",
+        help="Output format (default: table)",
+    )
+    p_wl.add_argument(
+        "--json-report",
+        default=None,
+        help="Write JSON output to this path (only used with --format json)",
+    )
+    p_wl.set_defaults(func=cmd_workspace_list)
+
+    p_wr = ws_sub.add_parser(
+        "report",
+        help="Generate a Subproject overview without copying shipments",
+    )
+    p_wr.add_argument(
+        "--root", default=".", help="Root directory containing received shipments"
+    )
+    p_wr.add_argument(
+        "--recursive", action="store_true", help="Recursively scan for SHA256SUMS"
+    )
+    p_wr.add_argument(
+        "--output",
+        required=True,
+        help="Output directory for subproject_overview.md/.json",
+    )
+    p_wr.add_argument(
+        "--checksums",
+        action="store_true",
+        help="Also verify checksums for each shipment",
+    )
+    p_wr.add_argument(
+        "--traceability",
+        action="store_true",
+        help="Also validate needs.json traceability for each shipment (non-writing)",
+    )
+    p_wr.add_argument("--needs-json", default=None, help="Override needs.json path")
+    p_wr.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help="Exclude glob(s) for checksum verify",
+    )
+    p_wr.add_argument("--enforce-req-has-test", action="store_true")
+    p_wr.add_argument("--enforce-arch-traces-req", action="store_true")
+    p_wr.add_argument("--enforce-test-traces-req", action="store_true")
+    p_wr.add_argument(
+        "--continue-on-error",
+        action="store_true",
+        help="Continue processing after a failure",
+    )
+    p_wr.add_argument(
+        "--json-report", default=None, help="Write a JSON summary report"
+    )
+    p_wr.set_defaults(func=cmd_workspace_report)
 
     p_wv = ws_sub.add_parser(
         "verify", help="Verify many shipments (discover by scanning for SHA256SUMS)"
