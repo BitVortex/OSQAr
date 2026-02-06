@@ -85,44 +85,44 @@ Recommended supplier procedure (per example)
 
    On Windows, prefer the cross-platform CLI flow (or run the shell script under WSL2)::
 
-	./osqar shipment prepare \
+	osqar shipment prepare \
 		--project examples/python_hello_world \
 		--clean
 
 2. Run traceability checks and write a JSON report::
 
-	./osqar traceability examples/python_hello_world/_build/html/needs.json \
+	osqar traceability examples/python_hello_world/_build/html/needs.json \
 		--json-report examples/python_hello_world/_build/html/traceability_report.json
 
 3. Generate a checksum manifest for the example build output directory and verify it immediately::
 
-	./osqar checksum generate \
+	osqar checksum generate \
 		--root examples/python_hello_world/_build/html \
 		--output examples/python_hello_world/_build/html/SHA256SUMS
 
-	./osqar checksum verify \
+	osqar checksum verify \
 		--root examples/python_hello_world/_build/html \
 		--manifest examples/python_hello_world/_build/html/SHA256SUMS
 
 Optional convenience: the same steps are available via higher-level OSQAr CLI workflows::
 
 	# One-shot shipment workflow (recommended)
-	./osqar shipment prepare \
+	osqar shipment prepare \
 		--project examples/python_hello_world \
 		--clean \
 		--archive
 
 	# Or run the individual shipment steps
-	./osqar build-docs --project examples/python_hello_world
-	./osqar shipment traceability --shipment examples/python_hello_world/_build/html
-	./osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
-	./osqar shipment checksums --shipment examples/python_hello_world/_build/html verify
+	osqar build-docs --project examples/python_hello_world
+	osqar shipment traceability --shipment examples/python_hello_world/_build/html
+	osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
+	osqar shipment checksums --shipment examples/python_hello_world/_build/html verify
 
 4. Ship the example build output directory as a ZIP archive, keeping ``SHA256SUMS`` at the root of the shipped directory.
 
 Optional: add project metadata into the shipment directory (recommended for multi-project integrators)::
 
-	./osqar shipment metadata write \
+	osqar shipment metadata write \
 		--shipment examples/python_hello_world/_build/html \
 		--name "OSQAr Python Hello World" \
 		--version "0.4.2" \

@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Collaboration workflows (multi-user)" href="collaboration_workflows.html" /><link rel="prev" title="Lifecycle Management" href="lifecycle_management.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Multi-project workflows - OSQAr 0.5.1 documentation</title>
+        <title>Multi-project workflows - OSQAr 0.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.5.1 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.5.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.5.1 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.5.3 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -272,7 +272,7 @@ The goal is to keep evidence intake scalable and repeatable, while preserving in
 <p>This is the simplest repeatable workflow when you receive multiple shipments:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Put supplier shipments under intake/received/&lt;name&gt;/</span>
 <span class="c1"># 2) Verify + archive them into a dated intake folder</span>
-./osqar<span class="w"> </span>workspace<span class="w"> </span>intake<span class="w"> </span><span class="se">\</span>
+osqar<span class="w"> </span>workspace<span class="w"> </span>intake<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--root<span class="w"> </span>intake/received<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--recursive<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--output<span class="w"> </span>intake/archive/2026-02-01<span class="w"> </span><span class="se">\</span>
@@ -356,12 +356,12 @@ The file ``_build/html/index.html`` is intended as the main human entrypoint.
 <p>To verify many shipments at once (integrator side), use the workspace commands.
 They discover shipment directories by scanning for <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verify all shipments under a folder</span>
-./osqar<span class="w"> </span>workspace<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
+osqar<span class="w"> </span>workspace<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--root<span class="w"> </span>intake/received<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--recursive
 
 <span class="c1"># Also run traceability checks (writes integrator-side reports alongside your archive/intake output)</span>
-./osqar<span class="w"> </span>workspace<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
+osqar<span class="w"> </span>workspace<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--root<span class="w"> </span>intake/received<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--recursive<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--traceability
@@ -373,7 +373,7 @@ They discover shipment directories by scanning for <code class="docutils literal
 <p>If you want team-wide defaults (e.g., checksum exclude globs) or integrator-side hooks around workspace
 operations, place an <code class="docutils literal notranslate"><span class="pre">osqar_workspace.json</span></code> in a trusted workspace root and pass it via <code class="docutils literal notranslate"><span class="pre">--config</span></code>.</p>
 <p>For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">workspace</span> <span class="n">verify</span> <span class="o">--</span><span class="n">root</span> <span class="n">intake</span><span class="o">/</span><span class="n">received</span> <span class="o">--</span><span class="n">recursive</span> <span class="o">--</span><span class="n">config</span> <span class="o">./</span><span class="n">osqar_workspace</span><span class="o">.</span><span class="n">json</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">osqar</span> <span class="n">workspace</span> <span class="n">verify</span> <span class="o">--</span><span class="n">root</span> <span class="n">intake</span><span class="o">/</span><span class="n">received</span> <span class="o">--</span><span class="n">recursive</span> <span class="o">--</span><span class="n">config</span> <span class="n">osqar_workspace</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="configuration_and_hooks.html"><span class="doc">Configuration and hooks</span></a> for details.</p>
@@ -381,12 +381,12 @@ operations, place an <code class="docutils literal notranslate"><span class="pre
 <section id="intake-archiving-cli">
 <h2>Intake + archiving (CLI)<a class="headerlink" href="#intake-archiving-cli" title="Link to this heading">¶</a></h2>
 <p>To create an immutable intake archive from multiple shipments:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./osqar<span class="w"> </span>workspace<span class="w"> </span>intake<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--root<span class="w"> </span>intake/received<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--recursive<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--output<span class="w"> </span>intake/archive/2026-02-01<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--traceability<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--doctor
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osqar<span class="w"> </span>workspace<span class="w"> </span>intake<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--root<span class="w"> </span>intake/received<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--recursive<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--output<span class="w"> </span>intake/archive/2026-02-01<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--traceability<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--doctor
 </pre></div>
 </div>
 <p>The intake output is structured so that the copied shipments remain byte-identical,
@@ -412,15 +412,15 @@ Good patterns:</p>
 and an explicit origin (e.g., VCS URL + revision). Integrators can use this to record
 where a shipment came from and how it maps back to source control.</p>
 <p>Write metadata into a shipment directory:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./osqar<span class="w"> </span>shipment<span class="w"> </span>metadata<span class="w"> </span>write<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--shipment<span class="w"> </span>&lt;bundle_dir&gt;<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--name<span class="w"> </span><span class="s2">&quot;My Component&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--version<span class="w"> </span><span class="s2">&quot;1.2.3&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--description<span class="w"> </span><span class="s2">&quot;Safety element out of context (SEooC)&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--url<span class="w"> </span><span class="nv">repository</span><span class="o">=</span>https://example.com/repo.git<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--url<span class="w"> </span><span class="nv">documentation</span><span class="o">=</span>https://example.com/docs<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--origin<span class="w"> </span><span class="nv">url</span><span class="o">=</span>https://example.com/repo.git<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--origin<span class="w"> </span><span class="nv">revision</span><span class="o">=</span>abc123
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osqar<span class="w"> </span>shipment<span class="w"> </span>metadata<span class="w"> </span>write<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--shipment<span class="w"> </span>&lt;bundle_dir&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--name<span class="w"> </span><span class="s2">&quot;My Component&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--version<span class="w"> </span><span class="s2">&quot;1.2.3&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--description<span class="w"> </span><span class="s2">&quot;Safety element out of context (SEooC)&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--url<span class="w"> </span><span class="nv">repository</span><span class="o">=</span>https://example.com/repo.git<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--url<span class="w"> </span><span class="nv">documentation</span><span class="o">=</span>https://example.com/docs<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--origin<span class="w"> </span><span class="nv">url</span><span class="o">=</span>https://example.com/repo.git<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--origin<span class="w"> </span><span class="nv">revision</span><span class="o">=</span>abc123
 </pre></div>
 </div>
 </section>
@@ -533,7 +533,7 @@ have less context about origin/URLs.</p>
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=b9afe91b"></script>
+    <script src="../_static/documentation_options.js?v=2a2fe768"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

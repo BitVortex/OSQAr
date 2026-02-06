@@ -191,7 +191,7 @@ Extra integrator verification commands
 Integrators can attach additional per-shipment verification commands (repeatable) that run after OSQAr’s
 built-in verification (checksums + optional traceability)::
 
-  ./osqar shipment verify \
+  osqar shipment verify \
     --shipment /path/to/shipment \
     --config-root /trusted/workspace \
     --verify-command "python -m my_company.audit_check" \
@@ -199,4 +199,4 @@ built-in verification (checksums + optional traceability)::
 
 The same option exists for batch verification:
 
-- ``./osqar workspace verify --verify-command '<cmd>'``
+- ``osqar workspace verify --verify-command '<cmd>'``

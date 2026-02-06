@@ -78,13 +78,13 @@ Recommended integrator procedure
 
 2. Verify the checksum manifest using the OSQAr checksum tool::
 
-      ./osqar checksum verify \
+  osqar checksum verify \
         --root /path/to/shipment \
         --manifest /path/to/shipment/SHA256SUMS
 
    Recommended integrator one-shot workflow (CLI)::
 
-      ./osqar shipment verify \
+    osqar shipment verify \
         --shipment /path/to/shipment \
         --traceability \
         --json-report /path/to/shipment/traceability_report.integrator.json \
@@ -107,7 +107,7 @@ Recommended integrator procedure
 
    You can re-run the checks locally to confirm the shipment content passes your intake gate::
 
-      ./osqar traceability /path/to/shipment/needs.json \
+    osqar traceability /path/to/shipment/needs.json \
         --json-report /path/to/shipment/traceability_report.integrator.json
 
    Store your integrator-side report alongside the shipped evidence.
@@ -118,7 +118,7 @@ Multi-shipment intake (recommended)
 If you routinely integrate multiple supplier projects, archive them using the workspace intake command.
 This produces a single dated intake folder with a **Subproject overview** summary file::
 
-      ./osqar workspace intake \
+  osqar workspace intake \
         --root intake/received \
         --recursive \
         --output intake/archive/2026-02-01 \
@@ -126,7 +126,7 @@ This produces a single dated intake folder with a **Subproject overview** summar
 
 For a quick, non-copying inventory of received shipments, you can also use::
 
-  ./osqar workspace report --root intake/received --recursive --output intake/overview --open
+  osqar workspace report --root intake/received --recursive --output intake/overview --open
 
 How to tailor the reference example
 ===================================

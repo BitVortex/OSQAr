@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supplier’s Guide" href="suppliers_guide.html" /><link rel="prev" title="CLI Reference" href="cli_reference.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Configuration and hooks - OSQAr 0.5.1 documentation</title>
+        <title>Configuration and hooks - OSQAr 0.5.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.5.1 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.5.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.5.1 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.5.3 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -440,7 +440,7 @@ and avoid executing commands from supplier-provided files.</p></li>
 <h2>Extra integrator verification commands<a class="headerlink" href="#extra-integrator-verification-commands" title="Link to this heading">¶</a></h2>
 <p>Integrators can attach additional per-shipment verification commands (repeatable) that run after OSQAr’s
 built-in verification (checksums + optional traceability):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">verify</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">verify</span> \
   <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
   <span class="o">--</span><span class="n">config</span><span class="o">-</span><span class="n">root</span> <span class="o">/</span><span class="n">trusted</span><span class="o">/</span><span class="n">workspace</span> \
   <span class="o">--</span><span class="n">verify</span><span class="o">-</span><span class="n">command</span> <span class="s2">&quot;python -m my_company.audit_check&quot;</span> \
@@ -449,7 +449,7 @@ built-in verification (checksums + optional traceability):</p>
 </div>
 <p>The same option exists for batch verification:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">verify</span> <span class="pre">--verify-command</span> <span class="pre">'&lt;cmd&gt;'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">workspace</span> <span class="pre">verify</span> <span class="pre">--verify-command</span> <span class="pre">'&lt;cmd&gt;'</span></code></p></li>
 </ul>
 </section>
 </section>
@@ -550,7 +550,7 @@ built-in verification (checksums + optional traceability):</p>
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=b9afe91b"></script>
+    <script src="../_static/documentation_options.js?v=2a2fe768"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

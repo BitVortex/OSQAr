@@ -25,13 +25,13 @@ Start here
 
 .. note::
 
-    The examples below use the repo-root wrapper ``./osqar`` (Linux/macOS) or
-    ``osqar.cmd`` / ``osqar.ps1`` (Windows).
+   The examples below use the PyPI-installed CLI.
 
-    - Requirement: you must run the command from the OSQAr repository root (where the wrapper lives)
-       and have installed dependencies via Poetry.
-    - Fallback: if the wrapper is not executable, run it via Python:
-       ``python ./osqar ...``
+   - Install OSQAr: ``pipx install osqar``
+   - Invoke commands as: ``osqar <command> ...``
+
+   If you are contributing to OSQAr from a git clone and did not install via pipx,
+   you can use the repo-root wrappers instead (``./osqar`` on Linux/macOS; ``osqar.cmd`` / ``osqar.ps1`` on Windows).
 
 1. Install the framework dependencies (Poetry environment).
 2. Build the framework documentation (repo root).
@@ -40,17 +40,20 @@ Start here
 
 .. code-block:: bash
 
+   # 0) Install the OSQAr CLI
+   pipx install osqar
+
    # 1) Install dependencies
    poetry install
 
    # 2) Build framework docs (this repo)
-   ./osqar build-docs
+   osqar build-docs
 
    # 3) Scaffold a minimal project next to the framework repo
-   ./osqar new --language c --name MySEooC --destination ../MySEooC
+   osqar new --language c --name MySEooC --destination ../MySEooC
 
    # 4) Build the scaffolded project docs
-   ./osqar build-docs --project ../MySEooC
+   osqar build-docs --project ../MySEooC
 
 Windows note: prefer the repo-root wrappers (``osqar.cmd`` / ``osqar.ps1``). If you want to run
 ``*.sh`` example scripts unchanged, use WSL2.
@@ -100,7 +103,7 @@ Build the rendered HTML documentation from the repository root:
 .. code-block:: bash
 
    poetry install
-   ./osqar build-docs
+   osqar build-docs
    open _build/html/index.html
 
 By default, ``build-docs`` uses ``--project .`` and writes HTML to ``./_build/html``.
@@ -220,9 +223,9 @@ Build any example documentation directly:
 .. code-block:: bash
 
    poetry install
-   ./osqar build-docs --project examples/c_hello_world
-   ./osqar build-docs --project examples/cpp_hello_world
-   ./osqar build-docs --project examples/rust_hello_world
+   osqar build-docs --project examples/c_hello_world
+   osqar build-docs --project examples/cpp_hello_world
+   osqar build-docs --project examples/rust_hello_world
 
 Run an end-to-end workflow (native tests → docs) for an example:
 
@@ -291,8 +294,8 @@ Reasons:
 
 Instead, OSQAr uses:
 
-- A **cross-platform primary entry point**: the repo-root wrappers (``./osqar`` on Linux/macOS; ``osqar.cmd`` / ``osqar.ps1`` on Windows).
-- **Thin Windows wrappers** for the CLI at repo root (``osqar.cmd`` and ``osqar.ps1``).
+- A **cross-platform primary entry point**: the installed CLI (``osqar``).
+- Repo-root wrappers for contributors and offline use (``./osqar`` on Linux/macOS; ``osqar.cmd`` / ``osqar.ps1`` on Windows).
 - A documented fallback for running example scripts on Windows: **WSL2** (recommended)
    or a POSIX-like environment such as Git Bash.
 
@@ -337,7 +340,7 @@ The following are intended as portable alternatives to the example scripts:
 .. code-block:: bash
 
    # Build docs and prepare an evidence shipment via the CLI
-   ./osqar shipment prepare \
+   osqar shipment prepare \
        --project examples/python_hello_world \
        --clean \
        --archive
@@ -354,7 +357,7 @@ For a step-by-step guide (including how to migrate existing sources and document
 
 .. code-block:: bash
 
-   ./osqar new --language c --name MySEooC --destination ./MySEooC
+   osqar new --language c --name MySEooC --destination ./MySEooC
 
 This copies the selected template while excluding build outputs (e.g., ``_build/``, ``target/``, ``__pycache__/``).
 
@@ -365,7 +368,7 @@ Run traceability checks on an exported ``needs.json``:
 
 .. code-block:: bash
 
-    ./osqar traceability ./_build/html/needs.json \
+   osqar traceability ./_build/html/needs.json \
      --json-report ./_build/html/traceability_report.json
 
 Checksum manifest (shipment integrity)
@@ -375,12 +378,12 @@ Generate and verify a checksum manifest (default: SHA-256) for a shipped directo
 
 .. code-block:: bash
 
-   ./osqar checksum generate \
+   osqar checksum generate \
       --root ./_build/html \
       --output ./_build/html/SHA256SUMS \
       --json-report ./_build/html/checksums_report.generate.json
 
-   ./osqar checksum verify \
+   osqar checksum verify \
       --root ./_build/html \
       --manifest ./_build/html/SHA256SUMS \
       --json-report ./_build/html/checksums_report.verify.json
@@ -474,7 +477,7 @@ Generate a report (non-failing by default):
 
 .. code-block:: bash
 
-   ./osqar code-trace \
+   osqar code-trace \
       --root . \
       --needs-json ./_build/html/needs.json \
       --json-report ./_build/html/code_trace_report.json
@@ -483,7 +486,7 @@ Enforce that every documented ID is mentioned in code (useful in CI):
 
 .. code-block:: bash
 
-   ./osqar code-trace \
+   osqar code-trace \
       --root . \
       --needs-json ./_build/html/needs.json \
       --enforce-req-in-impl \
@@ -508,21 +511,21 @@ Supplier-side procedure (create the shipment)
 
 Build the example documentation so that ``needs.json`` is exported::
 
-   ./osqar build-docs --project examples/python_hello_world
+   osqar build-docs --project examples/python_hello_world
 
 Run the traceability check (writes a machine-readable report)::
 
-   ./osqar traceability examples/python_hello_world/_build/html/needs.json \
+   osqar traceability examples/python_hello_world/_build/html/needs.json \
       --json-report examples/python_hello_world/_build/html/traceability_report.json
 
 Generate and verify checksums for the example build output directory::
 
-   ./osqar checksum generate \
+   osqar checksum generate \
       --root examples/python_hello_world/_build/html \
    --output examples/python_hello_world/_build/html/SHA256SUMS \
    --json-report examples/python_hello_world/_build/html/checksums_report.generate.json
 
-   ./osqar checksum verify \
+   osqar checksum verify \
       --root examples/python_hello_world/_build/html \
       --manifest examples/python_hello_world/_build/html/SHA256SUMS \
       --json-report examples/python_hello_world/_build/html/checksums_report.verify.json
@@ -530,19 +533,19 @@ Generate and verify checksums for the example build output directory::
 Optional convenience (higher-level workflows in one command)::
 
    # Build a shippable evidence directory in one command
-   ./osqar shipment prepare \
+   osqar shipment prepare \
       --project examples/python_hello_world \
       --clean \
       --archive
 
    # Verify a received shipment (checksums + traceability)
-   ./osqar shipment verify \
+   osqar shipment verify \
       --shipment /path/to/shipment \
       --traceability \
       --report-json /path/to/shipment/verify_report.json
 
    # Supplier: optionally add metadata into the shipment root
-   ./osqar shipment metadata write \
+   osqar shipment metadata write \
       --shipment examples/python_hello_world/_build/html \
       --name "OSQAr Python Hello World" \
       --version "1.0.0" \
@@ -551,21 +554,21 @@ Optional convenience (higher-level workflows in one command)::
       --origin revision=<commit>
 
    # Integrator: intake multiple shipments and generate a Subproject overview
-   ./osqar workspace intake \
+   osqar workspace intake \
       --root intake/received \
       --recursive \
       --output intake/archive/2026-02-01 \
       --traceability
 
    # Generate and open an HTML Subproject overview (via Sphinx)
-   ./osqar workspace report \
+   osqar workspace report \
       --root intake/received \
       --recursive \
       --output intake/overview \
       --open
 
    # Show explicit checksums/traceability status in the HTML overview
-   ./osqar workspace report \
+   osqar workspace report \
       --root intake/received \
       --recursive \
       --output intake/overview \
@@ -574,10 +577,10 @@ Optional convenience (higher-level workflows in one command)::
       --open
 
    # Or run the individual shipment steps
-   ./osqar build-docs --project examples/python_hello_world
-   ./osqar shipment traceability --shipment examples/python_hello_world/_build/html
-   ./osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
-   ./osqar shipment checksums --shipment examples/python_hello_world/_build/html verify
+   osqar build-docs --project examples/python_hello_world
+   osqar shipment traceability --shipment examples/python_hello_world/_build/html
+   osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
+   osqar shipment checksums --shipment examples/python_hello_world/_build/html verify
 
 Then archive and ship the **example output directory** (not the framework docs built from the repo root).
 
@@ -588,13 +591,13 @@ Integrator-side procedure (verify a received shipment)
 
 Verify the received directory against the provided manifest::
 
-   ./osqar checksum verify \
+   osqar checksum verify \
       --root /path/to/shipment \
       --manifest /path/to/shipment/SHA256SUMS
 
 Optionally re-run the traceability checks on the shipped ``needs.json``::
 
-   ./osqar traceability /path/to/shipment/needs.json \
+   osqar traceability /path/to/shipment/needs.json \
       --json-report /path/to/shipment/traceability_report.integrator.json
 
 For role-specific guidance (including what to do on mismatches), see:

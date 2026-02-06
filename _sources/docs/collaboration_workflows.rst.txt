@@ -150,7 +150,7 @@ What the CI runs
 ^^^^^^^^^^^^^^^^
 
 - Python checks (matrix): install via Poetry, run ``pytest``, build the Python demo example docs.
-- Traceability validation: run ``./osqar traceability`` on the exported ``needs.json``.
+- Traceability validation: run ``osqar traceability`` on the exported ``needs.json``.
 - Integrity metadata: generate and verify ``SHA256SUMS`` manifests for built documentation outputs.
 
 Reproducible example shipments
@@ -179,7 +179,7 @@ When multiple teams produce shipments simultaneously:
 
 - Standardize naming for shipments: ``<supplier>_<component>_<version>``.
 - Include ``osqar_project.json`` in each shipment to record origin, URLs, and descriptive metadata.
-- Use ``./osqar workspace intake`` to archive and summarize received shipments.
+- Use ``osqar workspace intake`` to archive and summarize received shipments.
 
 Change control tips
 -------------------

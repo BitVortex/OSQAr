@@ -69,4 +69,4 @@ Then build the documentation (imports `test_results.xml`):
 
 .. code-block:: bash
 
-      ./osqar build-docs --project examples/rust_hello_world
+   osqar build-docs --project examples/rust_hello_world
