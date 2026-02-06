@@ -1,30 +1,30 @@
 ================================================
   NLOC    CCN   token  PARAM  length  location  
 ------------------------------------------------
-       6      2     23      1       7 __post_init__@44-50@src/tsim.py
-       4      1     25      1       5 __init__@78-82@src/tsim.py
-      21      3    139      2      48 read_adc@84-131@src/tsim.py
-       2      1     12      1       3 __init__@146-148@src/tsim.py
-       8      3     68      2      26 update@150-175@src/tsim.py
-       4      2     40      2       5 __init__@191-195@src/tsim.py
-      12      5    110      2      33 evaluate@197-229@src/tsim.py
-       2      1     14      1      11 get_state_output@231-241@src/tsim.py
-       6      2     53      2       7 __init__@262-268@src/tsim.py
-      10      3     85      2      40 process_sample@270-309@src/tsim.py
-       2      1     16      1      12 get_safe_unsafe_output@311-322@src/tsim.py
-      13      2     65      1      23 test_conversion_full_range@36-58@tests/test_tsim.py
-       7      2     43      1      15 test_conversion_accuracy@60-74@tests/test_tsim.py
-      19      5    130      1      38 test_filter_noise_rejection@84-121@tests/test_tsim.py
-       6      3     39      1      13 test_filter_stabilization@123-135@tests/test_tsim.py
-      10      1     57      1      21 test_threshold_detection@145-165@tests/test_tsim.py
-      12      1     73      1      31 test_hysteresis_deadband@167-197@tests/test_tsim.py
-       5      1     34      1      14 test_state_output_bit@199-212@tests/test_tsim.py
-       8      2     71      1      27 test_end_to_end_latency@222-248@tests/test_tsim.py
-      15      4     96      1      26 test_detection_within_100ms@250-275@tests/test_tsim.py
-      10      3     63      1      21 test_safe_state_recovery@277-297@tests/test_tsim.py
-       7      2     56      1      16 test_error_recovery@299-314@tests/test_tsim.py
-       7      2     39      1      16 test_fail_safe_on_persistent_errors@316-331@tests/test_tsim.py
-       9      1     71      1      18 test_hysteresis_constraint@341-358@tests/test_tsim.py
+       6      2     23      1       7 __post_init__@48-54@src/tsim.py
+       4      1     25      1       5 __init__@82-86@src/tsim.py
+      21      3    139      2      48 read_adc@88-135@src/tsim.py
+       2      1     12      1       3 __init__@150-152@src/tsim.py
+       8      3     68      2      26 update@154-179@src/tsim.py
+       4      2     40      2       5 __init__@195-199@src/tsim.py
+      12      5    110      2      33 evaluate@201-233@src/tsim.py
+       2      1     14      1      11 get_state_output@235-245@src/tsim.py
+       6      2     53      2       7 __init__@266-272@src/tsim.py
+      10      3     85      2      40 process_sample@274-313@src/tsim.py
+       2      1     16      1      12 get_safe_unsafe_output@315-326@src/tsim.py
+      13      2     65      1      23 test_conversion_full_range@39-61@tests/test_tsim.py
+       7      2     43      1      15 test_conversion_accuracy@63-77@tests/test_tsim.py
+      19      5    130      1      38 test_filter_noise_rejection@87-124@tests/test_tsim.py
+       6      3     39      1      13 test_filter_stabilization@126-138@tests/test_tsim.py
+      10      1     57      1      21 test_threshold_detection@148-168@tests/test_tsim.py
+      12      1     73      1      31 test_hysteresis_deadband@170-200@tests/test_tsim.py
+       5      1     34      1      14 test_state_output_bit@202-215@tests/test_tsim.py
+       8      2     71      1      27 test_end_to_end_latency@225-251@tests/test_tsim.py
+      15      4     96      1      26 test_detection_within_100ms@253-278@tests/test_tsim.py
+      10      3     63      1      21 test_safe_state_recovery@280-300@tests/test_tsim.py
+       7      2     56      1      16 test_error_recovery@302-317@tests/test_tsim.py
+       7      2     39      1      16 test_fail_safe_on_persistent_errors@319-334@tests/test_tsim.py
+       9      1     71      1      18 test_hysteresis_constraint@344-361@tests/test_tsim.py
 4 file analyzed.
 ==============================================================
 NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file

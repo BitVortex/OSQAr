@@ -87,7 +87,14 @@ Recommended integrator procedure
       ./osqar shipment verify \
         --shipment /path/to/shipment \
         --traceability \
-        --json-report /path/to/shipment/traceability_report.integrator.json
+        --json-report /path/to/shipment/traceability_report.integrator.json \
+        --report-json /path/to/shipment/verify_report.json
+
+    Optional extensions:
+
+    - Use ``--verify-command '<cmd>'`` (repeatable) to run additional integrator-side checks after OSQAr’s built-in verification.
+    - Use ``--config-root <dir>`` / ``--config <path>`` to load a trusted integrator workspace config (``osqar_workspace.json``).
+    - Disable hooks via ``--no-hooks`` or by setting ``OSQAR_DISABLE_HOOKS=1``.
 
    - If verification reports ``missing`` or ``mismatched`` files, treat the shipment as corrupted or tampered
      with, and re-transfer the artifact.
@@ -119,7 +126,7 @@ This produces a single dated intake folder with a **Subproject overview** summar
 
 For a quick, non-copying inventory of received shipments, you can also use::
 
-      ./osqar workspace open --root intake/received --recursive
+  ./osqar workspace report --root intake/received --recursive --output intake/overview --open
 
 How to tailor the reference example
 ===================================

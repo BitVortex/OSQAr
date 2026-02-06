@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Multi-project workflows" href="multi_project_workflows.html" /><link rel="prev" title="Integrator’s Guide" href="integrators_guide.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Lifecycle Management - OSQAr 0.4.2 documentation</title>
+        <title>Lifecycle Management - OSQAr 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.4.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.5.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.4.2 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.5.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -210,6 +210,7 @@
 <li class="toctree-l1"><a class="reference internal" href="using_the_boilerplate.html">Using the OSQAr Boilerplate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli_reference.html">CLI Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul class="current">
@@ -431,7 +432,7 @@ In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx document
 <li><p>documentation build into the shipment directory (defaults to <code class="docutils literal notranslate"><span class="pre">&lt;project_dir&gt;/_build/html</span></code> unless you pass <code class="docutils literal notranslate"><span class="pre">--shipment</span></code>)</p></li>
 <li><p>traceability export + validation</p></li>
 <li><p>checksum generation + verification</p></li>
-<li><p>optional archive creation (<code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code>)</p></li>
+<li><p>optional archive creation (<code class="docutils literal notranslate"><span class="pre">.zip</span></code>)</p></li>
 </ul>
 </section>
 <section id="integrator-receive-verify">
@@ -440,7 +441,8 @@ In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx document
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">verify</span> \
    <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
    <span class="o">--</span><span class="n">traceability</span> \
-   <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span>
+    <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span> \
+    <span class="o">--</span><span class="n">report</span><span class="o">-</span><span class="n">json</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">verify_report</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>This performs:</p>
@@ -649,7 +651,7 @@ In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx document
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=ff822928"></script>
+    <script src="../_static/documentation_options.js?v=1dd76d02"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

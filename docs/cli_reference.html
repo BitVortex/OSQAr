@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supplier’s Guide" href="suppliers_guide.html" /><link rel="prev" title="Setting Up A Project From Scratch" href="project_setup_from_scratch.html" />
+<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Configuration and hooks" href="configuration_and_hooks.html" /><link rel="prev" title="Setting Up A Project From Scratch" href="project_setup_from_scratch.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>CLI Reference - OSQAr 0.4.2 documentation</title>
+        <title>CLI Reference - OSQAr 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.4.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.5.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.4.2 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.5.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -210,6 +210,7 @@
 <li class="toctree-l1"><a class="reference internal" href="using_the_boilerplate.html">Using the OSQAr Boilerplate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">CLI Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul>
@@ -278,11 +279,11 @@ see <a class="reference internal" href="using_the_boilerplate.html"><span class=
 </ul>
 <p>The wrapper prefers Poetry-managed execution when available.</p>
 </section>
-<section id="fallback-explicit-poetry-invocation">
-<h3>Fallback (explicit Poetry invocation)<a class="headerlink" href="#fallback-explicit-poetry-invocation" title="Link to this heading">¶</a></h3>
-<p>If you prefer not to use the wrapper, run:</p>
+<section id="fallback-run-wrapper-via-python">
+<h3>Fallback (run wrapper via Python)<a class="headerlink" href="#fallback-run-wrapper-via-python" title="Link to this heading">¶</a></h3>
+<p>If you cannot use the wrapper as an executable (e.g., missing execute bit), run it via Python:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">python</span> <span class="pre">-m</span> <span class="pre">tools.osqar_cli</span> <span class="pre">&lt;command&gt;</span> <span class="pre">...</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">./osqar</span> <span class="pre">&lt;command&gt;</span> <span class="pre">...</span></code></p></li>
 </ul>
 </section>
 </section>
@@ -293,6 +294,68 @@ see <a class="reference internal" href="using_the_boilerplate.html"><span class=
 <li><p><code class="docutils literal notranslate"><span class="pre">build-docs</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">--project</span> <span class="pre">.</span></code> and outputs to <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/_build/html</span></code>.</p></li>
 </ul>
 </section>
+<section id="configuration-and-hooks">
+<h2>Configuration and hooks<a class="headerlink" href="#configuration-and-hooks" title="Link to this heading">¶</a></h2>
+<p>OSQAr supports optional JSON configuration files to make workflows extensible for small and large projects.</p>
+<p>For a detailed reference (supported keys, hook events, and examples), see <a class="reference internal" href="configuration_and_hooks.html"><span class="doc">Configuration and hooks</span></a>.</p>
+<section id="project-config-osqar-project-json-supplier-dev-side">
+<h3>Project config: <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> (supplier/dev side)<a class="headerlink" href="#project-config-osqar-project-json-supplier-dev-side" title="Link to this heading">¶</a></h3>
+<p>Placed in the <strong>project root</strong>.</p>
+<p>Supported keys (v1-style, best-effort):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">commands.docs</span></code>: override how docs are built (used by <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">build-docs</span></code> and <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">prepare</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">commands.test</span></code>: override how tests/build are run (used by <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">run-tests</span></code> and <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">prepare</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">commands.build</span></code>: used by <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">run-build</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hooks.pre</span></code> / <code class="docutils literal notranslate"><span class="pre">hooks.post</span></code>: optional command(s) to run around OSQAr events</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;commands&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;test&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OSQAR_REPRODUCIBLE=1 ./build-and-test.sh&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;poetry run sphinx-build -b html . _build/html&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;pre&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;shipment.prepare&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;echo pre-prepare&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;post&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;shipment.prepare&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;echo post-prepare&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;echo done&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="workspace-config-osqar-workspace-json-integrator-side">
+<h3>Workspace config: <code class="docutils literal notranslate"><span class="pre">osqar_workspace.json</span></code> (integrator side)<a class="headerlink" href="#workspace-config-osqar-workspace-json-integrator-side" title="Link to this heading">¶</a></h3>
+<p>Placed in a <strong>trusted integrator workspace root</strong>.</p>
+<p>Security note:</p>
+<ul class="simple">
+<li><p>Treat configs inside received/shipped bundles as untrusted. Only use workspace config from a trusted location.</p></li>
+</ul>
+</section>
+<section id="common-flags">
+<h3>Common flags<a class="headerlink" href="#common-flags" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;path&gt;</span></code>: override config file path (project or workspace, depending on the command)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--no-hooks</span></code>: disable all pre/post hooks for the invocation</p></li>
+<li><p>Environment kill switch: set <code class="docutils literal notranslate"><span class="pre">OSQAR_DISABLE_HOOKS=1</span></code> to disable hooks globally</p></li>
+</ul>
+<p>Execution model:</p>
+<ul class="simple">
+<li><p>Hook and command strings are executed without a shell (argv splitting via Python). If you need shell features (pipes, <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code>), wrap explicitly, e.g. <code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">-lc</span> <span class="pre">'...your</span> <span class="pre">pipeline...'</span></code>.</p></li>
+</ul>
+</section>
+<section id="hook-events">
+<h3>Hook events<a class="headerlink" href="#hook-events" title="Link to this heading">¶</a></h3>
+<p>Hook event names are simple strings; current events include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">shipment.prepare</span></code>, <code class="docutils literal notranslate"><span class="pre">shipment.build-docs</span></code>, <code class="docutils literal notranslate"><span class="pre">shipment.run-tests</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shipment.verify</span></code> (integrator-side)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace.report</span></code>, <code class="docutils literal notranslate"><span class="pre">workspace.verify</span></code>, <code class="docutils literal notranslate"><span class="pre">workspace.verify.shipment</span></code>, <code class="docutils literal notranslate"><span class="pre">workspace.intake</span></code></p></li>
+</ul>
+</section>
+</section>
 <section id="top-level-commands">
 <h2>Top-level commands<a class="headerlink" href="#top-level-commands" title="Link to this heading">¶</a></h2>
 <section id="build-docs">
@@ -301,6 +364,8 @@ see <a class="reference internal" href="using_the_boilerplate.html"><span class=
 <p>Arguments:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--project</span></code>: project directory (default: <code class="docutils literal notranslate"><span class="pre">.</span></code>; must contain <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> and <code class="docutils literal notranslate"><span class="pre">index.rst</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--config</span></code>: override project config JSON path (default: <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/osqar_project.json</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--no-hooks</span></code>: disable pre/post hooks for this command</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: output directory (default: <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/_build/html</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--open</span></code>: open the built <code class="docutils literal notranslate"><span class="pre">index.html</span></code> in your default browser</p></li>
 </ul>
@@ -327,18 +392,29 @@ see <a class="reference internal" href="using_the_boilerplate.html"><span class=
 </section>
 <section id="doctor">
 <h3>doctor<a class="headerlink" href="#doctor" title="Link to this heading">¶</a></h3>
-<p>Run a quick diagnostic of common environment/setup issues.</p>
+<p>Run a full status report for debugging.</p>
+<p>Intent:</p>
+<ul class="simple">
+<li><p><strong>Before shipping</strong>: validate the local build environment (Poetry/Sphinx/PlantUML) and perform best-effort checks on the built shipment directory.</p></li>
+<li><p><strong>After receiving</strong>: diagnose a received shipment directory without requiring build tools.</p></li>
+</ul>
 <p>Checks (best-effort):</p>
 <ul class="simple">
 <li><p>Poetry availability (if the project is Poetry-managed)</p></li>
 <li><p>Sphinx importability in the environment used by <code class="docutils literal notranslate"><span class="pre">build-docs</span></code></p></li>
 <li><p>PlantUML availability (<code class="docutils literal notranslate"><span class="pre">plantuml</span></code> command or <code class="docutils literal notranslate"><span class="pre">PLANTUML_JAR</span></code> + Java)</p></li>
+<li><p>Shipment consistency (if a shipment directory is found/provided): <code class="docutils literal notranslate"><span class="pre">index.html</span></code>, <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>, <code class="docutils literal notranslate"><span class="pre">traceability_report.json</span></code>, <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>, <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code></p></li>
+</ul>
+<p>Machine-readable output:</p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">--json-report</span> <span class="pre">&lt;path&gt;</span></code> to write a structured JSON report (schema: <code class="docutils literal notranslate"><span class="pre">osqar.doctor_report.v1</span></code>).</p></li>
 </ul>
 <p>Examples:</p>
 <ul class="simple">
 <li><p>Check the current project: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">doctor</span></code></p></li>
 <li><p>Check an example: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">doctor</span> <span class="pre">--project</span> <span class="pre">examples/python_hello_world</span></code></p></li>
 <li><p>Also check traceability if a built <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> is present: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">doctor</span> <span class="pre">--traceability</span></code></p></li>
+<li><p>Diagnose a received shipment directory (skip environment checks): <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">doctor</span> <span class="pre">--shipment</span> <span class="pre">/path/to/shipment</span> <span class="pre">--skip-env-checks</span> <span class="pre">--json-report</span> <span class="pre">doctor_report.json</span></code></p></li>
 </ul>
 </section>
 <section id="new">
@@ -379,6 +455,33 @@ see <a class="reference internal" href="using_the_boilerplate.html"><span class=
 <li><p><code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">traceability</span> <span class="pre">./_build/html/needs.json</span> <span class="pre">--json-report</span> <span class="pre">./_build/html/traceability_report.json</span></code></p></li>
 </ul>
 </section>
+<section id="code-trace">
+<h3>code-trace<a class="headerlink" href="#code-trace" title="Link to this heading">¶</a></h3>
+<p>Scan implementation and test sources for need IDs (e.g., <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>, <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>) embedded in comments.</p>
+<p>Intent:</p>
+<ul class="simple">
+<li><p>Keep the docs-based traceability chain (<code class="docutils literal notranslate"><span class="pre">needs.json</span></code>) connected to the <em>actual code</em>.</p></li>
+<li><p>Optionally enforce that every <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code> / <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code> is mentioned at least once in implementation sources and every <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code> at least once in test sources.</p></li>
+</ul>
+<p>Key inputs:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--root</span></code>: project root to scan (defaults to <code class="docutils literal notranslate"><span class="pre">.</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--needs-json</span></code>: expected IDs source (optional for reporting; required for enforcement)</p></li>
+</ul>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>Generate a report (non-failing):</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">code-trace</span> <span class="pre">--root</span> <span class="pre">.</span> <span class="pre">--needs-json</span> <span class="pre">./_build/html/needs.json</span> <span class="pre">--json-report</span> <span class="pre">./_build/html/code_trace_report.json</span></code></p></li>
+</ul>
+</li>
+<li><p>Enforce “REQ/ARCH appear in implementation, TEST appears in tests”:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">code-trace</span> <span class="pre">--root</span> <span class="pre">.</span> <span class="pre">--needs-json</span> <span class="pre">./_build/html/needs.json</span> <span class="pre">--enforce-req-in-impl</span> <span class="pre">--enforce-arch-in-impl</span> <span class="pre">--enforce-test-in-tests</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
 <section id="checksum">
 <h3>checksum<a class="headerlink" href="#checksum" title="Link to this heading">¶</a></h3>
 <p>Generate or verify checksum manifests.</p>
@@ -386,6 +489,10 @@ see <a class="reference internal" href="using_the_boilerplate.html"><span class=
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">checksum</span> <span class="pre">generate</span> <span class="pre">--root</span> <span class="pre">&lt;dir&gt;</span> <span class="pre">--output</span> <span class="pre">&lt;manifest&gt;</span> <span class="pre">[--exclude</span> <span class="pre">&lt;glob&gt;</span> <span class="pre">...]</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">checksum</span> <span class="pre">verify</span> <span class="pre">--root</span> <span class="pre">&lt;dir&gt;</span> <span class="pre">--manifest</span> <span class="pre">&lt;manifest&gt;</span> <span class="pre">[--exclude</span> <span class="pre">&lt;glob&gt;</span> <span class="pre">...]</span></code></p></li>
+</ul>
+<p>Optional arguments (both subcommands):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--json-report</span> <span class="pre">&lt;path&gt;</span></code>: write a machine-readable JSON report (schema: <code class="docutils literal notranslate"><span class="pre">osqar.checksums_report.v1</span></code>)</p></li>
 </ul>
 <p>Example:</p>
 <ul class="simple">
@@ -402,7 +509,7 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">list</span></code>: discover shipment projects under a directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">build-docs</span></code>: same as top-level <code class="docutils literal notranslate"><span class="pre">build-docs</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">prepare</span></code>: generalized “build + traceability + checksums (+ archive)” workflow</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">verify</span></code>: generalized “verify checksums (+ traceability)” workflow</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">verify</span></code>: verify a <strong>received</strong> shipment directory (checksums, optional traceability re-check)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">traceability</span></code>: validate a built shipment directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">checksums</span></code>: generate/verify checksums for a shipment directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">clean</span></code>: remove generated outputs (conservative by default)</p></li>
@@ -417,11 +524,18 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <p>Common subcommands:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">list</span></code>: discover shipments under a root directory (by scanning for <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code>: generate a Subproject overview (Markdown + JSON) without copying shipments</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">open</span></code>: generate a Subproject overview and open an HTML version built via Sphinx (theme-aligned and shows OK/FAIL/skipped status for enabled checks)</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code>: generate a Subproject overview (HTML + JSON) without copying shipments</dt><dd><p>(use <code class="docutils literal notranslate"><span class="pre">--open</span></code> to open it in a browser)</p>
+</dd>
+</dl>
+</li>
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">diff</span></code>: diff two workspace reports (e.g., <code class="docutils literal notranslate"><span class="pre">subproject_overview.json</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">verify</span></code>: verify many shipments (checksums and optionally traceability)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">intake</span></code>: ingest multiple shipments into an archive directory and generate a consolidated overview</p></li>
+</ul>
+<p>For CI/non-interactive usage:</p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code> (without <code class="docutils literal notranslate"><span class="pre">--open</span></code>) to avoid opening a browser and only print the built <code class="docutils literal notranslate"><span class="pre">index.html</span></code> path.</p></li>
 </ul>
 <p>Use <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">&lt;command&gt;</span> <span class="pre">--help</span></code> to see the full set of options for these workflows.</p>
 <p>Workspace examples:</p>
@@ -429,8 +543,9 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <li><p>List shipments under a folder: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">list</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span></code></p></li>
 <li><p>Generate an overview without copying: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">report</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span> <span class="pre">--output</span> <span class="pre">intake/overview</span></code></p></li>
 <li><p>Generate an overview and also verify checksums + traceability: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">report</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span> <span class="pre">--output</span> <span class="pre">intake/overview</span> <span class="pre">--checksums</span> <span class="pre">--traceability</span></code></p></li>
-<li><p>Generate and open an HTML overview: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">open</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span></code></p></li>
-<li><p>Generate/open and also show checksums + traceability status: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">open</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span> <span class="pre">--checksums</span> <span class="pre">--traceability</span></code></p></li>
+<li><p>Generate and open an HTML overview: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">report</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span> <span class="pre">--output</span> <span class="pre">intake/overview</span> <span class="pre">--open</span></code></p></li>
+<li><p>Generate/open and also show checksums + traceability status: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">report</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span> <span class="pre">--output</span> <span class="pre">intake/overview</span> <span class="pre">--checksums</span> <span class="pre">--traceability</span> <span class="pre">--open</span></code></p></li>
+<li><p>Run with an explicit workspace config: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">report</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--config</span> <span class="pre">./osqar_workspace.json</span> <span class="pre">--output</span> <span class="pre">intake/overview</span></code></p></li>
 <li><p>Diff two overviews: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">diff</span> <span class="pre">intake/overview/subproject_overview.json</span> <span class="pre">intake/overview_new/subproject_overview.json</span></code></p></li>
 </ul>
 </section>
@@ -453,12 +568,12 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="suppliers_guide.html">
+          <a class="next-page" href="configuration_and_hooks.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Supplier’s Guide</div>
+                <div class="title">Configuration and hooks</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -506,16 +621,24 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <li><a class="reference internal" href="#">CLI Reference</a><ul>
 <li><a class="reference internal" href="#invocation">Invocation</a><ul>
 <li><a class="reference internal" href="#recommended-repo-root">Recommended (repo root)</a></li>
-<li><a class="reference internal" href="#fallback-explicit-poetry-invocation">Fallback (explicit Poetry invocation)</a></li>
+<li><a class="reference internal" href="#fallback-run-wrapper-via-python">Fallback (run wrapper via Python)</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#common-defaults">Common defaults</a></li>
+<li><a class="reference internal" href="#configuration-and-hooks">Configuration and hooks</a><ul>
+<li><a class="reference internal" href="#project-config-osqar-project-json-supplier-dev-side">Project config: <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> (supplier/dev side)</a></li>
+<li><a class="reference internal" href="#workspace-config-osqar-workspace-json-integrator-side">Workspace config: <code class="docutils literal notranslate"><span class="pre">osqar_workspace.json</span></code> (integrator side)</a></li>
+<li><a class="reference internal" href="#common-flags">Common flags</a></li>
+<li><a class="reference internal" href="#hook-events">Hook events</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#top-level-commands">Top-level commands</a><ul>
 <li><a class="reference internal" href="#build-docs">build-docs</a></li>
 <li><a class="reference internal" href="#open-docs">open-docs</a></li>
 <li><a class="reference internal" href="#doctor">doctor</a></li>
 <li><a class="reference internal" href="#new">new</a></li>
 <li><a class="reference internal" href="#traceability">traceability</a></li>
+<li><a class="reference internal" href="#code-trace">code-trace</a></li>
 <li><a class="reference internal" href="#checksum">checksum</a></li>
 </ul>
 </li>
@@ -535,7 +658,7 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=ff822928"></script>
+    <script src="../_static/documentation_options.js?v=1dd76d02"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

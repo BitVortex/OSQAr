@@ -15,7 +15,7 @@ OSQAr provides:
 - architecture diagrams (via PlantUML)
 - verification planning and traceability (requirements ↔ architecture ↔ tests)
 - evidence “shipments” (documentation + traceability + implementation + tests + analysis reports) protected by checksum manifests
-- workspace-friendly multi-shipment inventory/intake and a consolidated **Subproject overview** (Markdown/JSON and theme-aligned HTML)
+- workspace-friendly multi-shipment inventory/intake and a consolidated **Subproject overview** (JSON + theme-aligned HTML)
 - extensive lifecycle management guidance (framework-level and example-level)
 
 This chapter is the main entrypoint. It gives you the mental model and the first commands to run.
@@ -30,8 +30,8 @@ Start here
 
     - Requirement: you must run the command from the OSQAr repository root (where the wrapper lives)
        and have installed dependencies via Poetry.
-    - Fallback: if you prefer not to use the wrapper, run the equivalent command via Poetry:
-       ``poetry run python -m tools.osqar_cli ...``
+    - Fallback: if the wrapper is not executable, run it via Python:
+       ``python ./osqar ...``
 
 1. Install the framework dependencies (Poetry environment).
 2. Build the framework documentation (repo root).
@@ -200,7 +200,8 @@ Each example shipment contains:
 - ``SHA256SUMS`` (checksum manifest for the whole bundle directory)
 
 CI exports deterministic archives (``.tar.gz``) for each example as well as a combined archive.
-In GitHub Actions, download the artifact named ``osqar-example-shipments`` from the ``Tests and Example Shipments`` workflow run.
+CI exports deterministic-ish ZIP archives for each example shipment **and** a combined example workspace.
+In GitHub Actions, download the artifact named ``osqar-example-workspace`` from the ``Tests and Example Shipments`` workflow run.
 
 For the repository’s CI configuration (including reproducible build settings), see :ref:`ci-setup`.
 
@@ -286,11 +287,11 @@ Reasons:
 - Many scripts assume a POSIX shell and common Unix tooling (Bash, coreutils, path
    conventions, executable bits).
 - Reproducible-build packaging is much harder to keep consistent across platforms
-   (e.g., deterministic ``tar.gz`` creation, stable file ordering, stable timestamps).
+   (e.g., stable ZIP creation, stable file ordering, stable timestamps).
 
 Instead, OSQAr uses:
 
-- A **cross-platform primary entry point**: the Python CLI (``python -m tools.osqar_cli``).
+- A **cross-platform primary entry point**: the repo-root wrappers (``./osqar`` on Linux/macOS; ``osqar.cmd`` / ``osqar.ps1`` on Windows).
 - **Thin Windows wrappers** for the CLI at repo root (``osqar.cmd`` and ``osqar.ps1``).
 - A documented fallback for running example scripts on Windows: **WSL2** (recommended)
    or a POSIX-like environment such as Git Bash.
@@ -374,8 +375,15 @@ Generate and verify a checksum manifest (default: SHA-256) for a shipped directo
 
 .. code-block:: bash
 
-   ./osqar checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS
-   ./osqar checksum verify --root ./_build/html --manifest ./_build/html/SHA256SUMS
+   ./osqar checksum generate \
+      --root ./_build/html \
+      --output ./_build/html/SHA256SUMS \
+      --json-report ./_build/html/checksums_report.generate.json
+
+   ./osqar checksum verify \
+      --root ./_build/html \
+      --manifest ./_build/html/SHA256SUMS \
+      --json-report ./_build/html/checksums_report.verify.json
 
 Core authoring workflow
 =======================
@@ -433,6 +441,55 @@ A robust verification chapter typically contains:
 1) test requirements as needs objects (``TEST_*``)
 2) a traceability matrix mapping ``REQ_*``/``ARCH_*`` → ``TEST_*``
 
+Traceability into source code (“best of both worlds”)
+----------------------------------------------------------------
+
+In practice, teams often want two complementary views of traceability:
+
+1) **Documentation-level traceability** (auditor-friendly):
+   ``REQ_*`` ↔ ``ARCH_*`` ↔ ``TEST_*`` links in Sphinx via ``sphinx-needs``.
+2) **Code-level traceability** (engineer-friendly):
+   the same IDs appear in implementation and test code comments near the relevant functions.
+
+OSQAr supports using both together:
+
+- In the docs, create a code-level need (commonly ``CODE_*`` or ``IMPL_*``) as an *evidence anchor*.
+  Link it to the corresponding ``REQ_*``/``ARCH_*``/``TEST_*`` needs, and embed/attach the actual sources:
+
+  - Use ``literalinclude`` to embed excerpts directly into the shipped HTML.
+  - Use ``:download:`` to attach full files for review.
+
+- In the code, tag the relevant locations with IDs so reviewers can find the implementation quickly.
+  Examples (language-agnostic):
+
+  - Implementation: mention ``REQ_*`` and ``ARCH_*`` near the function/module that implements it.
+  - Tests: mention ``TEST_*`` near the test that realizes the verification requirement.
+
+Optional CI check: validate IDs in code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To keep the code tags from drifting, you can scan sources and optionally enforce simple coverage rules.
+
+Generate a report (non-failing by default):
+
+.. code-block:: bash
+
+   ./osqar code-trace \
+      --root . \
+      --needs-json ./_build/html/needs.json \
+      --json-report ./_build/html/code_trace_report.json
+
+Enforce that every documented ID is mentioned in code (useful in CI):
+
+.. code-block:: bash
+
+   ./osqar code-trace \
+      --root . \
+      --needs-json ./_build/html/needs.json \
+      --enforce-req-in-impl \
+      --enforce-arch-in-impl \
+      --enforce-test-in-tests
+
 Shipment verification (per example output)
 ==========================================
 
@@ -462,11 +519,13 @@ Generate and verify checksums for the example build output directory::
 
    ./osqar checksum generate \
       --root examples/python_hello_world/_build/html \
-      --output examples/python_hello_world/_build/html/SHA256SUMS
+   --output examples/python_hello_world/_build/html/SHA256SUMS \
+   --json-report examples/python_hello_world/_build/html/checksums_report.generate.json
 
    ./osqar checksum verify \
       --root examples/python_hello_world/_build/html \
-      --manifest examples/python_hello_world/_build/html/SHA256SUMS
+      --manifest examples/python_hello_world/_build/html/SHA256SUMS \
+      --json-report examples/python_hello_world/_build/html/checksums_report.verify.json
 
 Optional convenience (higher-level workflows in one command)::
 
@@ -479,13 +538,14 @@ Optional convenience (higher-level workflows in one command)::
    # Verify a received shipment (checksums + traceability)
    ./osqar shipment verify \
       --shipment /path/to/shipment \
-      --traceability
+      --traceability \
+      --report-json /path/to/shipment/verify_report.json
 
    # Supplier: optionally add metadata into the shipment root
    ./osqar shipment metadata write \
       --shipment examples/python_hello_world/_build/html \
       --name "OSQAr Python Hello World" \
-      --version "0.4.2" \
+      --version "1.0.0" \
       --url repository=https://example.com/repo.git \
       --origin url=https://example.com/repo.git \
       --origin revision=<commit>
@@ -498,16 +558,20 @@ Optional convenience (higher-level workflows in one command)::
       --traceability
 
    # Generate and open an HTML Subproject overview (via Sphinx)
-   ./osqar workspace open \
-      --root intake/received \
-      --recursive
-
-   # Show explicit checksums/traceability status in the HTML overview
-   ./osqar workspace open \
+   ./osqar workspace report \
       --root intake/received \
       --recursive \
+      --output intake/overview \
+      --open
+
+   # Show explicit checksums/traceability status in the HTML overview
+   ./osqar workspace report \
+      --root intake/received \
+      --recursive \
+      --output intake/overview \
       --checksums \
-      --traceability
+      --traceability \
+      --open
 
    # Or run the individual shipment steps
    ./osqar build-docs --project examples/python_hello_world

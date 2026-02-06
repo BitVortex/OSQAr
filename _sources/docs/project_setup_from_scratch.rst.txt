@@ -273,7 +273,7 @@ Release checklist (supplier)
    # Example naming convention
    ./osqar shipment package \
       --shipment _build/html \
-      --output OpenThermoLib_v1.4.0_evidence_shipment.tar.gz
+      --output OpenThermoLib_v1.4.0_evidence_shipment.zip
 
    # Optional: verify checksums again after moving/copying the directory
 
@@ -286,8 +286,8 @@ Common open-source pattern:
 - create a GitHub Release
 - attach:
 
-  - the source archive (GitHub auto-generates)
-  - ``OpenThermoLib_v1.4.0_evidence_shipment.tar.gz``
+   - the source archive (GitHub auto-generates)
+   - ``OpenThermoLib_v1.4.0_evidence_shipment.zip``
 
 For higher assurance, consider signing the shipped checksum manifest externally (e.g., detached signature) and storing signatures separately.
 

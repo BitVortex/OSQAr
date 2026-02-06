@@ -172,7 +172,7 @@ This performs:
 - documentation build into the shipment directory (defaults to ``<project_dir>/_build/html`` unless you pass ``--shipment``)
 - traceability export + validation
 - checksum generation + verification
-- optional archive creation (``.tar.gz``)
+- optional archive creation (``.zip``)
 
 Integrator (receive + verify)
 -----------------------------
@@ -182,7 +182,8 @@ Recommended intake workflow::
   ./osqar shipment verify \
      --shipment /path/to/shipment \
      --traceability \
-     --json-report /path/to/shipment/traceability_report.integrator.json
+      --json-report /path/to/shipment/traceability_report.integrator.json \
+      --report-json /path/to/shipment/verify_report.json
 
 This performs:
 

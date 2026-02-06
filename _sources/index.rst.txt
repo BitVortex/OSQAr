@@ -41,6 +41,7 @@ Additional guides are linked in the sidebar.
    docs/using_the_boilerplate
    docs/project_setup_from_scratch
    docs/cli_reference
+   docs/configuration_and_hooks
 
 .. toctree::
    :maxdepth: 1

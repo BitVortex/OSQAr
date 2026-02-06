@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "https://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage branch-rate="0" branches-covered="0" branches-valid="0" complexity="0" line-rate="0.9622641509433962" lines-covered="51" lines-valid="53" timestamp="1770377150" version="2.0.3">
+<coverage branch-rate="0" branches-covered="0" branches-valid="0" complexity="0" line-rate="0.9622641509433962" lines-covered="51" lines-valid="53" timestamp="1770392136" version="2.0.3">
     <sources>
         <source>/home/runner/work/OSQAr/OSQAr/examples/rust_hello_world</source>
     </sources>
@@ -11,84 +11,84 @@
                     <methods>
                         <method name="tsim::adc_to_temp_x10" signature="" complexity="0" line-rate="1" branch-rate="1">
                             <lines>
-                                <line hits="3" number="20" branch="false"/>
+                                <line hits="3" number="25" branch="false"/>
                             </lines>
                         </method>
                         <method name="&lt;tsim::Filter&gt;::new" signature="" complexity="0" line-rate="1" branch-rate="1">
                             <lines>
-                                <line hits="1" number="48" branch="false"/>
+                                <line hits="1" number="53" branch="false"/>
                             </lines>
                         </method>
                         <method name="&lt;tsim::Filter&gt;::update" signature="" complexity="0" line-rate="1" branch-rate="1">
                             <lines>
-                                <line hits="8" number="58" branch="false"/>
+                                <line hits="8" number="63" branch="false"/>
                             </lines>
                         </method>
                         <method name="&lt;tsim::StateMachine&gt;::new" signature="" complexity="0" line-rate="1" branch-rate="1">
                             <lines>
-                                <line hits="1" number="85" branch="false"/>
+                                <line hits="1" number="90" branch="false"/>
                             </lines>
                         </method>
                         <method name="&lt;tsim::StateMachine&gt;::evaluate" signature="" complexity="0" line-rate="1" branch-rate="1">
                             <lines>
-                                <line hits="4" number="93" branch="false"/>
+                                <line hits="4" number="98" branch="false"/>
                             </lines>
                         </method>
                     </methods>
                     <lines>
-                        <line branch="false" hits="3" number="20"/>
-                        <line branch="false" hits="3" number="21"/>
                         <line branch="false" hits="3" number="25"/>
                         <line branch="false" hits="3" number="26"/>
-                        <line branch="false" hits="3" number="27"/>
-                        <line branch="false" hits="3" number="29"/>
-                        <line branch="false" hits="0" number="30"/>
+                        <line branch="false" hits="3" number="30"/>
                         <line branch="false" hits="3" number="31"/>
                         <line branch="false" hits="3" number="32"/>
-                        <line branch="false" hits="0" number="33"/>
                         <line branch="false" hits="3" number="34"/>
+                        <line branch="false" hits="0" number="35"/>
                         <line branch="false" hits="3" number="36"/>
                         <line branch="false" hits="3" number="37"/>
-                        <line branch="false" hits="1" number="48"/>
-                        <line branch="false" hits="1" number="49"/>
-                        <line branch="false" hits="1" number="50"/>
-                        <line branch="false" hits="1" number="51"/>
-                        <line branch="false" hits="1" number="52"/>
+                        <line branch="false" hits="0" number="38"/>
+                        <line branch="false" hits="3" number="39"/>
+                        <line branch="false" hits="3" number="41"/>
+                        <line branch="false" hits="3" number="42"/>
                         <line branch="false" hits="1" number="53"/>
                         <line branch="false" hits="1" number="54"/>
                         <line branch="false" hits="1" number="55"/>
-                        <line branch="false" hits="8" number="58"/>
-                        <line branch="false" hits="8" number="59"/>
-                        <line branch="false" hits="5" number="60"/>
-                        <line branch="false" hits="5" number="61"/>
-                        <line branch="false" hits="5" number="62"/>
-                        <line branch="false" hits="5" number="63"/>
-                        <line branch="false" hits="5" number="64"/>
-                        <line branch="false" hits="3" number="65"/>
-                        <line branch="false" hits="3" number="67"/>
-                        <line branch="false" hits="3" number="68"/>
-                        <line branch="false" hits="3" number="69"/>
+                        <line branch="false" hits="1" number="56"/>
+                        <line branch="false" hits="1" number="57"/>
+                        <line branch="false" hits="1" number="58"/>
+                        <line branch="false" hits="1" number="59"/>
+                        <line branch="false" hits="1" number="60"/>
+                        <line branch="false" hits="8" number="63"/>
+                        <line branch="false" hits="8" number="64"/>
+                        <line branch="false" hits="5" number="65"/>
+                        <line branch="false" hits="5" number="66"/>
+                        <line branch="false" hits="5" number="67"/>
+                        <line branch="false" hits="5" number="68"/>
+                        <line branch="false" hits="5" number="69"/>
                         <line branch="false" hits="3" number="70"/>
-                        <line branch="false" hits="3" number="71"/>
+                        <line branch="false" hits="3" number="72"/>
                         <line branch="false" hits="3" number="73"/>
-                        <line branch="false" hits="8" number="74"/>
-                        <line branch="false" hits="1" number="85"/>
-                        <line branch="false" hits="1" number="86"/>
-                        <line branch="false" hits="1" number="87"/>
-                        <line branch="false" hits="1" number="88"/>
-                        <line branch="false" hits="1" number="89"/>
+                        <line branch="false" hits="3" number="74"/>
+                        <line branch="false" hits="3" number="75"/>
+                        <line branch="false" hits="3" number="76"/>
+                        <line branch="false" hits="3" number="78"/>
+                        <line branch="false" hits="8" number="79"/>
                         <line branch="false" hits="1" number="90"/>
                         <line branch="false" hits="1" number="91"/>
-                        <line branch="false" hits="4" number="93"/>
-                        <line branch="false" hits="4" number="94"/>
-                        <line branch="false" hits="2" number="96"/>
-                        <line branch="false" hits="1" number="97"/>
-                        <line branch="false" hits="1" number="98"/>
+                        <line branch="false" hits="1" number="92"/>
+                        <line branch="false" hits="1" number="93"/>
+                        <line branch="false" hits="1" number="94"/>
+                        <line branch="false" hits="1" number="95"/>
+                        <line branch="false" hits="1" number="96"/>
+                        <line branch="false" hits="4" number="98"/>
+                        <line branch="false" hits="4" number="99"/>
                         <line branch="false" hits="2" number="101"/>
                         <line branch="false" hits="1" number="102"/>
                         <line branch="false" hits="1" number="103"/>
-                        <line branch="false" hits="4" number="106"/>
-                        <line branch="false" hits="4" number="107"/>
+                        <line branch="false" hits="2" number="106"/>
+                        <line branch="false" hits="1" number="107"/>
+                        <line branch="false" hits="1" number="108"/>
+                        <line branch="false" hits="4" number="111"/>
+                        <line branch="false" hits="4" number="112"/>
                     </lines>
                 </class>
             </classes>

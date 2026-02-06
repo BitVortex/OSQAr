@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Collaboration workflows (multi-user)" href="collaboration_workflows.html" /><link rel="prev" title="Lifecycle Management" href="lifecycle_management.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Multi-project workflows - OSQAr 0.4.2 documentation</title>
+        <title>Multi-project workflows - OSQAr 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.4.2 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.5.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.4.2 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.5.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -210,6 +210,7 @@
 <li class="toctree-l1"><a class="reference internal" href="using_the_boilerplate.html">Using the OSQAr Boilerplate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli_reference.html">CLI Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Guides</span></p>
 <ul class="current">
@@ -279,7 +280,7 @@ The goal is to keep evidence intake scalable and repeatable, while preserving in
 </pre></div>
 </div>
 <p>Then open the generated overview:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>open<span class="w"> </span>intake/archive/2026-02-01/subproject_overview.md
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>open<span class="w"> </span>intake/archive/2026-02-01/_build/html/index.html
 </pre></div>
 </div>
 </section>
@@ -328,23 +329,27 @@ reports/               # integrator-side summaries (JSON/CSV/etc)
 <section id="what-the-intake-produces">
 <h2>What the intake produces<a class="headerlink" href="#what-the-intake-produces" title="Link to this heading">¶</a></h2>
 <p>An intake directory is meant to be self-contained and audit-friendly:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>intake/archive/2026-02-01/
-  intake_report.json
-  subproject_overview.json
-  subproject_overview.md
-  SHA256SUMS
-  shipments/
-    &lt;shipment-name&gt;/
-      index.html
-      needs.json
-      osqar_project.json
-      ... (rendered docs and shipped artifacts)
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span> intake/archive/2026-02-01/
+   intake_report.json
+   subproject_overview.json
+   SHA256SUMS
+   _build/
+     html/
+       index.html
+   shipments/
+     &lt;shipment-name&gt;/
+       index.html
+       needs.json
+       osqar_project.json
+       ... (rendered docs and shipped artifacts)
   reports/
-    &lt;shipment-name&gt;/
-      traceability_report.integrator.json
+     &lt;shipment-name&gt;/
+       traceability_report.integrator.json
+       doctor_report.integrator.json
+
+The file ``_build/html/index.html`` is intended as the main human entrypoint.
 </pre></div>
 </div>
-<p>The file <code class="docutils literal notranslate"><span class="pre">subproject_overview.md</span></code> is intended as the main human entrypoint.</p>
 </section>
 <section id="batch-verification-cli">
 <h2>Batch verification (CLI)<a class="headerlink" href="#batch-verification-cli" title="Link to this heading">¶</a></h2>
@@ -363,6 +368,16 @@ They discover shipment directories by scanning for <code class="docutils literal
 </pre></div>
 </div>
 </section>
+<section id="optional-workspace-configuration">
+<h2>Optional: workspace configuration<a class="headerlink" href="#optional-workspace-configuration" title="Link to this heading">¶</a></h2>
+<p>If you want team-wide defaults (e.g., checksum exclude globs) or integrator-side hooks around workspace
+operations, place an <code class="docutils literal notranslate"><span class="pre">osqar_workspace.json</span></code> in a trusted workspace root and pass it via <code class="docutils literal notranslate"><span class="pre">--config</span></code>.</p>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">workspace</span> <span class="n">verify</span> <span class="o">--</span><span class="n">root</span> <span class="n">intake</span><span class="o">/</span><span class="n">received</span> <span class="o">--</span><span class="n">recursive</span> <span class="o">--</span><span class="n">config</span> <span class="o">./</span><span class="n">osqar_workspace</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="configuration_and_hooks.html"><span class="doc">Configuration and hooks</span></a> for details.</p>
+</section>
 <section id="intake-archiving-cli">
 <h2>Intake + archiving (CLI)<a class="headerlink" href="#intake-archiving-cli" title="Link to this heading">¶</a></h2>
 <p>To create an immutable intake archive from multiple shipments:</p>
@@ -370,7 +385,8 @@ They discover shipment directories by scanning for <code class="docutils literal
 <span class="w">  </span>--root<span class="w"> </span>intake/received<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--recursive<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--output<span class="w"> </span>intake/archive/2026-02-01<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--traceability
+<span class="w">  </span>--traceability<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--doctor
 </pre></div>
 </div>
 <p>The intake output is structured so that the copied shipments remain byte-identical,
@@ -413,7 +429,7 @@ where a shipment came from and how it maps back to source control.</p>
 <p>When you run an intake, OSQAr generates a <strong>Subproject overview</strong> in the intake output:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">subproject_overview.json</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">subproject_overview.md</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_build/html/index.html</span></code></p></li>
 </ul>
 <p>These summarize all projects/shipments, their verification status, and (if present)
 their supplier-provided metadata (including origin and URLs).</p>
@@ -498,6 +514,7 @@ have less context about origin/URLs.</p>
 <li><a class="reference internal" href="#typical-process">Typical process</a></li>
 <li><a class="reference internal" href="#what-the-intake-produces">What the intake produces</a></li>
 <li><a class="reference internal" href="#batch-verification-cli">Batch verification (CLI)</a></li>
+<li><a class="reference internal" href="#optional-workspace-configuration">Optional: workspace configuration</a></li>
 <li><a class="reference internal" href="#intake-archiving-cli">Intake + archiving (CLI)</a></li>
 <li><a class="reference internal" href="#practical-naming-convention">Practical naming convention</a></li>
 <li><a class="reference internal" href="#shipment-metadata-supplier">Shipment metadata (supplier)</a></li>
@@ -516,7 +533,7 @@ have less context about origin/URLs.</p>
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=ff822928"></script>
+    <script src="../_static/documentation_options.js?v=1dd76d02"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

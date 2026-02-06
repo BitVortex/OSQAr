@@ -4,6 +4,10 @@ use std::io::{self, Write};
 
 use tsim::{adc_to_temp_x10, Filter, StateMachine, State};
 
+// OSQAR-CODE-TRACE (test tags)
+//
+// TEST: TEST_CODE_001 TEST_VERIFY_001 TEST_METHOD_001 TEST_METHOD_002 TEST_METHOD_003 TEST_CONVERSION_001 TEST_FILTER_001 TEST_THRESHOLD_001 TEST_HYSTERESIS_001 TEST_END_TO_END_001 TEST_ERROR_RECOVERY_001 TEST_FAIL_SAFE_001 TEST_EXEC_001 TEST_REPORT_001
+
 #[derive(Debug)]
 struct TestResult {
     name: &'static str,

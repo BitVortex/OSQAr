@@ -1,17 +1,17 @@
 ================================================
   NLOC    CCN   token  PARAM  length  location  
 ------------------------------------------------
-      11      4     78      1      18 tsim_adc_to_temp_x10@8-25@src/tsim.c
-       9      3     58      1       9 tsim_filter_init@27-35@src/tsim.c
-      19      4    155      3      24 tsim_filter_update@37-60@src/tsim.c
-       6      2     39      3       6 tsim_sm_init@62-67@src/tsim.c
-      13      5     69      2      15 tsim_sm_evaluate@69-83@src/tsim.c
-       5      1     53      2       5 set_fail@13-17@tests/test_tsim.c
-      19      4    201      0      23 test_conversion_full_range@19-41@tests/test_tsim.c
-      25      7    186      0      33 test_filter_noise_rejection@43-75@tests/test_tsim.c
-      26      6    156      0      34 test_threshold_and_hysteresis@77-110@tests/test_tsim.c
-      27      7    188      3      31 write_junit@112-142@tests/test_tsim.c
-      18      4    137      2      22 main@144-165@tests/test_tsim.c
+      11      4     78      1      18 tsim_adc_to_temp_x10@15-32@src/tsim.c
+       9      3     58      1       9 tsim_filter_init@34-42@src/tsim.c
+      19      4    155      3      24 tsim_filter_update@44-67@src/tsim.c
+       6      2     39      3       6 tsim_sm_init@69-74@src/tsim.c
+      13      5     69      2      15 tsim_sm_evaluate@76-90@src/tsim.c
+       5      1     53      2       5 set_fail@19-23@tests/test_tsim.c
+      19      4    201      0      23 test_conversion_full_range@25-47@tests/test_tsim.c
+      25      7    186      0      33 test_filter_noise_rejection@49-81@tests/test_tsim.c
+      26      6    156      0      34 test_threshold_and_hysteresis@83-116@tests/test_tsim.c
+      27      7    188      3      31 write_junit@118-148@tests/test_tsim.c
+      18      4    137      2      22 main@150-171@tests/test_tsim.c
 3 file analyzed.
 ==============================================================
 NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file

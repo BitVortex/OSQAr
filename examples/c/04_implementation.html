@@ -256,11 +256,11 @@
         <article role="main" id="furo-main-content">
           <section id="implementation-test-code">
 <h1>Implementation &amp; Test Code<a class="headerlink" href="#implementation-test-code" title="Link to this heading">¶</a></h1>
-<div class="need_container docutils container" id="SNCB-957d035c">
+<div class="need_container docutils container" id="SNCB-1f00e031">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="CODE_IMPL_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(CODE) Implementation follows requirement IDs and architecture specifications.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#CODE_IMPL_001" title="CODE_IMPL_001">CODE_IMPL_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(CODE) Implementation is traced into source files.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#CODE_IMPL_001" title="CODE_IMPL_001">CODE_IMPL_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -268,17 +268,170 @@
 <div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
 <div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">implementation</span><span class="needs_spacer">, </span><span class="needs_data">code</span><span class="needs_spacer">, </span><span class="needs_data">traceability</span></span></span></div>
 </span></span></div>
-<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="02_architecture.html#ARCH_001" title="CODE_IMPL_001">ARCH_001</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_001" title="CODE_IMPL_001">ARCH_FUNC_001</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_002" title="CODE_IMPL_001">ARCH_FUNC_002</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="CODE_IMPL_001">ARCH_FUNC_003</a></span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="02_architecture.html#ARCH_001" title="CODE_IMPL_001">ARCH_001</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_001" title="CODE_IMPL_001">ARCH_FUNC_001</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_002" title="CODE_IMPL_001">ARCH_FUNC_002</a>, <a class="reference internal" href="02_architecture.html#ARCH_FUNC_003" title="CODE_IMPL_001">ARCH_FUNC_003</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="CODE_IMPL_001">REQ_FUNC_001</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_002" title="CODE_IMPL_001">REQ_FUNC_002</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_003" title="CODE_IMPL_001">REQ_FUNC_003</a>, <a class="reference internal" href="01_requirements.html#REQ_FUNC_004" title="CODE_IMPL_001">REQ_FUNC_004</a></span></span></div>
 </span></div>
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"><p>The C implementation captures traceability via structured comments and stable interfaces.</p></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>The implementation is part of the traceability chain by:</p>
+<ul class="simple">
+<li><p>linking code-level needs (<code class="docutils literal notranslate"><span class="pre">CODE_*</span></code>) to REQ/ARCH/TEST needs</p></li>
+<li><p>embedding source excerpts (so the shipment HTML is self-contained)</p></li>
+<li><p>attaching downloadable source files (so auditors can inspect full context)</p></li>
+</ul>
+<p>Source files (download from the built docs):</p>
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/5ab295e452e82cc90c821eac047f80bb/tsim.h"><code class="xref download docutils literal notranslate"><span class="pre">include/tsim.h</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/2b527a09c0229c2628bc6bbfbab04fca/tsim.c"><code class="xref download docutils literal notranslate"><span class="pre">src/tsim.c</span></code></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/dc24054dfb592e6cda2b2053f3f4c218/test_tsim.c"><code class="xref download docutils literal notranslate"><span class="pre">tests/test_tsim.c</span></code></a></p></li>
+</ul>
+<p>Included sources:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+
+<span class="cp">#ifdef __cplusplus</span>
+<span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// Temperature in 0.1°C units (e.g., 100.0°C =&gt; 1000)</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">TSIM_STATE_SAFE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">TSIM_STATE_UNSAFE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span><span class="w"> </span><span class="n">tsim_state_t</span><span class="p">;</span>
+
+<span class="c1">// REQ_FUNC_001: ADC (12-bit) to temperature conversion</span>
+<span class="c1">// Output range: -40.0°C..+125.0°C =&gt; -400..1250 (0.1°C)</span>
+<span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="nf">tsim_adc_to_temp_x10</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">adc_counts</span><span class="p">);</span>
+
+<span class="c1">// REQ_FUNC_002: 5-sample moving average filter</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">window</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">count</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">index</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">tsim_filter_t</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">tsim_filter_init</span><span class="p">(</span><span class="n">tsim_filter_t</span><span class="o">*</span><span class="w"> </span><span class="n">filter</span><span class="p">);</span>
+<span class="c1">// Returns true when output is valid (after 5 samples)</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">tsim_filter_update</span><span class="p">(</span><span class="n">tsim_filter_t</span><span class="o">*</span><span class="w"> </span><span class="n">filter</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">sample</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="o">*</span><span class="w"> </span><span class="n">out_filtered</span><span class="p">);</span>
+
+<span class="c1">// REQ_FUNC_003/004: threshold + hysteresis state machine</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">threshold_high_x10</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">threshold_low_x10</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tsim_state_t</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">tsim_sm_t</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">tsim_sm_init</span><span class="p">(</span><span class="n">tsim_sm_t</span><span class="o">*</span><span class="w"> </span><span class="n">sm</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">high_x10</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">low_x10</span><span class="p">);</span>
+<span class="n">tsim_state_t</span><span class="w"> </span><span class="nf">tsim_sm_evaluate</span><span class="p">(</span><span class="n">tsim_sm_t</span><span class="o">*</span><span class="w"> </span><span class="n">sm</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">filtered_temp_x10</span><span class="p">);</span>
+
+<span class="cp">#ifdef __cplusplus</span>
+<span class="p">}</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;tsim.h&quot;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stddef.h&gt;</span>
+
+<span class="cm">/*</span>
+<span class="cm">OSQAR-CODE-TRACE (implementation tags)</span>
+
+<span class="cm">REQ: REQ_SAFETY_001 REQ_SAFETY_002 REQ_SAFETY_003 REQ_FUNC_001 REQ_FUNC_002 REQ_FUNC_003 REQ_FUNC_004</span>
+<span class="cm">ARCH: ARCH_001 ARCH_DESIGN_001 ARCH_DESIGN_002 ARCH_DESIGN_003 ARCH_ERROR_001 ARCH_ERROR_002 ARCH_FUNC_001 ARCH_FUNC_002 ARCH_FUNC_003 ARCH_SEOOC_001 ARCH_SEOOC_002 ARCH_SIGNAL_001 ARCH_SIGNAL_002 ARCH_SIGNAL_003</span>
+<span class="cm">*/</span>
+
+<span class="c1">// Linear mapping of ADC counts (0..4095) to Celsius (-40..125)</span>
+<span class="c1">// Returned as 0.1°C integer.</span>
+
+<span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="nf">tsim_adc_to_temp_x10</span><span class="p">(</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">adc_counts</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">adc_counts</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">4095u</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Hold last safe state behavior is integration-specific; for this example clamp.</span>
+<span class="w">        </span><span class="n">adc_counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4095u</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Use integer math with rounding to nearest.</span>
+<span class="w">    </span><span class="c1">// celsius = -40 + adc * (165 / 4095)</span>
+<span class="w">    </span><span class="c1">// x10: temp_x10 = -400 + adc * (1650 / 4095)</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">numerator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int32_t</span><span class="p">)</span><span class="n">adc_counts</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1650</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">numerator</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2047</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">4095</span><span class="p">;</span><span class="w"> </span><span class="c1">// round</span>
+<span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">temp_x10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-400</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">scaled</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">temp_x10</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">-400</span><span class="p">)</span><span class="w"> </span><span class="n">temp_x10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-400</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">temp_x10</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1250</span><span class="p">)</span><span class="w"> </span><span class="n">temp_x10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1250</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">tsim_temp_x10_t</span><span class="p">)</span><span class="n">temp_x10</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">tsim_filter_init</span><span class="p">(</span><span class="n">tsim_filter_t</span><span class="o">*</span><span class="w"> </span><span class="n">filter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">filter</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">window</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">tsim_filter_update</span><span class="p">(</span><span class="n">tsim_filter_t</span><span class="o">*</span><span class="w"> </span><span class="n">filter</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">sample</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="o">*</span><span class="w"> </span><span class="n">out_filtered</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">filter</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">count</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">window</span><span class="p">[</span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sample</span><span class="p">;</span>
+<span class="w">        </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">sample</span><span class="p">;</span>
+<span class="w">        </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)((</span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1u</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">5u</span><span class="p">);</span>
+<span class="w">        </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Replace oldest sample</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">window</span><span class="p">[</span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">index</span><span class="p">];</span>
+<span class="w">    </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">sum</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">old</span><span class="p">;</span>
+<span class="w">    </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">window</span><span class="p">[</span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sample</span><span class="p">;</span>
+<span class="w">    </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">sample</span><span class="p">;</span>
+<span class="w">    </span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)((</span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1u</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">5u</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">out_filtered</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">*</span><span class="n">out_filtered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">tsim_temp_x10_t</span><span class="p">)(</span><span class="n">filter</span><span class="o">-&gt;</span><span class="n">sum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">tsim_sm_init</span><span class="p">(</span><span class="n">tsim_sm_t</span><span class="o">*</span><span class="w"> </span><span class="n">sm</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">high_x10</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">low_x10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">sm</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sm</span><span class="o">-&gt;</span><span class="n">threshold_high_x10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">high_x10</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sm</span><span class="o">-&gt;</span><span class="n">threshold_low_x10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">low_x10</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sm</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSIM_STATE_SAFE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">tsim_state_t</span><span class="w"> </span><span class="nf">tsim_sm_evaluate</span><span class="p">(</span><span class="n">tsim_sm_t</span><span class="o">*</span><span class="w"> </span><span class="n">sm</span><span class="p">,</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">filtered_temp_x10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">sm</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">TSIM_STATE_SAFE</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sm</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">TSIM_STATE_SAFE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">filtered_temp_x10</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">sm</span><span class="o">-&gt;</span><span class="n">threshold_high_x10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">sm</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSIM_STATE_UNSAFE</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">filtered_temp_x10</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">sm</span><span class="o">-&gt;</span><span class="n">threshold_low_x10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">sm</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSIM_STATE_SAFE</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">sm</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-e1065971">
+<div class="need_container docutils container" id="SNCB-a0f52392">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="TEST_CODE_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -290,16 +443,191 @@
 <div class="line"><span><span><div class="line"><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">active</span></span></div>
 <div class="line"><span class="needs_tags"><span class="needs_label">tags: </span><span class="needs_data_container"><span class="needs_data">verification</span><span class="needs_spacer">, </span><span class="needs_data">testing</span><span class="needs_spacer">, </span><span class="needs_data">code</span></span></span></div>
 </span></span></div>
-<div class="line"><span></span></div>
+<div class="line"><span><div class="line">links outgoing: <span class="links"><span><a class="reference internal" href="03_verification.html#TEST_CONVERSION_001" title="TEST_CODE_001">TEST_CONVERSION_001</a>, <a class="reference internal" href="03_verification.html#TEST_FILTER_001" title="TEST_CODE_001">TEST_FILTER_001</a>, <a class="reference internal" href="03_verification.html#TEST_THRESHOLD_001" title="TEST_CODE_001">TEST_THRESHOLD_001</a>, <a class="reference internal" href="03_verification.html#TEST_HYSTERESIS_001" title="TEST_CODE_001">TEST_HYSTERESIS_001</a>, <a class="reference internal" href="03_verification.html#TEST_END_TO_END_001" title="TEST_CODE_001">TEST_END_TO_END_001</a></span></span></div>
+</span></div>
 </div>
 </td>
 </tr>
-<tr class="need content row-odd"><td class="need content" colspan="1"><p>The native test runner writes <cite>test_results.xml</cite> in JUnit format and maps to the <cite>TEST_*</cite> needs.</p></td>
+<tr class="need content row-odd"><td class="need content" colspan="1"><p>The native test runner writes <cite>test_results.xml</cite> in JUnit format and maps to the <cite>TEST_*</cite> needs.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;tsim.h&quot;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+
+<span class="cm">/*</span>
+<span class="cm">OSQAR-CODE-TRACE (test tags)</span>
+
+<span class="cm">TEST: TEST_CODE_001 TEST_VERIFY_001 TEST_METHOD_001 TEST_METHOD_002 TEST_METHOD_003 TEST_CONVERSION_001 TEST_FILTER_001 TEST_THRESHOLD_001 TEST_HYSTERESIS_001 TEST_END_TO_END_001 TEST_ERROR_RECOVERY_001 TEST_FAIL_SAFE_001 TEST_EXEC_001 TEST_REPORT_001</span>
+<span class="cm">*/</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">passed</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">message</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="p">}</span><span class="w"> </span><span class="n">test_result_t</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">set_fail</span><span class="p">(</span><span class="n">test_result_t</span><span class="o">*</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">msg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">r</span><span class="o">-&gt;</span><span class="n">passed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="n">strncpy</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">r</span><span class="o">-&gt;</span><span class="n">message</span><span class="p">[</span><span class="k">sizeof</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">test_result_t</span><span class="w"> </span><span class="nf">test_conversion_full_range</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// TEST_CONVERSION_001</span>
+<span class="w">    </span><span class="n">test_result_t</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;test_conversion_full_range&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">}};</span>
+
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">adc</span><span class="p">;</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">expected</span><span class="p">;</span><span class="w"> </span><span class="kt">int16_t</span><span class="w"> </span><span class="n">tol</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">cases</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">{</span><span class="mi">0u</span><span class="p">,</span><span class="w"> </span><span class="mi">-400</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="mi">2048u</span><span class="p">,</span><span class="w"> </span><span class="mi">425</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="mi">4095u</span><span class="p">,</span><span class="w"> </span><span class="mi">1250</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">},</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">cases</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="n">cases</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tsim_adc_to_temp_x10</span><span class="p">(</span><span class="n">cases</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">adc</span><span class="p">);</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int32_t</span><span class="p">)</span><span class="n">got</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="kt">int32_t</span><span class="p">)</span><span class="n">cases</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">expected</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">diff</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">cases</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">tol</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">-</span><span class="n">cases</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">tol</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="w">            </span><span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;ADC %u =&gt; %d, expected %d±%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">cases</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">adc</span><span class="p">,</span><span class="w"> </span><span class="n">got</span><span class="p">,</span><span class="w"> </span><span class="n">cases</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">expected</span><span class="p">,</span><span class="w"> </span><span class="n">cases</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">tol</span><span class="p">);</span>
+<span class="w">            </span><span class="n">set_fail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">test_result_t</span><span class="w"> </span><span class="nf">test_filter_noise_rejection</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// TEST_FILTER_001</span>
+<span class="w">    </span><span class="n">test_result_t</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;test_filter_noise_rejection&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">}};</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">noisy</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="mi">450</span><span class="p">,</span><span class="w"> </span><span class="mi">550</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="mi">480</span><span class="p">,</span><span class="w"> </span><span class="mi">520</span><span class="p">,</span><span class="w"> </span><span class="mi">490</span><span class="p">};</span>
+<span class="w">    </span><span class="n">tsim_filter_t</span><span class="w"> </span><span class="n">f</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tsim_filter_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">f</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">outputs</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">out_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">noisy</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="n">noisy</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">tsim_temp_x10_t</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tsim_filter_update</span><span class="p">(</span><span class="o">&amp;</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">noisy</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">outputs</span><span class="p">[</span><span class="n">out_count</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">out_count</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">set_fail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Filter produced no outputs&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// outputs should be near nominal 500</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">out_count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">480</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">outputs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">520</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">set_fail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Filtered output out of expected band (480..520)&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">test_result_t</span><span class="w"> </span><span class="nf">test_threshold_and_hysteresis</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// TEST_THRESHOLD_001 + TEST_HYSTERESIS_001</span>
+<span class="w">    </span><span class="n">test_result_t</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;test_threshold_and_hysteresis&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">}};</span>
+
+<span class="w">    </span><span class="n">tsim_sm_t</span><span class="w"> </span><span class="n">sm</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tsim_sm_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sm</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">950</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sm</span><span class="p">.</span><span class="n">state</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">TSIM_STATE_SAFE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">set_fail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Initial state must be SAFE&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tsim_sm_evaluate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sm</span><span class="p">,</span><span class="w"> </span><span class="mi">999</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">TSIM_STATE_SAFE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">set_fail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Must remain SAFE at 99.9C&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tsim_sm_evaluate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sm</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">TSIM_STATE_UNSAFE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">set_fail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Must transition to UNSAFE at 100.0C&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tsim_sm_evaluate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sm</span><span class="p">,</span><span class="w"> </span><span class="mi">990</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">TSIM_STATE_UNSAFE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">set_fail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Must remain UNSAFE at 99.0C due to hysteresis&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tsim_sm_evaluate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sm</span><span class="p">,</span><span class="w"> </span><span class="mi">950</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">TSIM_STATE_SAFE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">set_fail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Must recover to SAFE at 95.0C&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">write_junit</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">test_result_t</span><span class="o">*</span><span class="w"> </span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">FILE</span><span class="o">*</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;w&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Failed to open %s for writing</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
+<span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">failures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">passed</span><span class="p">)</span><span class="w"> </span><span class="n">failures</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&lt;?xml version=</span><span class="se">\&quot;</span><span class="s">1.0</span><span class="se">\&quot;</span><span class="s"> encoding=</span><span class="se">\&quot;</span><span class="s">UTF-8</span><span class="se">\&quot;</span><span class="s">?&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span>
+<span class="w">        </span><span class="n">f</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;&lt;testsuite name=</span><span class="se">\&quot;</span><span class="s">tsim_c</span><span class="se">\&quot;</span><span class="s"> tests=</span><span class="se">\&quot;</span><span class="s">%zu</span><span class="se">\&quot;</span><span class="s"> failures=</span><span class="se">\&quot;</span><span class="s">%zu</span><span class="se">\&quot;</span><span class="s"> errors=</span><span class="se">\&quot;</span><span class="s">0</span><span class="se">\&quot;</span><span class="s"> skipped=</span><span class="se">\&quot;</span><span class="s">0</span><span class="se">\&quot;</span><span class="s"> time=</span><span class="se">\&quot;</span><span class="s">0</span><span class="se">\&quot;</span><span class="s">&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">count</span><span class="p">,</span>
+<span class="w">        </span><span class="n">failures</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  &lt;testcase classname=</span><span class="se">\&quot;</span><span class="s">tsim_c</span><span class="se">\&quot;</span><span class="s"> name=</span><span class="se">\&quot;</span><span class="s">%s</span><span class="se">\&quot;</span><span class="s"> time=</span><span class="se">\&quot;</span><span class="s">0</span><span class="se">\&quot;</span><span class="s">&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">passed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;    &lt;failure message=</span><span class="se">\&quot;</span><span class="s">%s</span><span class="se">\&quot;</span><span class="s">/&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">message</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">message</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;failed&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  &lt;/testcase&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&lt;/testsuite&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;test_results.xml&quot;</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">test_result_t</span><span class="w"> </span><span class="n">results</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">test_conversion_full_range</span><span class="p">(),</span>
+<span class="w">        </span><span class="n">test_filter_noise_rejection</span><span class="p">(),</span>
+<span class="w">        </span><span class="n">test_threshold_and_hysteresis</span><span class="p">(),</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">write_junit</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">passed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;FAIL: %s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">message</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;PASS: %zu tests</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-f44a2356">
+<div class="need_container docutils container" id="SNCB-a500dba5">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="CODE_REPO_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
@@ -343,6 +671,8 @@
 <li><p>structured comments (e.g., <cite>REQ_FUNC_001</cite>, <cite>TEST_CONVERSION_001</cite>)</p></li>
 <li><p>module-level headers (interfaces as architecture artifacts)</p></li>
 </ul>
+<p>In OSQAr, you can additionally <strong>trace into the actual source</strong> by embedding excerpts via
+<code class="docutils literal notranslate"><span class="pre">literalinclude</span></code> and attaching full files via <code class="docutils literal notranslate"><span class="pre">:download:</span></code> (see above).</p>
 <p>The functions in <cite>include/tsim.h</cite> map directly to:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="01_requirements.html#REQ_FUNC_001" title="REQ_FUNC_001"><em class="xref need">(FR) The module shall read ... (REQ_FUNC_001)</em></a> (ADC conversion)</p></li>
