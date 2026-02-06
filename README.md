@@ -25,14 +25,13 @@ Typical roles and workflows:
 - Export machine-readable traceability (`needs.json`) alongside HTML
 - Generate traceability views (e.g., matrices) and keep verification coverage reviewable
 - Verify traceability rules and produce audit-friendly reports
-- Trace requirements/tests into the actual code (CODE/IMPL evidence anchors in docs + optional ID tag scanning via `./osqar code-trace`)
+- Trace requirements, architecture and tests into the actual code and check for consistency
 - Package documentation + evidence artifacts and protect them with checksum manifests
 - Integrate multiple shipments in a workspace and review a consolidated overview
-- Extend workflows via project/workspace config (custom commands + hooks)
-- Scaffold new projects from minimal templates (C/C++/Rust/Python) via the OSQAr CLI
+- Extend workflows via project and workspace configuration (custom commands + hooks)
 - Use lifecycle management and collaboration workflows for multi-user teams
-- Run reproducible native builds for the C/C++/Rust reference examples (optional Bazel integration)
-- Use CI-produced demo shipments and downloadable release bundles as a starting point for your own project setup
+- Run reproducible native builds for the C/C++/Rust reference examples with optional Bazel integration
+- Use CI-produced demo shipments and downloadable release bundles as a starting point for your own project setup, or scaffold new projects from minimal templates (C/C++/Rust/Python) via the OSQAr CLI
 
 ## Docs and examples
 

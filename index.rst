@@ -7,17 +7,19 @@ In OSQAr, a shipment is a reviewable bundle that contains **Sphinx documentation
 
 OSQAr is built on Sphinx + sphinx-needs and provides:
 
-- requirements and traceability
+- structured requirements, architecture, and verification plans (via reStructuredText + sphinx-needs)
+- traceability exports (``needs.json``), views (e.g., matrices), and audit-friendly reports
 - architecture diagrams (PlantUML)
-- verification planning and traceability matrices
-- evidence shipment workflows (integrity via checksum manifests)
+- evidence shipment workflows (documentation + evidence artifacts, integrity via checksum manifests)
+- code trace checks (trace requirements/tests into code and validate consistency)
 - integrator-side multi-shipment intake with consolidated summaries
+- extensibility via project/workspace configuration (custom commands + hooks)
 - lifecycle management guidance
 - collaboration workflows for large, multi-user teams
 - reproducible native builds for the C/C++/Rust example implementations (including optional Bazel integration)
-- CI-produced demo shipments (documentation + traceability + implementation + tests + analysis reports + checksum manifests)
+- CI-produced demo shipments and release bundles (documentation + traceability + implementation + tests + analysis reports + checksum manifests)
 
-OSQAr also includes a small CLI for scaffolding new projects and running traceability/checksum verification.
+OSQAr also includes a CLI for scaffolding new projects, building documentation, preparing/verifying shipments, and running traceability/checksum/code-trace checks.
 
 Start here
 ==========
