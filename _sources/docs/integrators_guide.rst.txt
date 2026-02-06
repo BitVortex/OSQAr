@@ -78,13 +78,13 @@ Recommended integrator procedure
 
 2. Verify the checksum manifest using the OSQAr checksum tool::
 
-  osqar checksum verify \
+      osqar checksum verify \
         --root /path/to/shipment \
         --manifest /path/to/shipment/SHA256SUMS
 
    Recommended integrator one-shot workflow (CLI)::
 
-    osqar shipment verify \
+      osqar shipment verify \
         --shipment /path/to/shipment \
         --traceability \
         --json-report /path/to/shipment/traceability_report.integrator.json \
@@ -107,7 +107,7 @@ Recommended integrator procedure
 
    You can re-run the checks locally to confirm the shipment content passes your intake gate::
 
-    osqar traceability /path/to/shipment/needs.json \
+      osqar traceability /path/to/shipment/needs.json \
         --json-report /path/to/shipment/traceability_report.integrator.json
 
    Store your integrator-side report alongside the shipped evidence.

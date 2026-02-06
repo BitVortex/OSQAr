@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Lifecycle Management" href="lifecycle_management.html" /><link rel="prev" title="Supplier’s Guide" href="suppliers_guide.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Integrator’s Guide - OSQAr 0.5.3 documentation</title>
+        <title>Integrator’s Guide - OSQAr 0.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.5.3 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.5.4 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.5.3 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.5.4 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -339,17 +339,16 @@
 The supplier should provide a checksum manifest file <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> at the root of that shipment.</p>
 <section id="recommended-integrator-procedure">
 <h4>Recommended integrator procedure<a class="headerlink" href="#recommended-integrator-procedure" title="Link to this heading">¶</a></h4>
-<ol class="arabic simple">
+<ol class="arabic">
 <li><p>Unpack the shipment into a controlled location.</p></li>
-<li><p>Verify the checksum manifest using the OSQAr checksum tool:</p></li>
-</ol>
-<blockquote>
-<div><dl>
-<dt>osqar checksum verify </dt><dd><blockquote>
-<div><p>–root /path/to/shipment –manifest /path/to/shipment/SHA256SUMS</p>
-</div></blockquote>
+<li><p>Verify the checksum manifest using the OSQAr checksum tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">osqar</span> <span class="n">checksum</span> <span class="n">verify</span> \
+  <span class="o">--</span><span class="n">root</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
+  <span class="o">--</span><span class="n">manifest</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">SHA256SUMS</span>
+</pre></div>
+</div>
 <p>Recommended integrator one-shot workflow (CLI):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>osqar shipment verify \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  osqar shipment verify \
     --shipment /path/to/shipment \
     --traceability \
     --json-report /path/to/shipment/traceability_report.integrator.json \
@@ -367,10 +366,7 @@ Optional extensions:
 with, and re-transfer the artifact.</p></li>
 <li><p>Do not regenerate <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> on the receiver side as a substitute for verification.</p></li>
 </ul>
-</dd>
-</dl>
-</div></blockquote>
-<ol class="arabic" start="3">
+</li>
 <li><p>Verify traceability artifacts (machine-readable) as part of intake:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">needs.json</span></code>: the exported traceability graph</p></li>
@@ -378,7 +374,7 @@ with, and re-transfer the artifact.</p></li>
 </ul>
 <p>You can re-run the checks locally to confirm the shipment content passes your intake gate:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">osqar</span> <span class="n">traceability</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
-    <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span>
+  <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>Store your integrator-side report alongside the shipped evidence.</p>
@@ -508,7 +504,7 @@ This produces a single dated intake folder with a <strong>Subproject overview</s
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=2a2fe768"></script>
+    <script src="../_static/documentation_options.js?v=e1a677a5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
