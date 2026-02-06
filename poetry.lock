@@ -1148,6 +1148,18 @@ requests = ">=1.0.0"
 six = "*"
 
 [[package]]
+name = "roman"
+version = "5.1"
+description = "Integer to Roman numerals converter"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "roman-5.1-py3-none-any.whl", hash = "sha256:bf595d8a9bc4a8e8b1dfa23e1d4def0251b03b494786df6b8c3d3f1635ce285a"},
+    {file = "roman-5.1.tar.gz", hash = "sha256:3a86572e9bc9183e771769601189e5fa32f1620ffeceebb9eca836affb409986"},
+]
+
+[[package]]
 name = "rpds-py"
 version = "0.27.1"
 description = "Python bindings to Rust's persistent data structures (rpds)"
@@ -1709,4 +1721,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.15"
-content-hash = "c8ad2a037abf7eed63a468db8fcec151ded5a430cd6cf99fca1c25dcd79f7b24"
+content-hash = "33238888804611fea9bf93d29dd9f4a87b270f7e2a334d48ec3868fee386383e"

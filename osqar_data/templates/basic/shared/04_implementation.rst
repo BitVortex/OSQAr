@@ -18,7 +18,7 @@ Example (adapt the file paths and links):
     :id: CODE_IMPL_001
     :status: active
     :tags: implementation, code
-    :links: REQ_FUNC_001, ARCH_DESIGN_001, TEST_EXAMPLE_001
+    :links: REQ_001, ARCH_001, TEST_001
 
     - :download:`src/<your_module>.c <src/your_module.c>`
     - :download:`tests/test_<your_module>.c <tests/test_your_module.c>`

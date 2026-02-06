@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.4] - 2026-02-06
+
+### Fixed
+- Framework documentation build now succeeds with ``sphinx-build -W`` by excluding packaged scaffold resources (``osqar_data/**``) from the framework docs build.
+- Scaffold template trace links are now internally consistent (no unknown outgoing need links).
+- Added missing ``roman`` dependency required by Sphinx in some environments.
+
 ## [0.5.3] - 2026-02-06
 
 ### Changed

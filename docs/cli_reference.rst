@@ -23,7 +23,7 @@ When building docs, OSQAr will automatically use a project’s Poetry environmen
 if it detects a Poetry-managed project and ``poetry`` is available.
 
 Repo-root wrappers (contributors)
---------------------------------
+---------------------------------
 
 If you are working from a git clone and have not installed OSQAr via pipx, you can use the repo-root wrappers:
 

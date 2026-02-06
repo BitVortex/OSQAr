@@ -72,6 +72,8 @@ exclude_patterns = [
     # Project scaffolding templates are Sphinx projects on their own and are
     # not part of the root framework documentation.
     "templates/**",
+    # Packaged scaffold templates/static resources are not framework docs.
+    "osqar_data/**",
 ]
 
 

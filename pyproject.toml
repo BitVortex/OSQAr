@@ -1,6 +1,6 @@
 [project]
 name = "osqar"
-version = "0.5.3"
+version = "0.5.4"
 description = "Open Safety Qualification Architecture - A Sphinx-Needs boilerplate for safety-related systems."
 readme = "README.md"
 license = "Apache-2.0"
@@ -11,6 +11,7 @@ authors = [
 requires-python = ">=3.9,<3.15"
 dependencies = [
 	"Sphinx==7.2.*",
+	"roman>=4.2",
 	"sphinx-needs>=2.0",
 	"sphinx-test-reports>=1.0",
 	"sphinxcontrib-plantuml>=0.25",
