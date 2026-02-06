@@ -75,7 +75,7 @@ Actions:
 
 Example commands (supplier, requirement change)::
 
-  ./osqar supplier prepare \
+  ./osqar shipment prepare \
      --project examples/python_hello_world \
      --clean \
      --archive
@@ -97,7 +97,7 @@ Actions:
 
 Example commands (supplier, implementation change)::
 
-  ./osqar supplier prepare \
+  ./osqar shipment prepare \
      --project examples/python_hello_world \
      --clean \
      --archive
@@ -158,7 +158,7 @@ Supplier workflow (produce shipment)
 
 From the repository root (recommended)::
 
-  ./osqar supplier prepare \
+  ./osqar shipment prepare \
      --project examples/python_hello_world \
      --clean \
      --archive
@@ -184,9 +184,10 @@ Integrator workflow (verify shipment)
 
 After unpacking a received shipment::
 
-  ./osqar integrator verify \
+  ./osqar shipment verify \
      --shipment /path/to/shipment \
-     --traceability
+     --traceability \
+     --json-report /path/to/shipment/traceability_report.integrator.json
 
 If you intake multiple shipments at once, prefer the batch workflow::
 

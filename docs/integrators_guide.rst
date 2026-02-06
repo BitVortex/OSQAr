@@ -84,9 +84,10 @@ Recommended integrator procedure
 
    Recommended integrator one-shot workflow (CLI)::
 
-      ./osqar integrator verify \
+      ./osqar shipment verify \
         --shipment /path/to/shipment \
-        --traceability
+        --traceability \
+        --json-report /path/to/shipment/traceability_report.integrator.json
 
    - If verification reports ``missing`` or ``mismatched`` files, treat the shipment as corrupted or tampered
      with, and re-transfer the artifact.
@@ -115,6 +116,10 @@ This produces a single dated intake folder with a **Subproject overview** summar
         --recursive \
         --output intake/archive/2026-02-01 \
         --traceability
+
+For a quick, non-copying inventory of received shipments, you can also use::
+
+      ./osqar workspace open --root intake/received --recursive
 
 How to tailor the reference example
 ===================================

@@ -92,7 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Shipment-oriented CLI commands to build docs, run tests, clean outputs, collect test reports, generate/verify checksums, and package shipments
-- Role-focused workflows in the CLI for suppliers (`supplier prepare`) and integrators (`integrator verify`)
+- Unified shipment/workspace workflows for producing and verifying evidence bundles
 - Extensive lifecycle management documentation at framework level and included in each example
 
 ## [0.2.0] - 2026-02-01
