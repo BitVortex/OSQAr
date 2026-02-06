@@ -269,17 +269,19 @@
 <p>In OSQAr, a shipment is a reviewable bundle that contains <strong>Sphinx documentation with maintained traceability</strong>, plus the <strong>implementation</strong>, <strong>tests</strong>, and <strong>analysis/verification reports</strong> needed to review and audit the evidence end-to-end.</p>
 <p>OSQAr is built on Sphinx + sphinx-needs and provides:</p>
 <ul class="simple">
-<li><p>requirements and traceability</p></li>
+<li><p>structured requirements, architecture, and verification plans (via reStructuredText + sphinx-needs)</p></li>
+<li><p>traceability exports (<code class="docutils literal notranslate"><span class="pre">needs.json</span></code>), views (e.g., matrices), and audit-friendly reports</p></li>
 <li><p>architecture diagrams (PlantUML)</p></li>
-<li><p>verification planning and traceability matrices</p></li>
-<li><p>evidence shipment workflows (integrity via checksum manifests)</p></li>
+<li><p>evidence shipment workflows (documentation + evidence artifacts, integrity via checksum manifests)</p></li>
+<li><p>code trace checks (trace requirements/tests into code and validate consistency)</p></li>
 <li><p>integrator-side multi-shipment intake with consolidated summaries</p></li>
+<li><p>extensibility via project/workspace configuration (custom commands + hooks)</p></li>
 <li><p>lifecycle management guidance</p></li>
 <li><p>collaboration workflows for large, multi-user teams</p></li>
 <li><p>reproducible native builds for the C/C++/Rust example implementations (including optional Bazel integration)</p></li>
-<li><p>CI-produced demo shipments (documentation + traceability + implementation + tests + analysis reports + checksum manifests)</p></li>
+<li><p>CI-produced demo shipments and release bundles (documentation + traceability + implementation + tests + analysis reports + checksum manifests)</p></li>
 </ul>
-<p>OSQAr also includes a small CLI for scaffolding new projects and running traceability/checksum verification.</p>
+<p>OSQAr also includes a CLI for scaffolding new projects, building documentation, preparing/verifying shipments, and running traceability/checksum/code-trace checks.</p>
 </section>
 <section id="start-here">
 <h1>Start here<a class="headerlink" href="#start-here" title="Link to this heading">¶</a></h1>
