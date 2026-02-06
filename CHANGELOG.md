@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-02-06
+
+### Added
+- `osqar open-docs` convenience command for opening built HTML docs
+- `osqar build-docs --open` to build and open docs in one step
+- Generalized shipment workflows (`shipment prepare`, `shipment verify`) with supplier/integrator commands kept as aliases
+- `osqar doctor` tooling diagnostics (Poetry/Sphinx/PlantUML checks)
+
+### Changed
+- Documentation now consistently prefers `./osqar` shorthand for traceability and checksums
+
 ## [0.4.0] - 2026-02-05
 
 ### Added

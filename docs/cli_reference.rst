@@ -45,11 +45,44 @@ Arguments:
 
 - ``--project``: project directory (default: ``.``; must contain ``conf.py`` and ``index.rst``)
 - ``--output``: output directory (default: ``<project>/_build/html``)
+- ``--open``: open the built ``index.html`` in your default browser
 
 Examples:
 
 - Build docs for the current project: ``./osqar build-docs``
 - Build docs for an example: ``./osqar build-docs --project examples/c_hello_world``
+- Build and open immediately: ``./osqar build-docs --open``
+
+open-docs
+---------
+
+Open built HTML documentation (``index.html``) in your default browser.
+
+Defaults:
+
+- Opens ``<project>/_build/html/index.html`` (default project: ``.``).
+
+Examples:
+
+- Open the current project docs: ``./osqar open-docs``
+- Open an example’s docs: ``./osqar open-docs --project examples/python_hello_world``
+- Open a specific shipment directory: ``./osqar open-docs --shipment examples/python_hello_world/_build/html``
+
+doctor
+------
+
+Run a quick diagnostic of common environment/setup issues.
+
+Checks (best-effort):
+
+- Poetry availability (if the project is Poetry-managed)
+- Sphinx importability in the environment used by ``build-docs``
+- PlantUML availability (``plantuml`` command or ``PLANTUML_JAR`` + Java)
+
+Examples:
+
+- Check the current project: ``./osqar doctor``
+- Check an example: ``./osqar doctor --project examples/python_hello_world``
 
 new
 ---
@@ -115,6 +148,8 @@ Common subcommands:
 
 - ``shipment list``: discover shipment projects under a directory
 - ``shipment build-docs``: same as top-level ``build-docs``
+- ``shipment prepare``: generalized “build + traceability + checksums (+ archive)” workflow
+- ``shipment verify``: generalized “verify checksums (+ traceability)” workflow
 - ``shipment traceability``: validate a built shipment directory
 - ``shipment checksums``: generate/verify checksums for a shipment directory
 - ``shipment clean``: remove generated outputs (conservative by default)
@@ -129,5 +164,10 @@ OSQAr also provides higher-level workflows:
 - Supplier: ``supplier prepare`` (build docs, traceability, checksums, optional archive)
 - Integrator: ``integrator verify`` (verify checksums and/or traceability)
 - Workspace: ``workspace intake`` (ingest multiple shipments and generate a consolidated overview)
+
+The supplier/integrator workflows are aliases of the generalized shipment workflows:
+
+- ``supplier prepare`` is equivalent to ``shipment prepare``
+- ``integrator verify`` is equivalent to ``shipment verify``
 
 Use ``./osqar <command> --help`` to see the full set of options for these workflows.

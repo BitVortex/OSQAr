@@ -455,50 +455,49 @@ Build the example documentation so that ``needs.json`` is exported::
 
 Run the traceability check (writes a machine-readable report)::
 
-    poetry run python tools/traceability_check.py \
-       examples/python_hello_world/_build/html/needs.json \
-       --json-report examples/python_hello_world/_build/html/traceability_report.json
+   ./osqar traceability examples/python_hello_world/_build/html/needs.json \
+      --json-report examples/python_hello_world/_build/html/traceability_report.json
 
 Generate and verify checksums for the example build output directory::
 
-    poetry run python tools/generate_checksums.py \
-       --root examples/python_hello_world/_build/html \
-       --output examples/python_hello_world/_build/html/SHA256SUMS
+   ./osqar checksum generate \
+      --root examples/python_hello_world/_build/html \
+      --output examples/python_hello_world/_build/html/SHA256SUMS
 
-    poetry run python tools/generate_checksums.py \
-       --root examples/python_hello_world/_build/html \
-       --verify examples/python_hello_world/_build/html/SHA256SUMS
+   ./osqar checksum verify \
+      --root examples/python_hello_world/_build/html \
+      --manifest examples/python_hello_world/_build/html/SHA256SUMS
 
-Optional convenience (same operations via the OSQAr CLI)::
+Optional convenience (higher-level workflows in one command)::
 
-    # Supplier: build a shippable evidence directory in one command
+   # Supplier: build a shippable evidence directory in one command
    ./osqar supplier prepare \
-       --project examples/python_hello_world \
-       --clean \
-       --archive
+      --project examples/python_hello_world \
+      --clean \
+      --archive
 
-    # Integrator: verify a received shipment (checksums + traceability)
+   # Integrator: verify a received shipment (checksums + traceability)
    ./osqar integrator verify \
-       --shipment /path/to/shipment \
-       --traceability
+      --shipment /path/to/shipment \
+      --traceability
 
-    # Supplier: optionally add metadata into the shipment root
-    ./osqar shipment metadata write \
-       --shipment examples/python_hello_world/_build/html \
-       --name "OSQAr Python Hello World" \
-       --version "0.4.0" \
-       --url repository=https://example.com/repo.git \
-       --origin url=https://example.com/repo.git \
-       --origin revision=<commit>
+   # Supplier: optionally add metadata into the shipment root
+   ./osqar shipment metadata write \
+      --shipment examples/python_hello_world/_build/html \
+      --name "OSQAr Python Hello World" \
+      --version "0.4.1" \
+      --url repository=https://example.com/repo.git \
+      --origin url=https://example.com/repo.git \
+      --origin revision=<commit>
 
-    # Integrator: intake multiple shipments and generate a Subproject overview
-    ./osqar workspace intake \
-       --root intake/received \
-       --recursive \
-       --output intake/archive/2026-02-01 \
-       --traceability
+   # Integrator: intake multiple shipments and generate a Subproject overview
+   ./osqar workspace intake \
+      --root intake/received \
+      --recursive \
+      --output intake/archive/2026-02-01 \
+      --traceability
 
-    # Or run the individual shipment steps
+   # Or run the individual shipment steps
    ./osqar build-docs --project examples/python_hello_world
    ./osqar shipment traceability --shipment examples/python_hello_world/_build/html
    ./osqar shipment checksums --shipment examples/python_hello_world/_build/html generate
@@ -513,15 +512,14 @@ Integrator-side procedure (verify a received shipment)
 
 Verify the received directory against the provided manifest::
 
-    poetry run python tools/generate_checksums.py \
-       --root /path/to/shipment \
-       --verify /path/to/shipment/SHA256SUMS
+   ./osqar checksum verify \
+      --root /path/to/shipment \
+      --manifest /path/to/shipment/SHA256SUMS
 
 Optionally re-run the traceability checks on the shipped ``needs.json``::
 
-    poetry run python tools/traceability_check.py \
-       /path/to/shipment/needs.json \
-       --json-report /path/to/shipment/traceability_report.integrator.json
+   ./osqar traceability /path/to/shipment/needs.json \
+      --json-report /path/to/shipment/traceability_report.integrator.json
 
 For role-specific guidance (including what to do on mismatches), see:
 

@@ -85,21 +85,20 @@ Recommended supplier procedure (per example)
 
 2. Run traceability checks and write a JSON report::
 
-	poetry run python tools/traceability_check.py \
-		examples/python_hello_world/_build/html/needs.json \
+	./osqar traceability examples/python_hello_world/_build/html/needs.json \
 		--json-report examples/python_hello_world/_build/html/traceability_report.json
 
 3. Generate a checksum manifest for the example build output directory and verify it immediately::
 
-	poetry run python tools/generate_checksums.py \
+	./osqar checksum generate \
 		--root examples/python_hello_world/_build/html \
 		--output examples/python_hello_world/_build/html/SHA256SUMS
 
-	poetry run python tools/generate_checksums.py \
+	./osqar checksum verify \
 		--root examples/python_hello_world/_build/html \
-		--verify examples/python_hello_world/_build/html/SHA256SUMS
+		--manifest examples/python_hello_world/_build/html/SHA256SUMS
 
-Optional convenience: the same steps are available via the OSQAr CLI::
+Optional convenience: the same steps are available via higher-level OSQAr CLI workflows::
 
 	# One-shot supplier workflow (recommended)
 	./osqar supplier prepare \
@@ -120,7 +119,7 @@ Optional: add project metadata into the shipment directory (recommended for mult
 	./osqar shipment metadata write \
 		--shipment examples/python_hello_world/_build/html \
 		--name "OSQAr Python Hello World" \
-		--version "0.4.0" \
+		--version "0.4.1" \
 		--url repository=https://example.com/repo.git \
 		--origin url=https://example.com/repo.git \
 		--origin revision=<commit>

@@ -686,6 +686,210 @@ def cmd_checksums_verify(args: argparse.Namespace) -> int:
     return checksums_cli(argv)
 
 
+def _logical_cwd() -> Path:
+    # On macOS, `os.getcwd()` may return a physical path (symlinks/casing collapsed),
+    # while shells preserve the logical path in $PWD.
+    return Path(os.environ.get("PWD") or os.getcwd())
+
+
+def _abspath_no_resolve(path: Path) -> Path:
+    # Do not use `Path.resolve()` (follows symlinks). Also avoid `os.path.abspath()`
+    # without a base, since it relies on getcwd() which may be physical on macOS.
+    base = _logical_cwd()
+    p = path
+    if not p.is_absolute():
+        p = base / p
+    return Path(os.path.normpath(os.fspath(p)))
+
+
+def _open_in_browser(path: Path) -> int:
+    path = path.resolve()
+    if not path.exists():
+        print(f"ERROR: path not found: {path}", file=sys.stderr)
+        return 2
+
+    if sys.platform == "darwin":
+        rc = _run(["open", str(path)], cwd=Path.cwd())
+        if rc != 0:
+            _print_open_hint(path)
+        return rc
+
+    if sys.platform.startswith("linux"):
+        rc = _run(["xdg-open", str(path)], cwd=Path.cwd())
+        if rc != 0:
+            _print_open_hint(path)
+        return rc
+
+    if os.name == "nt":
+        try:
+            os.startfile(str(path))  # type: ignore[attr-defined]
+            return 0
+        except Exception as exc:  # noqa: BLE001 - best-effort UX
+            print(f"ERROR: failed to open path: {path} ({exc})", file=sys.stderr)
+            _print_open_hint(path)
+            return 2
+
+    _print_open_hint(path)
+    return 0
+
+
+def cmd_open_docs(args: argparse.Namespace) -> int:
+    # Default: open docs for the current project.
+    project = getattr(args, "project", ".")
+    shipment = getattr(args, "shipment", None)
+    raw_path = getattr(args, "path", None)
+
+    target: Optional[Path] = None
+
+    if raw_path:
+        p = _abspath_no_resolve(Path(raw_path).expanduser())
+        if p.is_dir():
+            candidate = p / "index.html"
+            if candidate.is_file():
+                target = candidate
+            else:
+                print(
+                    f"ERROR: index.html not found under directory: {p}",
+                    file=sys.stderr,
+                )
+                return 2
+        else:
+            target = p
+    elif shipment:
+        ship_dir = _abspath_no_resolve(Path(shipment).expanduser())
+        target = ship_dir / "index.html"
+    else:
+        project_dir = _abspath_no_resolve(Path(project).expanduser())
+        ship_dir = _abspath_no_resolve(project_dir / DEFAULT_BUILD_DIR)
+        target = ship_dir / "index.html"
+
+    if target is None:
+        print("ERROR: could not resolve target path", file=sys.stderr)
+        return 2
+
+    if args.print_only:
+        print(target)
+        return 0
+
+    if not target.is_file():
+        print(f"ERROR: documentation entrypoint not found: {target}", file=sys.stderr)
+        if shipment or raw_path:
+            return 2
+        print("TIP: build docs first via: osqar build-docs", file=sys.stderr)
+        return 2
+
+    return _open_in_browser(target)
+
+
+def _run_capture(cmd: list[str], *, cwd: Path) -> tuple[int, str]:
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=str(cwd),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+        )
+        return int(proc.returncode), (proc.stdout or "").strip()
+    except FileNotFoundError as exc:
+        return 127, f"command not found: {cmd[0]} ({exc})"
+
+
+def cmd_doctor(args: argparse.Namespace) -> int:
+    project_dir = Path(args.project).expanduser().resolve()
+    ok = True
+
+    def info(msg: str) -> None:
+        print(f"INFO: {msg}")
+
+    def good(msg: str) -> None:
+        print(f"OK: {msg}")
+
+    def warn(msg: str) -> None:
+        nonlocal ok
+        print(f"WARN: {msg}")
+
+    def bad(msg: str) -> None:
+        nonlocal ok
+        ok = False
+        print(f"ERROR: {msg}")
+
+    info(f"python={sys.executable}")
+    info(f"platform={sys.platform}")
+
+    if not project_dir.is_dir():
+        bad(f"project directory not found: {project_dir}")
+        return 2
+
+    if _is_shipment_project_dir(project_dir):
+        good(f"project looks like a shipment project: {project_dir}")
+    else:
+        warn(f"project is missing conf.py/index.rst: {project_dir}")
+
+    uses_poetry = _project_uses_poetry(project_dir)
+    poetry = shutil.which("poetry")
+    if uses_poetry:
+        if poetry:
+            good("poetry found")
+        else:
+            bad("poetry not found but project uses Poetry (pyproject.toml)")
+    else:
+        if poetry:
+            good("poetry found (project does not require it)")
+        else:
+            info("poetry not found")
+
+    # Sphinx availability (in the environment that build-docs will use).
+    if uses_poetry and poetry:
+        rc, out = _run_capture(
+            [
+                "poetry",
+                "run",
+                "python",
+                "-c",
+                "import sphinx; print(sphinx.__version__)",
+            ],
+            cwd=project_dir,
+        )
+        if rc == 0:
+            good(f"sphinx import OK (poetry env): {out}")
+        else:
+            bad(f"sphinx not available in poetry env (rc={rc}): {out}")
+    else:
+        rc, out = _run_capture(
+            [sys.executable, "-c", "import sphinx; print(sphinx.__version__)"] ,
+            cwd=project_dir,
+        )
+        if rc == 0:
+            good(f"sphinx import OK (current env): {out}")
+        else:
+            warn(
+                "sphinx not importable in current env; build-docs may still work if you use Poetry"
+            )
+
+    # PlantUML diagnostics.
+    plantuml_cmd = shutil.which("plantuml")
+    plantuml_jar = os.environ.get("PLANTUML_JAR")
+    if plantuml_cmd:
+        good(f"plantuml command found: {plantuml_cmd}")
+    elif plantuml_jar:
+        jar_path = Path(plantuml_jar).expanduser()
+        if jar_path.is_file():
+            java = shutil.which("java")
+            if java:
+                good(f"PLANTUML_JAR set and java found: {jar_path}")
+            else:
+                warn(f"PLANTUML_JAR set but java not found: {jar_path}")
+        else:
+            warn(f"PLANTUML_JAR set but file not found: {jar_path}")
+    else:
+        warn(
+            "no PlantUML command or PLANTUML_JAR detected; builds may fall back to the public PlantUML server (internet required)"
+        )
+
+    return 0 if ok else 1
+
+
 def cmd_shipment_list(args: argparse.Namespace) -> int:
     root = Path(args.root).resolve()
     projects: list[ShipmentProject] = []
@@ -726,7 +930,18 @@ def cmd_shipment_build_docs(args: argparse.Namespace) -> int:
         else _default_shipment_dir(project_dir)
     )
     print(f"Building Sphinx HTML: {project_dir} -> {output_dir}")
-    return _run_sphinx_build(project_dir, output_dir)
+    rc = _run_sphinx_build(project_dir, output_dir)
+    if rc != 0:
+        return int(rc)
+
+    if getattr(args, "open", False):
+        entry = output_dir / "index.html"
+        if entry.is_file():
+            return _open_in_browser(entry)
+        print(f"WARNING: docs entrypoint not found: {entry}", file=sys.stderr)
+        _print_open_hint(entry)
+
+    return 0
 
 
 def cmd_shipment_run_tests(args: argparse.Namespace) -> int:
@@ -912,7 +1127,7 @@ def cmd_shipment_metadata_write(args: argparse.Namespace) -> int:
     )
 
 
-def cmd_supplier_prepare(args: argparse.Namespace) -> int:
+def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
     project_dir = Path(args.project).resolve()
     if not _is_shipment_project_dir(project_dir):
         print(
@@ -923,7 +1138,7 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
 
     shipment_dir = (
         Path(args.shipment).resolve()
-        if args.shipment
+        if getattr(args, "shipment", None)
         else _default_shipment_dir(project_dir)
     )
 
@@ -934,7 +1149,7 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
             )
         )
         if rc != 0:
-            return rc
+            return int(rc)
 
     if not args.skip_tests:
         # Best-effort: if no script exists, continue (some shipments are docs-only).
@@ -944,13 +1159,13 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
                 argparse.Namespace(project=str(project_dir), script=str(script.name))
             )
             if rc != 0:
-                return rc
+                return int(rc)
         else:
             print(f"NOTE: no test/build script found at {script}; skipping tests.")
 
     rc = _run_sphinx_build(project_dir, shipment_dir)
     if rc != 0:
-        return rc
+        return int(rc)
 
     # Bundle content: include implementation, tests, and analysis reports alongside docs.
     _copy_bundle_sources_and_reports(
@@ -977,7 +1192,7 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
         )
     )
     if rc != 0:
-        return rc
+        return int(rc)
 
     # Checksums: generate and immediately verify.
     rc = cmd_shipment_checksums(
@@ -989,7 +1204,7 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
         )
     )
     if rc != 0:
-        return rc
+        return int(rc)
 
     rc = cmd_shipment_checksums(
         argparse.Namespace(
@@ -1000,7 +1215,7 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
         )
     )
     if rc != 0:
-        return rc
+        return int(rc)
 
     if args.archive:
         rc = cmd_shipment_package(
@@ -1011,13 +1226,22 @@ def cmd_supplier_prepare(args: argparse.Namespace) -> int:
             )
         )
         if rc != 0:
-            return rc
+            return int(rc)
 
-    print(f"Supplier shipment ready: {shipment_dir}")
+    print(f"{label} ready: {shipment_dir}")
     return 0
 
 
-def cmd_integrator_verify(args: argparse.Namespace) -> int:
+def cmd_shipment_prepare(args: argparse.Namespace) -> int:
+    return _shipment_prepare_impl(args, label="Shipment")
+
+
+def cmd_supplier_prepare(args: argparse.Namespace) -> int:
+    # Alias of the generalized workflow.
+    return _shipment_prepare_impl(args, label="Supplier shipment")
+
+
+def _shipment_verify_impl(args: argparse.Namespace, *, label: str) -> int:
     shipment_dir = Path(args.shipment).resolve()
     if not shipment_dir.is_dir():
         print(f"ERROR: shipment directory not found: {shipment_dir}", file=sys.stderr)
@@ -1025,7 +1249,7 @@ def cmd_integrator_verify(args: argparse.Namespace) -> int:
 
     manifest = (
         Path(args.manifest).resolve()
-        if args.manifest
+        if getattr(args, "manifest", None)
         else (shipment_dir / DEFAULT_CHECKSUM_MANIFEST)
     )
     if not manifest.is_file():
@@ -1041,13 +1265,13 @@ def cmd_integrator_verify(args: argparse.Namespace) -> int:
         )
     )
     if rc != 0:
-        return rc
+        return int(rc)
 
     if args.traceability:
         report = (
             Path(args.json_report).resolve()
-            if args.json_report
-            else (shipment_dir / "traceability_report.integrator.json")
+            if getattr(args, "json_report", None)
+            else (shipment_dir / "traceability_report.check.json")
         )
         rc = cmd_shipment_traceability(
             argparse.Namespace(
@@ -1060,10 +1284,24 @@ def cmd_integrator_verify(args: argparse.Namespace) -> int:
             )
         )
         if rc != 0:
-            return rc
+            return int(rc)
 
-    print("Integrator verification passed.")
+    print(f"{label} passed.")
     return 0
+
+
+def cmd_shipment_verify(args: argparse.Namespace) -> int:
+    return _shipment_verify_impl(args, label="Shipment verification")
+
+
+def cmd_integrator_verify(args: argparse.Namespace) -> int:
+    # Alias of the generalized workflow.
+    # Keep the historical default report filename for integrator flows.
+    if getattr(args, "json_report", None) is None and bool(args.traceability):
+        args = argparse.Namespace(
+            **{**vars(args), "json_report": str(Path(args.shipment) / "traceability_report.integrator.json")}
+        )
+    return _shipment_verify_impl(args, label="Integrator verification")
 
 
 def _iter_shipment_dirs(root: Path, *, recursive: bool) -> list[Path]:
@@ -1126,7 +1364,7 @@ def cmd_workspace_verify(args: argparse.Namespace) -> int:
 
     for shipment_dir in shipments:
         print(f"\n== Verifying shipment: {shipment_dir}")
-        rc = cmd_integrator_verify(
+        rc = cmd_shipment_verify(
             argparse.Namespace(
                 shipment=str(shipment_dir),
                 manifest=None,
@@ -1422,7 +1660,50 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Output directory (default: <project>/_build/html)",
     )
+    p_build_docs.add_argument(
+        "--open",
+        action="store_true",
+        help="Open the built index.html in your default browser",
+    )
     p_build_docs.set_defaults(func=cmd_shipment_build_docs)
+
+    p_open = sub.add_parser(
+        "open-docs",
+        help="Open built HTML documentation (index.html) in your default browser",
+    )
+    open_group = p_open.add_mutually_exclusive_group(required=False)
+    open_group.add_argument(
+        "--project",
+        default=".",
+        help="Project directory (default: .; opens <project>/_build/html/index.html)",
+    )
+    open_group.add_argument(
+        "--shipment",
+        default=None,
+        help="Shipment directory (opens <shipment>/index.html)",
+    )
+    open_group.add_argument(
+        "--path",
+        default=None,
+        help="HTML file or directory (if directory: opens <dir>/index.html)",
+    )
+    p_open.add_argument(
+        "--print-only",
+        action="store_true",
+        help="Only print the resolved index.html path",
+    )
+    p_open.set_defaults(func=cmd_open_docs)
+
+    p_doc = sub.add_parser(
+        "doctor",
+        help="Diagnose common environment/setup issues (Poetry, Sphinx, PlantUML)",
+    )
+    p_doc.add_argument(
+        "--project",
+        default=".",
+        help="Project directory to check (default: .)",
+    )
+    p_doc.set_defaults(func=cmd_doctor)
 
     p_new = sub.add_parser(
         "new", help="Create a new OSQAr project from a language template"
@@ -1495,6 +1776,85 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ship_sub = p_ship.add_subparsers(dest="shipment_cmd", required=True)
 
+    p_prep = ship_sub.add_parser(
+        "prepare",
+        help="Build docs, run traceability + checksums, and optionally archive a shippable evidence bundle",
+    )
+    p_prep.add_argument(
+        "--project", required=True, help="Shipment project directory"
+    )
+    p_prep.add_argument(
+        "--shipment",
+        default=None,
+        help="Shipment output directory (default: <project>/_build/html)",
+    )
+    p_prep.add_argument(
+        "--clean", action="store_true", help="Clean generated outputs before building"
+    )
+    p_prep.add_argument(
+        "--dry-run", action="store_true", help="Print destructive ops without executing"
+    )
+    p_prep.add_argument(
+        "--script",
+        default=None,
+        help="Test/build script name (default: build-and-test.sh)",
+    )
+    p_prep.add_argument(
+        "--skip-tests", action="store_true", help="Skip running the test/build script"
+    )
+    p_prep.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help="Exclude glob(s) for checksum generation",
+    )
+    p_prep.add_argument("--enforce-req-has-test", action="store_true")
+    p_prep.add_argument("--enforce-arch-traces-req", action="store_true")
+    p_prep.add_argument("--enforce-test-traces-req", action="store_true")
+    p_prep.add_argument(
+        "--archive",
+        action="store_true",
+        help="Also create a .tar.gz of the shipment directory",
+    )
+    p_prep.add_argument(
+        "--archive-output",
+        default=None,
+        help="Archive output path (default: <shipment>.tar.gz)",
+    )
+    p_prep.set_defaults(func=cmd_shipment_prepare)
+
+    p_ver = ship_sub.add_parser(
+        "verify",
+        help="Verify checksum manifest and optionally re-run traceability checks for a shipment directory",
+    )
+    p_ver.add_argument(
+        "--shipment", required=True, help="Received shipment directory"
+    )
+    p_ver.add_argument(
+        "--manifest",
+        default=None,
+        help="Checksum manifest (default: <shipment>/SHA256SUMS)",
+    )
+    p_ver.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        help="Exclude glob(s) for checksum verify",
+    )
+    p_ver.add_argument(
+        "--traceability",
+        action="store_true",
+        help="Also validate needs.json traceability",
+    )
+    p_ver.add_argument("--needs-json", default=None, help="Override needs.json path")
+    p_ver.add_argument(
+        "--json-report", default=None, help="Write verification-side traceability report"
+    )
+    p_ver.add_argument("--enforce-req-has-test", action="store_true")
+    p_ver.add_argument("--enforce-arch-traces-req", action="store_true")
+    p_ver.add_argument("--enforce-test-traces-req", action="store_true")
+    p_ver.set_defaults(func=cmd_shipment_verify)
+
     p_list = ship_sub.add_parser(
         "list", help="Discover shipment projects under a directory"
     )
@@ -1519,6 +1879,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--output",
         default=None,
         help="Output directory (default: <project>/_build/html)",
+    )
+    p_build.add_argument(
+        "--open",
+        action="store_true",
+        help="Open the built index.html in your default browser",
     )
     p_build.set_defaults(func=cmd_shipment_build_docs)
 

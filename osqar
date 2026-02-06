@@ -16,6 +16,7 @@ Fallback:
 from __future__ import annotations
 
 import os
+import os.path
 import shutil
 import subprocess
 import sys
@@ -31,7 +32,19 @@ def _run(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
-  repo_root = Path(__file__).resolve().parent
+  # Prefer the user's logical working directory (symlink/case-preserving) when the
+  # wrapper is invoked from the repo root. This avoids surprising path rewrites on
+  # macOS (e.g., `open-docs --print-only`).
+  physical_root = Path(__file__).resolve().parent
+  repo_root = physical_root
+  pwd = os.environ.get("PWD")
+  if pwd:
+    try:
+      if os.path.isdir(pwd) and os.path.samefile(pwd, physical_root):
+        repo_root = Path(pwd)
+    except OSError:
+      pass
+
   os.chdir(repo_root)
 
   # If we're already running inside `poetry run`, avoid spawning Poetry again.

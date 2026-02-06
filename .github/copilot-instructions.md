@@ -156,17 +156,17 @@ Typical local workflow after building docs:
 ```bash
 ./osqar build-docs
 
-poetry run python tools/traceability_check.py \
+./osqar traceability \
    _build/html/needs.json \
    --json-report _build/html/traceability_report.json
 
-poetry run python tools/generate_checksums.py \
+./osqar checksum generate \
    --root _build/html \
    --output _build/html/SHA256SUMS
 
-poetry run python tools/generate_checksums.py \
+./osqar checksum verify \
    --root _build/html \
-   --verify _build/html/SHA256SUMS
+   --manifest _build/html/SHA256SUMS
 ```
 
 Quick command reminders:

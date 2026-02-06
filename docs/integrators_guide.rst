@@ -78,12 +78,6 @@ Recommended integrator procedure
 
 2. Verify the checksum manifest using the OSQAr checksum tool::
 
-      poetry run python tools/generate_checksums.py \
-        --root /path/to/shipment \
-        --verify /path/to/shipment/SHA256SUMS
-
-   Optional convenience (same verification via OSQAr CLI)::
-
       ./osqar checksum verify \
         --root /path/to/shipment \
         --manifest /path/to/shipment/SHA256SUMS
@@ -104,12 +98,6 @@ Recommended integrator procedure
    - ``traceability_report.json``: the supplier's check result
 
    You can re-run the checks locally to confirm the shipment content passes your intake gate::
-
-      poetry run python tools/traceability_check.py \
-        /path/to/shipment/needs.json \
-        --json-report /path/to/shipment/traceability_report.integrator.json
-
-   Optional convenience (same check via OSQAr CLI)::
 
       ./osqar traceability /path/to/shipment/needs.json \
         --json-report /path/to/shipment/traceability_report.integrator.json

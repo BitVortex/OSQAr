@@ -41,6 +41,7 @@ Build the framework documentation (repo root):
 ```bash
 poetry install
 ./osqar build-docs
+./osqar open-docs
 ```
 
 Build an example’s documentation (choose one):
