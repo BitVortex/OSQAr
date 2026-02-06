@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="CLI Reference" href="cli_reference.html" /><link rel="prev" title="Using the OSQAr Boilerplate" href="using_the_boilerplate.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Setting Up A Project From Scratch - OSQAr 0.4.0 documentation</title>
+        <title>Setting Up A Project From Scratch - OSQAr 0.4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.4.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.4.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.4.0 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.4.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -494,24 +494,25 @@ poetry<span class="w"> </span>install<span class="w"> </span>--with<span class="
 </section>
 <section id="generate-integrity-metadata-and-a-traceability-report">
 <h4>3) Generate integrity metadata and a traceability report<a class="headerlink" href="#generate-integrity-metadata-and-a-traceability-report" title="Link to this heading">¶</a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>tools/traceability_check.py<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>_build/html/needs.json<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--json-report<span class="w"> </span>_build/html/traceability_report.json
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./osqar<span class="w"> </span>traceability<span class="w"> </span>_build/html/needs.json<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--json-report<span class="w"> </span>_build/html/traceability_report.json
 
-poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>tools/generate_checksums.py<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--root<span class="w"> </span>_build/html<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--output<span class="w"> </span>_build/html/SHA256SUMS
+./osqar<span class="w"> </span>checksum<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--root<span class="w"> </span>_build/html<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--output<span class="w"> </span>_build/html/SHA256SUMS
 
-poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>tools/generate_checksums.py<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--root<span class="w"> </span>_build/html<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--verify<span class="w"> </span>_build/html/SHA256SUMS
+./osqar<span class="w"> </span>checksum<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--root<span class="w"> </span>_build/html<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--manifest<span class="w"> </span>_build/html/SHA256SUMS
 </pre></div>
 </div>
 </section>
 <section id="archive-the-shipment-for-distribution">
 <h4>4) Archive the shipment for distribution<a class="headerlink" href="#archive-the-shipment-for-distribution" title="Link to this heading">¶</a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example naming convention</span>
-tar<span class="w"> </span>-czf<span class="w"> </span>OpenThermoLib_v1.4.0_evidence_shipment.tar.gz<span class="w"> </span>-C<span class="w"> </span>_build<span class="w"> </span>html
+./osqar<span class="w"> </span>shipment<span class="w"> </span>package<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--shipment<span class="w"> </span>_build/html<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--output<span class="w"> </span>OpenThermoLib_v1.4.0_evidence_shipment.tar.gz
 
 <span class="c1"># Optional: verify checksums again after moving/copying the directory</span>
 </pre></div>
@@ -542,13 +543,13 @@ tar<span class="w"> </span>-czf<span class="w"> </span>OpenThermoLib_v1.4.0_evid
 <li><p>archives the shipment immutably</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>tools/generate_checksums.py<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--root<span class="w"> </span>/path/to/OpenThermoLib_shipment<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--verify<span class="w"> </span>/path/to/OpenThermoLib_shipment/SHA256SUMS
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./osqar<span class="w"> </span>checksum<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--root<span class="w"> </span>/path/to/OpenThermoLib_shipment<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--manifest<span class="w"> </span>/path/to/OpenThermoLib_shipment/SHA256SUMS
 
-poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>tools/traceability_check.py<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>/path/to/OpenThermoLib_shipment/needs.json<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--json-report<span class="w"> </span>/path/to/OpenThermoLib_shipment/traceability_report.integrator.json
+./osqar<span class="w"> </span>traceability<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>/path/to/OpenThermoLib_shipment/needs.json<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--json-report<span class="w"> </span>/path/to/OpenThermoLib_shipment/traceability_report.integrator.json
 </pre></div>
 </div>
 </section>
@@ -666,7 +667,7 @@ poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> 
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=6c02275b"></script>
+    <script src="../_static/documentation_options.js?v=c87aa342"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supplier’s Guide" href="suppliers_guide.html" /><link rel="prev" title="Setting Up A Project From Scratch" href="project_setup_from_scratch.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>CLI Reference - OSQAr 0.4.0 documentation</title>
+        <title>CLI Reference - OSQAr 0.4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.4.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.4.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.4.0 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.4.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -302,11 +302,42 @@ see <a class="reference internal" href="using_the_boilerplate.html"><span class=
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--project</span></code>: project directory (default: <code class="docutils literal notranslate"><span class="pre">.</span></code>; must contain <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> and <code class="docutils literal notranslate"><span class="pre">index.rst</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: output directory (default: <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/_build/html</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--open</span></code>: open the built <code class="docutils literal notranslate"><span class="pre">index.html</span></code> in your default browser</p></li>
 </ul>
 <p>Examples:</p>
 <ul class="simple">
 <li><p>Build docs for the current project: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">build-docs</span></code></p></li>
 <li><p>Build docs for an example: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">build-docs</span> <span class="pre">--project</span> <span class="pre">examples/c_hello_world</span></code></p></li>
+<li><p>Build and open immediately: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">build-docs</span> <span class="pre">--open</span></code></p></li>
+</ul>
+</section>
+<section id="open-docs">
+<h3>open-docs<a class="headerlink" href="#open-docs" title="Link to this heading">¶</a></h3>
+<p>Open built HTML documentation (<code class="docutils literal notranslate"><span class="pre">index.html</span></code>) in your default browser.</p>
+<p>Defaults:</p>
+<ul class="simple">
+<li><p>Opens <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/_build/html/index.html</span></code> (default project: <code class="docutils literal notranslate"><span class="pre">.</span></code>).</p></li>
+</ul>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>Open the current project docs: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">open-docs</span></code></p></li>
+<li><p>Open an example’s docs: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">open-docs</span> <span class="pre">--project</span> <span class="pre">examples/python_hello_world</span></code></p></li>
+<li><p>Open a specific shipment directory: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">open-docs</span> <span class="pre">--shipment</span> <span class="pre">examples/python_hello_world/_build/html</span></code></p></li>
+</ul>
+</section>
+<section id="doctor">
+<h3>doctor<a class="headerlink" href="#doctor" title="Link to this heading">¶</a></h3>
+<p>Run a quick diagnostic of common environment/setup issues.</p>
+<p>Checks (best-effort):</p>
+<ul class="simple">
+<li><p>Poetry availability (if the project is Poetry-managed)</p></li>
+<li><p>Sphinx importability in the environment used by <code class="docutils literal notranslate"><span class="pre">build-docs</span></code></p></li>
+<li><p>PlantUML availability (<code class="docutils literal notranslate"><span class="pre">plantuml</span></code> command or <code class="docutils literal notranslate"><span class="pre">PLANTUML_JAR</span></code> + Java)</p></li>
+</ul>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>Check the current project: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">doctor</span></code></p></li>
+<li><p>Check an example: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">doctor</span> <span class="pre">--project</span> <span class="pre">examples/python_hello_world</span></code></p></li>
 </ul>
 </section>
 <section id="new">
@@ -369,6 +400,8 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">list</span></code>: discover shipment projects under a directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">build-docs</span></code>: same as top-level <code class="docutils literal notranslate"><span class="pre">build-docs</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">prepare</span></code>: generalized “build + traceability + checksums (+ archive)” workflow</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">verify</span></code>: generalized “verify checksums (+ traceability)” workflow</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">traceability</span></code>: validate a built shipment directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">checksums</span></code>: generate/verify checksums for a shipment directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">clean</span></code>: remove generated outputs (conservative by default)</p></li>
@@ -383,6 +416,11 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <li><p>Supplier: <code class="docutils literal notranslate"><span class="pre">supplier</span> <span class="pre">prepare</span></code> (build docs, traceability, checksums, optional archive)</p></li>
 <li><p>Integrator: <code class="docutils literal notranslate"><span class="pre">integrator</span> <span class="pre">verify</span></code> (verify checksums and/or traceability)</p></li>
 <li><p>Workspace: <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">intake</span></code> (ingest multiple shipments and generate a consolidated overview)</p></li>
+</ul>
+<p>The supplier/integrator workflows are aliases of the generalized shipment workflows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">supplier</span> <span class="pre">prepare</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">prepare</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">integrator</span> <span class="pre">verify</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">verify</span></code></p></li>
 </ul>
 <p>Use <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">&lt;command&gt;</span> <span class="pre">--help</span></code> to see the full set of options for these workflows.</p>
 </section>
@@ -452,6 +490,8 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <li><a class="reference internal" href="#common-defaults">Common defaults</a></li>
 <li><a class="reference internal" href="#top-level-commands">Top-level commands</a><ul>
 <li><a class="reference internal" href="#build-docs">build-docs</a></li>
+<li><a class="reference internal" href="#open-docs">open-docs</a></li>
+<li><a class="reference internal" href="#doctor">doctor</a></li>
 <li><a class="reference internal" href="#new">new</a></li>
 <li><a class="reference internal" href="#traceability">traceability</a></li>
 <li><a class="reference internal" href="#checksum">checksum</a></li>
@@ -472,7 +512,7 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=6c02275b"></script>
+    <script src="../_static/documentation_options.js?v=c87aa342"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

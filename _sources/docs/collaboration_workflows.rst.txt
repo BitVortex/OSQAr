@@ -150,7 +150,7 @@ What the CI runs
 ^^^^^^^^^^^^^^^^
 
 - Python checks (matrix): install via Poetry, run ``pytest``, build the Python demo example docs.
-- Traceability validation: run ``tools/traceability_check.py`` on the exported ``needs.json``.
+- Traceability validation: run ``./osqar traceability`` on the exported ``needs.json``.
 - Integrity metadata: generate and verify ``SHA256SUMS`` manifests for built documentation outputs.
 
 Reproducible example shipments

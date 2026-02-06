@@ -254,17 +254,16 @@ Release checklist (supplier)
 
 .. code-block:: bash
 
-   poetry run python tools/traceability_check.py \
-     _build/html/needs.json \
-     --json-report _build/html/traceability_report.json
+    ./osqar traceability _build/html/needs.json \
+       --json-report _build/html/traceability_report.json
 
-   poetry run python tools/generate_checksums.py \
-     --root _build/html \
-     --output _build/html/SHA256SUMS
+    ./osqar checksum generate \
+       --root _build/html \
+       --output _build/html/SHA256SUMS
 
-   poetry run python tools/generate_checksums.py \
-     --root _build/html \
-     --verify _build/html/SHA256SUMS
+    ./osqar checksum verify \
+       --root _build/html \
+       --manifest _build/html/SHA256SUMS
 
 4) Archive the shipment for distribution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -272,7 +271,9 @@ Release checklist (supplier)
 .. code-block:: bash
 
    # Example naming convention
-   tar -czf OpenThermoLib_v1.4.0_evidence_shipment.tar.gz -C _build html
+   ./osqar shipment package \
+      --shipment _build/html \
+      --output OpenThermoLib_v1.4.0_evidence_shipment.tar.gz
 
    # Optional: verify checksums again after moving/copying the directory
 
@@ -303,13 +304,13 @@ Example:
 
 .. code-block:: bash
 
-   poetry run python tools/generate_checksums.py \
-     --root /path/to/OpenThermoLib_shipment \
-     --verify /path/to/OpenThermoLib_shipment/SHA256SUMS
+    ./osqar checksum verify \
+       --root /path/to/OpenThermoLib_shipment \
+       --manifest /path/to/OpenThermoLib_shipment/SHA256SUMS
 
-   poetry run python tools/traceability_check.py \
-     /path/to/OpenThermoLib_shipment/needs.json \
-     --json-report /path/to/OpenThermoLib_shipment/traceability_report.integrator.json
+    ./osqar traceability \
+       /path/to/OpenThermoLib_shipment/needs.json \
+       --json-report /path/to/OpenThermoLib_shipment/traceability_report.integrator.json
 
 Next steps
 ==========
