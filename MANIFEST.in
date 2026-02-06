@@ -1,0 +1,15 @@
+include README.md
+include CHANGELOG.md
+include LICENSE
+include NOTICE
+
+# Ship packaged resources
+recursive-include osqar_data/templates *
+recursive-include osqar_data/static *
+
+# Avoid shipping large/non-release directories
+prune _build
+prune examples
+prune __pycache__
+recursive-exclude * __pycache__
+recursive-exclude * *.pyc

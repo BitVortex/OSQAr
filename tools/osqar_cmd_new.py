@@ -4,18 +4,18 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import sys
+from importlib import resources
 from pathlib import Path
 
-TEMPLATES_BASIC: dict[str, Path] = {
-    "c": Path("templates/basic/c"),
-    "cpp": Path("templates/basic/cpp"),
-    "python": Path("templates/basic/python"),
-    "rust": Path("templates/basic/rust"),
+TEMPLATES_BASIC: dict[str, str] = {
+    "c": "c",
+    "cpp": "cpp",
+    "python": "python",
+    "rust": "rust",
 }
-
-TEMPLATE_BASIC_SHARED = Path("templates/basic/shared")
 
 TEMPLATES_EXAMPLE: dict[str, Path] = {
     "c": Path("examples/c_hello_world"),
@@ -24,11 +24,73 @@ TEMPLATES_EXAMPLE: dict[str, Path] = {
     "rust": Path("examples/rust_hello_world"),
 }
 
-TEMPLATES: dict[str, Path] = dict(TEMPLATES_BASIC)
+TEMPLATES: dict[str, str] = dict(TEMPLATES_BASIC)
 
 
 def _repo_root() -> Path:
+    # Repo root when running from the git checkout. In a PyPI install, this will
+    # typically resolve to the site-packages directory and is not guaranteed to
+    # contain repo assets like `examples/`.
     return Path(__file__).resolve().parents[1]
+
+
+def _resource_dir(*parts: str):
+    # `osqar_data` is packaged with templates for the PyPI distribution.
+    # `resources.files()` returns a Traversable which may not be a real path
+    # (e.g. in a zipped wheel).
+    return resources.files("osqar_data").joinpath(*parts)
+
+
+def _copy_resource_tree(src, dst: Path, *, merge: bool, force: bool) -> None:
+    if dst.exists() and not merge:
+        if not force:
+            raise FileExistsError(f"Destination already exists: {dst}")
+        shutil.rmtree(dst)
+
+    ignore_names = {
+        "_build",
+        "build",
+        "target",
+        "__pycache__",
+        ".pytest_cache",
+        "_diagrams",
+    }
+
+    def should_ignore(name: str) -> bool:
+        if name in ignore_names:
+            return True
+        if name.endswith(".pyc"):
+            return True
+        if name == ".DS_Store":
+            return True
+        return False
+
+    dst.mkdir(parents=True, exist_ok=True)
+
+    for entry in src.iterdir():
+        name = getattr(entry, "name", None) or str(entry).split("/")[-1]
+        if should_ignore(str(name)):
+            continue
+
+        out = dst / str(name)
+        if entry.is_dir():
+            _copy_resource_tree(entry, out, merge=True, force=force)
+            continue
+
+        # Best-effort copy for files.
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with entry.open("rb") as fsrc:
+            data = fsrc.read()
+        out.write_bytes(data)
+
+        # Restore executability for common scripts on POSIX.
+        if os.name == "posix":
+            if str(name).endswith(".sh") or str(name) in {"osqar", "osqar.cmd", "osqar.ps1"}:
+                try:
+                    st = out.stat()
+                    out.chmod(st.st_mode | 0o111)
+                except OSError:
+                    pass
 
 
 def _copytree(src: Path, dst: Path, *, force: bool) -> None:
@@ -117,18 +179,21 @@ def _rewrite_readme_title(readme_path: Path, name: str) -> None:
 
 def cmd_new(args: argparse.Namespace) -> int:
     template_kind = getattr(args, "template", "basic")
-    templates = TEMPLATES_BASIC if template_kind == "basic" else TEMPLATES_EXAMPLE
+    if template_kind == "basic":
+        template = TEMPLATES_BASIC.get(args.language)
+        if template is None:
+            print(f"ERROR: Unsupported language: {args.language}", file=sys.stderr)
+            return 2
+    else:
+        template = None
+        if args.language not in TEMPLATES_EXAMPLE:
+            print(f"ERROR: Unsupported language: {args.language}", file=sys.stderr)
+            return 2
 
-    template = templates.get(args.language)
-    if template is None:
-        print(f"ERROR: Unsupported language: {args.language}", file=sys.stderr)
-        return 2
-
-    repo_root = _repo_root()
     dest = (
         Path(args.destination).resolve()
         if args.destination
-        else (repo_root / args.name).resolve()
+        else (Path.cwd() / args.name).resolve()
     )
 
     if dest.exists():
@@ -138,30 +203,43 @@ def cmd_new(args: argparse.Namespace) -> int:
         shutil.rmtree(dest)
 
     if template_kind == "basic":
-        shared_src = (repo_root / TEMPLATE_BASIC_SHARED).resolve()
-        lang_src = (repo_root / template).resolve()
+        try:
+            shared_src = _resource_dir("templates", "basic", "shared")
+            lang_src = _resource_dir("templates", "basic", template)
+        except ModuleNotFoundError:
+            print(
+                "ERROR: packaged templates not available (missing osqar_data).\n"
+                "TIP: If you are running from the git repo, ensure your environment can import this workspace.",
+                file=sys.stderr,
+            )
+            return 2
 
         if not shared_src.is_dir():
             print(
-                f"ERROR: Shared template directory not found: {shared_src}",
+                f"ERROR: Shared template directory not found in package: {shared_src}",
                 file=sys.stderr,
             )
             return 2
         if not lang_src.is_dir():
             print(
-                f"ERROR: Template directory not found: {lang_src}",
+                f"ERROR: Template directory not found in package: {lang_src}",
                 file=sys.stderr,
             )
             return 2
 
         dest.mkdir(parents=True, exist_ok=True)
-        _copytree_merge(shared_src, dest)
-        _copytree_merge(lang_src, dest)
-        src = lang_src
+        _copy_resource_tree(shared_src, dest, merge=True, force=bool(args.force))
+        _copy_resource_tree(lang_src, dest, merge=True, force=bool(args.force))
+        src = f"osqar_data:{lang_src}"
     else:
-        src = (repo_root / template).resolve()
+        repo_root = _repo_root()
+        src = (repo_root / TEMPLATES_EXAMPLE[args.language]).resolve()
         if not src.is_dir():
-            print(f"ERROR: Template directory not found: {src}", file=sys.stderr)
+            print(
+                "ERROR: example templates are not included in the PyPI distribution.\n"
+                "TIP: Use --template basic, or run from the git repo to use --template example.",
+                file=sys.stderr,
+            )
             return 2
         try:
             _copytree(src, dest, force=args.force)

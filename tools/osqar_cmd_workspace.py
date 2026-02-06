@@ -13,6 +13,7 @@ import json
 import os
 import shutil
 import sys
+from importlib import resources
 from pathlib import Path
 from typing import Optional
 
@@ -147,13 +148,21 @@ def _write_workspace_overview_sphinx_source(
     static_dir.mkdir(parents=True, exist_ok=True)
 
     # Keep the workspace overview styling consistent with the main OSQAr docs.
-    # Copy the repo's static CSS into the generated Sphinx project so it works
-    # regardless of the output directory location.
-    repo_static = Path(__file__).resolve().parent.parent / "_static"
+    # Prefer the packaged CSS resources (PyPI install), but fall back to the repo
+    # path when running from the git checkout.
     for css_name in ("custom.css", "furo-fixes.css"):
-        src = repo_static / css_name
         dst = static_dir / css_name
         try:
+            css_res = resources.files("osqar_data").joinpath("static", css_name)
+            if css_res.is_file():
+                dst.write_text(css_res.read_text(encoding="utf-8"), encoding="utf-8")
+                continue
+        except Exception:
+            pass
+
+        try:
+            repo_static = Path(__file__).resolve().parent.parent / "_static"
+            src = repo_static / css_name
             if src.is_file():
                 dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
         except OSError:

@@ -47,6 +47,18 @@ Dependencies:
 - Poetry: https://python-poetry.org/
 - Optional for offline PlantUML rendering: Java and/or PlantUML (`PLANTUML_JAR` also works). If neither is available, the build falls back to the public PlantUML web service (requires internet).
 
+Install the OSQAr CLI (recommended for users):
+
+```bash
+pipx install osqar
+osqar --help
+```
+
+Notes:
+
+- The PyPI package includes the **minimal project templates** used by `osqar new`.
+- The full reference `examples/` are not shipped on PyPI; use the git repo or release bundles if you need them.
+
 Build the framework documentation (repo root):
 
 ```bash

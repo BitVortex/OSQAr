@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import shutil
 import sys
+from importlib import resources
 from pathlib import Path
 
 
@@ -52,11 +53,36 @@ def cmd_framework_bundle(args: argparse.Namespace) -> int:
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
 
+    def _copy_resource_tree(src, dst: Path) -> None:
+        dst.mkdir(parents=True, exist_ok=True)
+        for entry in src.iterdir():
+            name = getattr(entry, "name", None) or str(entry).split("/")[-1]
+            out = dst / str(name)
+            if entry.is_dir():
+                _copy_resource_tree(entry, out)
+            else:
+                out.parent.mkdir(parents=True, exist_ok=True)
+                out.write_bytes(entry.read_bytes())
+
     _copytree(docs_dir, bundle_root / "docs")
     _copytree(repo_root / "tools", bundle_root / "tools")
-    _copytree(repo_root / "templates", bundle_root / "templates")
 
-    _copyfile(repo_root / "osqar", bundle_root / "osqar")
+    templates_src = repo_root / "templates"
+    if templates_src.is_dir():
+        _copytree(templates_src, bundle_root / "templates")
+    else:
+        # PyPI installs do not have a repo-root `templates/` folder; use packaged resources.
+        try:
+            tmpl_res = resources.files("osqar_data").joinpath("templates")
+            if not tmpl_res.is_dir():
+                raise FileNotFoundError("Packaged templates not found")
+            _copy_resource_tree(tmpl_res, bundle_root / "templates")
+        except Exception as exc:
+            print(f"ERROR: templates not found (repo or packaged): {exc}", file=sys.stderr)
+            return 2
+
+    if (repo_root / "osqar").is_file():
+        _copyfile(repo_root / "osqar", bundle_root / "osqar")
     if (repo_root / "osqar.cmd").is_file():
         _copyfile(repo_root / "osqar.cmd", bundle_root / "osqar.cmd")
     if (repo_root / "osqar.ps1").is_file():

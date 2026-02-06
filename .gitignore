@@ -11,6 +11,11 @@ htmlcov/
 .DS_Store
 .DS_STORE
 
+# Python packaging/build artifacts
+dist/
+build/
+*.egg-info/
+
 # Legacy workspace overview outputs (no longer generated)
 
 # Example build artifacts

@@ -10,6 +10,34 @@ permissions:
   contents: write
 
 jobs:
+  pypi-publish:
+    name: Publish osqar to PyPI
+    runs-on: ubuntu-latest
+    environment: pypi
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Build distributions
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade build twine
+          python -m build
+
+      - name: Validate distributions
+        run: python -m twine check dist/*
+
+      - name: Publish to PyPI (Trusted Publishing)
+        uses: pypa/gh-action-pypi-publish@release/v1
+
   framework-bundle:
     name: Framework bundle (docs + CLI + templates)
     runs-on: ubuntu-latest
