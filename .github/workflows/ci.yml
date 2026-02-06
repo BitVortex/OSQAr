@@ -122,18 +122,13 @@ jobs:
 
     - name: Traceability checks (needs.json)
       run: |
-
-        # Supplier metadata (shipped)
-        if [ -f "${ex_dir}/osqar_project.json" ]; then
-          cp -a "${ex_dir}/osqar_project.json" "${ship_dir}/osqar_project.json"
-        fi
         test -f examples/python_hello_world/_build/html/needs.json
         chmod +x ./osqar
         ./osqar traceability \
           examples/python_hello_world/_build/html/needs.json \
           --json-report examples/python_hello_world/_build/html/traceability_report.json
 
-          --json-report "${ship_dir}/traceability_report.json"
+    - name: Generate checksums for documentation dump
       run: |
         chmod +x ./osqar
         ./osqar checksum generate \
