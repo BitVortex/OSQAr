@@ -162,7 +162,7 @@ Supplier (produce + ship)
 
 Recommended one-shot workflow (per shipment project)::
 
-  ./osqar supplier prepare \
+  ./osqar shipment prepare \
      --project <project_dir> \
      --clean \
      --archive
@@ -179,9 +179,10 @@ Integrator (receive + verify)
 
 Recommended intake workflow::
 
-  ./osqar integrator verify \
+  ./osqar shipment verify \
      --shipment /path/to/shipment \
-     --traceability
+     --traceability \
+     --json-report /path/to/shipment/traceability_report.integrator.json
 
 This performs:
 

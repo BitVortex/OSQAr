@@ -407,26 +407,21 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">checksums</span></code>: generate/verify checksums for a shipment directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">clean</span></code>: remove generated outputs (conservative by default)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">run-tests</span></code>: run a project’s <code class="docutils literal notranslate"><span class="pre">build-and-test.sh</span></code> (best run on POSIX/WSL2)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">run-build</span></code>: run a per-project build command (configured in the project root)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">metadata</span> <span class="pre">write</span></code>: write <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> into a shipment root</p></li>
 </ul>
 </section>
-<section id="supplier-integrator-workspace">
-<h2>Supplier / integrator / workspace<a class="headerlink" href="#supplier-integrator-workspace" title="Link to this heading">¶</a></h2>
-<p>OSQAr also provides higher-level workflows:</p>
+<section id="workspace-commands">
+<h2>Workspace commands<a class="headerlink" href="#workspace-commands" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">workspace</span></code> command group operates on multiple shipments/projects in a directory.</p>
+<p>Common subcommands:</p>
 <ul class="simple">
-<li><p>Supplier: <code class="docutils literal notranslate"><span class="pre">supplier</span> <span class="pre">prepare</span></code> (build docs, traceability, checksums, optional archive)</p></li>
-<li><p>Integrator: <code class="docutils literal notranslate"><span class="pre">integrator</span> <span class="pre">verify</span></code> (verify checksums and/or traceability)</p></li>
-<li><p>Workspace: <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">intake</span></code> (ingest multiple shipments and generate a consolidated overview)</p></li>
-</ul>
-<p>Additional workspace helpers:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">list</span></code> (discover shipments under a root directory)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code> (generate a Subproject overview without copying shipments)</p></li>
-</ul>
-<p>The supplier/integrator workflows are aliases of the generalized shipment workflows:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">supplier</span> <span class="pre">prepare</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">prepare</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">integrator</span> <span class="pre">verify</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">verify</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">list</span></code>: discover shipments under a root directory (by scanning for <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code>: generate a Subproject overview (Markdown + JSON) without copying shipments</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">open</span></code>: generate a Subproject overview and open an HTML version built via Sphinx</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">diff</span></code>: diff two workspace reports (e.g., <code class="docutils literal notranslate"><span class="pre">subproject_overview.json</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">verify</span></code>: verify many shipments (checksums and optionally traceability)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">intake</span></code>: ingest multiple shipments into an archive directory and generate a consolidated overview</p></li>
 </ul>
 <p>Use <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">&lt;command&gt;</span> <span class="pre">--help</span></code> to see the full set of options for these workflows.</p>
 <p>Workspace examples:</p>
@@ -434,6 +429,20 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <li><p>List shipments under a folder: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">list</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span></code></p></li>
 <li><p>Generate an overview without copying: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">report</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span> <span class="pre">--output</span> <span class="pre">intake/overview</span></code></p></li>
 <li><p>Generate an overview and also verify checksums + traceability: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">report</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span> <span class="pre">--output</span> <span class="pre">intake/overview</span> <span class="pre">--checksums</span> <span class="pre">--traceability</span></code></p></li>
+<li><p>Generate and open an HTML overview: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">open</span> <span class="pre">--root</span> <span class="pre">intake/received</span> <span class="pre">--recursive</span></code></p></li>
+<li><p>Diff two overviews: <code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">workspace</span> <span class="pre">diff</span> <span class="pre">intake/overview/subproject_overview.json</span> <span class="pre">intake/overview_new/subproject_overview.json</span></code></p></li>
+</ul>
+</section>
+<section id="per-project-build-command">
+<h2>Per-project build command<a class="headerlink" href="#per-project-build-command" title="Link to this heading">¶</a></h2>
+<p>In addition to <code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">run-tests</span></code>, OSQAr can run a per-project build command.</p>
+<p>Configure it by placing an <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> in the <strong>project root</strong> (not the shipped directory) and setting:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">commands.build</span></code> (string; executed in the project directory)</p></li>
+</ul>
+<p>Example:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">./osqar</span> <span class="pre">shipment</span> <span class="pre">run-build</span> <span class="pre">--project</span> <span class="pre">examples/python_hello_world</span></code></p></li>
 </ul>
 </section>
 </section>
@@ -510,7 +519,8 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 </ul>
 </li>
 <li><a class="reference internal" href="#shipment-commands">Shipment commands</a></li>
-<li><a class="reference internal" href="#supplier-integrator-workspace">Supplier / integrator / workspace</a></li>
+<li><a class="reference internal" href="#workspace-commands">Workspace commands</a></li>
+<li><a class="reference internal" href="#per-project-build-command">Per-project build command</a></li>
 </ul>
 </li>
 </ul>

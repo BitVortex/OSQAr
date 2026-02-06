@@ -420,7 +420,7 @@ In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx document
 <section id="supplier-produce-ship">
 <h3>Supplier (produce + ship)<a class="headerlink" href="#supplier-produce-ship" title="Link to this heading">¶</a></h3>
 <p>Recommended one-shot workflow (per shipment project):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">supplier</span> <span class="n">prepare</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">prepare</span> \
    <span class="o">--</span><span class="n">project</span> <span class="o">&lt;</span><span class="n">project_dir</span><span class="o">&gt;</span> \
    <span class="o">--</span><span class="n">clean</span> \
    <span class="o">--</span><span class="n">archive</span>
@@ -437,9 +437,10 @@ In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx document
 <section id="integrator-receive-verify">
 <h3>Integrator (receive + verify)<a class="headerlink" href="#integrator-receive-verify" title="Link to this heading">¶</a></h3>
 <p>Recommended intake workflow:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">integrator</span> <span class="n">verify</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">verify</span> \
    <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
-   <span class="o">--</span><span class="n">traceability</span>
+   <span class="o">--</span><span class="n">traceability</span> \
+   <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>This performs:</p>

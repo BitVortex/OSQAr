@@ -608,8 +608,8 @@ run them in WSL2.</p></li>
 <section id="windows-friendly-equivalents-recommended">
 <h4>Windows-friendly equivalents (recommended)<a class="headerlink" href="#windows-friendly-equivalents-recommended" title="Link to this heading">¶</a></h4>
 <p>The following are intended as portable alternatives to the example scripts:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="c1"># Build docs and prepare an evidence shipment via the CLI</span>
-./osqar<span class="w"> </span>supplier<span class="w"> </span>prepare<span class="w"> </span><span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build docs and prepare an evidence shipment via the CLI</span>
+./osqar<span class="w"> </span>shipment<span class="w"> </span>prepare<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--project<span class="w"> </span>examples/python_hello_world<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--clean<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--archive
@@ -729,14 +729,14 @@ This is the unit that is transferred, archived, and later verified (similar to a
 </pre></div>
 </div>
 <p>Optional convenience (higher-level workflows in one command):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Supplier: build a shippable evidence directory in one command</span>
-<span class="o">./</span><span class="n">osqar</span> <span class="n">supplier</span> <span class="n">prepare</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build a shippable evidence directory in one command</span>
+<span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">prepare</span> \
    <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
    <span class="o">--</span><span class="n">clean</span> \
    <span class="o">--</span><span class="n">archive</span>
 
-<span class="c1"># Integrator: verify a received shipment (checksums + traceability)</span>
-<span class="o">./</span><span class="n">osqar</span> <span class="n">integrator</span> <span class="n">verify</span> \
+<span class="c1"># Verify a received shipment (checksums + traceability)</span>
+<span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">verify</span> \
    <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
    <span class="o">--</span><span class="n">traceability</span>
 
@@ -755,6 +755,11 @@ This is the unit that is transferred, archived, and later verified (similar to a
    <span class="o">--</span><span class="n">recursive</span> \
    <span class="o">--</span><span class="n">output</span> <span class="n">intake</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="mi">2026</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">01</span> \
    <span class="o">--</span><span class="n">traceability</span>
+
+<span class="c1"># Generate and open an HTML Subproject overview (via Sphinx)</span>
+<span class="o">./</span><span class="n">osqar</span> <span class="n">workspace</span> <span class="nb">open</span> \
+   <span class="o">--</span><span class="n">root</span> <span class="n">intake</span><span class="o">/</span><span class="n">received</span> \
+   <span class="o">--</span><span class="n">recursive</span>
 
 <span class="c1"># Or run the individual shipment steps</span>
 <span class="o">./</span><span class="n">osqar</span> <span class="n">build</span><span class="o">-</span><span class="n">docs</span> <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span>

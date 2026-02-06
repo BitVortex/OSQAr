@@ -323,7 +323,7 @@
 <li><p>regenerate checksums</p></li>
 </ul>
 <p>Example commands (supplier, requirement change):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">supplier</span> <span class="n">prepare</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">prepare</span> \
    <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
    <span class="o">--</span><span class="n">clean</span> \
    <span class="o">--</span><span class="n">archive</span>
@@ -345,7 +345,7 @@
 <li><p>re-run traceability and checksums</p></li>
 </ul>
 <p>Example commands (supplier, implementation change):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">supplier</span> <span class="n">prepare</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">prepare</span> \
    <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
    <span class="o">--</span><span class="n">clean</span> \
    <span class="o">--</span><span class="n">archive</span>
@@ -410,7 +410,7 @@ To keep lifecycle management consistent:</p>
 <section id="supplier-workflow-produce-shipment">
 <h2>Supplier workflow (produce shipment)<a class="headerlink" href="#supplier-workflow-produce-shipment" title="Link to this heading">¶</a></h2>
 <p>From the repository root (recommended):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">supplier</span> <span class="n">prepare</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">prepare</span> \
    <span class="o">--</span><span class="n">project</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span> \
    <span class="o">--</span><span class="n">clean</span> \
    <span class="o">--</span><span class="n">archive</span>
@@ -436,9 +436,10 @@ Use <code class="docutils literal notranslate"><span class="pre">--skip-tests</s
 <section id="integrator-workflow-verify-shipment">
 <h2>Integrator workflow (verify shipment)<a class="headerlink" href="#integrator-workflow-verify-shipment" title="Link to this heading">¶</a></h2>
 <p>After unpacking a received shipment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">integrator</span> <span class="n">verify</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">verify</span> \
    <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
-   <span class="o">--</span><span class="n">traceability</span>
+   <span class="o">--</span><span class="n">traceability</span> \
+   <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <p>If you intake multiple shipments at once, prefer the batch workflow:</p>

@@ -335,8 +335,8 @@ The following are intended as portable alternatives to the example scripts:
 
 .. code-block:: bash
 
-    # Build docs and prepare an evidence shipment via the CLI
-   ./osqar supplier prepare \
+   # Build docs and prepare an evidence shipment via the CLI
+   ./osqar shipment prepare \
        --project examples/python_hello_world \
        --clean \
        --archive
@@ -470,14 +470,14 @@ Generate and verify checksums for the example build output directory::
 
 Optional convenience (higher-level workflows in one command)::
 
-   # Supplier: build a shippable evidence directory in one command
-   ./osqar supplier prepare \
+   # Build a shippable evidence directory in one command
+   ./osqar shipment prepare \
       --project examples/python_hello_world \
       --clean \
       --archive
 
-   # Integrator: verify a received shipment (checksums + traceability)
-   ./osqar integrator verify \
+   # Verify a received shipment (checksums + traceability)
+   ./osqar shipment verify \
       --shipment /path/to/shipment \
       --traceability
 
@@ -496,6 +496,11 @@ Optional convenience (higher-level workflows in one command)::
       --recursive \
       --output intake/archive/2026-02-01 \
       --traceability
+
+   # Generate and open an HTML Subproject overview (via Sphinx)
+   ./osqar workspace open \
+      --root intake/received \
+      --recursive
 
    # Or run the individual shipment steps
    ./osqar build-docs --project examples/python_hello_world

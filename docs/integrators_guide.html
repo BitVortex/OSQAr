@@ -347,9 +347,10 @@ The supplier should provide a checksum manifest file <code class="docutils liter
 </pre></div>
 </div>
 <p>Recommended integrator one-shot workflow (CLI):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">integrator</span> <span class="n">verify</span> \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">verify</span> \
   <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span> \
-  <span class="o">--</span><span class="n">traceability</span>
+  <span class="o">--</span><span class="n">traceability</span> \
+  <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -381,6 +382,10 @@ This produces a single dated intake folder with a <strong>Subproject overview</s
   <span class="o">--</span><span class="n">recursive</span> \
   <span class="o">--</span><span class="n">output</span> <span class="n">intake</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="mi">2026</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">01</span> \
   <span class="o">--</span><span class="n">traceability</span>
+</pre></div>
+</div>
+<p>For a quick, non-copying inventory of received shipments, you can also use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">osqar</span> <span class="n">workspace</span> <span class="nb">open</span> <span class="o">--</span><span class="n">root</span> <span class="n">intake</span><span class="o">/</span><span class="n">received</span> <span class="o">--</span><span class="n">recursive</span>
 </pre></div>
 </div>
 </section>

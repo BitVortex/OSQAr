@@ -155,26 +155,22 @@ Common subcommands:
 - ``shipment checksums``: generate/verify checksums for a shipment directory
 - ``shipment clean``: remove generated outputs (conservative by default)
 - ``shipment run-tests``: run a project’s ``build-and-test.sh`` (best run on POSIX/WSL2)
+- ``shipment run-build``: run a per-project build command (configured in the project root)
 - ``shipment metadata write``: write ``osqar_project.json`` into a shipment root
 
-Supplier / integrator / workspace
-=================================
+Workspace commands
+==================
 
-OSQAr also provides higher-level workflows:
+The ``workspace`` command group operates on multiple shipments/projects in a directory.
 
-- Supplier: ``supplier prepare`` (build docs, traceability, checksums, optional archive)
-- Integrator: ``integrator verify`` (verify checksums and/or traceability)
-- Workspace: ``workspace intake`` (ingest multiple shipments and generate a consolidated overview)
+Common subcommands:
 
-Additional workspace helpers:
-
-- ``workspace list`` (discover shipments under a root directory)
-- ``workspace report`` (generate a Subproject overview without copying shipments)
-
-The supplier/integrator workflows are aliases of the generalized shipment workflows:
-
-- ``supplier prepare`` is equivalent to ``shipment prepare``
-- ``integrator verify`` is equivalent to ``shipment verify``
+- ``workspace list``: discover shipments under a root directory (by scanning for ``SHA256SUMS``)
+- ``workspace report``: generate a Subproject overview (Markdown + JSON) without copying shipments
+- ``workspace open``: generate a Subproject overview and open an HTML version built via Sphinx
+- ``workspace diff``: diff two workspace reports (e.g., ``subproject_overview.json``)
+- ``workspace verify``: verify many shipments (checksums and optionally traceability)
+- ``workspace intake``: ingest multiple shipments into an archive directory and generate a consolidated overview
 
 Use ``./osqar <command> --help`` to see the full set of options for these workflows.
 
@@ -183,3 +179,18 @@ Workspace examples:
 - List shipments under a folder: ``./osqar workspace list --root intake/received --recursive``
 - Generate an overview without copying: ``./osqar workspace report --root intake/received --recursive --output intake/overview``
 - Generate an overview and also verify checksums + traceability: ``./osqar workspace report --root intake/received --recursive --output intake/overview --checksums --traceability``
+- Generate and open an HTML overview: ``./osqar workspace open --root intake/received --recursive``
+- Diff two overviews: ``./osqar workspace diff intake/overview/subproject_overview.json intake/overview_new/subproject_overview.json``
+
+Per-project build command
+=========================
+
+In addition to ``shipment run-tests``, OSQAr can run a per-project build command.
+
+Configure it by placing an ``osqar_project.json`` in the **project root** (not the shipped directory) and setting:
+
+- ``commands.build`` (string; executed in the project directory)
+
+Example:
+
+- ``./osqar shipment run-build --project examples/python_hello_world``

@@ -79,7 +79,7 @@ Recommended supplier procedure (per example)
 
    On Windows, prefer the cross-platform CLI flow (or run the shell script under WSL2)::
 
-	./osqar supplier prepare \
+	./osqar shipment prepare \
 		--project examples/python_hello_world \
 		--clean
 
@@ -100,8 +100,8 @@ Recommended supplier procedure (per example)
 
 Optional convenience: the same steps are available via higher-level OSQAr CLI workflows::
 
-	# One-shot supplier workflow (recommended)
-	./osqar supplier prepare \
+	# One-shot shipment workflow (recommended)
+	./osqar shipment prepare \
 		--project examples/python_hello_world \
 		--clean \
 		--archive

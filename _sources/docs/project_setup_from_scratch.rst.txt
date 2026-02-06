@@ -205,7 +205,7 @@ If you prefer the CLI one-shot flow:
 
 .. code-block:: bash
 
-   ./osqar supplier prepare \
+   ./osqar shipment prepare \
      --project . \
      --clean \
      --archive
