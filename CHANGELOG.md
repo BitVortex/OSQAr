@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-02-06
+
+### Added
+- Extensible JSON configuration for projects and workspaces:
+	- `osqar_project.json` supports `commands.docs`, `commands.test`, `commands.build`
+	- `osqar_workspace.json` supports `defaults.exclude` and integrator-side hooks
+- Pre/post hook execution around key CLI events (shipment and workspace workflows)
+- Hook kill switch: `--no-hooks` and environment `OSQAR_DISABLE_HOOKS=1`
+- Integrator-side extra verification commands:
+	- `shipment verify --verify-command '<cmd>'` (repeatable)
+	- `workspace verify --verify-command '<cmd>'` (repeatable)
+- Dedicated documentation page: “Configuration and hooks”
+
+### Changed
+- `build-docs` (top-level shorthand) now also accepts `--config` and `--no-hooks` for parity with `shipment build-docs`
+- Documentation now clarifies the security model: do not execute untrusted commands/hooks from received bundles
+
 ## [0.4.2] - 2026-02-06
 
 ### Added
@@ -97,7 +114,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Integrator multi-project workflow documentation ("Multi-project workflows")
-- Workspace intake/verify tooling for multi-shipment workflows, including a "Subproject overview" (Markdown/JSON) with entrypoint links and needs.json-derived counts
+- Workspace intake/verify tooling for multi-shipment workflows, including a "Subproject overview" (HTML/JSON) with entrypoint links and needs.json-derived counts
 - Optional supplier-provided shipment metadata file (osqar_project.json) with descriptive info, URLs, and origin
 
 ## [0.2.1] - 2026-02-01
@@ -124,7 +141,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Traceability validation tool producing `traceability_report.json`
 - Shipment integrity tool to generate and verify `SHA256SUMS` for example build outputs
 - Supplier/integrator documentation for shipment-style evidence transfer and verification
-- Simple OSQAr CLI (`python -m tools.osqar_cli` and `./osqar`) for scaffolding and verification tasks
+- Simple OSQAr CLI (`./osqar` and Windows wrappers `osqar.cmd` / `osqar.ps1`) for scaffolding and verification tasks
 
 ### Changed
 - Version bumped to `0.2.0`

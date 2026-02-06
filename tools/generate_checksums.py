@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import hashlib
+import json
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -137,8 +138,27 @@ def cli(argv: list[str]) -> int:
     parser.add_argument(
         "--exclude",
         action="append",
-        default=["**/.DS_Store"],
-        help="Glob pattern to exclude (repeatable). Default: **/.DS_Store",
+        default=[
+            "**/.DS_Store",
+            "**/__pycache__/**",
+            "**/*.pyc",
+            "**/.pytest_cache/**",
+            "**/.mypy_cache/**",
+            "**/.ruff_cache/**",
+        ],
+        help=(
+            "Glob pattern to exclude (repeatable). "
+            "Defaults exclude common transient files (e.g., **/.DS_Store, **/__pycache__/**, **/*.pyc)."
+        ),
+    )
+    parser.add_argument(
+        "--json-report",
+        type=Path,
+        default=None,
+        help=(
+            "Optional path to write a machine-readable JSON report "
+            "(recommended for CI / large workspaces)"
+        ),
     )
 
     mode = parser.add_mutually_exclusive_group(required=True)
@@ -164,6 +184,24 @@ def cli(argv: list[str]) -> int:
             args.root, args.output, args.algorithm, list(args.exclude)
         )
         print(f"Wrote {len(entries)} checksums to {args.output}")
+
+        if args.json_report is not None:
+            report = {
+                "schema": "osqar.checksums_report.v1",
+                "mode": "generate",
+                "root": str(args.root.resolve()),
+                "manifest": str(args.output.resolve()),
+                "algorithm": str(args.algorithm),
+                "excluded": list(args.exclude),
+                "counts": {
+                    "entries_total": len(entries),
+                },
+            }
+            args.json_report.parent.mkdir(parents=True, exist_ok=True)
+            args.json_report.write_text(
+                json.dumps(report, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
         return 0
 
     manifest = args.verify
@@ -175,6 +213,29 @@ def cli(argv: list[str]) -> int:
     print(
         f"Verified manifest: ok={len(ok)} missing={len(missing)} mismatched={len(mismatched)}"
     )
+
+    if args.json_report is not None:
+        report = {
+            "schema": "osqar.checksums_report.v1",
+            "mode": "verify",
+            "root": str(args.root.resolve()),
+            "manifest": str(manifest.resolve()),
+            "algorithm": str(args.algorithm),
+            "excluded": list(args.exclude),
+            "counts": {
+                "ok": len(ok),
+                "missing": len(missing),
+                "mismatched": len(mismatched),
+            },
+            # Keep the report scalable: store only the problem lists by default.
+            "missing": missing,
+            "mismatched": mismatched,
+        }
+        args.json_report.parent.mkdir(parents=True, exist_ok=True)
+        args.json_report.write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
 
     if missing:
         print("Missing files:")

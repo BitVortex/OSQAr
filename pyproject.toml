@@ -1,6 +1,6 @@
 [project]
 name = "osqar"
-version = "0.4.2"
+version = "0.5.0"
 description = "Open Safety Qualification Architecture - A Sphinx-Needs boilerplate for safety-related systems."
 readme = "README.md"
 license = "Apache-2.0"
@@ -24,6 +24,14 @@ package-mode = false
 # Tools for maintaining the boilerplate itself
 pytest = "^7.4"
 black = "^23.7"
+
+[tool.pytest.ini_options]
+addopts = [
+	"-ra",
+	"--ignore=_build",
+	"--ignore=examples",
+	"--ignore=templates",
+]
 
 [tool.poetry.group.evidence]
 optional = true

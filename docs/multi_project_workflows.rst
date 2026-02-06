@@ -23,7 +23,7 @@ Then open the generated overview:
 
 .. code-block:: bash
 
-  open intake/archive/2026-02-01/subproject_overview.md
+  open intake/archive/2026-02-01/_build/html/index.html
 
 Concepts
 --------
@@ -78,19 +78,22 @@ An intake directory is meant to be self-contained and audit-friendly:
    intake/archive/2026-02-01/
      intake_report.json
      subproject_overview.json
-     subproject_overview.md
      SHA256SUMS
+     _build/
+       html/
+         index.html
      shipments/
        <shipment-name>/
          index.html
          needs.json
          osqar_project.json
          ... (rendered docs and shipped artifacts)
-     reports/
+    reports/
        <shipment-name>/
          traceability_report.integrator.json
+         doctor_report.integrator.json
 
-The file ``subproject_overview.md`` is intended as the main human entrypoint.
+  The file ``_build/html/index.html`` is intended as the main human entrypoint.
 
 Batch verification (CLI)
 ------------------------
@@ -111,6 +114,18 @@ They discover shipment directories by scanning for ``SHA256SUMS``.
      --recursive \
      --traceability
 
+Optional: workspace configuration
+---------------------------------
+
+If you want team-wide defaults (e.g., checksum exclude globs) or integrator-side hooks around workspace
+operations, place an ``osqar_workspace.json`` in a trusted workspace root and pass it via ``--config``.
+
+For example::
+
+  ./osqar workspace verify --root intake/received --recursive --config ./osqar_workspace.json
+
+See :doc:`configuration_and_hooks` for details.
+
 Intake + archiving (CLI)
 ------------------------
 
@@ -122,7 +137,8 @@ To create an immutable intake archive from multiple shipments:
      --root intake/received \
      --recursive \
      --output intake/archive/2026-02-01 \
-     --traceability
+     --traceability \
+     --doctor
 
 The intake output is structured so that the copied shipments remain byte-identical,
 while integrator-side reports are written separately.
@@ -169,7 +185,7 @@ Subproject overview (integrator output)
 When you run an intake, OSQAr generates a **Subproject overview** in the intake output:
 
 - ``subproject_overview.json``
-- ``subproject_overview.md``
+- ``_build/html/index.html``
 
 These summarize all projects/shipments, their verification status, and (if present)
 their supplier-provided metadata (including origin and URLs).

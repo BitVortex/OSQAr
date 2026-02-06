@@ -1,6 +1,7 @@
 # Ignore Sphinx build artifacts and virtualenvs
 _build/
 **/_build/
+**/_sphinx/
 .venv/
 *.pyc
 __pycache__/
@@ -9,6 +10,8 @@ __pycache__/
 htmlcov/
 .DS_Store
 .DS_STORE
+
+# Legacy workspace overview outputs (no longer generated)
 
 # Example build artifacts
 examples/**/build/

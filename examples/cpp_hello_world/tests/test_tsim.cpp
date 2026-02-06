@@ -6,6 +6,12 @@
 #include <string>
 #include <vector>
 
+/*
+OSQAR-CODE-TRACE (test tags)
+
+TEST: TEST_CODE_001 TEST_VERIFY_001 TEST_METHOD_001 TEST_METHOD_002 TEST_METHOD_003 TEST_CONVERSION_001 TEST_FILTER_001 TEST_THRESHOLD_001 TEST_HYSTERESIS_001 TEST_END_TO_END_001 TEST_ERROR_RECOVERY_001 TEST_FAIL_SAFE_001 TEST_EXEC_001 TEST_REPORT_001
+*/
+
 auto fail_msg(char* buf, size_t n, const char* msg) -> void {
     std::snprintf(buf, n, "%s", msg);
 }

@@ -9,8 +9,8 @@ Usage:
 
 This wrapper prefers Poetry-managed execution when available.
 
-Fallback:
-  poetry run python -m tools.osqar_cli --help
+Fallback (no execute bit):
+  python ./osqar --help
 """
 
 from __future__ import annotations

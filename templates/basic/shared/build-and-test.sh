@@ -4,6 +4,17 @@ set -euo pipefail
 # Minimal evidence generator for the template.
 # This script intentionally does not require a compiler/toolchain.
 
+ACTION="all"
+if [[ "${1:-}" == "build" || "${1:-}" == "test" || "${1:-}" == "docs" || "${1:-}" == "all" ]]; then
+  ACTION="$1"
+  shift
+fi
+
+if [[ "${ACTION}" == "build" ]]; then
+  echo "No build step for this template (placeholder)."
+  exit 0
+fi
+
 cat > test_results.xml <<'XML'
 <?xml version="1.0" encoding="utf-8"?>
 <testsuite name="tests" tests="1" failures="0" errors="0" skipped="0" time="0">

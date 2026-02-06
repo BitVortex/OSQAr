@@ -34,12 +34,12 @@ jobs:
     - name: Install dependencies
       run: poetry install --with evidence
 
-    - name: Sanity-check CLI/tools import & syntax
+    - name: Sanity-check osqar CLI entrypoint
       run: |
-        poetry run python -m py_compile \
-          tools/osqar_cli.py \
-          tools/traceability_check.py \
-          tools/generate_checksums.py
+        set -euo pipefail
+        chmod +x ./osqar
+        ./osqar --help
+        ./osqar doctor --help
 
     - name: Build documentation
       run: |
@@ -62,18 +62,20 @@ jobs:
     - name: Traceability checks (needs.json)
       run: |
         test -f examples/python_hello_world/_build/html/needs.json
-        poetry run python tools/traceability_check.py \
+        chmod +x ./osqar
+        ./osqar traceability \
           examples/python_hello_world/_build/html/needs.json \
           --json-report examples/python_hello_world/_build/html/traceability_report.json
 
     - name: Generate checksums for documentation dump
       run: |
-        poetry run python tools/generate_checksums.py \
+        chmod +x ./osqar
+        ./osqar checksum generate \
           --root examples/python_hello_world/_build/html \
           --output examples/python_hello_world/_build/html/SHA256SUMS
-        poetry run python tools/generate_checksums.py \
+        ./osqar checksum verify \
           --root examples/python_hello_world/_build/html \
-          --verify examples/python_hello_world/_build/html/SHA256SUMS
+          --manifest examples/python_hello_world/_build/html/SHA256SUMS
 
     - name: Upload documentation
       uses: actions/upload-artifact@v4
@@ -121,18 +123,20 @@ jobs:
     - name: Traceability checks (needs.json)
       run: |
         test -f examples/python_hello_world/_build/html/needs.json
-        poetry run python tools/traceability_check.py \
+        chmod +x ./osqar
+        ./osqar traceability \
           examples/python_hello_world/_build/html/needs.json \
           --json-report examples/python_hello_world/_build/html/traceability_report.json
 
     - name: Generate checksums for documentation dump
       run: |
-        poetry run python tools/generate_checksums.py \
+        chmod +x ./osqar
+        ./osqar checksum generate \
           --root examples/python_hello_world/_build/html \
           --output examples/python_hello_world/_build/html/SHA256SUMS
-        poetry run python tools/generate_checksums.py \
+        ./osqar checksum verify \
           --root examples/python_hello_world/_build/html \
-          --verify examples/python_hello_world/_build/html/SHA256SUMS
+          --manifest examples/python_hello_world/_build/html/SHA256SUMS
 
     - name: Upload Python example artifacts
       uses: actions/upload-artifact@v4
@@ -195,7 +199,7 @@ jobs:
         ex_dir="examples/${{ matrix.example }}"
         ship_root="_ci_shipments"
         ship_dir="${ship_root}/${{ matrix.example }}"
-        out="osqar_${{ matrix.example }}_shipment.tar.gz"
+        out="osqar_${{ matrix.example }}_shipment.zip"
 
         rm -rf "${ship_root}"
         mkdir -p "${ship_dir}/implementation" "${ship_dir}/tests" "${ship_dir}/reports"
@@ -300,28 +304,19 @@ jobs:
           fi
         done
 
+        chmod +x ./osqar
+
         # Traceability report for the shipped docs
-        poetry run python tools/traceability_check.py \
+        ./osqar traceability \
           "${ship_dir}/needs.json" \
           --json-report "${ship_dir}/reports/traceability_report.json"
 
         # Bundle integrity: checksums over the full bundle directory
-        poetry run python tools/generate_checksums.py \
-          --root "${ship_dir}" \
-          --output "${ship_dir}/SHA256SUMS"
-
-        poetry run python tools/generate_checksums.py \
-          --root "${ship_dir}" \
-          --verify "${ship_dir}/SHA256SUMS"
+        ./osqar checksum generate --root "${ship_dir}" --output "${ship_dir}/SHA256SUMS"
+        ./osqar checksum verify --root "${ship_dir}" --manifest "${ship_dir}/SHA256SUMS"
 
         rm -f "${out}" "${out}.sha256"
-        tar -c \
-          --sort=name \
-          --mtime=@"${SOURCE_DATE_EPOCH}" \
-          --owner=0 --group=0 --numeric-owner \
-          -C "${ship_root}" \
-          "${{ matrix.example }}" \
-          | gzip -n > "${out}"
+        ./osqar shipment package --shipment "${ship_dir}" --output "${out}"
         sha256sum "${out}" > "${out}.sha256"
 
     - name: Upload shipment archive (${{ matrix.example }})
@@ -329,11 +324,11 @@ jobs:
       with:
         name: osqar-example-shipment-${{ matrix.example }}
         path: |
-          osqar_${{ matrix.example }}_shipment.tar.gz
-          osqar_${{ matrix.example }}_shipment.tar.gz.sha256
+          osqar_${{ matrix.example }}_shipment.zip
+          osqar_${{ matrix.example }}_shipment.zip.sha256
         retention-days: 30
 
-  bazel-example-shipments:
+  example-workspace:
     runs-on: ubuntu-24.04
     needs: bazel-example-shipment
     steps:
@@ -346,41 +341,42 @@ jobs:
         path: _ci_per_example
         merge-multiple: true
 
-    - name: Create combined deterministic archive
+    - name: Create combined workspace (intake + package ZIP)
       run: |
         set -euo pipefail
         export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
 
+        chmod +x ./osqar
+
         rm -rf _ci_shipments
         mkdir -p _ci_shipments
 
-        # Extract each per-example shipment into a combined folder tree.
-        for a in _ci_per_example/osqar_*_shipment.tar.gz; do
-          tar -xzf "${a}" -C _ci_shipments
+        for a in _ci_per_example/osqar_*_shipment.zip; do
+          unzip -q "${a}" -d _ci_shipments
         done
 
-        rm -f osqar_example_shipments.tar.gz osqar_example_shipments.tar.gz.sha256
-        tar -c \
-          --sort=name \
-          --mtime=@"${SOURCE_DATE_EPOCH}" \
-          --owner=0 --group=0 --numeric-owner \
-          -C _ci_shipments \
-          c_hello_world cpp_hello_world rust_hello_world \
-          | gzip -n > osqar_example_shipments.tar.gz
+        ws_root="_ci_workspace/osqar-example-workspace"
+        rm -rf "${ws_root}"
+        mkdir -p _ci_workspace
 
-        sha256sum osqar_example_shipments.tar.gz > osqar_example_shipments.tar.gz.sha256
+        ./osqar workspace intake \
+          --root _ci_shipments \
+          --recursive \
+          --output "${ws_root}" \
+          --force \
+          --traceability \
+          --doctor
 
-    - name: Upload Bazel example shipments (combined + per-example)
+        out="osqar_example_workspace.zip"
+        rm -f "${out}" "${out}.sha256"
+        ./osqar shipment package --shipment "${ws_root}" --output "${out}"
+        sha256sum "${out}" > "${out}.sha256"
+
+    - name: Upload example workspace (combined)
       uses: actions/upload-artifact@v4
       with:
-        name: osqar-example-shipments
+        name: osqar-example-workspace
         path: |
-          osqar_example_shipments.tar.gz
-          osqar_example_shipments.tar.gz.sha256
-          _ci_per_example/osqar_c_hello_world_shipment.tar.gz
-          _ci_per_example/osqar_c_hello_world_shipment.tar.gz.sha256
-          _ci_per_example/osqar_cpp_hello_world_shipment.tar.gz
-          _ci_per_example/osqar_cpp_hello_world_shipment.tar.gz.sha256
-          _ci_per_example/osqar_rust_hello_world_shipment.tar.gz
-          _ci_per_example/osqar_rust_hello_world_shipment.tar.gz.sha256
+          osqar_example_workspace.zip
+          osqar_example_workspace.zip.sha256
         retention-days: 30

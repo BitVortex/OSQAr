@@ -86,6 +86,7 @@ def _run_checks(
     req_prefixes: tuple[str, ...],
     arch_prefixes: tuple[str, ...],
     test_prefixes: tuple[str, ...],
+    code_prefixes: tuple[str, ...],
     enforce_req_traces_arch: bool,
     enforce_req_has_test: bool,
     enforce_arch_traces_req: bool,
@@ -194,12 +195,14 @@ def _run_checks(
             "req_total": sum(1 for k in needs_by_id if k.startswith(req_prefixes)),
             "arch_total": sum(1 for k in needs_by_id if k.startswith(arch_prefixes)),
             "test_total": sum(1 for k in needs_by_id if k.startswith(test_prefixes)),
+            "code_total": sum(1 for k in needs_by_id if k.startswith(code_prefixes)),
             "violations_total": len(violations),
         },
         "prefixes": {
             "requirements": list(req_prefixes),
             "architecture": list(arch_prefixes),
             "tests": list(test_prefixes),
+            "code": list(code_prefixes),
         },
     }
 
@@ -236,6 +239,12 @@ def cli(argv: list[str]) -> int:
         action="append",
         default=["TEST_"],
         help="Test ID prefix (repeatable). Default: TEST_",
+    )
+    parser.add_argument(
+        "--code-prefix",
+        action="append",
+        default=["CODE_", "IMPL_"],
+        help="Implementation/code ID prefix (repeatable). Default: CODE_, IMPL_",
     )
 
     parser.add_argument(
@@ -286,6 +295,7 @@ def cli(argv: list[str]) -> int:
         req_prefixes=tuple(args.req_prefix),
         arch_prefixes=tuple(args.arch_prefix),
         test_prefixes=tuple(args.test_prefix),
+        code_prefixes=tuple(args.code_prefix),
         enforce_req_traces_arch=bool(args.enforce_req_traces_arch),
         enforce_req_has_test=bool(args.enforce_req_has_test),
         enforce_arch_traces_req=bool(args.enforce_arch_traces_req),

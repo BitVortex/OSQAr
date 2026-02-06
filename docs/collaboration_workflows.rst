@@ -160,9 +160,9 @@ The CI workflow builds deterministic archives for the native examples (C/C++/Rus
 
 - Sets ``SOURCE_DATE_EPOCH`` (using the latest git commit timestamp).
 - Enables reproducible mode via ``OSQAR_REPRODUCIBLE=1``.
-- Produces per-example shipment archives and a combined archive, each with a ``.sha256`` file.
+- Produces per-example shipment archives and a combined example workspace archive, each with a ``.sha256`` file.
 
-In GitHub Actions, download the artifact named ``osqar-example-shipments`` from the
+In GitHub Actions, download the artifact named ``osqar-example-workspace`` from the
 ``Tests and Example Shipments`` workflow run.
 
 GitHub Pages publishing

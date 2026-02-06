@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0",
+  "origin": {
+    "vcs": "git",
+    "path": "examples/c_hello_world"
+  },
+  "commands": {
+    "build": "./build-and-test.sh build",
+    "test": "./build-and-test.sh test"
+  }
+}

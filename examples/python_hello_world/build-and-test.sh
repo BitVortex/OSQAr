@@ -22,7 +22,12 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}🔨 OSQAr example: Build & Traceability Workflow${NC}\n"
 
-# Step 1: Run Code Style Checks
+ACTION="all"
+if [[ "${1:-}" == "build" || "${1:-}" == "test" || "${1:-}" == "docs" || "${1:-}" == "all" ]]; then
+    ACTION="$1"
+    shift
+fi
+
 echo -e "${BLUE}Step 1️⃣: Code Style Checks${NC}"
 if command -v poetry &> /dev/null; then
     echo "✓ Poetry found"
@@ -34,89 +39,106 @@ else
     exit 1
 fi
 
-# Step 2: Run Unit Tests
-echo -e "\n${BLUE}Step 2️⃣: Unit Tests with Coverage${NC}"
-echo "  Running 13 test cases..."
-rm -f coverage_report.txt coverage.xml
+if [[ "${ACTION}" == "all" || "${ACTION}" == "test" ]]; then
+    echo -e "\n${BLUE}Step 2️⃣: Unit Tests with Coverage${NC}"
+    echo "  Running 13 test cases..."
+    rm -f coverage_report.txt coverage.xml
 
-poetry run pytest \
-    -v \
-    --junitxml=test_results.xml \
-    --cov=src \
-    --cov-report=term-missing \
-    --cov-report=xml:coverage.xml \
-    tests/test_tsim.py
+    poetry run pytest \
+        -v \
+        --junitxml=test_results.xml \
+        --cov=src \
+        --cov-report=term-missing \
+        --cov-report=xml:coverage.xml \
+        tests/test_tsim.py
 
-# Create a stable, human-readable coverage summary for embedding in Sphinx.
-poetry run coverage report -m > coverage_report.txt
+    # Create a stable, human-readable coverage summary for embedding in Sphinx.
+    poetry run coverage report -m > coverage_report.txt
 
-if [ $? -eq 0 ]; then
-    echo -e "${GREEN}  ✓ All tests passed${NC}"
-else
-    echo -e "${RED}  ✗ Test failures detected${NC}"
-    exit 1
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}  ✓ All tests passed${NC}"
+    else
+        echo -e "${RED}  ✗ Test failures detected${NC}"
+        exit 1
+    fi
 fi
 
-# Step 3: Verify Test-Requirement Coverage
-echo -e "\n${BLUE}Step 3️⃣: Traceability Coverage Check${NC}"
-if [ ! -f test_results.xml ]; then
-    echo -e "${RED}  ✗ Missing test_results.xml (JUnit)${NC}"
-    exit 1
-fi
-
-TEST_COUNT=$(grep -oE 'tests="[0-9]+"' test_results.xml | head -1 | grep -oE '[0-9]+' || echo "0")
-REQ_COUNT=$(grep -c ":id: TEST_" ../tsim_docs/03_verification.rst 2>/dev/null || echo "0")
-echo "  Test cases: $TEST_COUNT"
-echo "  Test requirements: $REQ_COUNT"
-
-if [ "$TEST_COUNT" -gt 0 ]; then
-    echo -e "${GREEN}  ✓ Test results generated (test_results.xml)${NC}"
-else
-    echo -e "${RED}  ✗ No test results found${NC}"
-    exit 1
-fi
-
-# Step 3.5: Code complexity report (optional)
-echo -e "\n${BLUE}Step 3️⃣.5: Code Complexity Report (lizard)${NC}"
-rm -f complexity_report.txt
-poetry run lizard -C 10 src tests > complexity_report.txt 2>&1 || {
-    echo "  ⚠️  Complexity report skipped (lizard not available)"
-}
-if [ -f complexity_report.txt ]; then
-    echo -e "${GREEN}  ✓ Wrote complexity_report.txt${NC}"
-fi
-
-# Step 4: Build Documentation
-echo -e "\n${BLUE}Step 4️⃣: Build Documentation with Test Results${NC}"
-echo "  Running Sphinx..."
-rm -rf _build/html
-if poetry run sphinx-build -b html . _build/html 2>&1 | tail -5; then
-    echo -e "${GREEN}  ✓ Documentation build succeeded${NC}"
-
-    # Ship raw evidence files alongside the HTML directory (for CI shipments / audits)
-    cp -f test_results.xml _build/html/test_results.xml >/dev/null 2>&1 || true
-    cp -f coverage_report.txt _build/html/coverage_report.txt >/dev/null 2>&1 || true
-    cp -f complexity_report.txt _build/html/complexity_report.txt >/dev/null 2>&1 || true
-    if [ -f coverage.xml ]; then
-        cp -f coverage.xml _build/html/coverage.xml >/dev/null 2>&1 || true
+if [[ "${ACTION}" == "all" || "${ACTION}" == "test" ]]; then
+    echo -e "\n${BLUE}Step 3️⃣: Traceability Coverage Check${NC}"
+    if [ ! -f test_results.xml ]; then
+        echo -e "${RED}  ✗ Missing test_results.xml (JUnit)${NC}"
+        exit 1
     fi
 
-    # Ship implementation + tests alongside the docs (so a bundle can be reviewed end-to-end)
-    mkdir -p _build/html/implementation/src _build/html/tests
-    cp -a src/. _build/html/implementation/src/ >/dev/null 2>&1 || true
-    cp -a tests/. _build/html/tests/ >/dev/null 2>&1 || true
-else
-    echo -e "${RED}  ✗ Documentation build failed${NC}"
-    exit 1
+    TEST_COUNT=$(grep -oE 'tests="[0-9]+"' test_results.xml | head -1 | grep -oE '[0-9]+' || echo "0")
+    REQ_COUNT=$(grep -c ":id: TEST_" ../tsim_docs/03_verification.rst 2>/dev/null || echo "0")
+    echo "  Test cases: $TEST_COUNT"
+    echo "  Test requirements: $REQ_COUNT"
+
+    if [ "$TEST_COUNT" -gt 0 ]; then
+        echo -e "${GREEN}  ✓ Test results generated (test_results.xml)${NC}"
+    else
+        echo -e "${RED}  ✗ No test results found${NC}"
+        exit 1
+    fi
 fi
 
-# Step 5: Generate Traceability Report
-echo -e "\n${BLUE}Step 5️⃣: Traceability Report${NC}"
-echo "  Analyzing traceability chain..."
+if [[ "${ACTION}" == "all" || "${ACTION}" == "test" ]]; then
+    echo -e "\n${BLUE}Step 3️⃣.5: Code Complexity Report (lizard)${NC}"
+    rm -f complexity_report.txt
+    poetry run lizard -C 10 src tests > complexity_report.txt 2>&1 || {
+        echo "  ⚠️  Complexity report skipped (lizard not available)"
+    }
+    if [ -f complexity_report.txt ]; then
+        echo -e "${GREEN}  ✓ Wrote complexity_report.txt${NC}"
+    fi
+fi
 
-REQUIREMENTS=$(grep -cE "^\.\. need::" ../tsim_docs/01_requirements.rst 2>/dev/null || echo "0")
-ARCH=$(grep -c ":id: ARCH_" ../tsim_docs/02_architecture.rst 2>/dev/null || echo "0")
-TESTS=$(grep -c ":id: TEST_" ../tsim_docs/03_verification.rst 2>/dev/null || echo "0")
+if [[ "${ACTION}" == "all" || "${ACTION}" == "docs" ]]; then
+    echo -e "\n${BLUE}Step 4️⃣: Build Documentation with Test Results${NC}"
+    echo "  Running Sphinx..."
+    rm -rf _build/html
+    if poetry run sphinx-build -b html . _build/html 2>&1 | tail -5; then
+        echo -e "${GREEN}  ✓ Documentation build succeeded${NC}"
+
+        # Ship raw evidence files alongside the HTML directory (for CI shipments / audits)
+        cp -f test_results.xml _build/html/test_results.xml >/dev/null 2>&1 || true
+        cp -f coverage_report.txt _build/html/coverage_report.txt >/dev/null 2>&1 || true
+        cp -f complexity_report.txt _build/html/complexity_report.txt >/dev/null 2>&1 || true
+        if [ -f coverage.xml ]; then
+            cp -f coverage.xml _build/html/coverage.xml >/dev/null 2>&1 || true
+        fi
+
+        # Ship implementation + tests alongside the docs (so a bundle can be reviewed end-to-end)
+        mkdir -p _build/html/implementation/src _build/html/tests
+        cp -a src/. _build/html/implementation/src/ >/dev/null 2>&1 || true
+        cp -a tests/. _build/html/tests/ >/dev/null 2>&1 || true
+    else
+        echo -e "${RED}  ✗ Documentation build failed${NC}"
+        exit 1
+    fi
+fi
+
+if [[ "${ACTION}" == "all" || "${ACTION}" == "docs" ]]; then
+    echo -e "\n${BLUE}Step 5️⃣: Traceability Report${NC}"
+    echo "  Analyzing traceability chain..."
+
+    REQUIREMENTS=$(grep -cE "^\.\. need::" ../tsim_docs/01_requirements.rst 2>/dev/null || echo "0")
+    ARCH=$(grep -c ":id: ARCH_" ../tsim_docs/02_architecture.rst 2>/dev/null || echo "0")
+    TESTS=$(grep -c ":id: TEST_" ../tsim_docs/03_verification.rst 2>/dev/null || echo "0")
+fi
+
+if [[ "${ACTION}" != "all" ]]; then
+    echo -e "\n${GREEN}✅ Done (${ACTION})${NC}"
+    if [[ "${ACTION}" == "test" ]]; then
+        echo "  - Test Results: test_results.xml"
+        echo "  - Coverage: coverage_report.txt"
+        echo "  - Complexity: complexity_report.txt"
+    elif [[ "${ACTION}" == "docs" ]]; then
+        echo "  - Documentation: _build/html/index.html"
+    fi
+    exit 0
+fi
 
 TOTAL=$(grep -oE 'tests="[0-9]+"' test_results.xml | head -1 | grep -oE '[0-9]+' || echo "0")
 FAILURES=$(grep -oE 'failures="[0-9]+"' test_results.xml | head -1 | grep -oE '[0-9]+' || echo "0")
@@ -158,4 +180,4 @@ echo "  2. Share documentation with stakeholders"
 echo "  3. Integrate into CI/CD pipeline"
 echo "  4. Archive artifacts for qualification dossier"
 echo ""
-echo "📚 For more details, see: TEST_TRACEABILITY_GUIDE.md"
+echo "📚 For details, see: _build/html/03_verification.html and _build/html/05_test_results.html"

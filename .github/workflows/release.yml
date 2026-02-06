@@ -38,10 +38,11 @@ jobs:
         run: |
           poetry run sphinx-build -b html -W . _build/html
 
-      - name: Assemble bundle directory
+      - name: Assemble bundle directory (via osqar)
         run: |
           set -euo pipefail
-          poetry run python ci/assemble_framework_bundle.py \
+          chmod +x ./osqar
+          ./osqar framework bundle \
             --version "${GITHUB_REF_NAME}" \
             --docs-dir _build/html \
             --output-dir _dist
@@ -50,33 +51,21 @@ jobs:
         run: |
           set -euo pipefail
           bundle_dir="_dist/osqar-framework-${GITHUB_REF_NAME}"
-          poetry run python tools/generate_checksums.py --root "${bundle_dir}" --output "${bundle_dir}/SHA256SUMS"
-          poetry run python tools/generate_checksums.py --root "${bundle_dir}" --verify "${bundle_dir}/SHA256SUMS"
-
-      - name: Create deterministic bundle archive (tar.gz)
-        run: |
-          set -euo pipefail
-          export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
-
-          out="osqar_framework_bundle_${GITHUB_REF_NAME}.tar.gz"
-          rm -f "${out}" "${out}.sha256"
-
-          tar -c \
-            --sort=name \
-            --mtime=@"${SOURCE_DATE_EPOCH}" \
-            --owner=0 --group=0 --numeric-owner \
-            -C _dist \
-            "osqar-framework-${GITHUB_REF_NAME}" \
-            | gzip -n > "${out}"
-
-          sha256sum "${out}" > "${out}.sha256"
+          chmod +x ./osqar
+          ./osqar checksum generate --root "${bundle_dir}" --output "${bundle_dir}/SHA256SUMS"
+          ./osqar checksum verify --root "${bundle_dir}" --manifest "${bundle_dir}/SHA256SUMS"
 
       - name: Create bundle archive (zip)
         run: |
           set -euo pipefail
+          export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
+          chmod +x ./osqar
+
+          bundle_dir="_dist/osqar-framework-${GITHUB_REF_NAME}"
           out="osqar_framework_bundle_${GITHUB_REF_NAME}.zip"
           rm -f "${out}" "${out}.sha256"
-          (cd _dist && zip -r -q "../${out}" "osqar-framework-${GITHUB_REF_NAME}")
+
+          ./osqar shipment package --shipment "${bundle_dir}" --output "${out}"
           sha256sum "${out}" > "${out}.sha256"
 
       - name: Upload framework bundle artifacts
@@ -84,8 +73,6 @@ jobs:
         with:
           name: osqar-framework-bundle
           path: |
-            osqar_framework_bundle_${{ github.ref_name }}.tar.gz
-            osqar_framework_bundle_${{ github.ref_name }}.tar.gz.sha256
             osqar_framework_bundle_${{ github.ref_name }}.zip
             osqar_framework_bundle_${{ github.ref_name }}.zip.sha256
 
@@ -140,7 +127,7 @@ jobs:
           ex_dir="examples/${{ matrix.example }}"
           ship_root="_ci_shipments"
           ship_dir="${ship_root}/${{ matrix.example }}"
-          out="osqar_${{ matrix.example }}_shipment.tar.gz"
+          out="osqar_${{ matrix.example }}_shipment.zip"
 
           rm -rf "${ship_root}"
           mkdir -p "${ship_dir}/implementation" "${ship_dir}/tests" "${ship_dir}/reports"
@@ -231,21 +218,15 @@ jobs:
             fi
           done
 
-          poetry run python tools/traceability_check.py \
-            "${ship_dir}/needs.json" \
+          chmod +x ./osqar
+          ./osqar traceability "${ship_dir}/needs.json" \
             --json-report "${ship_dir}/reports/traceability_report.json"
 
-          poetry run python tools/generate_checksums.py --root "${ship_dir}" --output "${ship_dir}/SHA256SUMS"
-          poetry run python tools/generate_checksums.py --root "${ship_dir}" --verify "${ship_dir}/SHA256SUMS"
+          ./osqar checksum generate --root "${ship_dir}" --output "${ship_dir}/SHA256SUMS"
+          ./osqar checksum verify --root "${ship_dir}" --manifest "${ship_dir}/SHA256SUMS"
 
           rm -f "${out}" "${out}.sha256"
-          tar -c \
-            --sort=name \
-            --mtime=@"${SOURCE_DATE_EPOCH}" \
-            --owner=0 --group=0 --numeric-owner \
-            -C "${ship_root}" \
-            "${{ matrix.example }}" \
-            | gzip -n > "${out}"
+          ./osqar shipment package --shipment "${ship_dir}" --output "${out}"
           sha256sum "${out}" > "${out}.sha256"
 
       - name: Upload shipment archive (${{ matrix.example }})
@@ -253,11 +234,11 @@ jobs:
         with:
           name: osqar-example-shipment-${{ matrix.example }}
           path: |
-            osqar_${{ matrix.example }}_shipment.tar.gz
-            osqar_${{ matrix.example }}_shipment.tar.gz.sha256
+            osqar_${{ matrix.example }}_shipment.zip
+            osqar_${{ matrix.example }}_shipment.zip.sha256
 
-  bazel-example-shipments:
-    name: Example shipments (combined)
+  example-workspace:
+    name: Example workspace (combined, verifiable)
     runs-on: ubuntu-24.04
     needs: bazel-example-shipment
     steps:
@@ -270,49 +251,52 @@ jobs:
           path: _ci_per_example
           merge-multiple: true
 
-      - name: Create combined deterministic archive
+      - name: Create combined workspace (intake + package ZIP)
         run: |
           set -euo pipefail
           export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
 
+          chmod +x ./osqar
+
           rm -rf _ci_shipments
           mkdir -p _ci_shipments
 
-          for a in _ci_per_example/osqar_*_shipment.tar.gz; do
-            tar -xzf "${a}" -C _ci_shipments
+          # Extract each per-example shipment into a combined folder tree.
+          for a in _ci_per_example/osqar_*_shipment.zip; do
+            unzip -q "${a}" -d _ci_shipments
           done
 
-          rm -f osqar_example_shipments.tar.gz osqar_example_shipments.tar.gz.sha256
-          tar -c \
-            --sort=name \
-            --mtime=@"${SOURCE_DATE_EPOCH}" \
-            --owner=0 --group=0 --numeric-owner \
-            -C _ci_shipments \
-            c_hello_world cpp_hello_world rust_hello_world \
-            | gzip -n > osqar_example_shipments.tar.gz
+          ws_root="_ci_workspace/osqar-example-workspace-${GITHUB_REF_NAME}"
+          rm -rf "${ws_root}"
+          mkdir -p _ci_workspace
 
-          sha256sum osqar_example_shipments.tar.gz > osqar_example_shipments.tar.gz.sha256
+          ./osqar workspace intake \
+            --root _ci_shipments \
+            --recursive \
+            --output "${ws_root}" \
+            --force \
+            --traceability \
+            --doctor
 
-      - name: Upload example shipments artifacts
+          out="osqar_example_workspace_${GITHUB_REF_NAME}.zip"
+          rm -f "${out}" "${out}.sha256"
+          ./osqar shipment package --shipment "${ws_root}" --output "${out}"
+          sha256sum "${out}" > "${out}.sha256"
+
+      - name: Upload example workspace artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: osqar-example-shipments
+          name: osqar-example-workspace
           path: |
-            osqar_example_shipments.tar.gz
-            osqar_example_shipments.tar.gz.sha256
-            _ci_per_example/osqar_c_hello_world_shipment.tar.gz
-            _ci_per_example/osqar_c_hello_world_shipment.tar.gz.sha256
-            _ci_per_example/osqar_cpp_hello_world_shipment.tar.gz
-            _ci_per_example/osqar_cpp_hello_world_shipment.tar.gz.sha256
-            _ci_per_example/osqar_rust_hello_world_shipment.tar.gz
-            _ci_per_example/osqar_rust_hello_world_shipment.tar.gz.sha256
+            osqar_example_workspace_${{ github.ref_name }}.zip
+            osqar_example_workspace_${{ github.ref_name }}.zip.sha256
 
   publish:
     name: Publish GitHub Release assets
     runs-on: ubuntu-latest
     needs:
       - framework-bundle
-      - bazel-example-shipments
+      - example-workspace
     steps:
       - name: Download all build artifacts
         uses: actions/download-artifact@v4
@@ -331,21 +315,11 @@ jobs:
           generate_release_notes: true
           files: |
             # Framework tooling first
-            dist/osqar_framework_bundle_${{ github.ref_name }}.tar.gz
-            dist/osqar_framework_bundle_${{ github.ref_name }}.tar.gz.sha256
             dist/osqar_framework_bundle_${{ github.ref_name }}.zip
             dist/osqar_framework_bundle_${{ github.ref_name }}.zip.sha256
 
-            # Combined shipments next
-            dist/osqar_example_shipments.tar.gz
-            dist/osqar_example_shipments.tar.gz.sha256
-
-            # Per-example shipments last
-            dist/osqar_c_hello_world_shipment.tar.gz
-            dist/osqar_c_hello_world_shipment.tar.gz.sha256
-            dist/osqar_cpp_hello_world_shipment.tar.gz
-            dist/osqar_cpp_hello_world_shipment.tar.gz.sha256
-            dist/osqar_rust_hello_world_shipment.tar.gz
-            dist/osqar_rust_hello_world_shipment.tar.gz.sha256
+            # Combined example workspace
+            dist/osqar_example_workspace_${{ github.ref_name }}.zip
+            dist/osqar_example_workspace_${{ github.ref_name }}.zip.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

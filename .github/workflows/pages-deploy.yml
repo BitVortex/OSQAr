@@ -120,28 +120,31 @@ jobs:
           test -f _build/html/examples/rust/needs.json
           test -f _build/html/examples/python/needs.json
 
-          poetry run python tools/traceability_check.py _build/html/examples/c/needs.json \
+          chmod +x ./osqar
+          ./osqar traceability _build/html/examples/c/needs.json \
             --json-report _build/html/examples/c/traceability_report.json
-          poetry run python tools/traceability_check.py _build/html/examples/cpp/needs.json \
+          ./osqar traceability _build/html/examples/cpp/needs.json \
             --json-report _build/html/examples/cpp/traceability_report.json
-          poetry run python tools/traceability_check.py _build/html/examples/rust/needs.json \
+          ./osqar traceability _build/html/examples/rust/needs.json \
             --json-report _build/html/examples/rust/traceability_report.json
-          poetry run python tools/traceability_check.py _build/html/examples/python/needs.json \
+          ./osqar traceability _build/html/examples/python/needs.json \
             --json-report _build/html/examples/python/traceability_report.json
 
       - name: Generate checksums for each published example (shipment-style)
         run: |
-          poetry run python tools/generate_checksums.py --root _build/html/examples/c --output _build/html/examples/c/SHA256SUMS
-          poetry run python tools/generate_checksums.py --root _build/html/examples/c --verify _build/html/examples/c/SHA256SUMS
+          chmod +x ./osqar
 
-          poetry run python tools/generate_checksums.py --root _build/html/examples/cpp --output _build/html/examples/cpp/SHA256SUMS
-          poetry run python tools/generate_checksums.py --root _build/html/examples/cpp --verify _build/html/examples/cpp/SHA256SUMS
+          ./osqar checksum generate --root _build/html/examples/c --output _build/html/examples/c/SHA256SUMS
+          ./osqar checksum verify --root _build/html/examples/c --manifest _build/html/examples/c/SHA256SUMS
 
-          poetry run python tools/generate_checksums.py --root _build/html/examples/rust --output _build/html/examples/rust/SHA256SUMS
-          poetry run python tools/generate_checksums.py --root _build/html/examples/rust --verify _build/html/examples/rust/SHA256SUMS
+          ./osqar checksum generate --root _build/html/examples/cpp --output _build/html/examples/cpp/SHA256SUMS
+          ./osqar checksum verify --root _build/html/examples/cpp --manifest _build/html/examples/cpp/SHA256SUMS
 
-          poetry run python tools/generate_checksums.py --root _build/html/examples/python --output _build/html/examples/python/SHA256SUMS
-          poetry run python tools/generate_checksums.py --root _build/html/examples/python --verify _build/html/examples/python/SHA256SUMS
+          ./osqar checksum generate --root _build/html/examples/rust --output _build/html/examples/rust/SHA256SUMS
+          ./osqar checksum verify --root _build/html/examples/rust --manifest _build/html/examples/rust/SHA256SUMS
+
+          ./osqar checksum generate --root _build/html/examples/python --output _build/html/examples/python/SHA256SUMS
+          ./osqar checksum verify --root _build/html/examples/python --manifest _build/html/examples/python/SHA256SUMS
 
       - name: Deploy to GitHub Pages (push to gh-pages)
         uses: peaceiris/actions-gh-pages@v4

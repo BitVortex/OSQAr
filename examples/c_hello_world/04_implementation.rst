@@ -2,20 +2,42 @@
 Implementation & Test Code
 ==========================
 
-.. need:: (CODE) Implementation follows requirement IDs and architecture specifications.
+.. need:: (CODE) Implementation is traced into source files.
    :id: CODE_IMPL_001
    :status: active
    :tags: implementation, code, traceability
-   :links: ARCH_001, ARCH_FUNC_001, ARCH_FUNC_002, ARCH_FUNC_003
+   :links: ARCH_001, ARCH_FUNC_001, ARCH_FUNC_002, ARCH_FUNC_003, REQ_FUNC_001, REQ_FUNC_002, REQ_FUNC_003, REQ_FUNC_004
 
-   The C implementation captures traceability via structured comments and stable interfaces.
+   The implementation is part of the traceability chain by:
+
+   - linking code-level needs (``CODE_*``) to REQ/ARCH/TEST needs
+   - embedding source excerpts (so the shipment HTML is self-contained)
+   - attaching downloadable source files (so auditors can inspect full context)
+
+   Source files (download from the built docs):
+
+   - :download:`include/tsim.h <include/tsim.h>`
+   - :download:`src/tsim.c <src/tsim.c>`
+   - :download:`tests/test_tsim.c <tests/test_tsim.c>`
+
+   Included sources:
+
+   .. literalinclude:: include/tsim.h
+      :language: c
+
+   .. literalinclude:: src/tsim.c
+      :language: c
 
 .. need:: (TEST) Test suite provides coverage of requirements.
    :id: TEST_CODE_001
    :status: active
    :tags: verification, testing, code
+   :links: TEST_CONVERSION_001, TEST_FILTER_001, TEST_THRESHOLD_001, TEST_HYSTERESIS_001, TEST_END_TO_END_001
 
    The native test runner writes `test_results.xml` in JUnit format and maps to the `TEST_*` needs.
+
+   .. literalinclude:: tests/test_tsim.c
+      :language: c
 
 .. need:: (CODE) Complete example includes both documentation and implementation.
    :id: CODE_REPO_001
@@ -49,6 +71,9 @@ In C/C++ projects, requirement traceability is typically captured via:
 
 - structured comments (e.g., `REQ_FUNC_001`, `TEST_CONVERSION_001`)
 - module-level headers (interfaces as architecture artifacts)
+
+In OSQAr, you can additionally **trace into the actual source** by embedding excerpts via
+``literalinclude`` and attaching full files via ``:download:`` (see above).
 
 The functions in `include/tsim.h` map directly to:
 

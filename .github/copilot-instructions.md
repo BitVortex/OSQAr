@@ -93,14 +93,14 @@ OSQAr/
 
 The GitHub Actions workflow `CI` produces downloadable example “shipments” as build evidence bundles.
 
-- Artifact name: `osqar-example-shipments`
-- Contents: deterministic `.tar.gz` archives for each example plus a combined archive
-- Integrity: each archive has a corresponding `.sha256` file
+- Artifact name: `osqar-example-workspace`
+- Contents: a combined example workspace `.zip` containing all examples (built from per-example shipments)
+- Integrity: the archive has a corresponding `.sha256` file
 
 To verify an archive locally (macOS):
 
 ```bash
-shasum -a 256 -c osqar_example_shipments.tar.gz.sha256
+shasum -a 256 -c osqar_example_workspace.zip.sha256
 ```
 
 ## Project-Specific Conventions
@@ -148,8 +148,8 @@ shasum -a 256 -c osqar_example_shipments.tar.gz.sha256
 
 OSQAr ships two dependency-free helper tools (stdlib only):
 
-- `tools/traceability_check.py`: validates basic traceability rules from `needs.json` and can emit `traceability_report.json`
-- `tools/generate_checksums.py`: generates/verifies `SHA256SUMS` manifests for evidence directories
+- `./osqar traceability`: validates basic traceability rules from `needs.json` and can emit `traceability_report.json`
+- `./osqar checksum`: generates/verifies `SHA256SUMS` manifests for evidence directories
 
 Typical local workflow after building docs:
 
