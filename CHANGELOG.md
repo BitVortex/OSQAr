@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-02-06
+
+### Added
+- Workspace HTML overview now follows the main docs theme and includes shared CSS fixes
+
+### Changed
+- Workspace HTML overview renders explicit verification status values for checksums/traceability (OK / FAIL / skipped)
+
+### Fixed
+- Workspace HTML overview no longer appears visually empty in some themes
+- Workspace overview renders placeholders for missing shipment metadata fields (version/origin)
+
 ## [0.4.1] - 2026-02-06
 
 ### Added

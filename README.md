@@ -16,7 +16,7 @@ A shipment is a reviewable bundle that contains **Sphinx documentation with main
 - Generate traceability views (e.g., matrices) and keep verification coverage reviewable
 - Verify traceability rules and produce audit-friendly reports
 - Package documentation + evidence artifacts and protect them with checksum manifests
-- Integrate multiple supplier shipments as an integrator (multi-project intake workflows)
+- Integrate multiple shipments in a workspace and review a consolidated HTML overview (optionally with checksums + traceability status)
 - Scaffold new projects from minimal templates (C/C++/Rust/Python) via the OSQAr CLI
 - Use lifecycle management and collaboration workflows for multi-user teams
 - Run reproducible native builds for the C/C++/Rust reference examples (optional Bazel integration)
