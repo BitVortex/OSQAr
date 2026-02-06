@@ -208,7 +208,26 @@ else:
                     return str(v)
             if md.get("name"):
                 return str(md.get("name"))
-        return str(item.get("shipment") or "")
+
+        # Workspace intake items use a different schema than workspace report items.
+        # Prefer the stable intake name when metadata is not available.
+        if item.get("name"):
+            return str(item.get("name"))
+
+        for k in ("shipment", "dest", "source"):
+            v = item.get(k)
+            if not v:
+                continue
+            try:
+                return Path(str(v)).name
+            except Exception:
+                return str(v)
+
+        return ""
+
+    # `html_out_dir` is usually `<output>/_build/html`. This allows us to resolve
+    # intake-style relative paths like `shipments/<name>/index.html`.
+    workspace_output_dir = html_out_dir.parent.parent
 
     lines: list[str] = []
     lines.append("Workspace overview\n")
@@ -246,16 +265,31 @@ else:
     for it in projects:
         if not isinstance(it, dict):
             continue
-        shipment = it.get("shipment")
+        shipment = it.get("shipment") or it.get("dest") or it.get("source")
         shipment_dir = Path(str(shipment)).resolve() if shipment else None
         project_label = key_for_project(it)
 
+        if not project_label:
+            project_label = "(unnamed)"
+
         link = ""
-        if shipment_dir is not None:
-            index = shipment_dir / "index.html"
-            if index.is_file():
-                rel = u.relpath(html_out_dir, index)
-                link = f"`{esc(project_label)} <{esc(rel)}>`_"
+
+        # Determine a docs entrypoint path.
+        index: Optional[Path] = None
+        docs_entry = it.get("docs_entrypoint")
+        if docs_entry:
+            candidate = (workspace_output_dir / str(docs_entry)).resolve()
+            if candidate.is_file():
+                index = candidate
+
+        if index is None and shipment_dir is not None:
+            candidate = shipment_dir / "index.html"
+            if candidate.is_file():
+                index = candidate
+
+        if index is not None:
+            rel = u.relpath(html_out_dir, index)
+            link = f"`{esc(project_label)} <{esc(rel)}>`_"
 
         project_cell = link or esc(project_label)
 

@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored the OSQAr CLI internals into per-command modules under `tools/` (thin `tools/osqar_cli.py` entrypoint).
 - Removed the previously monolithic `tools/osqar_cli_app/` implementation to improve maintainability.
 
+### Fixed
+- Workspace intake overview now shows project names (instead of a blank Project column).
+
 ## [0.5.0] - 2026-02-06
 
 ### Added
