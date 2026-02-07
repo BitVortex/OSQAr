@@ -33,6 +33,70 @@ def _iter_shipment_dirs(root: Path, *, recursive: bool) -> list[Path]:
     if not root.exists():
         return []
 
+    def is_shipment_dir(candidate: Path) -> bool:
+        """Heuristic: a real shipment dir contains a checksum manifest plus
+        at least one other typical shipment artifact.
+
+        Workspace intake outputs also contain a top-level SHA256SUMS, but those
+        are archive-level checksums over the whole workspace and should not be
+        treated as a shipment.
+        """
+
+        if not (candidate / u.DEFAULT_CHECKSUM_MANIFEST).is_file():
+            return False
+
+        markers = [
+            candidate / "osqar_project.json",
+            candidate / "needs.json",
+            candidate / "index.html",
+            candidate / u.DEFAULT_TRACEABILITY_REPORT,
+        ]
+        return any(p.is_file() for p in markers)
+
+    def looks_like_workspace_container(candidate: Path) -> bool:
+        """Return True if this directory is likely a workspace/intake bundle.
+
+        A combined workspace bundle contains a top-level checksum manifest and a
+        `shipments/` directory containing one or more real shipments.
+
+        Some bundles also contain marker files like `intake_report.json` or a
+        workspace overview under `_build/html/index.html`, but we should not
+        rely on those being present.
+        """
+
+        shipments_dir = candidate / "shipments"
+        if not shipments_dir.is_dir():
+            return False
+
+        if not (candidate / u.DEFAULT_CHECKSUM_MANIFEST).is_file():
+            return False
+
+        # Prefer explicit intake/report markers when present.
+        if (
+            (candidate / "intake_report.json").is_file()
+            or (candidate / "subproject_overview.json").is_file()
+            or (candidate / "_build" / "html" / "index.html").is_file()
+            or (candidate / "reports").is_dir()
+        ):
+            return True
+
+        # Fallback: if there is at least one shipment-like directory under
+        # shipments/, treat this as a workspace container.
+        try:
+            for child in shipments_dir.iterdir():
+                if child.is_dir() and is_shipment_dir(child):
+                    return True
+        except OSError:
+            return False
+
+        return False
+
+    # If this looks like an OSQAr workspace/intake bundle, prefer scanning the
+    # contained shipments.
+    scan_root = root
+    if looks_like_workspace_container(root):
+        scan_root = root / "shipments"
+
     results: set[Path] = set()
 
     # Workspace operations typically target built shipment directories, which by
@@ -45,22 +109,23 @@ def _iter_shipment_dirs(root: Path, *, recursive: bool) -> list[Path]:
             return
         if any(part in ignored_scan_names for part in candidate.parts):
             return
-        manifest = candidate / u.DEFAULT_CHECKSUM_MANIFEST
-        if manifest.is_file():
+        if is_shipment_dir(candidate):
             results.add(candidate)
 
-    if root.is_dir() and (root / u.DEFAULT_CHECKSUM_MANIFEST).is_file():
+    # If the root is a workspace container, do not treat it as a shipment even
+    # if it happens to contain shipment-like marker files.
+    if root.is_dir() and is_shipment_dir(root) and scan_root == root:
         return [root]
 
     if not recursive:
-        if not root.is_dir():
+        if not scan_root.is_dir():
             return []
-        for child in sorted(root.iterdir()):
+        for child in sorted(scan_root.iterdir()):
             consider(child)
         return sorted(results)
 
-    if root.is_dir():
-        for manifest in root.rglob(u.DEFAULT_CHECKSUM_MANIFEST.name):
+    if scan_root.is_dir():
+        for manifest in scan_root.rglob(u.DEFAULT_CHECKSUM_MANIFEST.name):
             if not manifest.is_file():
                 continue
             consider(manifest.parent)

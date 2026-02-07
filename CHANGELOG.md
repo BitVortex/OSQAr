@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.5] - 2026-02-07
+
+### Fixed
+- ``osqar workspace verify`` now correctly treats combined example workspace bundles (release assets) as containers and verifies the shipments under ``shipments/`` instead of attempting to verify the workspace root as a single shipment.
+- Shipment verification code-trace now locates ``needs.json`` via recursive discovery (aligns with existing traceability behavior).
+
+### Added
+- ``osqar setup`` command to verify (optional checksum), extract, and then verify a downloaded shipment/workspace ZIP.
+
 ## [0.5.4] - 2026-02-06
 
 ### Fixed

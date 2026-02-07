@@ -115,6 +115,15 @@ If you want a pre-built bundle (framework HTML docs + CLI tooling) without build
 
 - https://github.com/bitvortex/OSQAr/releases
 
+Starting point (downloaded example workspace)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you downloaded the combined example workspace ZIP from Releases (often together with a ``.sha256`` file), the quickest way to extract and verify it is:
+
+.. code-block:: bash
+
+   osqar setup osqar_example_workspace_<tag>.zip
+
 Reproducible native builds (C / C++ / Rust)
 ===========================================
 

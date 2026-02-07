@@ -20,6 +20,7 @@ from tools import osqar_cmd_doctor
 from tools import osqar_cmd_framework
 from tools import osqar_cmd_new
 from tools import osqar_cmd_open_docs
+from tools import osqar_cmd_setup
 from tools import osqar_cmd_shipment
 from tools import osqar_cmd_traceability
 from tools import osqar_cmd_workspace
@@ -32,6 +33,7 @@ def build_parser() -> argparse.ArgumentParser:
     # Top-level commands
     osqar_cmd_shipment.register_build_docs_shortcut(sub)
     osqar_cmd_open_docs.register(sub)
+    osqar_cmd_setup.register(sub)
     osqar_cmd_doctor.register(sub)
     osqar_cmd_new.register(sub)
     osqar_cmd_traceability.register(sub)

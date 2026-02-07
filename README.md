@@ -54,6 +54,14 @@ pipx install osqar
 osqar --help
 ```
 
+Quickstart from a downloaded Release bundle (example workspace):
+
+```bash
+# Download the example workspace ZIP (and its .sha256) from GitHub Releases.
+# Then verify checksum (if present), extract it, and verify all contained shipments:
+osqar setup osqar_example_workspace_<tag>.zip
+```
+
 Notes:
 
 - The PyPI package includes the **minimal project templates** used by `osqar new`.

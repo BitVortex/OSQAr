@@ -810,7 +810,7 @@ def _shipment_verify_impl(args: argparse.Namespace, *, label: str) -> int:
         needs_json_path = (
             Path(args.needs_json).resolve()
             if getattr(args, "needs_json", None)
-            else (shipment_dir / "needs.json")
+            else u.find_needs_json(shipment_dir)
         )
 
         with tempfile.NamedTemporaryFile(mode="w+", suffix=".json", delete=False) as tf:
@@ -818,7 +818,7 @@ def _shipment_verify_impl(args: argparse.Namespace, *, label: str) -> int:
         report = tmp_code_trace_report
 
         argv: list[str] = ["--root", str(shipment_dir), "--json-report", str(report)]
-        if needs_json_path.is_file():
+        if needs_json_path is not None and Path(needs_json_path).is_file():
             argv += ["--needs-json", str(needs_json_path)]
         for d in (
             shipment_dir / "implementation" / "src",

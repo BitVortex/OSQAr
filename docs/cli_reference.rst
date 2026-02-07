@@ -141,6 +141,35 @@ Examples:
 - Open an example’s docs: ``osqar open-docs --project examples/python_hello_world``
 - Open a specific shipment directory: ``osqar open-docs --shipment examples/python_hello_world/_build/html``
 
+setup
+-----
+
+Verify, extract, and then verify a downloaded shipment/workspace ZIP.
+
+Intent:
+
+- Make GitHub Release assets usable immediately (especially the combined example workspace).
+- Verify a sibling checksum file (``.sha256`` / ``.zip.sha256``) when present.
+
+Behavior:
+
+- If a checksum file is found next to the ZIP, OSQAr verifies it and fails on mismatch.
+- If no checksum file is present, OSQAr emits a warning and continues.
+- The ZIP is extracted into a directory and OSQAr runs the appropriate verification command:
+
+  - Workspace bundle: ``osqar workspace verify``
+  - Shipment bundle: ``osqar shipment verify``
+
+Arguments:
+
+- ``zip``: path to a shipment/workspace ZIP
+- ``--output``: extraction directory (default: ``<zip path without .zip>``)
+- ``--force``: overwrite the output directory if it exists
+
+Example (combined example workspace from Releases):
+
+- ``osqar setup osqar_example_workspace_<tag>.zip``
+
 doctor
 ------
 
