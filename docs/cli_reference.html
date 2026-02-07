@@ -6,7 +6,7 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Configuration and hooks" href="configuration_and_hooks.html" /><link rel="prev" title="Setting Up A Project From Scratch" href="project_setup_from_scratch.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>CLI Reference - OSQAr 0.5.4 documentation</title>
+        <title>CLI Reference - OSQAr 0.5.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.5.4 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.5.5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.5.4 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.5.5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -391,6 +391,36 @@ if it detects a Poetry-managed project and <code class="docutils literal notrans
 <li><p>Open the current project docs: <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">open-docs</span></code></p></li>
 <li><p>Open an example’s docs: <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">open-docs</span> <span class="pre">--project</span> <span class="pre">examples/python_hello_world</span></code></p></li>
 <li><p>Open a specific shipment directory: <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">open-docs</span> <span class="pre">--shipment</span> <span class="pre">examples/python_hello_world/_build/html</span></code></p></li>
+</ul>
+</section>
+<section id="setup">
+<h3>setup<a class="headerlink" href="#setup" title="Link to this heading">¶</a></h3>
+<p>Verify, extract, and then verify a downloaded shipment/workspace ZIP.</p>
+<p>Intent:</p>
+<ul class="simple">
+<li><p>Make GitHub Release assets usable immediately (especially the combined example workspace).</p></li>
+<li><p>Verify a sibling checksum file (<code class="docutils literal notranslate"><span class="pre">.sha256</span></code> / <code class="docutils literal notranslate"><span class="pre">.zip.sha256</span></code>) when present.</p></li>
+</ul>
+<p>Behavior:</p>
+<ul class="simple">
+<li><p>If a checksum file is found next to the ZIP, OSQAr verifies it and fails on mismatch.</p></li>
+<li><p>If no checksum file is present, OSQAr emits a warning and continues.</p></li>
+<li><p>The ZIP is extracted into a directory and OSQAr runs the appropriate verification command:</p>
+<ul>
+<li><p>Workspace bundle: <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">workspace</span> <span class="pre">verify</span></code></p></li>
+<li><p>Shipment bundle: <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">shipment</span> <span class="pre">verify</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>Arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zip</span></code>: path to a shipment/workspace ZIP</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: extraction directory (default: <code class="docutils literal notranslate"><span class="pre">&lt;zip</span> <span class="pre">path</span> <span class="pre">without</span> <span class="pre">.zip&gt;</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--force</span></code>: overwrite the output directory if it exists</p></li>
+</ul>
+<p>Example (combined example workspace from Releases):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">setup</span> <span class="pre">osqar_example_workspace_&lt;tag&gt;.zip</span></code></p></li>
 </ul>
 </section>
 <section id="doctor">
@@ -638,6 +668,7 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
 <li><a class="reference internal" href="#top-level-commands">Top-level commands</a><ul>
 <li><a class="reference internal" href="#build-docs">build-docs</a></li>
 <li><a class="reference internal" href="#open-docs">open-docs</a></li>
+<li><a class="reference internal" href="#setup">setup</a></li>
 <li><a class="reference internal" href="#doctor">doctor</a></li>
 <li><a class="reference internal" href="#new">new</a></li>
 <li><a class="reference internal" href="#traceability">traceability</a></li>
@@ -661,7 +692,7 @@ shipment directory (usually <code class="docutils literal notranslate"><span cla
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../_static/documentation_options.js?v=45def3bc"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
