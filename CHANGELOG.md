@@ -7,7 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-02-12
+
+### Added
+- Workspace dependency awareness for OSQAr-qualified libraries:
+	- Workspace reports/intakes now analyze supplier-declared dependencies from ``osqar_project.json``.
+	- Dedup support: a single dependency shipment can satisfy multiple projects in the same workspace if the identity matches.
+	- New enforcement flag: ``osqar workspace report|verify|intake --enforce-deps`` fails on missing/ambiguous/conflicting dependencies.
+- ``osqar shipment pin`` helper command to compute a ``pin_sha256sums`` value for dependency declarations (SHA-256 of a shipment's ``SHA256SUMS``).
+
 ## [0.5.6] - 2026-02-07
+
+### Changed
+- Documentation rework: refreshed the framework entrypoint docs for clarity and consistency.
+- Reworked the CLI reference to be the single authoritative command manual (synopsis/options/examples) and aligned terminology across the docs.
+- Reworked the “Using the OSQAr Boilerplate” chapter to emphasize the mental model (project → shipment → workspace) and provide workflow recipes without duplicating the CLI reference.
 
 ### Fixed
 - Framework documentation build no longer fails with ``sphinx-build -W`` due to a reStructuredText title underline length error.

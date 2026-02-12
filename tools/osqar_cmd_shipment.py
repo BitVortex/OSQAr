@@ -7,6 +7,7 @@ This module is stdlib-only and keeps the CLI entrypoint small.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shlex
@@ -301,6 +302,51 @@ def cmd_shipment_checksums(args: argparse.Namespace) -> int:
     if getattr(args, "json_report", None):
         argv += ["--json-report", str(args.json_report)]
     return int(checksums_cli(argv))
+
+
+def cmd_shipment_pin(args: argparse.Namespace) -> int:
+    """Compute a stable integrity pin for dependency declarations.
+
+    The pin is the SHA-256 of the shipment's SHA256SUMS file contents.
+    """
+
+    shipment_dir = Path(args.shipment).resolve()
+    if not shipment_dir.is_dir():
+        print(f"ERROR: shipment directory not found: {shipment_dir}", file=sys.stderr)
+        return 2
+
+    manifest = (
+        Path(args.manifest).expanduser().resolve()
+        if getattr(args, "manifest", None)
+        else (shipment_dir / u.DEFAULT_CHECKSUM_MANIFEST)
+    )
+
+    if not manifest.is_file():
+        print(f"ERROR: checksum manifest not found: {manifest}", file=sys.stderr)
+        return 2
+
+    try:
+        data = manifest.read_bytes()
+    except OSError as exc:
+        print(f"ERROR: failed to read manifest: {manifest} ({exc})", file=sys.stderr)
+        return 2
+
+    pin = hashlib.sha256(data).hexdigest()
+    print(pin)
+
+    if getattr(args, "json_report", None):
+        out = Path(args.json_report).expanduser().resolve()
+        out.parent.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "schema": "osqar.shipment_sha256sums_pin.v1",
+            "generated_at": u.utc_now_iso(),
+            "shipment": str(shipment_dir),
+            "manifest": str(manifest),
+            "pin_sha256sums": pin,
+        }
+        out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    return 0
 
 
 def cmd_shipment_copy_test_reports(args: argparse.Namespace) -> int:
@@ -1275,6 +1321,23 @@ def register(sub: argparse._SubParsersAction) -> None:
     )
     p_cs.add_argument("mode", choices=["generate", "verify"], help="Operation")
     p_cs.set_defaults(func=cmd_shipment_checksums)
+
+    p_pin = ship_sub.add_parser(
+        "pin",
+        help="Compute the dependency pin for a shipment (SHA-256 of SHA256SUMS)",
+    )
+    p_pin.add_argument("--shipment", required=True, help="Shipment directory")
+    p_pin.add_argument(
+        "--manifest",
+        default=None,
+        help="Checksum manifest path (default: <shipment>/SHA256SUMS)",
+    )
+    p_pin.add_argument(
+        "--json-report",
+        default=None,
+        help="Optional path to write a machine-readable JSON report",
+    )
+    p_pin.set_defaults(func=cmd_shipment_pin)
 
     p_rep = ship_sub.add_parser("copy-test-reports", help="Copy raw JUnit XML into the shipment directory")
     p_rep.add_argument("--project", required=True, help="Shipment project directory")

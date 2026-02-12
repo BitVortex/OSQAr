@@ -110,7 +110,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        example: [c_hello_world, cpp_hello_world, rust_hello_world]
+        example: [c_shared_lib, c_hello_world, cpp_hello_world, rust_hello_world]
     steps:
       - uses: actions/checkout@v4
 
@@ -168,12 +168,23 @@ jobs:
 
           rm -f coverage_report.txt coverage.xml
           case "${{ matrix.example }}" in
+            c_shared_lib)
+              rm -rf _coverage_build
+              mkdir -p _coverage_build
+              cc --coverage -O0 -g -Iinclude -c src/osqar_shared.c -o _coverage_build/osqar_shared.o
+              cc --coverage -O0 -g -Iinclude -c tests/test_osqar_shared.c -o _coverage_build/test_osqar_shared.o
+              cc --coverage -o _coverage_build/junit_tests _coverage_build/osqar_shared.o _coverage_build/test_osqar_shared.o
+              ./_coverage_build/junit_tests test_results.xml
+              poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --print-summary > coverage_report.txt 2>&1 || true
+              poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --xml-pretty -o coverage.xml >/dev/null 2>&1 || true
+              ;;
             c_hello_world)
               rm -rf _coverage_build
               mkdir -p _coverage_build
-              cc --coverage -O0 -g -Iinclude -c src/tsim.c -o _coverage_build/tsim.o
-              cc --coverage -O0 -g -Iinclude -c tests/test_tsim.c -o _coverage_build/test_tsim.o
-              cc --coverage -o _coverage_build/junit_tests _coverage_build/tsim.o _coverage_build/test_tsim.o
+              cc --coverage -O0 -g -Iinclude -I../c_shared_lib/include -c ../c_shared_lib/src/osqar_shared.c -o _coverage_build/osqar_shared.o
+              cc --coverage -O0 -g -Iinclude -I../c_shared_lib/include -c src/tsim.c -o _coverage_build/tsim.o
+              cc --coverage -O0 -g -Iinclude -I../c_shared_lib/include -c tests/test_tsim.c -o _coverage_build/test_tsim.o
+              cc --coverage -o _coverage_build/junit_tests _coverage_build/osqar_shared.o _coverage_build/tsim.o _coverage_build/test_tsim.o
               ./_coverage_build/junit_tests test_results.xml
               poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --print-summary > coverage_report.txt 2>&1 || true
               poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --xml-pretty -o coverage.xml >/dev/null 2>&1 || true
@@ -181,9 +192,10 @@ jobs:
             cpp_hello_world)
               rm -rf _coverage_build
               mkdir -p _coverage_build
-              c++ --coverage -O0 -g -Iinclude -c src/tsim.cpp -o _coverage_build/tsim.o
-              c++ --coverage -O0 -g -Iinclude -c tests/test_tsim.cpp -o _coverage_build/test_tsim.o
-              c++ --coverage -o _coverage_build/junit_tests _coverage_build/tsim.o _coverage_build/test_tsim.o
+              cc --coverage -O0 -g -I../c_shared_lib/include -c ../c_shared_lib/src/osqar_shared.c -o _coverage_build/osqar_shared.o
+              c++ --coverage -O0 -g -Iinclude -I../c_shared_lib/include -c src/tsim.cpp -o _coverage_build/tsim.o
+              c++ --coverage -O0 -g -Iinclude -I../c_shared_lib/include -c tests/test_tsim.cpp -o _coverage_build/test_tsim.o
+              c++ --coverage -o _coverage_build/junit_tests _coverage_build/osqar_shared.o _coverage_build/tsim.o _coverage_build/test_tsim.o
               ./_coverage_build/junit_tests test_results.xml
               poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --print-summary > coverage_report.txt 2>&1 || true
               poetry run gcovr -r . --object-directory _coverage_build --exclude 'tests/.*' --xml-pretty -o coverage.xml >/dev/null 2>&1 || true
@@ -327,7 +339,8 @@ jobs:
             --output "${ws_root}" \
             --force \
             --traceability \
-            --doctor
+            --doctor \
+            --enforce-deps
 
           out="osqar_example_workspace_${GITHUB_REF_NAME}.zip"
           rm -f "${out}" "${out}.sha256"

@@ -9,6 +9,7 @@ Stdlib-only.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -26,6 +27,411 @@ from tools.osqar_cmd_shipment import (
     cmd_shipment_verify,
 )
 from tools.traceability_check import cli as traceability_cli
+
+
+def _hash_file(path: Path, algorithm: str = "sha256") -> str:
+    h = hashlib.new(algorithm)
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _project_id_from_metadata(md: object) -> Optional[str]:
+    if not isinstance(md, dict):
+        return None
+    for k in ("id", "project_id"):
+        v = md.get(k)
+        if v:
+            return str(v)
+    return None
+
+
+def _project_version_from_metadata(md: object) -> Optional[str]:
+    if not isinstance(md, dict):
+        return None
+    v = md.get("version")
+    return str(v) if v else None
+
+
+def _shipment_identity(shipment_dir: Path, md: object) -> dict[str, object]:
+    """Return a best-effort identity record for a shipment.
+
+    This is used for:
+    - deduplicating identical shipments present multiple times in a workspace
+    - matching dependency declarations to available shipments
+
+    Identity is not a security boundary. Integrity should be enforced via
+    checksum verification (SHA256SUMS) and intake policies.
+    """
+
+    project_id = _project_id_from_metadata(md)
+    version = _project_version_from_metadata(md)
+
+    # Best-effort integrity pin: SHA256 of the checksum manifest file contents.
+    # This remains stable across transfers as long as the shipment is byte-identical.
+    manifest = shipment_dir / u.DEFAULT_CHECKSUM_MANIFEST
+    pin_sha256sums: Optional[str] = None
+    if manifest.is_file():
+        try:
+            pin_sha256sums = _hash_file(manifest)
+        except OSError:
+            pin_sha256sums = None
+
+    origin_revision: Optional[str] = None
+    if isinstance(md, dict):
+        origin = md.get("origin")
+        if isinstance(origin, dict):
+            rev = origin.get("revision")
+            origin_revision = str(rev) if rev else None
+
+    return {
+        "project_id": project_id,
+        "version": version,
+        "pin_sha256sums": pin_sha256sums,
+        "origin_revision": origin_revision,
+    }
+
+
+def _shipment_identity_key(identity: dict[str, object]) -> str:
+    pid = identity.get("project_id") or ""
+    ver = identity.get("version") or ""
+    pin = identity.get("pin_sha256sums") or ""
+    if pid and ver and pin:
+        return f"{pid}@{ver}#{pin}"
+    if pid and ver:
+        return f"{pid}@{ver}"
+    if pid and pin:
+        return f"{pid}#{pin}"
+    return pid or "(unknown)"
+
+
+def _parse_dependency_spec(dep: object) -> Optional[dict[str, object]]:
+    """Normalize one dependency declaration from metadata.
+
+    Supported shapes (best-effort):
+    - {"id": "LIB_X", "version": "1.2.3", "pin_sha256sums": "..."}
+    - {"id": "LIB_X", "version": "1.2.3", "pin": {"sha256": "..."}}
+    - "LIB_X" or "LIB_X@1.2.3"
+    """
+
+    if isinstance(dep, str):
+        raw = dep.strip()
+        if not raw:
+            return None
+        if "@" in raw:
+            dep_id, dep_ver = raw.split("@", 1)
+            dep_id = dep_id.strip()
+            dep_ver = dep_ver.strip()
+        else:
+            dep_id, dep_ver = raw, ""
+        if not dep_id:
+            return None
+        out: dict[str, object] = {"id": dep_id}
+        if dep_ver:
+            out["version"] = dep_ver
+        return out
+
+    if not isinstance(dep, dict):
+        return None
+
+    dep_id = dep.get("id")
+    if not dep_id:
+        return None
+
+    out = {
+        "id": str(dep_id),
+    }
+
+    if dep.get("version"):
+        out["version"] = str(dep.get("version"))
+
+    # Optional role/kind metadata.
+    if dep.get("kind"):
+        out["kind"] = str(dep.get("kind"))
+    if dep.get("optional") is not None:
+        out["optional"] = bool(dep.get("optional"))
+
+    # Optional integrity pin.
+    if dep.get("pin_sha256sums"):
+        out["pin_sha256sums"] = str(dep.get("pin_sha256sums"))
+    else:
+        pin = dep.get("pin")
+        if isinstance(pin, dict):
+            if pin.get("sha256"):
+                out["pin_sha256sums"] = str(pin.get("sha256"))
+            elif pin.get("sha256sums_sha256"):
+                out["pin_sha256sums"] = str(pin.get("sha256sums_sha256"))
+
+    return out
+
+
+def _declared_dependencies_from_metadata(md: object) -> list[dict[str, object]]:
+    if not isinstance(md, dict):
+        return []
+
+    deps_raw = None
+    for k in ("dependencies", "depends_on", "deps"):
+        if k in md:
+            deps_raw = md.get(k)
+            break
+
+    if deps_raw is None:
+        return []
+
+    if not isinstance(deps_raw, list):
+        return []
+
+    out: list[dict[str, object]] = []
+    for item in deps_raw:
+        norm = _parse_dependency_spec(item)
+        if norm is not None:
+            out.append(norm)
+    return out
+
+
+def _shipment_dir_from_item(item: dict) -> Optional[Path]:
+    for k in ("shipment", "dest", "source"):
+        v = item.get(k)
+        if v:
+            try:
+                return Path(str(v)).resolve()
+            except Exception:
+                return None
+    return None
+
+
+def _analyze_workspace_dependencies(
+    items: list[dict[str, object]],
+    *,
+    verification_rc_by_shipment: Optional[dict[str, int]] = None,
+) -> dict[str, object]:
+    """Analyze dependency declarations across workspace items.
+
+    The analysis is best-effort and schema-flexible; it only relies on
+    osqar_project.json fields when present.
+    """
+
+    entries: list[dict[str, object]] = []
+    for it in items:
+        if not isinstance(it, dict):
+            continue
+        shipment_dir = _shipment_dir_from_item(it)
+        if shipment_dir is None or not shipment_dir.is_dir():
+            continue
+        md = it.get("metadata")
+        identity = _shipment_identity(shipment_dir, md)
+        identity_key = _shipment_identity_key(identity)
+        declared = _declared_dependencies_from_metadata(md)
+        it["identity"] = identity
+        it["dependencies_declared"] = declared
+
+        verified_rc: Optional[int] = None
+        if verification_rc_by_shipment is not None:
+            verified_rc = verification_rc_by_shipment.get(str(shipment_dir))
+
+        entries.append(
+            {
+                "shipment": str(shipment_dir),
+                "metadata": md,
+                "identity": identity,
+                "identity_key": identity_key,
+                "declared": declared,
+                "verified_rc": verified_rc,
+            }
+        )
+
+    # Index shipments by declared project id.
+    by_id: dict[str, list[dict[str, object]]] = {}
+    for e in entries:
+        pid = e.get("identity", {}).get("project_id") if isinstance(e.get("identity"), dict) else None
+        if not pid:
+            continue
+        by_id.setdefault(str(pid), []).append(e)
+
+    # Identify duplicates already present (same identity key in multiple paths).
+    dedup_groups: dict[str, list[str]] = {}
+    for e in entries:
+        k = str(e.get("identity_key") or "")
+        if not k:
+            continue
+        dedup_groups.setdefault(k, []).append(str(e.get("shipment")))
+
+    dedup = [
+        {"identity": k, "shipments": sorted(v)}
+        for k, v in sorted(dedup_groups.items())
+        if len(v) > 1
+    ]
+
+    issues: list[dict[str, object]] = []
+    resolutions: list[dict[str, object]] = []
+
+    # Gather requirements to detect conflicts across the workspace.
+    reqs_by_id: dict[str, dict[str, set[str]]] = {}
+    # reqs_by_id[dep_id]["specs"] = set of spec keys like "ver=...;pin=..."
+    # reqs_by_id[dep_id]["required_by"] = set of shipment paths
+
+    def spec_key(dep: dict[str, object]) -> str:
+        ver = str(dep.get("version") or "")
+        pin = str(dep.get("pin_sha256sums") or "")
+        if ver and pin:
+            return f"ver={ver};pin={pin}"
+        if ver:
+            return f"ver={ver}"
+        if pin:
+            return f"pin={pin}"
+        return "(unversioned)"
+
+    # Dependency resolution: determine satisfied / missing / ambiguous.
+    # Also capture a small machine-readable resolution list so the “one shipment
+    # satisfies multiple dependents” behavior is observable in reports.
+    satisfier_use: dict[str, set[str]] = {}  # identity_key -> set(project shipment paths)
+    for e in entries:
+        declared = e.get("declared")
+        if not isinstance(declared, list):
+            continue
+
+        for dep in declared:
+            if not isinstance(dep, dict):
+                continue
+            dep_id = dep.get("id")
+            if not dep_id:
+                continue
+            dep_id = str(dep_id)
+
+            dep_rec: dict[str, object] = {
+                "id": dep_id,
+            }
+            if dep.get("version"):
+                dep_rec["version"] = str(dep.get("version"))
+            if dep.get("pin_sha256sums"):
+                dep_rec["pin_sha256sums"] = str(dep.get("pin_sha256sums"))
+
+            reqs_by_id.setdefault(dep_id, {"specs": set(), "required_by": set()})
+            reqs_by_id[dep_id]["specs"].add(spec_key(dep))
+            reqs_by_id[dep_id]["required_by"].add(str(e.get("shipment")))
+
+            candidates = list(by_id.get(dep_id, []))
+            if dep.get("version"):
+                candidates = [
+                    c
+                    for c in candidates
+                    if isinstance(c.get("identity"), dict)
+                    and str(c["identity"].get("version") or "") == str(dep.get("version"))
+                ]
+
+            # If enforce/verify context exists, prefer candidates that verified OK.
+            if verification_rc_by_shipment is not None:
+                ok = [c for c in candidates if c.get("verified_rc") == 0]
+                if ok:
+                    candidates = ok
+
+            if dep.get("pin_sha256sums"):
+                dep_pin = str(dep.get("pin_sha256sums"))
+                candidates = [
+                    c
+                    for c in candidates
+                    if isinstance(c.get("identity"), dict)
+                    and str(c["identity"].get("pin_sha256sums") or "") == dep_pin
+                ]
+
+            if not candidates:
+                issues.append(
+                    {
+                        "type": "missing_dependency",
+                        "severity": "error",
+                        "project": str(e.get("shipment")),
+                        "dependency": dep,
+                    }
+                )
+                resolutions.append(
+                    {
+                        "project": str(e.get("shipment")),
+                        "dependency": dep_rec,
+                        "status": "missing",
+                    }
+                )
+                continue
+
+            distinct_identities = sorted({str(c.get("identity_key") or "") for c in candidates})
+            if len(distinct_identities) > 1:
+                issues.append(
+                    {
+                        "type": "ambiguous_dependency",
+                        "severity": "error",
+                        "project": str(e.get("shipment")),
+                        "dependency": dep,
+                        "candidates": distinct_identities,
+                    }
+                )
+                resolutions.append(
+                    {
+                        "project": str(e.get("shipment")),
+                        "dependency": dep_rec,
+                        "status": "ambiguous",
+                        "candidates": distinct_identities,
+                    }
+                )
+                continue
+
+            # Unique satisfier identity; duplicates by path are fine.
+            dep["satisfied_by"] = distinct_identities[0]
+            dep_rec["satisfied_by"] = distinct_identities[0]
+            resolutions.append(
+                {
+                    "project": str(e.get("shipment")),
+                    "dependency": dep_rec,
+                    "status": "satisfied",
+                }
+            )
+
+            satisfier_use.setdefault(distinct_identities[0], set()).add(str(e.get("shipment")))
+
+    # Workspace-level conflicts: same dep id requested with different spec keys.
+    for dep_id, info in sorted(reqs_by_id.items()):
+        specs = info.get("specs")
+        required_by = info.get("required_by")
+        if isinstance(specs, set) and len(specs) > 1:
+            issues.append(
+                {
+                    "type": "dependency_conflict",
+                    "severity": "error",
+                    "dependency_id": dep_id,
+                    "requested": sorted(specs),
+                    "required_by": sorted(required_by) if isinstance(required_by, set) else [],
+                }
+            )
+
+    summary = {
+        "projects_total": len(entries),
+        "shipments_with_project_id": sum(
+            1
+            for e in entries
+            if isinstance(e.get("identity"), dict) and e["identity"].get("project_id")
+        ),
+        "declared_dependencies_total": sum(
+            len(e.get("declared") or [])
+            for e in entries
+            if isinstance(e.get("declared"), list)
+        ),
+        "satisfied_total": sum(1 for r in resolutions if r.get("status") == "satisfied"),
+        "distinct_satisfiers_total": len({str(r.get("dependency", {}).get("satisfied_by")) for r in resolutions if isinstance(r.get("dependency"), dict) and r.get("dependency", {}).get("satisfied_by")}),
+        "shared_satisfiers_total": sum(1 for _id, users in satisfier_use.items() if len(users) > 1),
+        "issues_total": len(issues),
+        "missing_total": sum(1 for i in issues if i.get("type") == "missing_dependency"),
+        "ambiguous_total": sum(1 for i in issues if i.get("type") == "ambiguous_dependency"),
+        "conflicts_total": sum(1 for i in issues if i.get("type") == "dependency_conflict"),
+        "dedup_groups_total": len(dedup),
+    }
+
+    return {
+        "schema": "osqar.workspace_dependency_analysis.v1",
+        "generated_at": u.utc_now_iso(),
+        "summary": summary,
+        "resolutions": resolutions,
+        "issues": issues,
+        "dedup": dedup,
+    }
 
 
 def _iter_shipment_dirs(root: Path, *, recursive: bool) -> list[Path]:
@@ -319,6 +725,57 @@ else:
         + "\n\n"
     )
 
+    dep = overview.get("dependency_analysis")
+    if isinstance(dep, dict) and isinstance(dep.get("summary"), dict):
+        s = dep["summary"]
+        lines.append(
+            "Dependencies: "
+            + f"declared={esc(str(s.get('declared_dependencies_total', 0)))} "
+            + f"satisfied={esc(str(s.get('satisfied_total', 0)))} "
+            + f"distinct_satisfiers={esc(str(s.get('distinct_satisfiers_total', 0)))} "
+            + f"shared_satisfiers={esc(str(s.get('shared_satisfiers_total', 0)))} "
+            + f"missing={esc(str(s.get('missing_total', 0)))} "
+            + f"ambiguous={esc(str(s.get('ambiguous_total', 0)))} "
+            + f"conflicts={esc(str(s.get('conflicts_total', 0)))} "
+            + f"dedup_groups={esc(str(s.get('dedup_groups_total', 0)))}\n\n"
+        )
+
+        issues = dep.get("issues")
+        if isinstance(issues, list) and issues:
+            lines.append("Dependency issues\n")
+            lines.append("-----------------\n\n")
+            lines.append(".. list-table::\n")
+            lines.append("   :header-rows: 1\n\n")
+            lines.append("   * - Severity\n")
+            lines.append("     - Type\n")
+            lines.append("     - Project\n")
+            lines.append("     - Dependency\n")
+
+            for issue in issues:
+                if not isinstance(issue, dict):
+                    continue
+                sev = str(issue.get("severity") or "")
+                typ = str(issue.get("type") or "")
+                proj = str(issue.get("project") or issue.get("dependency_id") or "")
+                dep_val = issue.get("dependency")
+                dep_s = ""
+                if isinstance(dep_val, dict):
+                    did = dep_val.get("id")
+                    dver = dep_val.get("version")
+                    if did and dver:
+                        dep_s = f"{did}@{dver}"
+                    elif did:
+                        dep_s = str(did)
+                elif issue.get("requested"):
+                    dep_s = "; ".join(str(x) for x in (issue.get("requested") or []) if x)
+
+                lines.append("\n   * - " + esc(sev or "—") + "\n")
+                lines.append("     - " + esc(typ or "—") + "\n")
+                lines.append("     - " + esc(proj or "—") + "\n")
+                lines.append("     - " + esc(dep_s or "—") + "\n")
+
+            lines.append("\n")
+
     lines.append(".. list-table::\n")
     lines.append("   :header-rows: 1\n\n")
     lines.append("   * - Project\n")
@@ -363,7 +820,9 @@ else:
 
         if index is not None:
             rel = u.relpath(html_out_dir, index)
-            link = f"`{esc(project_label)} <{esc(rel)}>`_"
+            # Use an anonymous external reference to avoid Sphinx warnings when
+            # the same project label appears multiple times (e.g., deduped deps).
+            link = f"`{esc(project_label)} <{esc(rel)}>`__"
 
         project_cell = link or esc(project_label)
 
@@ -584,6 +1043,14 @@ def cmd_workspace_report(args: argparse.Namespace) -> int:
         "projects": items,
         "failures": bool(any_failures),
     }
+
+    dep = _analyze_workspace_dependencies(items)
+    overview["dependency_analysis"] = dep
+    if bool(getattr(args, "enforce_deps", False)):
+        issues = dep.get("issues") if isinstance(dep, dict) else None
+        if isinstance(issues, list) and issues:
+            any_failures = True
+            overview["failures"] = True
 
     overview_json_path = output_dir / "subproject_overview.json"
 
@@ -872,6 +1339,25 @@ def cmd_workspace_verify(args: argparse.Namespace) -> int:
         if not args.continue_on_error:
             break
 
+    # Workspace-level dependency analysis (best-effort).
+    rc_by_ship = {str(Path(e["shipment"]).resolve()): int(e.get("rc") or 0) for e in successes + failures if isinstance(e, dict) and e.get("shipment")}
+    dep = _analyze_workspace_dependencies(
+        [
+            {
+                "shipment": str(s.resolve()),
+                "metadata": u.read_project_metadata(s),
+            }
+            for s in shipments
+        ],
+        verification_rc_by_shipment=rc_by_ship,
+    )
+
+    deps_failed = False
+    if bool(getattr(args, "enforce_deps", False)):
+        issues = dep.get("issues") if isinstance(dep, dict) else None
+        if isinstance(issues, list) and issues:
+            deps_failed = True
+
     if args.json_report:
         report_path = Path(args.json_report).resolve()
         report_path.parent.mkdir(parents=True, exist_ok=True)
@@ -881,14 +1367,17 @@ def cmd_workspace_verify(args: argparse.Namespace) -> int:
             "traceability": bool(args.traceability),
             "successes": successes,
             "failures": failures,
+            "dependency_analysis": dep,
         }
         report_path.write_text(
             json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
         print(f"\nWrote workspace report: {report_path}")
 
-    if failures:
+    if failures or deps_failed:
         print(f"\nWorkspace verify FAILED: {len(failures)} / {len(successes) + len(failures)}")
+        if deps_failed:
+            print("Workspace verify FAILED: dependency issues detected")
         u.run_hooks(
             ws_config,
             args=args,
@@ -1130,6 +1619,13 @@ def cmd_workspace_intake(args: argparse.Namespace) -> int:
         "output": str(output_dir),
         "projects": items,
     }
+
+    dep = _analyze_workspace_dependencies(items)
+    overview["dependency_analysis"] = dep
+    if bool(getattr(args, "enforce_deps", False)):
+        issues = dep.get("issues") if isinstance(dep, dict) else None
+        if isinstance(issues, list) and issues:
+            any_failures = True
     overview_json_path.write_text(
         json.dumps(overview, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
@@ -1268,6 +1764,12 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_wr.add_argument("--enforce-arch-traces-req", action="store_true")
     p_wr.add_argument("--enforce-test-traces-req", action="store_true")
     p_wr.add_argument(
+        "--enforce-deps",
+        dest="enforce_deps",
+        action="store_true",
+        help="Fail the command if any declared dependencies are missing, ambiguous, or conflicting",
+    )
+    p_wr.add_argument(
         "--continue-on-error",
         action="store_true",
         help="Continue processing after a failure",
@@ -1334,6 +1836,12 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_wv.add_argument("--enforce-arch-traces-req", action="store_true")
     p_wv.add_argument("--enforce-test-traces-req", action="store_true")
     p_wv.add_argument(
+        "--enforce-deps",
+        dest="enforce_deps",
+        action="store_true",
+        help="Fail if any declared dependencies are missing, ambiguous, or conflicting (also prefers dependencies that verified OK)",
+    )
+    p_wv.add_argument(
         "--continue-on-error",
         action="store_true",
         help="Continue verifying after a failure",
@@ -1395,6 +1903,12 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_wi.add_argument("--enforce-req-has-test", action="store_true")
     p_wi.add_argument("--enforce-arch-traces-req", action="store_true")
     p_wi.add_argument("--enforce-test-traces-req", action="store_true")
+    p_wi.add_argument(
+        "--enforce-deps",
+        dest="enforce_deps",
+        action="store_true",
+        help="Fail the intake if any declared dependencies are missing, ambiguous, or conflicting",
+    )
     p_wi.add_argument(
         "--continue-on-error",
         action="store_true",

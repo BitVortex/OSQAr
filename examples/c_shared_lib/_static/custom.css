@@ -1,0 +1,7 @@
+/* Minimal custom CSS for OSQAr examples. */
+
+/* Keep PlantUML SVGs responsive. */
+img, svg {
+  max-width: 100%;
+  height: auto;
+}

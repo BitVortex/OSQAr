@@ -67,6 +67,7 @@ exclude_patterns = [
     ".venv/**",
     # The example projects are built separately.
     "examples/*_hello_world/**",
+    "examples/c_shared_lib/**",
     # Shared example chapter sources are included by example projects.
     "examples/tsim_docs/**",
     # Project scaffolding templates are Sphinx projects on their own and are

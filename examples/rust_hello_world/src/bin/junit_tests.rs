@@ -2,7 +2,7 @@ use std::env;
 use std::fs::File;
 use std::io::{self, Write};
 
-use tsim::{adc_to_temp_x10, Filter, StateMachine, State};
+use tsim::{adc_to_temp_x10, shared_magic, Filter, StateMachine, State};
 
 // OSQAR-CODE-TRACE (test tags)
 //
@@ -97,6 +97,18 @@ fn test_threshold_and_hysteresis() -> TestResult {
     pass("test_threshold_and_hysteresis")
 }
 
+fn test_shared_magic_constant() -> TestResult {
+    let got = shared_magic();
+    if got != 42 {
+        return fail(
+            "test_shared_magic_constant",
+            format!("shared_magic() => {got}, expected 42"),
+        );
+    }
+
+    pass("test_shared_magic_constant")
+}
+
 fn write_junit(mut w: impl Write, suite: &str, results: &[TestResult]) -> io::Result<()> {
     let failures = results.iter().filter(|r| !r.passed).count();
 
@@ -143,6 +155,7 @@ fn main() {
         test_conversion_full_range(),
         test_filter_noise_rejection(),
         test_threshold_and_hysteresis(),
+        test_shared_magic_constant(),
     ];
 
     let mut file = File::create(out).expect("failed to open output file");

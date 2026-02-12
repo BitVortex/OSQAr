@@ -80,6 +80,33 @@ pip install pre-commit
 pre-commit install
 ```
 
+### Git Hooks (Local CI Gate)
+
+OSQAr aims to ensure that changes are never pushed while the framework documentation or examples are broken.
+
+This repository includes **repo-local git hooks** under ``.githooks/`` that enforce:
+
+- reStructuredText title underline hygiene (prevents Sphinx warnings like "Title underline too short")
+- a successful framework Sphinx build via ``./osqar build-docs``
+- successful example builds/tests/docs via each ``examples/**/build-and-test.sh``
+
+Enable them once per clone:
+
+```bash
+python3 tools/install_git_hooks.py
+```
+
+This sets ``core.hooksPath`` to ``.githooks`` for your local checkout.
+
+Emergency bypass (avoid unless you know what you're doing):
+
+```bash
+OSQAR_SKIP_DOCS_HOOKS=1 git commit ...
+OSQAR_SKIP_DOCS_HOOKS=1 git push
+OSQAR_SKIP_FULL_BUILD_HOOKS=1 git commit ...
+OSQAR_SKIP_FULL_BUILD_HOOKS=1 git push
+```
+
 ## Project Structure
 
 ```

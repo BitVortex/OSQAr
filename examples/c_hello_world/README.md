@@ -2,6 +2,8 @@
 
 This example mirrors the Python `hello_world` documentation flow, but the implementation and tests are written in **C**.
 
+It also links against the shared C library example in `../c_shared_lib` (used to showcase workspace dependency deduplication).
+
 ## Workflow
 
 1) Build and run native tests (generates `test_results.xml` in JUnit format)
@@ -38,7 +40,7 @@ cmake -S . -B build
 cmake --build build
 
 # Option B: plain C compiler
-cc -std=c11 -O2 -Iinclude -o build/junit_tests tests/test_tsim.c src/tsim.c
+cc -std=c11 -O2 -Iinclude -I../c_shared_lib/include -o build/junit_tests tests/test_tsim.c src/tsim.c ../c_shared_lib/src/osqar_shared.c
 
 ./build/junit_tests test_results.xml
 ```

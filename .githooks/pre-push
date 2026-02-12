@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# OSQAr local CI gate.
+#
+# This hook runs locally to prevent pushing changes that break the framework docs
+# build or any of the example projects.
+#
+# Bypass only when absolutely necessary:
+#   OSQAR_SKIP_DOCS_HOOKS=1 git push
+#   OSQAR_SKIP_FULL_BUILD_HOOKS=1 git push
+
+if [[ "${OSQAR_SKIP_DOCS_HOOKS:-}" == "1" ]]; then
+  echo "[osqar] pre-push: skipping docs checks (OSQAR_SKIP_DOCS_HOOKS=1)" >&2
+  exit 0
+fi
+
+if [[ "${OSQAR_SKIP_FULL_BUILD_HOOKS:-}" == "1" ]]; then
+  echo "[osqar] pre-push: skipping full build checks (OSQAR_SKIP_FULL_BUILD_HOOKS=1)" >&2
+  exit 0
+fi
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+if [[ ! -x "./osqar" ]]; then
+  echo "[osqar] pre-push: expected ./osqar in repo root" >&2
+  exit 2
+fi
+
+if ! command -v poetry >/dev/null 2>&1; then
+  echo "[osqar] pre-push: poetry not found in PATH" >&2
+  echo "[osqar] pre-push: install poetry or bypass via OSQAR_SKIP_FULL_BUILD_HOOKS=1" >&2
+  exit 2
+fi
+
+echo "[osqar] pre-push: ensuring python deps (poetry install)" >&2
+poetry install --no-interaction --with evidence >/dev/null 2>&1 || poetry install --no-interaction >/dev/null
+
+log_dir="_build/hook_logs"
+mkdir -p "${log_dir}"
+
+python3 tools/fix_rst_title_underlines.py --check docs index.rst examples
+
+echo "[osqar] pre-push: building framework docs" >&2
+if ! ./osqar build-docs --output _build/html_prepush_check >"${log_dir}/framework_docs.log" 2>&1; then
+  echo "[osqar] pre-push: framework docs build FAILED" >&2
+  echo "[osqar] pre-push: log: ${log_dir}/framework_docs.log" >&2
+  tail -n 80 "${log_dir}/framework_docs.log" >&2 || true
+  exit 1
+fi
+
+echo "[osqar] pre-push: building all examples" >&2
+
+example_scripts="$(find examples -maxdepth 2 -type f -name build-and-test.sh | sort)"
+if [[ -z "${example_scripts}" ]]; then
+  echo "[osqar] pre-push: no examples/**/build-and-test.sh found" >&2
+  exit 2
+fi
+
+while IFS= read -r script; do
+  [[ -z "${script}" ]] && continue
+  ex_dir="$(dirname "${script}")"
+  ex_name="$(basename "${ex_dir}")"
+  ex_log="${log_dir}/example_${ex_name}.log"
+  echo "[osqar] pre-push: example ${ex_dir}" >&2
+  if ! (
+    cd "${ex_dir}"
+    chmod +x ./build-and-test.sh
+    ./build-and-test.sh all
+  ) >"${ex_log}" 2>&1; then
+    echo "[osqar] pre-push: example build FAILED: ${ex_dir}" >&2
+    echo "[osqar] pre-push: log: ${ex_log}" >&2
+    tail -n 120 "${ex_log}" >&2 || true
+    exit 1
+  fi
+done <<< "${example_scripts}"
+
+echo "[osqar] pre-push: full build checks OK" >&2

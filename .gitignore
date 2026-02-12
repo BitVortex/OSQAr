@@ -18,6 +18,10 @@ build/
 
 # Legacy workspace overview outputs (no longer generated)
 
+# Local temporary workspaces/shipments (release sanity, experiments)
+_tmp*/
+tmp_ws_report/
+
 # Example build artifacts
 examples/**/build/
 examples/**/target/

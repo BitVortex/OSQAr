@@ -2,6 +2,7 @@
 name = "osqar_tsim_rust"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
 
 [lib]
 name = "tsim"
@@ -12,3 +13,4 @@ name = "junit_tests"
 path = "src/bin/junit_tests.rs"
 
 [dependencies]
+

@@ -9,7 +9,7 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${BLUE}OSQAr example (C++): Build & Traceability Workflow${NC}\n"
+echo -e "${BLUE}OSQAr example (Shared C library): Build & Traceability Workflow${NC}\n"
 
 ACTION="all"
 if [[ "${1:-}" == "build" || "${1:-}" == "test" || "${1:-}" == "docs" || "${1:-}" == "all" ]]; then
@@ -18,7 +18,6 @@ if [[ "${1:-}" == "build" || "${1:-}" == "test" || "${1:-}" == "docs" || "${1:-}
 fi
 
 ensure_poetry_deps() {
-  # Evidence tooling is optional; try to install it, but fall back to the lean install.
   poetry install --no-interaction --with evidence >/dev/null 2>&1 || \
     poetry install --no-interaction >/dev/null 2>&1
 }
@@ -51,10 +50,10 @@ if [[ "${REPRODUCIBLE}" == "1" ]]; then
   fi
   osqar_reproducible_setup "${SCRIPT_DIR}"
 
-  EXTRA_CXXFLAGS="$(osqar_cc_reproducible_flags)"
+  EXTRA_CFLAGS="$(osqar_cc_reproducible_flags)"
   EXTRA_LDFLAGS="$(osqar_ld_reproducible_flags)"
 
-  export CXXFLAGS="${CXXFLAGS:-} ${EXTRA_CXXFLAGS}"
+  export CFLAGS="${CFLAGS:-} ${EXTRA_CFLAGS}"
   export LDFLAGS="${LDFLAGS:-} ${EXTRA_LDFLAGS}"
 fi
 
@@ -74,23 +73,15 @@ if [[ "${ACTION}" == "all" || "${ACTION}" == "build" ]]; then
     cmake --build build >/dev/null
     echo -e "${GREEN}✓ Native build succeeded (CMake)${NC}"
   else
-    if command -v c++ >/dev/null 2>&1; then
-      # Use env flags if present (including reproducible flags).
-      rm -f build/osqar_shared.o build/tsim.o build/test_tsim.o
+    if command -v cc >/dev/null 2>&1; then
       if [[ "${COVERAGE}" == "1" ]]; then
-        cc -O0 -g -I../c_shared_lib/include --coverage -c ../c_shared_lib/src/osqar_shared.c -o build/osqar_shared.o
-        c++ -std=c++17 -O0 -g -Iinclude --coverage ${CXXFLAGS:-} -c src/tsim.cpp -o build/tsim.o
-        c++ -std=c++17 -O0 -g -Iinclude -I../c_shared_lib/include --coverage ${CXXFLAGS:-} -c tests/test_tsim.cpp -o build/test_tsim.o
-        c++ --coverage ${LDFLAGS:-} -o build/junit_tests build/osqar_shared.o build/tsim.o build/test_tsim.o
+        cc -std=c11 -O0 -g -Iinclude --coverage ${CFLAGS:-} ${LDFLAGS:-} -o build/junit_tests tests/test_osqar_shared.c src/osqar_shared.c
       else
-        cc -O2 -g0 -I../c_shared_lib/include -c ../c_shared_lib/src/osqar_shared.c -o build/osqar_shared.o
-        c++ -std=c++17 -O2 -g0 -Iinclude ${CXXFLAGS:-} -c src/tsim.cpp -o build/tsim.o
-        c++ -std=c++17 -O2 -g0 -Iinclude -I../c_shared_lib/include ${CXXFLAGS:-} -c tests/test_tsim.cpp -o build/test_tsim.o
-        c++ ${LDFLAGS:-} -o build/junit_tests build/osqar_shared.o build/tsim.o build/test_tsim.o
+        cc -std=c11 -O2 -g0 -Iinclude ${CFLAGS:-} ${LDFLAGS:-} -o build/junit_tests tests/test_osqar_shared.c src/osqar_shared.c
       fi
-      echo -e "${GREEN}✓ Native build succeeded (c++)${NC}"
+      echo -e "${GREEN}✓ Native build succeeded (cc)${NC}"
     else
-      echo -e "${RED}✗ Neither cmake nor c++ found; cannot build native code${NC}"
+      echo -e "${RED}✗ Neither cmake nor cc found; cannot build native code${NC}"
       exit 1
     fi
   fi
@@ -116,9 +107,7 @@ if [[ "${ACTION}" == "all" || "${ACTION}" == "test" ]]; then
   if [[ "${COVERAGE}" == "1" ]] && command -v poetry >/dev/null 2>&1; then
     ensure_poetry_deps || true
     if poetry run python -c "import gcovr" >/dev/null 2>&1; then
-      # Text summary (embedded in docs)
       poetry run gcovr -r . --object-directory build --exclude 'tests/.*' --print-summary > coverage_report.txt 2>&1 || true
-      # Cobertura XML (useful for CI tooling)
       poetry run gcovr -r . --object-directory build --exclude 'tests/.*' --xml-pretty -o coverage.xml >/dev/null 2>&1 || true
     else
       echo "gcovr not installed in the Poetry environment." > coverage_report.txt
@@ -136,7 +125,6 @@ if [[ "${ACTION}" == "all" || "${ACTION}" == "test" ]]; then
   rm -f complexity_report.txt
   if command -v poetry >/dev/null 2>&1; then
     ensure_poetry_deps || true
-    # Cyclomatic complexity report (best-effort; does not fail the build)
     if poetry run python -c "import lizard" >/dev/null 2>&1; then
       poetry run lizard -C 10 src include tests > complexity_report.txt 2>&1 || true
     else
@@ -160,7 +148,6 @@ if [[ "${ACTION}" == "all" || "${ACTION}" == "docs" ]]; then
     ensure_poetry_deps
     poetry run sphinx-build -b html . _build/html 2>&1 | tail -10
 
-    # Ship raw evidence files alongside the HTML directory (for CI shipments / audits)
     cp -f test_results.xml _build/html/test_results.xml >/dev/null 2>&1 || true
     cp -f coverage_report.txt _build/html/coverage_report.txt >/dev/null 2>&1 || true
     cp -f complexity_report.txt _build/html/complexity_report.txt >/dev/null 2>&1 || true
@@ -168,7 +155,6 @@ if [[ "${ACTION}" == "all" || "${ACTION}" == "docs" ]]; then
       cp -f coverage.xml _build/html/coverage.xml >/dev/null 2>&1 || true
     fi
 
-    # Ship implementation + tests alongside the docs (so a bundle can be reviewed end-to-end)
     mkdir -p _build/html/implementation/src _build/html/tests
     cp -a src/. _build/html/implementation/src/ >/dev/null 2>&1 || true
     if [ -d include ]; then

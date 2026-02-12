@@ -1,5 +1,12 @@
 {
+  "id": "EX_C_HELLO_WORLD",
   "version": "0.1.0",
+  "dependencies": [
+    {
+      "id": "LIB_SHARED_C",
+      "version": "0.1.0"
+    }
+  ],
   "origin": {
     "vcs": "git",
     "path": "examples/c_hello_world"

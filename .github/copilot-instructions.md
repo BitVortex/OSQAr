@@ -127,6 +127,24 @@ shasum -a 256 -c osqar_example_workspace.zip.sha256
 
 ## Common Patterns to Apply
 
+## Documentation hygiene (reST)
+
+OSQAr’s Sphinx build is run with warnings enabled in CI and often locally.
+One recurring source of warnings is reStructuredText title adornments (e.g., "Title underline too short").
+
+When working on ``*.rst`` files:
+
+- **Before any commit that touches RST**: run the title underline fixer in **check mode** and ensure it passes:
+
+   - ``python3 tools/fix_rst_title_underlines.py --check docs index.rst examples``
+
+- **If a Sphinx build emits underline/overline length warnings**: run the fixer in **write mode**, then rebuild docs:
+
+   - ``python3 tools/fix_rst_title_underlines.py --write docs index.rst examples``
+   - ``./osqar build-docs``
+
+The fixer is stdlib-only and intentionally conservative; it only extends adornment lines when they are shorter than the title.
+
 1. **When adding requirements**: Use structured IDs and `needs_id_regex`-compliant naming
    - Link to ISO 26262 source material or applicable standard (IEC 61508, ISO 13849, etc.)
    - Include traceability back to safety goals and forward to verification methods

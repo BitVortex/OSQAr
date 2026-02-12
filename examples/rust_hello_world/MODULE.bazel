@@ -7,6 +7,12 @@ module(
 # Pinned via Bazel Central Registry for reproducibility.
 bazel_dep(name = "rules_rust", version = "0.68.1")
 
+bazel_dep(name = "osqar_c_shared_lib", version = "0.0.0")
+local_path_override(
+    module_name = "osqar_c_shared_lib",
+    path = "../c_shared_lib",
+)
+
 # Register Rust toolchains (edition 2021).
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(edition = "2021")

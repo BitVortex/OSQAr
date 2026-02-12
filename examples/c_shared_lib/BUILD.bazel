@@ -1,9 +1,9 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 cc_library(
-    name = "tsim",
-    srcs = ["src/tsim.c"],
-    hdrs = ["include/tsim.h"],
+    name = "osqar_shared",
+    srcs = ["src/osqar_shared.c"],
+    hdrs = ["include/osqar_shared.h"],
     includes = ["include"],
     copts = ["-std=c11"],
     visibility = ["//visibility:public"],
@@ -11,7 +11,7 @@ cc_library(
 
 cc_binary(
     name = "junit_tests",
-    srcs = ["tests/test_tsim.c"],
-    deps = [":tsim", "@osqar_c_shared_lib//:osqar_shared"],
+    srcs = ["tests/test_osqar_shared.c"],
+    deps = [":osqar_shared"],
     copts = ["-std=c11"],
 )

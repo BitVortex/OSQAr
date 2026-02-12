@@ -1,0 +1,3 @@
+build:reproducible --copt=-Werror
+build:reproducible --copt=-Wall
+build:reproducible --copt=-Wextra

@@ -13,5 +13,5 @@ rust_binary(
     srcs = ["src/bin/junit_tests.rs"],
     crate_root = "src/bin/junit_tests.rs",
     edition = "2021",
-    deps = [":tsim"],
+    deps = [":tsim", "@osqar_c_shared_lib//:osqar_shared"],
 )

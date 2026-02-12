@@ -77,9 +77,9 @@ if [[ "${ACTION}" == "all" || "${ACTION}" == "build" ]]; then
     if command -v cc >/dev/null 2>&1; then
       # Use env flags if present (including reproducible flags).
       if [[ "${COVERAGE}" == "1" ]]; then
-        cc -std=c11 -O0 -g -Iinclude --coverage ${CFLAGS:-} ${LDFLAGS:-} -o build/junit_tests tests/test_tsim.c src/tsim.c
+        cc -std=c11 -O0 -g -Iinclude -I../c_shared_lib/include --coverage ${CFLAGS:-} ${LDFLAGS:-} -o build/junit_tests tests/test_tsim.c src/tsim.c ../c_shared_lib/src/osqar_shared.c
       else
-        cc -std=c11 -O2 -g0 -Iinclude ${CFLAGS:-} ${LDFLAGS:-} -o build/junit_tests tests/test_tsim.c src/tsim.c
+        cc -std=c11 -O2 -g0 -Iinclude -I../c_shared_lib/include ${CFLAGS:-} ${LDFLAGS:-} -o build/junit_tests tests/test_tsim.c src/tsim.c ../c_shared_lib/src/osqar_shared.c
       fi
       echo -e "${GREEN}✓ Native build succeeded (cc)${NC}"
     else

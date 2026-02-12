@@ -12,6 +12,6 @@ cc_library(
 cc_binary(
     name = "junit_tests",
     srcs = ["tests/test_tsim.cpp"],
-    deps = [":tsim"],
+    deps = [":tsim", "@osqar_c_shared_lib//:osqar_shared"],
     copts = ["-std=c++17"],
 )

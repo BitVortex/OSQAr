@@ -2,6 +2,8 @@
 
 This example mirrors the reference documentation flow, but the implementation and tests are written in **Rust**.
 
+It also links against the shared C library example in `../c_shared_lib` (used to showcase workspace dependency deduplication). A C compiler is required.
+
 ## Workflow
 
 1) Build and run native tests (generates `test_results.xml` in JUnit format)

@@ -4,7 +4,7 @@ CLI Reference
 
 This page is a **command reference** for the OSQAr CLI.
 
-For workflow guidance (what to run when and why), see :doc:`using_the_boilerplate`.
+For workflow guidance and copy/paste recipes, see :doc:`using_the_boilerplate` (especially :ref:`quick-start` and :ref:`workflow-recipes`).
 
 
 How To Use This Reference
@@ -584,6 +584,7 @@ Subcommands
 - ``shipment clean`` — remove generated outputs
 - ``shipment traceability`` — traceability checks for a shipment directory
 - ``shipment checksums`` — generate/verify checksums for a shipment directory
+- ``shipment pin`` — compute a dependency pin from a shipment manifest
 - ``shipment copy-test-reports`` — copy raw JUnit XML into a shipment directory
 - ``shipment package`` — archive a shipment directory into a ``.zip``
 - ``shipment metadata write`` — write ``osqar_project.json`` into a shipment directory
@@ -757,6 +758,22 @@ Synopsis
                   [--json-report <path>] {generate,verify}
 
 
+shipment pin
+^^^^^^^^^^^^
+
+Compute a stable pin from a shipment manifest (default: ``SHA256SUMS``).
+
+This prints a hex SHA-256 digest of the manifest file bytes. It can be used to
+identify an OSQAr-qualified dependency precisely.
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar shipment pin --shipment <dir> [--manifest <path>] [--json-report <path>]
+
+
 shipment copy-test-reports
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -807,6 +824,13 @@ workspace
 
 The ``workspace`` command group operates on multiple shipments in an integrator workspace.
 
+If supplier-provided shipment metadata declares OSQAr-qualified dependencies, you can use
+``--enforce-deps`` on workspace commands to fail on missing/ambiguous/conflicting dependencies.
+
+Workspace commands that produce an output directory (e.g., ``workspace report`` / ``workspace intake``)
+also write a machine-readable ``subproject_overview.json`` which includes ``dependency_analysis``
+(summary counts, dependency resolutions, and any detected issues).
+
 Subcommands
 ^^^^^^^^^^^
 
@@ -843,6 +867,7 @@ Synopsis
                  --output <dir>
                  [--checksums] [--traceability] [--doctor]
                  [--needs-json <path>] [--exclude <glob> ...]
+                 [--enforce-deps]
                  [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
                  [--continue-on-error] [--json-report <path>] [--open]
 
@@ -889,6 +914,7 @@ Synopsis
                  [--verify-command <cmd> ...] [--recursive]
                  [--exclude <glob> ...]
                  [--traceability] [--doctor] [--needs-json <path>]
+                 [--enforce-deps]
                  [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
                  [--continue-on-error] [--json-report <path>]
 
@@ -908,5 +934,6 @@ Synopsis
                  --output <dir> [--force] [--dry-run]
                  [--exclude <glob> ...]
                  [--traceability] [--doctor] [--needs-json <path>]
+                 [--enforce-deps]
                  [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
                  [--continue-on-error]
