@@ -179,6 +179,38 @@ Write metadata into a shipment directory:
      --origin url=https://example.com/repo.git \
      --origin revision=abc123
 
+Shipment dependencies (supplier)
+--------------------------------
+
+If an OSQAr-qualified library depends on other OSQAr-qualified libraries, declare these
+dependencies in the shipped ``osqar_project.json``.
+
+Recommended structure:
+
+.. code-block:: json
+
+  {
+    "schema": "osqar.shipment_project_metadata.v1",
+    "id": "LIB_CONSUMER",
+    "version": "1.2.3",
+    "dependencies": [
+      {
+        "id": "LIB_PROVIDER",
+        "version": "2.0.0",
+        "pin_sha256sums": "<sha256-of-SHA256SUMS-file-bytes>"
+      }
+    ]
+  }
+
+The ``pin_sha256sums`` field is a stable identifier of the dependency shipment’s
+``SHA256SUMS`` manifest file.
+
+Compute a dependency pin from a received or built shipment directory:
+
+.. code-block:: console
+
+  osqar shipment pin --shipment /path/to/LIB_PROVIDER_shipment
+
 Subproject overview (integrator output)
 ---------------------------------------
 
@@ -205,3 +237,31 @@ Notes and good practices
 - Do not regenerate supplier manifests; verify them.
 - Keep integrator-generated artifacts (reports, dashboards) outside the shipment tree.
 - Prefer deterministic naming (supplier, component, version) for shipment folders.
+
+Workspace dependency enforcement (integrator)
+---------------------------------------------
+
+Workspace commands can validate declared dependencies across all shipments:
+
+.. code-block:: console
+
+  osqar workspace verify --root intake/received --recursive --enforce-deps
+
+With ``--enforce-deps``, OSQAr fails the command if dependencies are missing, ambiguous,
+or conflicting (for example, the same dependency ``id`` is requested with different versions
+or pins in the same workspace).
+
+How to observe deduplication
+----------------------------
+
+After running ``osqar workspace intake`` or ``osqar workspace report``, you can observe
+logical deduplication in two places:
+
+- In the generated HTML overview, the summary line includes ``shared_satisfiers=<N>``.
+  This counts how many distinct dependency shipments satisfy more than one dependent project.
+- In the JSON overview (written as ``subproject_overview.json`` in the output directory),
+  look at ``dependency_analysis.summary.shared_satisfiers_total`` and the
+  ``dependency_analysis.resolutions`` list (each entry records ``dependency.satisfied_by``).
+
+If your workspace contains identical duplicate shipments (same id/version/pin present multiple times),
+those are reported separately as ``dedup_groups=<N>`` and in ``dependency_analysis.dedup``.

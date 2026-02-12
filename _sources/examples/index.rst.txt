@@ -18,3 +18,5 @@ Notes
 - **C++** is widely used in industry, but is not recommended here as a starting point for safety-related embedded work.
 - The **Python** example is an easy-to-run workstation demo of the traceability workflow, not an embedded implementation.
 - If you are building locally, enter an example directory and run its ``build-and-test.sh``.
+- The combined example workspace (release asset) also includes a shared C library shipment
+	(``c_shared_lib``) that is consumed by the C/C++/Rust examples to showcase dependency deduplication.

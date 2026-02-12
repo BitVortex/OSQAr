@@ -31,8 +31,8 @@ NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
 --------------------------------------------------------------
     102       7.0     2.2       53.2        11     src/tsim.py
      16       0.0     0.0        0.0         0     src/__init__.py
-    145       9.8     2.2       64.4        13     tests/test_tsim.py
       0       0.0     0.0        0.0         0     tests/__init__.py
+    145       9.8     2.2       64.4        13     tests/test_tsim.py
 
 ===============================================================================================================
 No thresholds exceeded (cyclomatic_complexity > 10 or length > 1000 or nloc > 1000000 or parameter_count > 100)

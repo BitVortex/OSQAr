@@ -1,4 +1,5 @@
 #include "tsim.h"
+#include "osqar_shared.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -115,6 +116,21 @@ static test_result_t test_threshold_and_hysteresis(void) {
     return r;
 }
 
+static test_result_t test_shared_magic_constant(void) {
+    // TEST_METHOD_001
+    test_result_t r = {"test_shared_magic_constant", true, {0}};
+
+    const int got = osqar_shared_magic();
+    if (got != 42) {
+        char buf[256];
+        snprintf(buf, sizeof(buf), "osqar_shared_magic() => %d, expected 42", got);
+        set_fail(&r, buf);
+        return r;
+    }
+
+    return r;
+}
+
 static void write_junit(const char* path, const test_result_t* results, size_t count) {
     FILE* f = fopen(path, "w");
     if (!f) {
@@ -154,6 +170,7 @@ int main(int argc, char** argv) {
         test_conversion_full_range(),
         test_filter_noise_rejection(),
         test_threshold_and_hysteresis(),
+        test_shared_magic_constant(),
     };
 
     const size_t count = sizeof(results)/sizeof(results[0]);

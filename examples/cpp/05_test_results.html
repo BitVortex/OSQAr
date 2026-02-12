@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-test-results/common.css?v=9ec2c1d5" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=0b3876c2" />
@@ -411,7 +411,7 @@ open<span class="w"> </span>_build/html/index.html
 <section id="imported-junit-results">
 <h3>Imported JUnit results<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
 <h3>tsim_cpp<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
-<p>Tests: 3, Failures: 0, Errors: 0, Skips: 0</p>
+<p>Tests: 4, Failures: 0, Errors: 0, Skips: 0</p>
 <p>Time: 0.0</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -439,6 +439,13 @@ open<span class="w"> </span>_build/html/index.html
 </tr>
 <tr class="tr_passed row-even"><td class="tr_passed class"><p class="tr_passed">tsim_cpp</p></td>
 <td class="tr_passed name"><p class="tr_passed">test_threshold_and_hysteresis</p></td>
+<td class="tr_passed status"><p class="tr_passed">passed</p></td>
+<td class="tr_passed reason"><p class="tr_passed">
+
+</p></td>
+</tr>
+<tr class="tr_passed row-odd"><td class="tr_passed class"><p class="tr_passed">tsim_cpp</p></td>
+<td class="tr_passed name"><p class="tr_passed">test_shared_magic_constant</p></td>
 <td class="tr_passed status"><p class="tr_passed">passed</p></td>
 <td class="tr_passed reason"><p class="tr_passed">
 
@@ -490,27 +497,28 @@ branches: 78.6% (11 out of 14)
       16      2    109      2      18 tsim_filter_t::update@37-54@src/tsim.cpp
        5      1     26      2       5 tsim_sm_t::init@56-60@src/tsim.cpp
       12      4     53      1      13 tsim_sm_t::evaluate@62-74@src/tsim.cpp
-       3      1     31      3       3 fail_msg@15-17@tests/test_tsim.cpp
-       4      1     45      2       4 set_fail@25-28@tests/test_tsim.cpp
-      20      4    176      0      24 test_conversion_full_range@30-53@tests/test_tsim.cpp
-      24      7    150      0      30 test_filter_noise_rejection@55-84@tests/test_tsim.cpp
-      26      6    154      0      34 test_threshold_and_hysteresis@86-119@tests/test_tsim.cpp
-      28      7    198      2      32 write_junit@121-152@tests/test_tsim.cpp
-      16      4    127      2      20 main@154-173@tests/test_tsim.cpp
+       3      1     31      3       3 fail_msg@16-18@tests/test_tsim.cpp
+       4      1     45      2       4 set_fail@26-29@tests/test_tsim.cpp
+      20      4    176      0      24 test_conversion_full_range@31-54@tests/test_tsim.cpp
+      24      7    150      0      30 test_filter_noise_rejection@56-85@tests/test_tsim.cpp
+      26      6    154      0      34 test_threshold_and_hysteresis@87-120@tests/test_tsim.cpp
+      11      2     68      0      13 test_shared_magic_constant@122-134@tests/test_tsim.cpp
+      28      7    198      2      32 write_junit@136-167@tests/test_tsim.cpp
+      17      4    136      2      21 main@169-189@tests/test_tsim.cpp
 3 file analyzed.
 ==============================================================
 NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
 --------------------------------------------------------------
      51       9.8     2.0       58.0         5     src/tsim.cpp
      23       0.0     0.0        0.0         0     include/tsim.hpp
-    132      17.3     4.3      125.9         7     tests/test_tsim.cpp
+    145      16.6     4.0      119.8         8     tests/test_tsim.cpp
 
 ===============================================================================================================
 No thresholds exceeded (cyclomatic_complexity &gt; 10 or length &gt; 1000 or nloc &gt; 1000000 or parameter_count &gt; 100)
 ==========================================================================================
 Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
 ------------------------------------------------------------------------------------------
-       206      14.2     3.3       97.6       12            0      0.00    0.00
+       219      14.0     3.2       96.0       13            0      0.00    0.00
 </pre></div>
 </div>
 </section>

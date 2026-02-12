@@ -18,7 +18,9 @@ add_executable(junit_tests
     tests/test_tsim.cpp
 )
 
-target_link_libraries(junit_tests PRIVATE tsim)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../c_shared_lib c_shared_lib_build)
+
+target_link_libraries(junit_tests PRIVATE tsim osqar_shared)
 
 if(OSQAR_COVERAGE)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")

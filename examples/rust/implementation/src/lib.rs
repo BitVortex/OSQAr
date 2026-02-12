@@ -41,6 +41,15 @@ pub fn adc_to_temp_x10(adc_counts: u16) -> TempX10 {
     temp_x10 as TempX10
 }
 
+extern "C" {
+    fn osqar_shared_magic() -> i32;
+}
+
+pub fn shared_magic() -> i32 {
+    // Safety: This example links `osqar_shared_magic` from the shared C library.
+    unsafe { osqar_shared_magic() }
+}
+
 /// REQ_FUNC_002: 5-sample moving average filter.
 pub struct Filter {
     window: [TempX10; 5],

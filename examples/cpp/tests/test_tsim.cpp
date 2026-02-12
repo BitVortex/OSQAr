@@ -1,4 +1,5 @@
 #include "tsim.hpp"
+#include "osqar_shared.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -118,6 +119,20 @@ static test_result_t test_threshold_and_hysteresis() {
     return r;
 }
 
+static test_result_t test_shared_magic_constant() {
+    test_result_t r{"test_shared_magic_constant", true, {0}};
+
+    const int got = osqar_shared_magic();
+    if (got != 42) {
+        char buf[256];
+        std::snprintf(buf, sizeof(buf), "osqar_shared_magic() => %d, expected 42", got);
+        set_fail(r, buf);
+        return r;
+    }
+
+    return r;
+}
+
 static void write_junit(const char* path, const std::vector<test_result_t>& results) {
     FILE* f = std::fopen(path, "w");
     if (!f) {
@@ -158,6 +173,7 @@ int main(int argc, char** argv) {
     results.push_back(test_conversion_full_range());
     results.push_back(test_filter_noise_rejection());
     results.push_back(test_threshold_and_hysteresis());
+    results.push_back(test_shared_magic_constant());
 
     write_junit(out, results);
 

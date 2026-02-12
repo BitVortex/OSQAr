@@ -2,51 +2,65 @@
 Using the OSQAr Boilerplate
 ===========================
 
-Purpose
-=======
+This chapter is the main entrypoint for OSQAr.
+It explains the **mental model** (project → shipment → workspace) and provides **copy/paste workflows**.
+
+For the full per-command reference (all flags, exit codes, and resolution rules), see :doc:`cli_reference`.
+
+
+What OSQAr Is For
+=================
 
 OSQAr is a **documentation-first framework** for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
 
-In OSQAr, an evidence shipment is the unit you transfer and archive: a bundle that contains **Sphinx documentation with maintained traceability**, plus the **implementation**, **tests**, and **analysis/verification reports** needed to review and audit the evidence end-to-end.
+An evidence shipment is the unit you transfer and archive: a bundle that contains:
 
-OSQAr provides:
+- rendered Sphinx documentation (with traceability)
+- implementation sources and tests
+- verification artifacts (test reports, analysis summaries, traceability reports)
+- integrity protection (checksum manifest)
+
+OSQAr’s core ingredients:
 
 - structured requirements and traceability (via ``sphinx-needs``)
 - architecture diagrams (via PlantUML)
-- verification planning and traceability (requirements ↔ architecture ↔ tests)
-- evidence “shipments” (documentation + traceability + implementation + tests + analysis reports) protected by checksum manifests
-- workspace-friendly multi-shipment inventory/intake and a consolidated **Subproject overview** (JSON + theme-aligned HTML)
-- extensive lifecycle management guidance (framework-level and example-level)
+- verification planning (requirements ↔ architecture ↔ tests)
+- shipment and workspace workflows (prepare, verify, intake, report)
 
-This chapter is the main entrypoint. It gives you the mental model and the first commands to run.
 
-Start here
-==========
+How To Use This Guide
+=====================
+
+1. Run :ref:`quick-start` to build docs and generate a scaffold.
+2. Read :ref:`terms` once (project vs shipment vs workspace).
+3. Use :ref:`workflow-recipes` as your day-to-day command cookbook.
+4. When you need exact flags/help, jump to :doc:`cli_reference`.
+
+
+.. _quick-start:
+
+Quick Start (End-to-End)
+========================
 
 .. note::
 
    The examples below use the PyPI-installed CLI.
 
-   - Install OSQAr: ``pipx install osqar``
+   - Install OSQAr once: ``pipx install osqar``
    - Invoke commands as: ``osqar <command> ...``
 
    If you are contributing to OSQAr from a git clone and did not install via pipx,
-   you can use the repo-root wrappers instead (``./osqar`` on Linux/macOS; ``osqar.cmd`` / ``osqar.ps1`` on Windows).
+   use the repo-root wrappers instead (``./osqar`` on Linux/macOS; ``osqar.cmd`` / ``osqar.ps1`` on Windows).
 
-1. Install the framework dependencies (Poetry environment).
-2. Build the framework documentation (repo root).
-3. Create a minimal project scaffold (so you can try the workflow in your own repo layout).
-4. In the generated project, build the docs and inspect the outputs (HTML + ``needs.json``).
-
-.. code-block:: bash
+.. code-block:: console
 
    # 0) Install the OSQAr CLI
    pipx install osqar
 
-   # 1) Install dependencies
+   # 1) Install dependencies (this repo / framework docs)
    poetry install
 
-   # 2) Build framework docs (this repo)
+   # 2) Build the framework docs (repo root)
    osqar build-docs
 
    # 3) Scaffold a minimal project next to the framework repo
@@ -55,8 +69,8 @@ Start here
    # 4) Build the scaffolded project docs
    osqar build-docs --project ../MySEooC
 
-Windows note: prefer the repo-root wrappers (``osqar.cmd`` / ``osqar.ps1``). If you want to run
-``*.sh`` example scripts unchanged, use WSL2.
+Windows note: prefer the Windows repo-root wrappers (``osqar.cmd`` / ``osqar.ps1``).
+If you want to run the example ``*.sh`` scripts unchanged, use WSL2.
 
 Recommended reading order
 =========================
@@ -69,22 +83,20 @@ Recommended reading order
 6. For release/baseline discipline, see: :doc:`lifecycle_management`.
 7. For team-scale collaboration, see: :doc:`collaboration_workflows`.
 
-Typical workflow
-================
+Workflow overview
+=================
 
 1. Author needs objects (REQ/ARCH/TEST) in RST with stable IDs.
 2. Build HTML docs and export machine-readable artifacts (e.g. ``needs.json``).
-3. Run traceability checks and store the report.
-4. Generate a checksum manifest (e.g. ``SHA256SUMS``) for integrity.
+3. Run traceability checks and keep the report.
+4. Generate a checksum manifest (e.g. ``SHA256SUMS``).
 5. Transfer/archive the shipment; integrators verify checksums and (optionally) re-run checks.
 
-Quick start
-===========
+Installation options (Poetry groups)
+====================================
 
-Install options
----------------
-
-OSQAr keeps the default Python dependency footprint lean. Install additional tooling only if you need it:
+OSQAr keeps the default Python dependency footprint lean.
+Install additional tooling only if you need it:
 
 - Core docs + CLI (recommended default)::
 
@@ -98,31 +110,115 @@ OSQAr keeps the default Python dependency footprint lean. Install additional too
 
    poetry install --with ide
 
-Build the rendered HTML documentation from the repository root:
-
-.. code-block:: bash
-
-   poetry install
-   osqar build-docs
-   open _build/html/index.html
-
-By default, ``build-docs`` uses ``--project .`` and writes HTML to ``./_build/html``.
-
 Download (optional)
--------------------
+===================
 
-If you want a pre-built bundle (framework HTML docs + CLI tooling) without building locally, use the GitHub Releases assets:
+If you want pre-built archives (example workspaces / demo shipments) without building locally, use the GitHub Releases assets:
 
 - https://github.com/bitvortex/OSQAr/releases
 
-Starting point (downloaded example workspace)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If you downloaded the combined example workspace ZIP from Releases (often together with a ``.sha256`` file), extract and verify it with:
 
-If you downloaded the combined example workspace ZIP from Releases (often together with a ``.sha256`` file), the quickest way to extract and verify it is:
-
-.. code-block:: bash
+.. code-block:: console
 
    osqar setup osqar_example_workspace_<tag>.zip
+
+
+.. _terms:
+
+Terminology (Project, Shipment, Workspace)
+==========================================
+
+These terms are used consistently across the docs and the CLI.
+They match the definitions in :doc:`cli_reference`.
+
+Project (shipment project)
+--------------------------
+
+Directory that contains at least:
+
+- ``conf.py``
+- ``index.rst``
+
+Examples live under ``examples/``.
+
+Shipment directory (built evidence output)
+------------------------------------------
+
+The built HTML output directory, usually:
+
+- ``<project>/_build/html``
+
+This directory may contain artifacts such as ``index.html``, ``needs.json``, ``SHA256SUMS``, and reports.
+
+Workspace (integrator side)
+---------------------------
+
+A directory that contains **multiple received shipments**.
+Workspace commands typically discover shipments by scanning for ``SHA256SUMS`` in subdirectories.
+
+
+.. _workflow-recipes:
+
+Workflow Recipes
+================
+
+The commands below are the “core loop” you’ll run most often.
+
+Build docs (Sphinx HTML)
+------------------------
+
+.. code-block:: console
+
+   # Build docs for the current project (default: --project .)
+   osqar build-docs
+
+   # Build docs for an example project
+   osqar build-docs --project examples/c_hello_world
+
+   # Build and open index.html
+   osqar build-docs --open
+
+Verify traceability
+-------------------
+
+OSQAr’s traceability check validates basic rules based on exported ``needs.json``.
+
+.. code-block:: console
+
+   osqar traceability ./_build/html/needs.json \
+     --json-report ./_build/html/traceability_report.json
+
+Checksum manifest (shipment integrity)
+--------------------------------------
+
+Generate and verify a checksum manifest (default: SHA-256) for a shipped directory.
+
+.. code-block:: console
+
+   osqar checksum generate \
+      --root ./_build/html \
+      --output ./_build/html/SHA256SUMS \
+      --json-report ./_build/html/checksums_report.generate.json
+
+   osqar checksum verify \
+      --root ./_build/html \
+      --manifest ./_build/html/SHA256SUMS \
+      --json-report ./_build/html/checksums_report.verify.json
+
+Prepare and verify a shipment (high-level)
+------------------------------------------
+
+If you want one command that builds docs, runs checks, and optionally archives:
+
+.. code-block:: console
+
+   # Supplier side: build a shippable evidence directory
+   osqar shipment prepare --project examples/python_hello_world --clean --archive
+
+   # Integrator side: verify a received shipment
+   osqar shipment verify --shipment /path/to/shipment --traceability \
+      --report-json /path/to/shipment/verify_report.json
 
 Reproducible native builds (C / C++ / Rust)
 ===========================================
@@ -531,8 +627,8 @@ Generate and verify checksums for the example build output directory::
 
    osqar checksum generate \
       --root examples/python_hello_world/_build/html \
-   --output examples/python_hello_world/_build/html/SHA256SUMS \
-   --json-report examples/python_hello_world/_build/html/checksums_report.generate.json
+      --output examples/python_hello_world/_build/html/SHA256SUMS \
+      --json-report examples/python_hello_world/_build/html/checksums_report.generate.json
 
    osqar checksum verify \
       --root examples/python_hello_world/_build/html \
@@ -568,6 +664,15 @@ Optional convenience (higher-level workflows in one command)::
       --recursive \
       --output intake/archive/2026-02-01 \
       --traceability
+
+   # Optional: enforce declared OSQAr-qualified dependencies
+   osqar workspace verify \
+      --root intake/received \
+      --recursive \
+      --enforce-deps
+
+   # Optional: compute a stable dependency pin for a shipment (SHA256SUMS)
+   osqar shipment pin --shipment /path/to/shipment
 
    # Generate and open an HTML Subproject overview (via Sphinx)
    osqar workspace report \
@@ -653,3 +758,4 @@ Troubleshooting
 - PlantUML in offline environments: set ``PLANTUML_JAR`` or install PlantUML locally.
 - Broken trace links: prefer ``:need:`ID``` references over plain-text IDs.
 - ID validation failures: keep IDs uppercase with underscores (e.g., ``REQ_SAFETY_001``).
+

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tsim_rust" tests="3" failures="0" errors="0" skipped="0" time="0">
+<testsuite name="tsim_rust" tests="4" failures="0" errors="0" skipped="0" time="0">
   <testcase classname="tsim_rust" name="test_conversion_full_range" time="0">
   </testcase>
   <testcase classname="tsim_rust" name="test_filter_noise_rejection" time="0">
   </testcase>
   <testcase classname="tsim_rust" name="test_threshold_and_hysteresis" time="0">
+  </testcase>
+  <testcase classname="tsim_rust" name="test_shared_magic_constant" time="0">
   </testcase>
 </testsuite>

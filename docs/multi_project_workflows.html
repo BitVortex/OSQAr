@@ -6,15 +6,15 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Collaboration workflows (multi-user)" href="collaboration_workflows.html" /><link rel="prev" title="Lifecycle Management" href="lifecycle_management.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Multi-project workflows - OSQAr 0.5.6 documentation</title>
+        <title>Multi-project workflows - OSQAr 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=a9325376" />
     
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.5.6 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.6.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.5.6 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.6.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -424,6 +424,32 @@ where a shipment came from and how it maps back to source control.</p>
 </pre></div>
 </div>
 </section>
+<section id="shipment-dependencies-supplier">
+<h2>Shipment dependencies (supplier)<a class="headerlink" href="#shipment-dependencies-supplier" title="Link to this heading">¶</a></h2>
+<p>If an OSQAr-qualified library depends on other OSQAr-qualified libraries, declare these
+dependencies in the shipped <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code>.</p>
+<p>Recommended structure:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;osqar.shipment_project_metadata.v1&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LIB_CONSUMER&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.2.3&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;dependencies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LIB_PROVIDER&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;pin_sha256sums&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;sha256-of-SHA256SUMS-file-bytes&gt;&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">pin_sha256sums</span></code> field is a stable identifier of the dependency shipment’s
+<code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> manifest file.</p>
+<p>Compute a dependency pin from a received or built shipment directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment pin --shipment /path/to/LIB_PROVIDER_shipment</span>
+</pre></div>
+</div>
+</section>
 <section id="subproject-overview-integrator-output">
 <h2>Subproject overview (integrator output)<a class="headerlink" href="#subproject-overview-integrator-output" title="Link to this heading">¶</a></h2>
 <p>When you run an intake, OSQAr generates a <strong>Subproject overview</strong> in the intake output:</p>
@@ -449,6 +475,30 @@ have less context about origin/URLs.</p>
 <li><p>Keep integrator-generated artifacts (reports, dashboards) outside the shipment tree.</p></li>
 <li><p>Prefer deterministic naming (supplier, component, version) for shipment folders.</p></li>
 </ul>
+</section>
+<section id="workspace-dependency-enforcement-integrator">
+<h2>Workspace dependency enforcement (integrator)<a class="headerlink" href="#workspace-dependency-enforcement-integrator" title="Link to this heading">¶</a></h2>
+<p>Workspace commands can validate declared dependencies across all shipments:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace verify --root intake/received --recursive --enforce-deps</span>
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">--enforce-deps</span></code>, OSQAr fails the command if dependencies are missing, ambiguous,
+or conflicting (for example, the same dependency <code class="docutils literal notranslate"><span class="pre">id</span></code> is requested with different versions
+or pins in the same workspace).</p>
+</section>
+<section id="how-to-observe-deduplication">
+<h2>How to observe deduplication<a class="headerlink" href="#how-to-observe-deduplication" title="Link to this heading">¶</a></h2>
+<p>After running <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">workspace</span> <span class="pre">intake</span></code> or <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">workspace</span> <span class="pre">report</span></code>, you can observe
+logical deduplication in two places:</p>
+<ul class="simple">
+<li><p>In the generated HTML overview, the summary line includes <code class="docutils literal notranslate"><span class="pre">shared_satisfiers=&lt;N&gt;</span></code>.
+This counts how many distinct dependency shipments satisfy more than one dependent project.</p></li>
+<li><p>In the JSON overview (written as <code class="docutils literal notranslate"><span class="pre">subproject_overview.json</span></code> in the output directory),
+look at <code class="docutils literal notranslate"><span class="pre">dependency_analysis.summary.shared_satisfiers_total</span></code> and the
+<code class="docutils literal notranslate"><span class="pre">dependency_analysis.resolutions</span></code> list (each entry records <code class="docutils literal notranslate"><span class="pre">dependency.satisfied_by</span></code>).</p></li>
+</ul>
+<p>If your workspace contains identical duplicate shipments (same id/version/pin present multiple times),
+those are reported separately as <code class="docutils literal notranslate"><span class="pre">dedup_groups=&lt;N&gt;</span></code> and in <code class="docutils literal notranslate"><span class="pre">dependency_analysis.dedup</span></code>.</p>
 </section>
 </section>
 
@@ -518,8 +568,11 @@ have less context about origin/URLs.</p>
 <li><a class="reference internal" href="#intake-archiving-cli">Intake + archiving (CLI)</a></li>
 <li><a class="reference internal" href="#practical-naming-convention">Practical naming convention</a></li>
 <li><a class="reference internal" href="#shipment-metadata-supplier">Shipment metadata (supplier)</a></li>
+<li><a class="reference internal" href="#shipment-dependencies-supplier">Shipment dependencies (supplier)</a></li>
 <li><a class="reference internal" href="#subproject-overview-integrator-output">Subproject overview (integrator output)</a></li>
 <li><a class="reference internal" href="#notes-and-good-practices">Notes and good practices</a></li>
+<li><a class="reference internal" href="#workspace-dependency-enforcement-integrator">Workspace dependency enforcement (integrator)</a></li>
+<li><a class="reference internal" href="#how-to-observe-deduplication">How to observe deduplication</a></li>
 </ul>
 </li>
 </ul>
@@ -533,7 +586,7 @@ have less context about origin/URLs.</p>
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=722679d6"></script>
+    <script src="../_static/documentation_options.js?v=8fa8b3e9"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

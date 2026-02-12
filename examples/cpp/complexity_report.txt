@@ -6,24 +6,25 @@
       16      2    109      2      18 tsim_filter_t::update@37-54@src/tsim.cpp
        5      1     26      2       5 tsim_sm_t::init@56-60@src/tsim.cpp
       12      4     53      1      13 tsim_sm_t::evaluate@62-74@src/tsim.cpp
-       3      1     31      3       3 fail_msg@15-17@tests/test_tsim.cpp
-       4      1     45      2       4 set_fail@25-28@tests/test_tsim.cpp
-      20      4    176      0      24 test_conversion_full_range@30-53@tests/test_tsim.cpp
-      24      7    150      0      30 test_filter_noise_rejection@55-84@tests/test_tsim.cpp
-      26      6    154      0      34 test_threshold_and_hysteresis@86-119@tests/test_tsim.cpp
-      28      7    198      2      32 write_junit@121-152@tests/test_tsim.cpp
-      16      4    127      2      20 main@154-173@tests/test_tsim.cpp
+       3      1     31      3       3 fail_msg@16-18@tests/test_tsim.cpp
+       4      1     45      2       4 set_fail@26-29@tests/test_tsim.cpp
+      20      4    176      0      24 test_conversion_full_range@31-54@tests/test_tsim.cpp
+      24      7    150      0      30 test_filter_noise_rejection@56-85@tests/test_tsim.cpp
+      26      6    154      0      34 test_threshold_and_hysteresis@87-120@tests/test_tsim.cpp
+      11      2     68      0      13 test_shared_magic_constant@122-134@tests/test_tsim.cpp
+      28      7    198      2      32 write_junit@136-167@tests/test_tsim.cpp
+      17      4    136      2      21 main@169-189@tests/test_tsim.cpp
 3 file analyzed.
 ==============================================================
 NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
 --------------------------------------------------------------
      51       9.8     2.0       58.0         5     src/tsim.cpp
      23       0.0     0.0        0.0         0     include/tsim.hpp
-    132      17.3     4.3      125.9         7     tests/test_tsim.cpp
+    145      16.6     4.0      119.8         8     tests/test_tsim.cpp
 
 ===============================================================================================================
 No thresholds exceeded (cyclomatic_complexity > 10 or length > 1000 or nloc > 1000000 or parameter_count > 100)
 ==========================================================================================
 Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
 ------------------------------------------------------------------------------------------
-       206      14.2     3.3       97.6       12            0      0.00    0.00
+       219      14.0     3.2       96.0       13            0      0.00    0.00

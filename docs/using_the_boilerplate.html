@@ -6,15 +6,15 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Setting Up A Project From Scratch" href="project_setup_from_scratch.html" /><link rel="prev" title="OSQAr (Open Safety Qualification Architecture)" href="../index.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>Using the OSQAr Boilerplate - OSQAr 0.5.6 documentation</title>
+        <title>Using the OSQAr Boilerplate - OSQAr 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=a9325376" />
     
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.5.6 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.6.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.5.6 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.6.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -265,57 +265,66 @@
         <article role="main" id="furo-main-content">
           <section id="using-the-osqar-boilerplate">
 <h1>Using the OSQAr Boilerplate<a class="headerlink" href="#using-the-osqar-boilerplate" title="Link to this heading">¶</a></h1>
-<section id="purpose">
-<h2>Purpose<a class="headerlink" href="#purpose" title="Link to this heading">¶</a></h2>
+<p>This chapter is the main entrypoint for OSQAr.
+It explains the <strong>mental model</strong> (project → shipment → workspace) and provides <strong>copy/paste workflows</strong>.</p>
+<p>For the full per-command reference (all flags, exit codes, and resolution rules), see <a class="reference internal" href="cli_reference.html"><span class="doc">CLI Reference</span></a>.</p>
+<section id="what-osqar-is-for">
+<h2>What OSQAr Is For<a class="headerlink" href="#what-osqar-is-for" title="Link to this heading">¶</a></h2>
 <p>OSQAr is a <strong>documentation-first framework</strong> for producing, verifying, and integrating <strong>auditable evidence shipments</strong> for safety/compliance work.</p>
-<p>In OSQAr, an evidence shipment is the unit you transfer and archive: a bundle that contains <strong>Sphinx documentation with maintained traceability</strong>, plus the <strong>implementation</strong>, <strong>tests</strong>, and <strong>analysis/verification reports</strong> needed to review and audit the evidence end-to-end.</p>
-<p>OSQAr provides:</p>
+<p>An evidence shipment is the unit you transfer and archive: a bundle that contains:</p>
+<ul class="simple">
+<li><p>rendered Sphinx documentation (with traceability)</p></li>
+<li><p>implementation sources and tests</p></li>
+<li><p>verification artifacts (test reports, analysis summaries, traceability reports)</p></li>
+<li><p>integrity protection (checksum manifest)</p></li>
+</ul>
+<p>OSQAr’s core ingredients:</p>
 <ul class="simple">
 <li><p>structured requirements and traceability (via <code class="docutils literal notranslate"><span class="pre">sphinx-needs</span></code>)</p></li>
 <li><p>architecture diagrams (via PlantUML)</p></li>
-<li><p>verification planning and traceability (requirements ↔ architecture ↔ tests)</p></li>
-<li><p>evidence “shipments” (documentation + traceability + implementation + tests + analysis reports) protected by checksum manifests</p></li>
-<li><p>workspace-friendly multi-shipment inventory/intake and a consolidated <strong>Subproject overview</strong> (JSON + theme-aligned HTML)</p></li>
-<li><p>extensive lifecycle management guidance (framework-level and example-level)</p></li>
+<li><p>verification planning (requirements ↔ architecture ↔ tests)</p></li>
+<li><p>shipment and workspace workflows (prepare, verify, intake, report)</p></li>
 </ul>
-<p>This chapter is the main entrypoint. It gives you the mental model and the first commands to run.</p>
 </section>
-<section id="start-here">
-<h2>Start here<a class="headerlink" href="#start-here" title="Link to this heading">¶</a></h2>
+<section id="how-to-use-this-guide">
+<h2>How To Use This Guide<a class="headerlink" href="#how-to-use-this-guide" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Run <a class="reference internal" href="#quick-start"><span class="std std-ref">Quick Start (End-to-End)</span></a> to build docs and generate a scaffold.</p></li>
+<li><p>Read <a class="reference internal" href="#terms"><span class="std std-ref">Terminology (Project, Shipment, Workspace)</span></a> once (project vs shipment vs workspace).</p></li>
+<li><p>Use <a class="reference internal" href="#workflow-recipes"><span class="std std-ref">Workflow Recipes</span></a> as your day-to-day command cookbook.</p></li>
+<li><p>When you need exact flags/help, jump to <a class="reference internal" href="cli_reference.html"><span class="doc">CLI Reference</span></a>.</p></li>
+</ol>
+</section>
+<section id="quick-start-end-to-end">
+<span id="quick-start"></span><h2>Quick Start (End-to-End)<a class="headerlink" href="#quick-start-end-to-end" title="Link to this heading">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The examples below use the PyPI-installed CLI.</p>
 <ul class="simple">
-<li><p>Install OSQAr: <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">osqar</span></code></p></li>
+<li><p>Install OSQAr once: <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">osqar</span></code></p></li>
 <li><p>Invoke commands as: <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">&lt;command&gt;</span> <span class="pre">...</span></code></p></li>
 </ul>
 <p>If you are contributing to OSQAr from a git clone and did not install via pipx,
-you can use the repo-root wrappers instead (<code class="docutils literal notranslate"><span class="pre">./osqar</span></code> on Linux/macOS; <code class="docutils literal notranslate"><span class="pre">osqar.cmd</span></code> / <code class="docutils literal notranslate"><span class="pre">osqar.ps1</span></code> on Windows).</p>
+use the repo-root wrappers instead (<code class="docutils literal notranslate"><span class="pre">./osqar</span></code> on Linux/macOS; <code class="docutils literal notranslate"><span class="pre">osqar.cmd</span></code> / <code class="docutils literal notranslate"><span class="pre">osqar.ps1</span></code> on Windows).</p>
 </div>
-<ol class="arabic simple">
-<li><p>Install the framework dependencies (Poetry environment).</p></li>
-<li><p>Build the framework documentation (repo root).</p></li>
-<li><p>Create a minimal project scaffold (so you can try the workflow in your own repo layout).</p></li>
-<li><p>In the generated project, build the docs and inspect the outputs (HTML + <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>).</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 0) Install the OSQAr CLI</span>
-pipx<span class="w"> </span>install<span class="w"> </span>osqar
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="m">0</span><span class="o">)</span><span class="w"> </span>Install<span class="w"> </span>the<span class="w"> </span>OSQAr<span class="w"> </span>CLI
+<span class="go">pipx install osqar</span>
 
-<span class="c1"># 1) Install dependencies</span>
-poetry<span class="w"> </span>install
+<span class="gp"># </span><span class="m">1</span><span class="o">)</span><span class="w"> </span>Install<span class="w"> </span>dependencies<span class="w"> </span><span class="o">(</span>this<span class="w"> </span>repo<span class="w"> </span>/<span class="w"> </span>framework<span class="w"> </span>docs<span class="o">)</span>
+<span class="go">poetry install</span>
 
-<span class="c1"># 2) Build framework docs (this repo)</span>
-osqar<span class="w"> </span>build-docs
+<span class="gp"># </span><span class="m">2</span><span class="o">)</span><span class="w"> </span>Build<span class="w"> </span>the<span class="w"> </span>framework<span class="w"> </span>docs<span class="w"> </span><span class="o">(</span>repo<span class="w"> </span>root<span class="o">)</span>
+<span class="go">osqar build-docs</span>
 
-<span class="c1"># 3) Scaffold a minimal project next to the framework repo</span>
-osqar<span class="w"> </span>new<span class="w"> </span>--language<span class="w"> </span>c<span class="w"> </span>--name<span class="w"> </span>MySEooC<span class="w"> </span>--destination<span class="w"> </span>../MySEooC
+<span class="gp"># </span><span class="m">3</span><span class="o">)</span><span class="w"> </span>Scaffold<span class="w"> </span>a<span class="w"> </span>minimal<span class="w"> </span>project<span class="w"> </span>next<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>framework<span class="w"> </span>repo
+<span class="go">osqar new --language c --name MySEooC --destination ../MySEooC</span>
 
-<span class="c1"># 4) Build the scaffolded project docs</span>
-osqar<span class="w"> </span>build-docs<span class="w"> </span>--project<span class="w"> </span>../MySEooC
+<span class="gp"># </span><span class="m">4</span><span class="o">)</span><span class="w"> </span>Build<span class="w"> </span>the<span class="w"> </span>scaffolded<span class="w"> </span>project<span class="w"> </span>docs
+<span class="go">osqar build-docs --project ../MySEooC</span>
 </pre></div>
 </div>
-<p>Windows note: prefer the repo-root wrappers (<code class="docutils literal notranslate"><span class="pre">osqar.cmd</span></code> / <code class="docutils literal notranslate"><span class="pre">osqar.ps1</span></code>). If you want to run
-<code class="docutils literal notranslate"><span class="pre">*.sh</span></code> example scripts unchanged, use WSL2.</p>
+<p>Windows note: prefer the Windows repo-root wrappers (<code class="docutils literal notranslate"><span class="pre">osqar.cmd</span></code> / <code class="docutils literal notranslate"><span class="pre">osqar.ps1</span></code>).
+If you want to run the example <code class="docutils literal notranslate"><span class="pre">*.sh</span></code> scripts unchanged, use WSL2.</p>
 </section>
 <section id="recommended-reading-order">
 <h2>Recommended reading order<a class="headerlink" href="#recommended-reading-order" title="Link to this heading">¶</a></h2>
@@ -329,21 +338,20 @@ osqar<span class="w"> </span>build-docs<span class="w"> </span>--project<span cl
 <li><p>For team-scale collaboration, see: <a class="reference internal" href="collaboration_workflows.html"><span class="doc">Collaboration workflows (multi-user)</span></a>.</p></li>
 </ol>
 </section>
-<section id="typical-workflow">
-<h2>Typical workflow<a class="headerlink" href="#typical-workflow" title="Link to this heading">¶</a></h2>
+<section id="workflow-overview">
+<h2>Workflow overview<a class="headerlink" href="#workflow-overview" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Author needs objects (REQ/ARCH/TEST) in RST with stable IDs.</p></li>
 <li><p>Build HTML docs and export machine-readable artifacts (e.g. <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>).</p></li>
-<li><p>Run traceability checks and store the report.</p></li>
-<li><p>Generate a checksum manifest (e.g. <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>) for integrity.</p></li>
+<li><p>Run traceability checks and keep the report.</p></li>
+<li><p>Generate a checksum manifest (e.g. <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>).</p></li>
 <li><p>Transfer/archive the shipment; integrators verify checksums and (optionally) re-run checks.</p></li>
 </ol>
 </section>
-<section id="quick-start">
-<h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
-<section id="install-options">
-<h3>Install options<a class="headerlink" href="#install-options" title="Link to this heading">¶</a></h3>
-<p>OSQAr keeps the default Python dependency footprint lean. Install additional tooling only if you need it:</p>
+<section id="installation-options-poetry-groups">
+<h2>Installation options (Poetry groups)<a class="headerlink" href="#installation-options-poetry-groups" title="Link to this heading">¶</a></h2>
+<p>OSQAr keeps the default Python dependency footprint lean.
+Install additional tooling only if you need it:</p>
 <ul>
 <li><p>Core docs + CLI (recommended default):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">install</span>
@@ -361,27 +369,95 @@ osqar<span class="w"> </span>build-docs<span class="w"> </span>--project<span cl
 </div>
 </li>
 </ul>
-<p>Build the rendered HTML documentation from the repository root:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install
-osqar<span class="w"> </span>build-docs
-open<span class="w"> </span>_build/html/index.html
-</pre></div>
-</div>
-<p>By default, <code class="docutils literal notranslate"><span class="pre">build-docs</span></code> uses <code class="docutils literal notranslate"><span class="pre">--project</span> <span class="pre">.</span></code> and writes HTML to <code class="docutils literal notranslate"><span class="pre">./_build/html</span></code>.</p>
 </section>
 <section id="download-optional">
-<h3>Download (optional)<a class="headerlink" href="#download-optional" title="Link to this heading">¶</a></h3>
-<p>If you want a pre-built bundle (framework HTML docs + CLI tooling) without building locally, use the GitHub Releases assets:</p>
+<h2>Download (optional)<a class="headerlink" href="#download-optional" title="Link to this heading">¶</a></h2>
+<p>If you want pre-built archives (example workspaces / demo shipments) without building locally, use the GitHub Releases assets:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/bitvortex/OSQAr/releases">https://github.com/bitvortex/OSQAr/releases</a></p></li>
 </ul>
-<section id="starting-point-downloaded-example-workspace">
-<h4>Starting point (downloaded example workspace)<a class="headerlink" href="#starting-point-downloaded-example-workspace" title="Link to this heading">¶</a></h4>
-<p>If you downloaded the combined example workspace ZIP from Releases (often together with a <code class="docutils literal notranslate"><span class="pre">.sha256</span></code> file), the quickest way to extract and verify it is:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osqar<span class="w"> </span>setup<span class="w"> </span>osqar_example_workspace_&lt;tag&gt;.zip
+<p>If you downloaded the combined example workspace ZIP from Releases (often together with a <code class="docutils literal notranslate"><span class="pre">.sha256</span></code> file), extract and verify it with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar setup osqar_example_workspace_&lt;tag&gt;.zip</span>
 </pre></div>
 </div>
 </section>
+<section id="terminology-project-shipment-workspace">
+<span id="terms"></span><h2>Terminology (Project, Shipment, Workspace)<a class="headerlink" href="#terminology-project-shipment-workspace" title="Link to this heading">¶</a></h2>
+<p>These terms are used consistently across the docs and the CLI.
+They match the definitions in <a class="reference internal" href="cli_reference.html"><span class="doc">CLI Reference</span></a>.</p>
+<section id="project-shipment-project">
+<h3>Project (shipment project)<a class="headerlink" href="#project-shipment-project" title="Link to this heading">¶</a></h3>
+<p>Directory that contains at least:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">conf.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index.rst</span></code></p></li>
+</ul>
+<p>Examples live under <code class="docutils literal notranslate"><span class="pre">examples/</span></code>.</p>
+</section>
+<section id="shipment-directory-built-evidence-output">
+<h3>Shipment directory (built evidence output)<a class="headerlink" href="#shipment-directory-built-evidence-output" title="Link to this heading">¶</a></h3>
+<p>The built HTML output directory, usually:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/_build/html</span></code></p></li>
+</ul>
+<p>This directory may contain artifacts such as <code class="docutils literal notranslate"><span class="pre">index.html</span></code>, <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>, <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>, and reports.</p>
+</section>
+<section id="workspace-integrator-side">
+<h3>Workspace (integrator side)<a class="headerlink" href="#workspace-integrator-side" title="Link to this heading">¶</a></h3>
+<p>A directory that contains <strong>multiple received shipments</strong>.
+Workspace commands typically discover shipments by scanning for <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> in subdirectories.</p>
+</section>
+</section>
+<section id="workflow-recipes">
+<span id="id1"></span><h2>Workflow Recipes<a class="headerlink" href="#workflow-recipes" title="Link to this heading">¶</a></h2>
+<p>The commands below are the “core loop” you’ll run most often.</p>
+<section id="build-docs-sphinx-html">
+<h3>Build docs (Sphinx HTML)<a class="headerlink" href="#build-docs-sphinx-html" title="Link to this heading">¶</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Build<span class="w"> </span>docs<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>current<span class="w"> </span>project<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span>--project<span class="w"> </span>.<span class="o">)</span>
+<span class="go">osqar build-docs</span>
+
+<span class="gp"># </span>Build<span class="w"> </span>docs<span class="w"> </span><span class="k">for</span><span class="w"> </span>an<span class="w"> </span>example<span class="w"> </span>project
+<span class="go">osqar build-docs --project examples/c_hello_world</span>
+
+<span class="gp"># </span>Build<span class="w"> </span>and<span class="w"> </span>open<span class="w"> </span>index.html
+<span class="go">osqar build-docs --open</span>
+</pre></div>
+</div>
+</section>
+<section id="verify-traceability">
+<h3>Verify traceability<a class="headerlink" href="#verify-traceability" title="Link to this heading">¶</a></h3>
+<p>OSQAr’s traceability check validates basic rules based on exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar traceability ./_build/html/needs.json \</span>
+<span class="go">  --json-report ./_build/html/traceability_report.json</span>
+</pre></div>
+</div>
+</section>
+<section id="checksum-manifest-shipment-integrity">
+<h3>Checksum manifest (shipment integrity)<a class="headerlink" href="#checksum-manifest-shipment-integrity" title="Link to this heading">¶</a></h3>
+<p>Generate and verify a checksum manifest (default: SHA-256) for a shipped directory.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar checksum generate \</span>
+<span class="go">   --root ./_build/html \</span>
+<span class="go">   --output ./_build/html/SHA256SUMS \</span>
+<span class="go">   --json-report ./_build/html/checksums_report.generate.json</span>
+
+<span class="go">osqar checksum verify \</span>
+<span class="go">   --root ./_build/html \</span>
+<span class="go">   --manifest ./_build/html/SHA256SUMS \</span>
+<span class="go">   --json-report ./_build/html/checksums_report.verify.json</span>
+</pre></div>
+</div>
+</section>
+<section id="prepare-and-verify-a-shipment-high-level">
+<h3>Prepare and verify a shipment (high-level)<a class="headerlink" href="#prepare-and-verify-a-shipment-high-level" title="Link to this heading">¶</a></h3>
+<p>If you want one command that builds docs, runs checks, and optionally archives:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Supplier<span class="w"> </span>side:<span class="w"> </span>build<span class="w"> </span>a<span class="w"> </span>shippable<span class="w"> </span>evidence<span class="w"> </span>directory
+<span class="go">osqar shipment prepare --project examples/python_hello_world --clean --archive</span>
+
+<span class="gp"># </span>Integrator<span class="w"> </span>side:<span class="w"> </span>verify<span class="w"> </span>a<span class="w"> </span>received<span class="w"> </span>shipment
+<span class="go">osqar shipment verify --shipment /path/to/shipment --traceability \</span>
+<span class="go">   --report-json /path/to/shipment/verify_report.json</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="reproducible-native-builds-c-c-rust">
@@ -574,9 +650,9 @@ run them in WSL2.</p></li>
 </section>
 <section id="support-matrix">
 <h4>Support matrix<a class="headerlink" href="#support-matrix" title="Link to this heading">¶</a></h4>
-<div class="table-wrapper colwidths-given docutils container" id="id1">
-<table class="docutils align-default" id="id1">
-<caption><span class="caption-text">Support matrix (recommended expectations)</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<div class="table-wrapper colwidths-given docutils container" id="id4">
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Support matrix (recommended expectations)</span><a class="headerlink" href="#id4" title="Link to this table">¶</a></caption>
 <colgroup>
 <col style="width: 34.0%" />
 <col style="width: 22.0%" />
@@ -633,16 +709,16 @@ see <a class="reference internal" href="collaboration_workflows.html#ci-setup"><
 </div>
 <p>This copies the selected template while excluding build outputs (e.g., <code class="docutils literal notranslate"><span class="pre">_build/</span></code>, <code class="docutils literal notranslate"><span class="pre">target/</span></code>, <code class="docutils literal notranslate"><span class="pre">__pycache__/</span></code>).</p>
 </section>
-<section id="verify-traceability">
-<h3>Verify traceability<a class="headerlink" href="#verify-traceability" title="Link to this heading">¶</a></h3>
+<section id="id2">
+<h3>Verify traceability<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
 <p>Run traceability checks on an exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osqar<span class="w"> </span>traceability<span class="w"> </span>./_build/html/needs.json<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--json-report<span class="w"> </span>./_build/html/traceability_report.json
 </pre></div>
 </div>
 </section>
-<section id="checksum-manifest-shipment-integrity">
-<h3>Checksum manifest (shipment integrity)<a class="headerlink" href="#checksum-manifest-shipment-integrity" title="Link to this heading">¶</a></h3>
+<section id="id3">
+<h3>Checksum manifest (shipment integrity)<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
 <p>Generate and verify a checksum manifest (default: SHA-256) for a shipped directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osqar<span class="w"> </span>checksum<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
 <span class="w">   </span>--root<span class="w"> </span>./_build/html<span class="w"> </span><span class="se">\</span>
@@ -780,8 +856,8 @@ This is the unit that is transferred, archived, and later verified (similar to a
 <p>Generate and verify checksums for the example build output directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">osqar</span> <span class="n">checksum</span> <span class="n">generate</span> \
    <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
-<span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span> \
-<span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">checksums_report</span><span class="o">.</span><span class="n">generate</span><span class="o">.</span><span class="n">json</span>
+   <span class="o">--</span><span class="n">output</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">SHA256SUMS</span> \
+   <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">checksums_report</span><span class="o">.</span><span class="n">generate</span><span class="o">.</span><span class="n">json</span>
 
 <span class="n">osqar</span> <span class="n">checksum</span> <span class="n">verify</span> \
    <span class="o">--</span><span class="n">root</span> <span class="n">examples</span><span class="o">/</span><span class="n">python_hello_world</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span> \
@@ -817,6 +893,15 @@ This is the unit that is transferred, archived, and later verified (similar to a
    <span class="o">--</span><span class="n">recursive</span> \
    <span class="o">--</span><span class="n">output</span> <span class="n">intake</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="mi">2026</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">01</span> \
    <span class="o">--</span><span class="n">traceability</span>
+
+<span class="c1"># Optional: enforce declared OSQAr-qualified dependencies</span>
+<span class="n">osqar</span> <span class="n">workspace</span> <span class="n">verify</span> \
+   <span class="o">--</span><span class="n">root</span> <span class="n">intake</span><span class="o">/</span><span class="n">received</span> \
+   <span class="o">--</span><span class="n">recursive</span> \
+   <span class="o">--</span><span class="n">enforce</span><span class="o">-</span><span class="n">deps</span>
+
+<span class="c1"># Optional: compute a stable dependency pin for a shipment (SHA256SUMS)</span>
+<span class="n">osqar</span> <span class="n">shipment</span> <span class="n">pin</span> <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">shipment</span>
 
 <span class="c1"># Generate and open an HTML Subproject overview (via Sphinx)</span>
 <span class="n">osqar</span> <span class="n">workspace</span> <span class="n">report</span> \
@@ -974,16 +1059,24 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Using the OSQAr Boilerplate</a><ul>
-<li><a class="reference internal" href="#purpose">Purpose</a></li>
-<li><a class="reference internal" href="#start-here">Start here</a></li>
+<li><a class="reference internal" href="#what-osqar-is-for">What OSQAr Is For</a></li>
+<li><a class="reference internal" href="#how-to-use-this-guide">How To Use This Guide</a></li>
+<li><a class="reference internal" href="#quick-start-end-to-end">Quick Start (End-to-End)</a></li>
 <li><a class="reference internal" href="#recommended-reading-order">Recommended reading order</a></li>
-<li><a class="reference internal" href="#typical-workflow">Typical workflow</a></li>
-<li><a class="reference internal" href="#quick-start">Quick start</a><ul>
-<li><a class="reference internal" href="#install-options">Install options</a></li>
-<li><a class="reference internal" href="#download-optional">Download (optional)</a><ul>
-<li><a class="reference internal" href="#starting-point-downloaded-example-workspace">Starting point (downloaded example workspace)</a></li>
+<li><a class="reference internal" href="#workflow-overview">Workflow overview</a></li>
+<li><a class="reference internal" href="#installation-options-poetry-groups">Installation options (Poetry groups)</a></li>
+<li><a class="reference internal" href="#download-optional">Download (optional)</a></li>
+<li><a class="reference internal" href="#terminology-project-shipment-workspace">Terminology (Project, Shipment, Workspace)</a><ul>
+<li><a class="reference internal" href="#project-shipment-project">Project (shipment project)</a></li>
+<li><a class="reference internal" href="#shipment-directory-built-evidence-output">Shipment directory (built evidence output)</a></li>
+<li><a class="reference internal" href="#workspace-integrator-side">Workspace (integrator side)</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#workflow-recipes">Workflow Recipes</a><ul>
+<li><a class="reference internal" href="#build-docs-sphinx-html">Build docs (Sphinx HTML)</a></li>
+<li><a class="reference internal" href="#verify-traceability">Verify traceability</a></li>
+<li><a class="reference internal" href="#checksum-manifest-shipment-integrity">Checksum manifest (shipment integrity)</a></li>
+<li><a class="reference internal" href="#prepare-and-verify-a-shipment-high-level">Prepare and verify a shipment (high-level)</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#reproducible-native-builds-c-c-rust">Reproducible native builds (C / C++ / Rust)</a><ul>
@@ -1004,8 +1097,8 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
 </ul>
 </li>
 <li><a class="reference internal" href="#scaffold-a-new-project">Scaffold a new project</a></li>
-<li><a class="reference internal" href="#verify-traceability">Verify traceability</a></li>
-<li><a class="reference internal" href="#checksum-manifest-shipment-integrity">Checksum manifest (shipment integrity)</a></li>
+<li><a class="reference internal" href="#id2">Verify traceability</a></li>
+<li><a class="reference internal" href="#id3">Checksum manifest (shipment integrity)</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#core-authoring-workflow">Core authoring workflow</a><ul>
@@ -1039,7 +1132,7 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=722679d6"></script>
+    <script src="../_static/documentation_options.js?v=8fa8b3e9"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

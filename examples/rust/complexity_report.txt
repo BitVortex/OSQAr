@@ -6,24 +6,26 @@
       18      4    104      0      21 test_conversion_full_range@26-46@src/bin/junit_tests.rs
       19      7    132      0      24 test_filter_noise_rejection@48-71@src/bin/junit_tests.rs
       19      6    127      0      26 test_threshold_and_hysteresis@73-98@src/bin/junit_tests.rs
-      26     10    173      3      29 write_junit@100-128@src/bin/junit_tests.rs
-       7      1     48      1       7 xml_escape@130-136@src/bin/junit_tests.rs
-      18      3    153      0      22 main@138-159@src/bin/junit_tests.rs
+      10      2     38      0      11 test_shared_magic_constant@100-110@src/bin/junit_tests.rs
+      26     10    173      3      29 write_junit@112-140@src/bin/junit_tests.rs
+       7      1     48      1       7 xml_escape@142-148@src/bin/junit_tests.rs
+      19      3    157      0      23 main@150-172@src/bin/junit_tests.rs
       13      3     83      1      18 adc_to_temp_x10@25-42@src/lib.rs
-       8      1     31      0       8 new@53-60@src/lib.rs
-      15      2    133      2      17 update@63-79@src/lib.rs
-       7      1     28      2       7 new@90-96@src/lib.rs
-      15      4     68      2      15 evaluate@98-112@src/lib.rs
+       5      1     23      0       7 osqar_shared_magic@45-51@src/lib.rs
+       8      1     31      0       8 new@62-69@src/lib.rs
+      15      2    133      2      17 update@72-88@src/lib.rs
+       7      1     28      2       7 new@99-105@src/lib.rs
+      15      4     68      2      15 evaluate@107-121@src/lib.rs
 2 file analyzed.
 ==============================================================
 NLOC    Avg.NLOC  AvgCCN  Avg.token  function_cnt    file
 --------------------------------------------------------------
-    123      14.1     4.1      100.4         8     src/bin/junit_tests.rs
-     79      11.6     2.2       68.6         5     src/lib.rs
+    134      13.8     3.9       93.9         9     src/bin/junit_tests.rs
+     85      10.5     2.0       61.0         6     src/lib.rs
 
 ===============================================================================================================
 No thresholds exceeded (cyclomatic_complexity > 10 or length > 1000 or nloc > 1000000 or parameter_count > 100)
 ==========================================================================================
 Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc Rt
 ------------------------------------------------------------------------------------------
-       202      13.2     3.4       88.2       13            0      0.00    0.00
+       219      12.5     3.1       80.7       15            0      0.00    0.00

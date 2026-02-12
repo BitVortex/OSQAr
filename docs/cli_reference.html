@@ -6,15 +6,15 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Configuration and hooks" href="configuration_and_hooks.html" /><link rel="prev" title="Setting Up A Project From Scratch" href="project_setup_from_scratch.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
-        <title>CLI Reference - OSQAr 0.5.6 documentation</title>
+        <title>CLI Reference - OSQAr 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=a9325376" />
     
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.5.6 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.6.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.5.6 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.6.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -266,7 +266,7 @@
           <section id="cli-reference">
 <h1>CLI Reference<a class="headerlink" href="#cli-reference" title="Link to this heading">¶</a></h1>
 <p>This page is a <strong>command reference</strong> for the OSQAr CLI.</p>
-<p>For workflow guidance (what to run when and why), see <a class="reference internal" href="using_the_boilerplate.html"><span class="doc">Using the OSQAr Boilerplate</span></a>.</p>
+<p>For workflow guidance and copy/paste recipes, see <a class="reference internal" href="using_the_boilerplate.html"><span class="doc">Using the OSQAr Boilerplate</span></a> (especially <a class="reference internal" href="using_the_boilerplate.html#quick-start"><span class="std std-ref">Quick Start (End-to-End)</span></a> and <a class="reference internal" href="using_the_boilerplate.html#workflow-recipes"><span class="std std-ref">Workflow Recipes</span></a>).</p>
 <section id="how-to-use-this-reference">
 <h2>How To Use This Reference<a class="headerlink" href="#how-to-use-this-reference" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
@@ -785,6 +785,7 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">clean</span></code> — remove generated outputs</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">traceability</span></code> — traceability checks for a shipment directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">checksums</span></code> — generate/verify checksums for a shipment directory</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">pin</span></code> — compute a dependency pin from a shipment manifest</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">copy-test-reports</span></code> — copy raw JUnit XML into a shipment directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">package</span></code> — archive a shipment directory into a <code class="docutils literal notranslate"><span class="pre">.zip</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">metadata</span> <span class="pre">write</span></code> — write <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> into a shipment directory</p></li>
@@ -932,12 +933,24 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 </section>
+<section id="shipment-pin">
+<h4>shipment pin<a class="headerlink" href="#shipment-pin" title="Link to this heading">¶</a></h4>
+<p>Compute a stable pin from a shipment manifest (default: <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>).</p>
+<p>This prints a hex SHA-256 digest of the manifest file bytes. It can be used to
+identify an OSQAr-qualified dependency precisely.</p>
+</section>
+<section id="id33">
+<h4>Synopsis<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment pin --shipment &lt;dir&gt; [--manifest &lt;path&gt;] [--json-report &lt;path&gt;]</span>
+</pre></div>
+</div>
+</section>
 <section id="shipment-copy-test-reports">
 <h4>shipment copy-test-reports<a class="headerlink" href="#shipment-copy-test-reports" title="Link to this heading">¶</a></h4>
 <p>Copy raw JUnit XML test reports into a shipment directory.</p>
 </section>
-<section id="id33">
-<h4>Synopsis<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h4>
+<section id="id34">
+<h4>Synopsis<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment copy-test-reports --project &lt;dir&gt; [--shipment &lt;dir&gt;]</span>
 <span class="go">                      [--glob &lt;pattern&gt; ...] [--dry-run]</span>
 </pre></div>
@@ -947,8 +960,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment package<a class="headerlink" href="#shipment-package" title="Link to this heading">¶</a></h4>
 <p>Archive a shipment directory into a <code class="docutils literal notranslate"><span class="pre">.zip</span></code>.</p>
 </section>
-<section id="id34">
-<h4>Synopsis<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h4>
+<section id="id35">
+<h4>Synopsis<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment package --shipment &lt;dir&gt; [--output &lt;path&gt;] [--dry-run]</span>
 </pre></div>
 </div>
@@ -957,8 +970,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment metadata write<a class="headerlink" href="#shipment-metadata-write" title="Link to this heading">¶</a></h4>
 <p>Write <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> into a shipment directory.</p>
 </section>
-<section id="id35">
-<h4>Synopsis<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h4>
+<section id="id36">
+<h4>Synopsis<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment metadata write --shipment &lt;dir&gt;</span>
 <span class="go">   [--name &lt;text&gt;] [--id &lt;stable-id&gt;] [--version &lt;ver&gt;] [--description &lt;text&gt;]</span>
 <span class="go">   [--url KEY=VALUE ...] [--origin KEY=VALUE ...] [--set KEY=VALUE ...]</span>
@@ -970,8 +983,13 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <section id="workspace">
 <span id="cli-workspace"></span><h3>workspace<a class="headerlink" href="#workspace" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">workspace</span></code> command group operates on multiple shipments in an integrator workspace.</p>
-<section id="id36">
-<h4>Subcommands<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h4>
+<p>If supplier-provided shipment metadata declares OSQAr-qualified dependencies, you can use
+<code class="docutils literal notranslate"><span class="pre">--enforce-deps</span></code> on workspace commands to fail on missing/ambiguous/conflicting dependencies.</p>
+<p>Workspace commands that produce an output directory (e.g., <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code> / <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">intake</span></code>)
+also write a machine-readable <code class="docutils literal notranslate"><span class="pre">subproject_overview.json</span></code> which includes <code class="docutils literal notranslate"><span class="pre">dependency_analysis</span></code>
+(summary counts, dependency resolutions, and any detected issues).</p>
+<section id="id37">
+<h4>Subcommands<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h4>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">list</span></code> — list discovered shipments (scan for <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code> — generate a workspace overview (JSON + HTML)</p></li>
@@ -983,8 +1001,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <section id="workspace-list">
 <h4>workspace list<a class="headerlink" href="#workspace-list" title="Link to this heading">¶</a></h4>
 </section>
-<section id="id37">
-<h4>Synopsis<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h4>
+<section id="id38">
+<h4>Synopsis<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace list [--root &lt;dir&gt;] [--config &lt;path&gt;] [--recursive]</span>
 <span class="go">              [--format {table,paths,json}] [--json-report &lt;path&gt;]</span>
 </pre></div>
@@ -994,19 +1012,20 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>workspace report<a class="headerlink" href="#workspace-report" title="Link to this heading">¶</a></h4>
 <p>Generate a subproject overview without copying shipments.</p>
 </section>
-<section id="id38">
-<h4>Synopsis<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h4>
+<section id="id39">
+<h4>Synopsis<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace report [--root &lt;dir&gt;] [--config &lt;path&gt;] [--no-hooks] [--recursive]</span>
 <span class="go">               --output &lt;dir&gt;</span>
 <span class="go">               [--checksums] [--traceability] [--doctor]</span>
 <span class="go">               [--needs-json &lt;path&gt;] [--exclude &lt;glob&gt; ...]</span>
+<span class="go">               [--enforce-deps]</span>
 <span class="go">               [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
 <span class="go">               [--continue-on-error] [--json-report &lt;path&gt;] [--open]</span>
 </pre></div>
 </div>
 </section>
-<section id="id39">
-<h4>Examples<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h4>
+<section id="id40">
+<h4>Examples<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>List<span class="w"> </span>shipments<span class="w"> </span>under<span class="w"> </span>a<span class="w"> </span>folder
 <span class="go">osqar workspace list --root intake/received --recursive</span>
 
@@ -1024,8 +1043,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <section id="workspace-diff">
 <h4>workspace diff<a class="headerlink" href="#workspace-diff" title="Link to this heading">¶</a></h4>
 </section>
-<section id="id40">
-<h4>Synopsis<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h4>
+<section id="id41">
+<h4>Synopsis<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace diff &lt;old_report.json&gt; &lt;new_report.json&gt;</span>
 </pre></div>
 </div>
@@ -1034,12 +1053,13 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>workspace verify<a class="headerlink" href="#workspace-verify" title="Link to this heading">¶</a></h4>
 <p>Verify many shipments (discover by scanning for <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>).</p>
 </section>
-<section id="id41">
-<h4>Synopsis<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h4>
+<section id="id42">
+<h4>Synopsis<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace verify [--root &lt;dir&gt;] [--config &lt;path&gt;] [--no-hooks]</span>
 <span class="go">               [--verify-command &lt;cmd&gt; ...] [--recursive]</span>
 <span class="go">               [--exclude &lt;glob&gt; ...]</span>
 <span class="go">               [--traceability] [--doctor] [--needs-json &lt;path&gt;]</span>
+<span class="go">               [--enforce-deps]</span>
 <span class="go">               [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
 <span class="go">               [--continue-on-error] [--json-report &lt;path&gt;]</span>
 </pre></div>
@@ -1049,13 +1069,14 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>workspace intake<a class="headerlink" href="#workspace-intake" title="Link to this heading">¶</a></h4>
 <p>Verify and archive multiple shipments into a single intake directory.</p>
 </section>
-<section id="id42">
-<h4>Synopsis<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h4>
+<section id="id43">
+<h4>Synopsis<a class="headerlink" href="#id43" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace intake [&lt;shipment_dir&gt; ...]</span>
 <span class="go">               [--root &lt;dir&gt;] [--config &lt;path&gt;] [--no-hooks] [--recursive]</span>
 <span class="go">               --output &lt;dir&gt; [--force] [--dry-run]</span>
 <span class="go">               [--exclude &lt;glob&gt; ...]</span>
 <span class="go">               [--traceability] [--doctor] [--needs-json &lt;path&gt;]</span>
+<span class="go">               [--enforce-deps]</span>
 <span class="go">               [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
 <span class="go">               [--continue-on-error]</span>
 </pre></div>
@@ -1236,27 +1257,29 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <li><a class="reference internal" href="#id31">Synopsis</a></li>
 <li><a class="reference internal" href="#shipment-checksums">shipment checksums</a></li>
 <li><a class="reference internal" href="#id32">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-copy-test-reports">shipment copy-test-reports</a></li>
+<li><a class="reference internal" href="#shipment-pin">shipment pin</a></li>
 <li><a class="reference internal" href="#id33">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-package">shipment package</a></li>
+<li><a class="reference internal" href="#shipment-copy-test-reports">shipment copy-test-reports</a></li>
 <li><a class="reference internal" href="#id34">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-metadata-write">shipment metadata write</a></li>
+<li><a class="reference internal" href="#shipment-package">shipment package</a></li>
 <li><a class="reference internal" href="#id35">Synopsis</a></li>
+<li><a class="reference internal" href="#shipment-metadata-write">shipment metadata write</a></li>
+<li><a class="reference internal" href="#id36">Synopsis</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#workspace">workspace</a><ul>
-<li><a class="reference internal" href="#id36">Subcommands</a></li>
+<li><a class="reference internal" href="#id37">Subcommands</a></li>
 <li><a class="reference internal" href="#workspace-list">workspace list</a></li>
-<li><a class="reference internal" href="#id37">Synopsis</a></li>
-<li><a class="reference internal" href="#workspace-report">workspace report</a></li>
 <li><a class="reference internal" href="#id38">Synopsis</a></li>
-<li><a class="reference internal" href="#id39">Examples</a></li>
+<li><a class="reference internal" href="#workspace-report">workspace report</a></li>
+<li><a class="reference internal" href="#id39">Synopsis</a></li>
+<li><a class="reference internal" href="#id40">Examples</a></li>
 <li><a class="reference internal" href="#workspace-diff">workspace diff</a></li>
-<li><a class="reference internal" href="#id40">Synopsis</a></li>
-<li><a class="reference internal" href="#workspace-verify">workspace verify</a></li>
 <li><a class="reference internal" href="#id41">Synopsis</a></li>
-<li><a class="reference internal" href="#workspace-intake">workspace intake</a></li>
+<li><a class="reference internal" href="#workspace-verify">workspace verify</a></li>
 <li><a class="reference internal" href="#id42">Synopsis</a></li>
+<li><a class="reference internal" href="#workspace-intake">workspace intake</a></li>
+<li><a class="reference internal" href="#id43">Synopsis</a></li>
 </ul>
 </li>
 </ul>
@@ -1274,7 +1297,7 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=722679d6"></script>
+    <script src="../_static/documentation_options.js?v=8fa8b3e9"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
