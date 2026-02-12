@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "https://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage branch-rate="0" branches-covered="0" branches-valid="0" complexity="0" line-rate="0.9642857142857143" lines-covered="54" lines-valid="56" timestamp="1770931488" version="2.0.3">
+<coverage branch-rate="0" branches-covered="0" branches-valid="0" complexity="0" line-rate="0.9642857142857143" lines-covered="54" lines-valid="56" timestamp="1770932892" version="2.0.3">
     <sources>
         <source>/home/runner/work/OSQAr/OSQAr/examples/rust_hello_world</source>
     </sources>

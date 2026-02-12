@@ -392,6 +392,35 @@ integrator-side configuration.</p>
 </pre></div>
 </div>
 </section>
+<section id="optional-declare-dependencies-on-other-osqar-qualified-libraries">
+<h4>Optional: declare dependencies on other OSQAr-qualified libraries<a class="headerlink" href="#optional-declare-dependencies-on-other-osqar-qualified-libraries" title="Link to this heading">¶</a></h4>
+<p>If your shipped component depends on other OSQAr-qualified components, declare them in the shipped
+<code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> under <code class="docutils literal notranslate"><span class="pre">dependencies</span></code>.</p>
+<p>Each dependency entry includes a pin:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pin_sha256sums</span></code> is a SHA-256 over the dependency shipment’s <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> file bytes.</p></li>
+</ul>
+<p>Compute a pin from a built/received dependency shipment directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">osqar</span> <span class="n">shipment</span> <span class="n">pin</span> <span class="o">--</span><span class="n">shipment</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">LIB_PROVIDER_shipment</span>
+</pre></div>
+</div>
+<p>Then add the dependency entry to your metadata (example):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;osqar.shipment_project_metadata.v1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LIB_CONSUMER&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.2.3&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;dependencies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LIB_PROVIDER&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nt">&quot;pin_sha256sums&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;sha256-of-SHA256SUMS-file-bytes&gt;&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Integrator workspaces can then enforce dependency closure across all received shipments using <code class="docutils literal notranslate"><span class="pre">--enforce-deps</span></code>.</p>
+</section>
 <section id="notes">
 <h4>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h4>
 <ul class="simple">
@@ -496,6 +525,7 @@ integrator-side configuration.</p>
 <li><a class="reference internal" href="#verification-artifacts">Verification artifacts</a></li>
 <li><a class="reference internal" href="#traceability-export-and-shipment-integrity">Traceability export and shipment integrity</a><ul>
 <li><a class="reference internal" href="#recommended-supplier-procedure-per-example">Recommended supplier procedure (per example)</a></li>
+<li><a class="reference internal" href="#optional-declare-dependencies-on-other-osqar-qualified-libraries">Optional: declare dependencies on other OSQAr-qualified libraries</a></li>
 <li><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>

@@ -407,6 +407,27 @@ They match the definitions in <a class="reference internal" href="cli_reference.
 <p>A directory that contains <strong>multiple received shipments</strong>.
 Workspace commands typically discover shipments by scanning for <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> in subdirectories.</p>
 </section>
+<section id="declared-dependencies-pins">
+<h3>Declared dependencies (pins)<a class="headerlink" href="#declared-dependencies-pins" title="Link to this heading">¶</a></h3>
+<p>OSQAr supports <strong>workspace dependency closure</strong> for OSQAr-qualified libraries.
+If a shipped component depends on other OSQAr-qualified components, the supplier can declare those dependencies
+in the shipped <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code>.</p>
+<p>Each dependency is identified by:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pin_sha256sums</span></code> (a SHA-256 over the dependency shipment’s <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> file bytes)</p></li>
+</ul>
+<p>Suppliers can compute the pin from a built/received shipment directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment pin --shipment /path/to/LIB_PROVIDER_shipment</span>
+</pre></div>
+</div>
+<p>Integrators can enforce that all declared dependencies are present (and unambiguous) in a workspace:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace verify --root intake/received --recursive --enforce-deps</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="multi_project_workflows.html"><span class="doc">Multi-project workflows</span></a> for the full dependency resolution rules and how to observe logical deduplication.</p>
+</section>
 </section>
 <section id="workflow-recipes">
 <span id="id1"></span><h2>Workflow Recipes<a class="headerlink" href="#workflow-recipes" title="Link to this heading">¶</a></h2>
@@ -1070,6 +1091,7 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
 <li><a class="reference internal" href="#project-shipment-project">Project (shipment project)</a></li>
 <li><a class="reference internal" href="#shipment-directory-built-evidence-output">Shipment directory (built evidence output)</a></li>
 <li><a class="reference internal" href="#workspace-integrator-side">Workspace (integrator side)</a></li>
+<li><a class="reference internal" href="#declared-dependencies-pins">Declared dependencies (pins)</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#workflow-recipes">Workflow Recipes</a><ul>

@@ -392,6 +392,13 @@ This produces a single dated intake folder with a <strong>Subproject overview</s
       <span class="o">--</span><span class="n">traceability</span>
 </pre></div>
 </div>
+<p>If supplier shipments declare dependencies (in shipped <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code>), enforce dependency closure during
+verification/intake:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace verify --root intake/received --recursive --enforce-deps</span>
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">--enforce-deps</span></code>, OSQAr fails the command if dependencies are missing, ambiguous, or conflicting in the workspace.</p>
+<p>For details on dependency pins and deduplication, see <a class="reference internal" href="multi_project_workflows.html"><span class="doc">Multi-project workflows</span></a>.</p>
 <p>For a quick, non-copying inventory of received shipments, you can also use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">osqar</span> <span class="n">workspace</span> <span class="n">report</span> <span class="o">--</span><span class="n">root</span> <span class="n">intake</span><span class="o">/</span><span class="n">received</span> <span class="o">--</span><span class="n">recursive</span> <span class="o">--</span><span class="n">output</span> <span class="n">intake</span><span class="o">/</span><span class="n">overview</span> <span class="o">--</span><span class="nb">open</span>
 </pre></div>
