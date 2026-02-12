@@ -28,6 +28,7 @@ Typical roles and workflows:
 - Trace requirements, architecture and tests into the actual code and check for consistency
 - Package documentation + evidence artifacts and protect them with checksum manifests
 - Integrate multiple shipments in a workspace and review a consolidated overview
+- Declare and enforce workspace dependency closure for OSQAr-qualified libraries (id/version/pin), including logical deduplication when a single dependency shipment satisfies multiple dependents
 - Extend workflows via project and workspace configuration (custom commands + hooks)
 - Use lifecycle management and collaboration workflows for multi-user teams
 - Run reproducible native builds for the C/C++/Rust reference examples with optional Bazel integration
@@ -112,11 +113,22 @@ Project-side config: `osqar_project.json`
 - Put this file in a project root (supplier/dev side).
 - Use `commands.test` and `commands.docs` to override how tests and docs are executed.
 - Use `hooks.pre` / `hooks.post` to run pre/post actions around OSQAr command events.
+- If your project (library) depends on other OSQAr-qualified libraries, declare them under `dependencies` so integrator workspaces can validate dependency closure.
 
 Example:
 
 ```json
 {
+
+  "id": "LIB_CONSUMER",
+  "version": "1.2.3",
+  "dependencies": [
+    {
+      "id": "LIB_PROVIDER",
+      "version": "2.0.0",
+      "pin_sha256sums": "<sha256-of-SHA256SUMS-file-bytes>"
+    }
+  ],
 
   "commands": {
     "test": "OSQAR_REPRODUCIBLE=1 ./build-and-test.sh",
@@ -131,6 +143,18 @@ Example:
     }
   }
 }
+```
+
+Compute a dependency pin from a built/received shipment directory:
+
+```bash
+osqar shipment pin --shipment /path/to/LIB_PROVIDER_shipment
+```
+
+Integrator workspaces can enforce dependency closure across all received shipments:
+
+```bash
+osqar workspace verify --root intake/received --recursive --enforce-deps
 ```
 
 Integrator-side config: `osqar_workspace.json`

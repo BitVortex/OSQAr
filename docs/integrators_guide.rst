@@ -124,6 +124,17 @@ This produces a single dated intake folder with a **Subproject overview** summar
         --output intake/archive/2026-02-01 \
         --traceability
 
+If supplier shipments declare dependencies (in shipped ``osqar_project.json``), enforce dependency closure during
+verification/intake:
+
+.. code-block:: console
+
+  osqar workspace verify --root intake/received --recursive --enforce-deps
+
+With ``--enforce-deps``, OSQAr fails the command if dependencies are missing, ambiguous, or conflicting in the workspace.
+
+For details on dependency pins and deduplication, see :doc:`multi_project_workflows`.
+
 For a quick, non-copying inventory of received shipments, you can also use::
 
   osqar workspace report --root intake/received --recursive --output intake/overview --open

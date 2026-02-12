@@ -157,6 +157,33 @@ Workspace (integrator side)
 A directory that contains **multiple received shipments**.
 Workspace commands typically discover shipments by scanning for ``SHA256SUMS`` in subdirectories.
 
+Declared dependencies (pins)
+----------------------------
+
+OSQAr supports **workspace dependency closure** for OSQAr-qualified libraries.
+If a shipped component depends on other OSQAr-qualified components, the supplier can declare those dependencies
+in the shipped ``osqar_project.json``.
+
+Each dependency is identified by:
+
+- ``id``
+- ``version``
+- ``pin_sha256sums`` (a SHA-256 over the dependency shipment's ``SHA256SUMS`` file bytes)
+
+Suppliers can compute the pin from a built/received shipment directory:
+
+.. code-block:: console
+
+   osqar shipment pin --shipment /path/to/LIB_PROVIDER_shipment
+
+Integrators can enforce that all declared dependencies are present (and unambiguous) in a workspace:
+
+.. code-block:: console
+
+   osqar workspace verify --root intake/received --recursive --enforce-deps
+
+See :doc:`multi_project_workflows` for the full dependency resolution rules and how to observe logical deduplication.
+
 
 .. _workflow-recipes:
 

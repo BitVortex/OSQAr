@@ -130,6 +130,39 @@ Optional: add project metadata into the shipment directory (recommended for mult
 		--origin url=https://example.com/repo.git \
 		--origin revision=<commit>
 
+Optional: declare dependencies on other OSQAr-qualified libraries
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If your shipped component depends on other OSQAr-qualified components, declare them in the shipped
+``osqar_project.json`` under ``dependencies``.
+
+Each dependency entry includes a pin:
+
+- ``pin_sha256sums`` is a SHA-256 over the dependency shipment's ``SHA256SUMS`` file bytes.
+
+Compute a pin from a built/received dependency shipment directory::
+
+	osqar shipment pin --shipment /path/to/LIB_PROVIDER_shipment
+
+Then add the dependency entry to your metadata (example):
+
+.. code-block:: json
+
+	{
+		"schema": "osqar.shipment_project_metadata.v1",
+		"id": "LIB_CONSUMER",
+		"version": "1.2.3",
+		"dependencies": [
+			{
+				"id": "LIB_PROVIDER",
+				"version": "2.0.0",
+				"pin_sha256sums": "<sha256-of-SHA256SUMS-file-bytes>"
+			}
+		]
+	}
+
+Integrator workspaces can then enforce dependency closure across all received shipments using ``--enforce-deps``.
+
 Notes
 ^^^^^
 
