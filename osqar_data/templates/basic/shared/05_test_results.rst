@@ -10,3 +10,5 @@ Coverage (optional):
 
 .. literalinclude:: coverage_report.txt
    :language: text
+
+.. include:: _static/gaps.rst

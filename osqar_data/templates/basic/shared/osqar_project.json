@@ -7,5 +7,65 @@
   "commands": {
     "build": "./build-and-test.sh build",
     "test": "./build-and-test.sh test"
+  },
+  "verification": {
+    "gaps": {
+      "valgrind": {
+        "activity": "Valgrind Memcheck",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "Memory leak detection via Valgrind Memcheck",
+        "mitigation": "ASan+UBSan covers most memory errors"
+      },
+      "cppcheck": {
+        "activity": "Static Analysis (cppcheck)",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "Static analysis with cppcheck --enable=all",
+        "mitigation": "Compiler warning audit (-Werror -Wall)"
+      },
+      "afl_fuzz": {
+        "activity": "Fuzzing Campaign (AFL++)",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "24-hour fuzzing campaign with AFL++",
+        "mitigation": "Unit tests cover boundary conditions"
+      },
+      "gcov_coverage": {
+        "activity": "Coverage Measurement (gcov/lcov)",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "Statement/branch coverage with gcov",
+        "mitigation": "Extensive unit test suite"
+      },
+      "misra_c": {
+        "activity": "MISRA C Compliance",
+        "status": "not_run",
+        "reason": "commercial_tool_required",
+        "description": "MISRA C:2012 Directive 4.1 compliance check",
+        "mitigation": "Compiler warning audit covers ~60% of MISRA rules"
+      },
+      "mc_dc": {
+        "activity": "MC/DC Coverage",
+        "status": "not_run",
+        "reason": "commercial_tool_required",
+        "description": "Modified Condition/Decision Coverage (ASIL D)",
+        "mitigation": "Structural coverage via branch coverage"
+      },
+      "stack_depth": {
+        "activity": "Stack Depth Verification",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "Worst-case stack depth analysis",
+        "mitigation": "Recursion limits enforced in design"
+      },
+      "reproducible_build": {
+        "activity": "Reproducible Build Verification",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "Bit-identical binary across rebuilds",
+        "mitigation": "Build system pinned to specific toolchain version"
+      }
+    }
   }
 }
