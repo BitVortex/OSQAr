@@ -556,6 +556,74 @@ def _generate_gap_documentation(config: dict, gaps_rst_path: Path) -> bool:
     return has_rows
 
 
+def _run_verification_activities(
+    config: dict,
+    project_dir: Path,
+    shipment_dir: Path,
+    env: dict,
+) -> int:
+    """Run enabled verification activities from ``verification.run`` in config.
+
+    Each activity specifies a ``command`` and an optional ``report`` glob.
+    Reports matching the glob are copied into the shipment directory.
+
+    Returns 0 if all activities succeed, non-zero on first failure.
+    """
+    verification = config.get("verification") if isinstance(config, dict) else None
+    if not isinstance(verification, dict):
+        return 0
+
+    activities = verification.get("run")
+    if not isinstance(activities, list) or not activities:
+        return 0
+
+    print(f"Running {len(activities)} verification activit{'y' if len(activities) == 1 else 'ies'}...")
+    verification_dir = shipment_dir / "verification"
+    verification_dir.mkdir(parents=True, exist_ok=True)
+
+    for i, activity in enumerate(activities):
+        if not isinstance(activity, dict):
+            continue
+
+        activity_id = str(activity.get("id", f"activity_{i}"))
+        label = str(activity.get("label", activity_id))
+        command = str(activity.get("command", ""))
+        report_glob = str(activity.get("report", ""))
+
+        if not command.strip():
+            print(f"  [{activity_id}] SKIP: no command configured")
+            continue
+
+        print(f"  [{activity_id}] {label}")
+        print(f"    command: {command}")
+
+        rc = u.run_command_string(command, cwd=project_dir, env=env)
+        if rc != 0:
+            print(
+                f"    ERROR: verification activity [{activity_id}] failed (rc={rc})",
+                file=sys.stderr,
+            )
+            return rc
+
+        if report_glob:
+            import glob as _glob
+
+            matches = sorted(_glob.glob(
+                str(project_dir / report_glob), recursive=True
+            ))
+            if matches:
+                for m in matches:
+                    src = Path(m)
+                    if src.is_file():
+                        dst = verification_dir / src.name
+                        shutil.copy2(src, dst)
+                        print(f"    report: {src.name} -> {dst}")
+            else:
+                print(f"    WARNING: no files matched report glob: {report_glob}")
+
+    return 0
+
+
 def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
     project_dir = Path(args.project).resolve()
     if not u.is_shipment_project_dir(project_dir):
@@ -631,6 +699,12 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
     # Generate gap documentation from osqar_project.json before docs build.
     gaps_rst = project_dir / "_static" / "gaps.rst"
     _generate_gap_documentation(config, gaps_rst)
+
+    # Run verification activities (sanitizers, static analysis, coverage, etc.).
+    if not bool(getattr(args, "skip_verification", False)):
+        rc = _run_verification_activities(config, project_dir, shipment_dir, env)
+        if rc != 0:
+            return int(rc)
 
     rc = u.run_docs_build(project_dir, shipment_dir, config=config)
     if rc != 0:
@@ -1197,6 +1271,11 @@ def register(sub: argparse._SubParsersAction) -> None:
         "--skip-code-trace",
         action="store_true",
         help="Skip source-level code traceability check (code-trace)",
+    )
+    p_prep.add_argument(
+        "--skip-verification",
+        action="store_true",
+        help="Skip running verification activities (from verification.run in osqar_project.json)",
     )
     p_prep.add_argument(
         "--code-trace-warn-only",

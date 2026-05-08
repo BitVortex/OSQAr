@@ -66,6 +66,29 @@
         "description": "Bit-identical binary across rebuilds",
         "mitigation": "Build system pinned to specific toolchain version"
       }
-    }
+    },
+    "run": [
+      {
+        "_comment": "Example: run test under sanitizers",
+        "id": "sanitizer",
+        "label": "Sanitizer Run (ASan+UBSan)",
+        "command": "./build-and-test.sh test-asan",
+        "report": "**/asan_report.txt"
+      },
+      {
+        "_comment": "Example: static analysis with cppcheck",
+        "id": "cppcheck",
+        "label": "Static Analysis (cppcheck)",
+        "command": "cppcheck --enable=all --xml src/ 2> cppcheck_report.xml",
+        "report": "cppcheck_report.xml"
+      },
+      {
+        "_comment": "Example: coverage collection with gcov",
+        "id": "coverage",
+        "label": "Coverage (gcov/lcov)",
+        "command": "./build-and-test.sh coverage",
+        "report": "**/*.gcov"
+      }
+    ]
   }
 }
