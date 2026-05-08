@@ -462,6 +462,100 @@ def cmd_shipment_metadata_write(args: argparse.Namespace) -> int:
     )
 
 
+GAP_STATUS_LABELS: dict[str, str] = {
+    "not_run": "Not Run",
+    "planned": "Planned",
+    "deferred": "Deferred",
+    "partial": "Partial",
+    "not_applicable": "N/A",
+}
+
+GAP_REASON_LABELS: dict[str, str] = {
+    "tooling_constraint": "Tooling constraint",
+    "commercial_tool_required": "Commercial tool required",
+    "schedule_constraint": "Schedule constraint",
+    "budget_constraint": "Budget constraint",
+    "not_in_scope": "Not in scope",
+}
+
+_GAP_TABLE_HEADER = """\
+.. list-table:: Verification Gap Summary
+   :header-rows: 1
+   :widths: 25 15 30 30
+
+   * - Activity
+     - Status
+     - Gap Description
+     - Mitigation"""
+
+_GAP_RST_INTRO = """\
+Gap Documentation
+=================
+
+ISO 26262-8 §11.4.8 requires that planned-but-not-executed verification
+activities be documented with justifications.
+
+.. note::
+
+   This table is auto-generated from the ``verification.gaps`` section of
+   ``osqar_project.json`` during ``osqar shipment prepare``.
+   Edit ``osqar_project.json`` and re-run ``osqar shipment prepare`` to
+   keep gap documentation in sync with the configuration.
+"""
+
+
+def _generate_gap_documentation(config: dict, gaps_rst_path: Path) -> bool:
+    """Generate ``_static/gaps.rst`` from ``verification.gaps`` in config.
+
+    Always writes a valid RST file so the ``.. include`` directive in
+    ``05_test_results.rst`` never breaks the Sphinx build.
+    Returns True if actual gap rows were generated, False if only the
+    placeholder.
+
+    """
+    verification = config.get("verification") if isinstance(config, dict) else None
+    gaps: dict = {}
+    if isinstance(verification, dict):
+        raw = verification.get("gaps")
+        if isinstance(raw, dict):
+            gaps = raw
+
+    lines: list[str] = [_GAP_RST_INTRO, "", _GAP_TABLE_HEADER]
+
+    for key, gap in gaps.items():
+        if not isinstance(gap, dict):
+            continue
+        activity = str(gap.get("activity", key))
+        status_raw = str(gap.get("status", "not_run"))
+        status = GAP_STATUS_LABELS.get(status_raw, status_raw.replace("_", " ").title())
+        reason = str(gap.get("reason", "unspecified"))
+        reason_label = GAP_REASON_LABELS.get(reason, reason.replace("_", " ").title())
+        description = str(gap.get("description", ""))
+        mitigation = str(gap.get("mitigation", ""))
+
+        combined = f"{description} ({reason_label})" if description else reason_label
+
+        lines.append(f"   * - {activity}")
+        lines.append(f"     - {status}")
+        lines.append(f"     - {combined}")
+        lines.append(f"     - {mitigation}")
+
+    has_rows = len(lines) > 3
+
+    if not has_rows:
+        lines.append("   * - *(No verification gaps documented)*")
+        lines.append("     - —")
+        lines.append("     - —")
+        lines.append("     - —")
+
+    lines.append("")
+
+    gaps_rst_path.parent.mkdir(parents=True, exist_ok=True)
+    gaps_rst_path.write_text("\n".join(lines), encoding="utf-8")
+    print(f"Gap documentation written: {gaps_rst_path}")
+    return has_rows
+
+
 def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
     project_dir = Path(args.project).resolve()
     if not u.is_shipment_project_dir(project_dir):
@@ -533,6 +627,10 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
         )
         if rc != 0:
             return int(rc)
+
+    # Generate gap documentation from osqar_project.json before docs build.
+    gaps_rst = project_dir / "_static" / "gaps.rst"
+    _generate_gap_documentation(config, gaps_rst)
 
     rc = u.run_docs_build(project_dir, shipment_dir, config=config)
     if rc != 0:
