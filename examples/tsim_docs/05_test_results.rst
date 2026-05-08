@@ -5,15 +5,15 @@ Test Results & Traceability
 Overview
 ========
 
-This section demonstrates how OSQAr auto-imports test results into the documentation, establishing a complete **compliance artifact chain** from safety goals through implementation code to automated test reporting.
+This section demonstrates how OSQAr auto-imports test results into the documentation, establishing a traceable chain from goals through implementation code to automated test reporting.
 
 The traceability flow is:
 
 .. code-block:: text
 
-    ISO 26262 Safety Goal
+    Example Safety Goal
          ↓
-    Safety Requirement (REQ_SAFETY_*)
+    Example Requirement (REQ_SAFETY_*)
          ↓
     Functional Requirement (REQ_FUNC_*, ARCH_*)
          ↓
@@ -25,12 +25,12 @@ The traceability flow is:
          ↓
     Sphinx Auto-Import & HTML Report
          ↓
-    Compliance Artifact Package
+    Traceability Outputs
 
 Test Suite Execution
 ====================
 
-The test suite can be run locally to generate compliance artifacts:
+The test suite can be run locally to generate traceability outputs:
 
 .. code-block:: bash
 
@@ -195,10 +195,10 @@ The build workflow generates a cyclomatic complexity report (``complexity_report
 .. literalinclude:: complexity_report.txt
   :language: text
 
-Building Compliance Artifacts
+Building Traceability Outputs
 ==============================
 
-The complete compliance artifact package is generated via:
+The complete traceability output package is generated via:
 
 .. code-block:: bash
 
@@ -211,9 +211,9 @@ The complete compliance artifact package is generated via:
   #    - Architecture diagrams with PlantUML
   #    - Test results integrated into HTML
   #    - Searchable traceability matrix
-  #    - Compliance documentation suitable for assessment/audit
+  #    - Traceability documentation with linked needs and reports
 
-Compliance Artifact Checklist
+Traceability Output Checklist
 =============================
 
 Use this checklist to verify complete traceability:

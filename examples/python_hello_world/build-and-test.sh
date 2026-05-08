@@ -1,7 +1,7 @@
 #!/bin/bash
 # build-and-test.sh - OSQAr example: Automated Build & Traceability
 # 
-# This script demonstrates the complete workflow for generating compliance artifacts:
+# This script demonstrates the complete workflow for generating traceability outputs:
 # 1. Run unit tests with JUnit output
 # 2. Verify test coverage
 # 3. Build documentation with auto-imported test results
@@ -175,9 +175,9 @@ fi
 
 echo ""
 echo "🚀 Next Steps:"
-echo "  1. Review compliance artifacts: open _build/html/index.html"
+echo "  1. Review traceability outputs: open _build/html/index.html"
 echo "  2. Share documentation with stakeholders"
 echo "  3. Integrate into CI/CD pipeline"
-echo "  4. Archive artifacts for qualification dossier"
+echo "  4. Archive outputs for shipment packaging"
 echo ""
 echo "📚 For details, see: _build/html/03_verification.html and _build/html/05_test_results.html"

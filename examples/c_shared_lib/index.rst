@@ -1,11 +1,11 @@
 OSQAr Shared C Library
 ======================
 
-This example is a tiny OSQAr-qualified C library that is used by multiple other examples.
+This example is a tiny C library annotated with OSQAr needs that is used by multiple other examples.
 
 It exists to demonstrate a common integrator scenario:
 
-- multiple qualified libraries / components depend on the same qualified library
+- multiple annotated libraries / components depend on the same annotated library
 - the workspace contains the dependency shipment only once (logical dedup)
 
 Requirements

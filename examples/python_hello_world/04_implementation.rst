@@ -31,7 +31,7 @@ All code modules include requirement traceability in docstrings and comments. Cl
 
    Each Python module, class, and function includes docstring comments mapping to:
    
-   - Safety Requirements (:need:`REQ_SAFETY_001`, :need:`REQ_SAFETY_002`, :need:`REQ_SAFETY_003`)
+   - Example Requirements (:need:`REQ_SAFETY_001`, :need:`REQ_SAFETY_002`, :need:`REQ_SAFETY_003`)
    - Functional Requirements (:need:`REQ_FUNC_001`, :need:`REQ_FUNC_002`, :need:`REQ_FUNC_003`, :need:`REQ_FUNC_004`)
    - Architecture Specifications (:need:`ARCH_001`, :need:`ARCH_FUNC_001`, :need:`ARCH_FUNC_002`, :need:`ARCH_FUNC_003`, :need:`ARCH_DESIGN_001`)
 
@@ -153,7 +153,7 @@ Test Execution & Reporting
   cd examples/python_hello_world
    poetry run pytest tests/test_tsim.py -v
    
-   # Generate JUnit XML for compliance reporting
+   # Generate JUnit XML for traceability reporting
    poetry run pytest tests/test_tsim.py --junit-xml=test_results.xml
    
    # Results can be imported by sphinx-test-reports for automated traceability
@@ -186,9 +186,9 @@ The complete traceability chain flows:
 
 .. code-block:: text
 
-   ISO 26262 Safety Goal (REQ_SAFETY_001)
+   Example Safety Goal (REQ_SAFETY_001)
             ↓
-   Safety Requirements (REQ_SAFETY_002/003)
+   Example Requirements (REQ_SAFETY_002/003)
             ↓
    Functional Requirements (REQ_FUNC_001-004)
             ↓
@@ -202,7 +202,7 @@ The complete traceability chain flows:
             ↓
    Documentation (index.rst, *.rst)
             ↓
-   Compliance Artifacts (HTML with traceability matrix)
+   Traceability Outputs (HTML with linked needs and matrix)
 
 Code Repository Structure
 ==========================
@@ -237,4 +237,4 @@ To add more domains or features:
 6. **Run tests**: `pytest tests/ --junit-xml=test_results.xml`
 7. **Verify traceability**: Check generated HTML matrix
 
-This demonstrates how OSQAr enables **complete compliance verification** from high-level safety goals through low-level code and automated test reporting—all traceable in the generated documentation.
+This demonstrates how OSQAr enables traceability from high-level goals through low-level code and automated test reporting—all linked in the generated documentation.

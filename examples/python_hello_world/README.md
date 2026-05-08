@@ -16,8 +16,8 @@ For safety-related embedded projects, prefer **C** or **Rust**. **C++** is commo
 
 ## What This Example Shows
 
-1. **Requirements Traceability**: Safety requirements linked to functional and design specifications
-2. **ISO 26262 Compliance**: Structured requirement IDs, traceability matrices, and verification mapping
+1. **Requirements Traceability**: Example requirements linked to functional and design specifications
+2. **Traceability Demonstration**: Structured requirement IDs, traceability matrices, and verification mapping
 3. **Architecture Documentation**: System diagrams with PlantUML
 4. **Test Mapping**: Requirements traced to test cases for verification
 5. **Optional Complexity Report**: Cyclomatic complexity report via `lizard`
@@ -52,4 +52,4 @@ cd examples/python_hello_world
 - Requirements use structured IDs: `REQ_SAFETY_*`, `REQ_FUNC_*`, `ARCH_*`, `TEST_*`
 - Each requirement links upstream/downstream for traceability
 - Architecture diagrams show component boundaries and data flow
-- Test cases are mapped to requirements for compliance verification
+- Test cases are mapped to requirements for traceability verification

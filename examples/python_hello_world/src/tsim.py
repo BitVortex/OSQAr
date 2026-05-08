@@ -1,11 +1,11 @@
 """
 TSIM - Thermal Sensor Interface Module
 
-Implements a domain-agnostic temperature monitoring Safety Element (SEooC)
-compliant with ISO 26262 functional safety requirements.
+Demonstrates an OSQAr-annotated temperature monitoring component used to
+illustrate traceability from requirements through architecture to code and tests.
 
 Requirement Traceability:
-  - REQ_SAFETY_001: Safety goal - prevent thermal damage
+  - REQ_SAFETY_001: Example safety goal - prevent thermal damage
   - REQ_SAFETY_002: Detect overheat within 100ms
   - REQ_SAFETY_003: Report safe state on recovery
 

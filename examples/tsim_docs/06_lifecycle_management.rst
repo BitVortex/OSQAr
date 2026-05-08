@@ -12,7 +12,7 @@ This chapter explains how to manage the TSIM example through its lifecycle:
 - verification and evidence regeneration
 - supplier shipment creation and integrator intake
 
-Even though this is a reference example, the workflow is intentionally close to real-world safety projects.
+Even though this is a reference example, the workflow models the lifecycle of real projects.
 
 What is a "shipment" in this example?
 =====================================

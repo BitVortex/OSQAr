@@ -8,7 +8,7 @@ extern "C" {
 // A tiny shared library used across OSQAr examples.
 //
 // This is intentionally small: it exists to demonstrate how multiple
-// OSQAr-qualified projects can depend on the same qualified library.
+// OSQAr-annotated projects can depend on the same annotated library.
 
 int osqar_shared_magic(void);
 int osqar_shared_add(int a, int b);

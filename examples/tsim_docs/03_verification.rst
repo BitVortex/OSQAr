@@ -237,4 +237,4 @@ Test Execution & Reporting
    :status: active
    :tags: reporting, artifact
 
-   **Integration**: Configure sphinx-test-reports in ``conf.py`` to import test results into this documentation for automated compliance artifact generation.
+   **Integration**: Configure sphinx-test-reports in ``conf.py`` to import test results into this documentation for automated traceability output generation.
