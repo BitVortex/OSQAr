@@ -193,6 +193,31 @@ def cmd_doctor(args: argparse.Namespace) -> int:
                 "no PlantUML command or PLANTUML_JAR detected; builds may fall back to the public PlantUML server (internet required)"
             )
 
+        # Template availability check.
+        from tools.osqar_cmd_new import _check_example_templates_available
+        try:
+            example_tmpl = _check_example_templates_available()
+            env_dir = os.environ.get("OSQAR_EXAMPLES_DIR")
+            available = [lang for lang, ok in example_tmpl.items() if ok]
+            unavailable = [lang for lang, ok in example_tmpl.items() if not ok]
+            if available:
+                src = f"OSQAR_EXAMPLES_DIR={env_dir}" if env_dir else "git checkout"
+                avail_str = ", ".join(sorted(available))
+                good(f"example templates available ({src}): {avail_str}")
+            if unavailable:
+                unavail_str = ", ".join(sorted(unavailable))
+                warn(f"example templates NOT available: {unavail_str}")
+                info("use --template basic, --fallback-basic, or set OSQAR_EXAMPLES_DIR")
+            checks.append({
+                "name": "templates.example",
+                "status": "ok" if not unavailable else "partial",
+                "available": sorted(available),
+                "unavailable": sorted(unavailable),
+                "source": env_dir if env_dir else "git_checkout",
+            })
+        except ImportError:
+            warn("template availability check skipped (osqar_cmd_new not importable)")
+
     shipment_override = getattr(args, "shipment", None)
     if skip_env_checks and shipment_override:
         shipment_dir = Path(shipment_override).expanduser().resolve()
