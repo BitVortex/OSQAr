@@ -28,7 +28,7 @@ else:
 
 html_theme = os.environ.get("OSQAR_SPHINX_THEME", "furo")
 html_static_path = ["_static"]
-html_css_files = ["custom.css"]
+html_css_files = ["custom.css", "furo-fixes.css"]
 
 # PlantUML is only loaded when diagrams are not explicitly disabled.
 _NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")

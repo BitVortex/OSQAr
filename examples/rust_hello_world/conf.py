@@ -40,7 +40,7 @@ else:
 # Theme
 html_theme = os.environ.get("OSQAR_SPHINX_THEME", "furo")
 html_static_path = ["_static"]
-html_css_files = ["custom.css"]
+html_css_files = ["custom.css", "furo-fixes.css"]
 
 # Keep indices tidy: examples are not API references.
 html_use_index = False
