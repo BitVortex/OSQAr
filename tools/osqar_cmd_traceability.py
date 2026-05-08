@@ -14,6 +14,12 @@ def cmd_traceability(args: argparse.Namespace) -> int:
     if getattr(args, "json_report", None):
         argv += ["--json-report", str(args.json_report)]
 
+    for prefix_attr in ("req_prefix", "arch_prefix", "test_prefix", "code_prefix"):
+        values = getattr(args, prefix_attr, None) or []
+        flag = "--" + prefix_attr.replace("_", "-")
+        for v in values:
+            argv.extend([flag, str(v)])
+
     if getattr(args, "enforce_req_has_test", False):
         argv += ["--enforce-req-has-test"]
     if getattr(args, "enforce_arch_traces_req", False):
@@ -46,5 +52,29 @@ def register(sub: argparse._SubParsersAction) -> None:
         "--enforce-test-traces-req",
         action="store_true",
         help="Also enforce TEST_* → REQ_* coverage",
+    )
+    p_tr.add_argument(
+        "--req-prefix",
+        action="append",
+        default=[],
+        help="Requirement ID prefix (repeatable; default: REQ_)",
+    )
+    p_tr.add_argument(
+        "--arch-prefix",
+        action="append",
+        default=[],
+        help="Architecture ID prefix (repeatable; default: ARCH_)",
+    )
+    p_tr.add_argument(
+        "--test-prefix",
+        action="append",
+        default=[],
+        help="Test ID prefix (repeatable; default: TEST_)",
+    )
+    p_tr.add_argument(
+        "--code-prefix",
+        action="append",
+        default=[],
+        help="Implementation/code ID prefix (repeatable; default: CODE_, IMPL_)",
     )
     p_tr.set_defaults(func=cmd_traceability)
