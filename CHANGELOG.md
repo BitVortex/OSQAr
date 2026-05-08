@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.1] - 2026-05-08
+
+### Added
+- **CI Integration Guide** (`docs/ci_integration.rst`): public documentation covering the
+  full verification-tooling-to-CI workflow — three-layer pipeline architecture
+  (``build-and-test.sh`` → CI → OSQAr CLI), step-by-step integration, shipment
+  assembly, local verification, and tag-based releases. Uses `OSQAr-cJSON`_ as the
+  canonical reference implementation with direct links to all key files.
+- **Dark-mode and PlantUML CSS fixes** (`furo-fixes.css`): sphinx-needs requirement
+  tables now adapt to Furo's dark/light theme toggle via CSS variable overrides
+  (no more white backgrounds in dark mode). PlantUML SVG diagrams are constrained to
+  ``max-width: 100%`` with ``cursor: zoom-in`` affordance, preventing horizontal
+  overflow from wide diagrams (e.g., 1933px component architecture SVG).
+- ``furo-fixes.css`` is now included automatically in all scaffolded projects via
+  ``osqar new`` and ``osqar workspace``, and in all template ``conf.py`` files.
+
+### Changed
+- **Example terminology audit** (26 fixes across ``python_hello_world``, ``tsim_docs``,
+  ``c_shared_lib``): removed overclaiming and inappropriate safety terminology.
+  "Compliance artifacts" → "Traceability outputs", "ISO 26262 Safety Goal" →
+  "Example Safety Goal", "Safety Element (SEooC)" → "OSQAr-annotated component",
+  "OSQAr-qualified" → "OSQAr-annotated". Examples now accurately describe
+  themselves as OSQAr tooling demonstrations, not formal safety artifacts.
+
+### Fixed
+- sphinx-needs tables no longer render with white background in Furo dark mode.
+- PlantUML diagrams no longer overflow the text column width.
+- Example projects no longer contain misleading claims about ISO 26262 compliance
+  or formal qualification status.
+
 ## [0.7.0] - 2026-05-08
 
 ### Added
