@@ -52,6 +52,7 @@ Additional guides are linked in the sidebar.
 
    docs/suppliers_guide
    docs/integrators_guide
+   docs/ci_integration
    docs/lifecycle_management
    docs/multi_project_workflows
    docs/collaboration_workflows
