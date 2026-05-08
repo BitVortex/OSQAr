@@ -54,8 +54,12 @@ version = ".".join(release.split(".")[:2])
 # -- General configuration ---------------------------------------------------
 extensions = [
     "sphinx_needs",
-    "sphinxcontrib.plantuml",
 ]
+
+# PlantUML is only loaded when diagrams are not explicitly disabled.
+_NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")
+if not _NO_DIAGRAMS:
+    extensions.append("sphinxcontrib.plantuml")
 
 # The root documentation is framework documentation.
 # Example projects (under examples/*) are built separately and should not be
@@ -111,45 +115,46 @@ needs_reproducible_json = True
 
 
 # -- PlantUML ----------------------------------------------------------------
-plantuml_output_format = "svg"
+if not _NO_DIAGRAMS:
+    plantuml_output_format = "svg"
 
-env_jar = os.environ.get("PLANTUML_JAR")
-if env_jar and Path(env_jar).is_file():
-    plantuml = f'java -jar "{env_jar}"'
-    print(f"✓ Using PLANTUML JAR from environment: {env_jar}")
-elif env_jar:
-    print(f"! PLANTUML_JAR is set but not found at: {env_jar}; falling back")
+    env_jar = os.environ.get("PLANTUML_JAR")
+    if env_jar and Path(env_jar).is_file():
+        plantuml = f'java -jar "{env_jar}"'
+        print(f"✓ Using PLANTUML JAR from environment: {env_jar}")
+    elif env_jar:
+        print(f"! PLANTUML_JAR is set but not found at: {env_jar}; falling back")
 
-if "plantuml" not in globals() and "plantuml_server" not in globals():
-    if shutil.which("plantuml"):
-        plantuml = "plantuml"
-        print("✓ Using system 'plantuml' command")
-    elif shutil.which("java"):
-        jar_paths = [
-            "/opt/plantuml/plantuml.jar",
-            "/usr/share/plantuml/plantuml.jar",
-            "/usr/local/opt/plantuml/libexec/plantuml.jar",
-        ]
-        for jar_path in jar_paths:
-            try:
-                subprocess.run(
-                    ["java", "-jar", jar_path, "-version"],
-                    capture_output=True,
-                    check=True,
-                    timeout=5,
-                )
-                plantuml = f'java -jar "{jar_path}"'
-                print(f"✓ Using PlantUML JAR: {jar_path}")
-                break
-            except (
-                subprocess.CalledProcessError,
-                subprocess.TimeoutExpired,
-                FileNotFoundError,
-            ):
-                continue
+    if "plantuml" not in globals() and "plantuml_server" not in globals():
+        if shutil.which("plantuml"):
+            plantuml = "plantuml"
+            print("✓ Using system 'plantuml' command")
+        elif shutil.which("java"):
+            jar_paths = [
+                "/opt/plantuml/plantuml.jar",
+                "/usr/share/plantuml/plantuml.jar",
+                "/usr/local/opt/plantuml/libexec/plantuml.jar",
+            ]
+            for jar_path in jar_paths:
+                try:
+                    subprocess.run(
+                        ["java", "-jar", jar_path, "-version"],
+                        capture_output=True,
+                        check=True,
+                        timeout=5,
+                    )
+                    plantuml = f'java -jar "{jar_path}"'
+                    print(f"✓ Using PlantUML JAR: {jar_path}")
+                    break
+                except (
+                    subprocess.CalledProcessError,
+                    subprocess.TimeoutExpired,
+                    FileNotFoundError,
+                ):
+                    continue
+            else:
+                plantuml_server = "https://www.plantuml.com/plantuml"
+                print("! PlantUML JAR not found; using web service")
         else:
             plantuml_server = "https://www.plantuml.com/plantuml"
-            print("! PlantUML JAR not found; using web service")
-    else:
-        plantuml_server = "https://www.plantuml.com/plantuml"
-        print("! PlantUML and Java not found; using web service (requires internet)")
+            print("! PlantUML and Java not found; using web service (requires internet)")

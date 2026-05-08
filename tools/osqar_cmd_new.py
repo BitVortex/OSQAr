@@ -164,6 +164,29 @@ def _rewrite_conf_project(conf_path: Path, project_title: str) -> None:
     conf_path.write_text("".join(out), encoding="utf-8")
 
 
+def _disable_diagrams_in_conf(conf_path: Path) -> None:
+    """Force-disable diagrams in the generated conf.py.
+
+    Inserts ``_NO_DIAGRAMS = True`` right after the env-var check so that
+    PlantUML is permanently disabled for this project regardless of
+    environment variables.
+
+    """
+    if not conf_path.is_file():
+        return
+
+    text = conf_path.read_text(encoding="utf-8")
+    # The guard line is: _NO_DIAGRAMS = os.environ.get(...)
+    marker = '_NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")'
+    if marker not in text:
+        return
+
+    override = '\n# Force-disabled via --no-diagrams\n_NO_DIAGRAMS = True'
+    text = text.replace(marker, marker + override)
+    conf_path.write_text(text, encoding="utf-8")
+    print("  Diagrams disabled in conf.py (--no-diagrams)")
+
+
 def _rewrite_readme_title(readme_path: Path, name: str) -> None:
     if not readme_path.is_file():
         return
@@ -305,6 +328,9 @@ def cmd_new(args: argparse.Namespace) -> int:
     _rewrite_conf_project(dest / "conf.py", project_title)
     _rewrite_readme_title(dest / "README.md", args.name)
 
+    if getattr(args, "no_diagrams", False):
+        _disable_diagrams_in_conf(dest / "conf.py")
+
     print(f"Created OSQAr project at: {dest}")
     print(f"Template: {src} ({template_kind})")
     return 0
@@ -334,5 +360,10 @@ def register(sub: argparse._SubParsersAction) -> None:
         "--fallback-basic",
         action="store_true",
         help="Silently fall back to --template basic when example templates are unavailable (e.g. from a PyPI install)",
+    )
+    p_new.add_argument(
+        "--no-diagrams",
+        action="store_true",
+        help="Generate conf.py with PlantUML disabled (no diagram dependencies)",
     )
     p_new.set_defaults(func=cmd_new)

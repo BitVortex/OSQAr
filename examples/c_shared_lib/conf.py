@@ -18,9 +18,13 @@ author = "OSQAr Team"
 
 extensions = [
     "sphinx_needs",
-    "sphinxcontrib.plantuml",
     "sphinx.ext.ifconfig",
 ]
+
+# PlantUML is only loaded when diagrams are not explicitly disabled.
+_NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")
+if not _NO_DIAGRAMS:
+    extensions.append("sphinxcontrib.plantuml")
 
 try:
     import sphinxcontrib.test_reports  # noqa: F401
@@ -47,6 +51,11 @@ exclude_patterns = [
     "bazel-out",
     "bazel-testlogs",
 ]
+
+# PlantUML is only loaded when diagrams are not explicitly disabled.
+_NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")
+if not _NO_DIAGRAMS:
+    extensions.append("sphinxcontrib.plantuml")
 
 needs_id_regex = "^[A-Z0-9_]{3,}"
 needs_css = "modern.css"
