@@ -177,8 +177,40 @@ def _rewrite_readme_title(readme_path: Path, name: str) -> None:
     readme_path.write_text("".join(lines), encoding="utf-8")
 
 
+def _resolve_example_dir(language: str) -> Path | None:
+    """Resolve the example template directory for a language.
+
+    Checks (in order):
+    1. OSQAR_EXAMPLES_DIR environment variable
+    2. Git checkout (repo root relative path)
+    Returns None if not found.
+    """
+    env_dir = os.environ.get("OSQAR_EXAMPLES_DIR")
+    if env_dir:
+        candidate = Path(env_dir).expanduser() / TEMPLATES_EXAMPLE[language]
+        if candidate.is_dir():
+            return candidate.resolve()
+
+    repo_root = _repo_root()
+    candidate = (repo_root / TEMPLATES_EXAMPLE[language]).resolve()
+    return candidate if candidate.is_dir() else None
+
+
+def _check_example_templates_available() -> dict[str, bool]:
+    """Check which example templates are available.
+
+    Returns a dict mapping language -> available (bool).
+    """
+    result: dict[str, bool] = {}
+    for lang in TEMPLATES_EXAMPLE:
+        result[lang] = _resolve_example_dir(lang) is not None
+    return result
+
+
 def cmd_new(args: argparse.Namespace) -> int:
     template_kind = getattr(args, "template", "basic")
+    fallback_basic = bool(getattr(args, "fallback_basic", False))
+
     if template_kind == "basic":
         template = TEMPLATES_BASIC.get(args.language)
         if template is None:
@@ -232,20 +264,42 @@ def cmd_new(args: argparse.Namespace) -> int:
         _copy_resource_tree(lang_src, dest, merge=True, force=bool(args.force))
         src = f"osqar_data:{lang_src}"
     else:
-        repo_root = _repo_root()
-        src = (repo_root / TEMPLATES_EXAMPLE[args.language]).resolve()
-        if not src.is_dir():
-            print(
-                "ERROR: example templates are not included in the PyPI distribution.\n"
-                "TIP: Use --template basic, or run from the git repo to use --template example.",
-                file=sys.stderr,
-            )
-            return 2
-        try:
-            _copytree(src, dest, force=args.force)
-        except FileExistsError as exc:
-            print(f"ERROR: {exc}", file=sys.stderr)
-            return 2
+        src = _resolve_example_dir(args.language)
+        if src is None:
+            if fallback_basic:
+                print(
+                    "WARNING: example templates not available, falling back to --template basic.",
+                    file=sys.stderr,
+                )
+                template_kind = "basic"
+                template = TEMPLATES_BASIC.get(args.language)
+                try:
+                    shared_src = _resource_dir("templates", "basic", "shared")
+                    lang_src = _resource_dir("templates", "basic", template)
+                except ModuleNotFoundError:
+                    print(
+                        "ERROR: packaged templates not available (missing osqar_data).",
+                        file=sys.stderr,
+                    )
+                    return 2
+                dest.mkdir(parents=True, exist_ok=True)
+                _copy_resource_tree(shared_src, dest, merge=True, force=bool(args.force))
+                _copy_resource_tree(lang_src, dest, merge=True, force=bool(args.force))
+                src = f"osqar_data:{lang_src}"
+            else:
+                print(
+                    "ERROR: example templates are not included in the PyPI distribution.\n"
+                    "TIP: Use --template basic, --fallback-basic, or set OSQAR_EXAMPLES_DIR to\n"
+                    "     a local git checkout of OSQAr (e.g. /path/to/OSQAr).",
+                    file=sys.stderr,
+                )
+                return 2
+        else:
+            try:
+                _copytree(src, dest, force=args.force)
+            except FileExistsError as exc:
+                print(f"ERROR: {exc}", file=sys.stderr)
+                return 2
 
     project_title = f"OSQAr: {args.name} ({args.language})"
     _rewrite_conf_project(dest / "conf.py", project_title)
@@ -275,5 +329,10 @@ def register(sub: argparse._SubParsersAction) -> None:
     )
     p_new.add_argument(
         "--force", action="store_true", help="Overwrite destination if it exists"
+    )
+    p_new.add_argument(
+        "--fallback-basic",
+        action="store_true",
+        help="Silently fall back to --template basic when example templates are unavailable (e.g. from a PyPI install)",
     )
     p_new.set_defaults(func=cmd_new)
