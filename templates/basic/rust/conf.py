@@ -12,8 +12,12 @@ author = "OSQAr"
 
 extensions = [
     "sphinx_needs",
-    "sphinxcontrib.plantuml",
 ]
+
+# PlantUML is only loaded when diagrams are not explicitly disabled.
+_NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")
+if not _NO_DIAGRAMS:
+    extensions.append("sphinxcontrib.plantuml")
 
 try:
     import sphinxcontrib.test_reports  # noqa: F401
@@ -26,6 +30,11 @@ html_theme = os.environ.get("OSQAR_SPHINX_THEME", "furo")
 html_static_path = ["_static"]
 html_css_files = ["custom.css"]
 
+# PlantUML is only loaded when diagrams are not explicitly disabled.
+_NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")
+if not _NO_DIAGRAMS:
+    extensions.append("sphinxcontrib.plantuml")
+
 exclude_patterns = [
     "_build",
     "build",
@@ -35,6 +44,11 @@ exclude_patterns = [
     ".pytest_cache",
     "bazel-*",
 ]
+
+# PlantUML is only loaded when diagrams are not explicitly disabled.
+_NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")
+if not _NO_DIAGRAMS:
+    extensions.append("sphinxcontrib.plantuml")
 
 needs_id_regex = "^[A-Z0-9_]{3,}"
 needs_css = "modern.css"

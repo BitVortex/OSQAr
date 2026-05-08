@@ -12,8 +12,12 @@ author = "OSQAr"
 
 extensions = [
     "sphinx_needs",
-    "sphinxcontrib.plantuml",
 ]
+
+# PlantUML is only loaded when diagrams are not explicitly disabled.
+_NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")
+if not _NO_DIAGRAMS:
+    extensions.append("sphinxcontrib.plantuml")
 
 try:
     import sphinxcontrib.test_reports  # noqa: F401
@@ -62,31 +66,32 @@ _ensure_file(
     "Complexity report not generated in this build.\n",
 )
 
-plantuml_output_format = "svg"
+if not _NO_DIAGRAMS:
+    plantuml_output_format = "svg"
 
-env_jar = os.environ.get("PLANTUML_JAR")
-if env_jar and Path(env_jar).is_file():
-    plantuml = f'java -jar "{env_jar}"'
-elif shutil.which("plantuml"):
-    plantuml = "plantuml"
-elif shutil.which("java"):
-    for jar_path in (
-        "/opt/plantuml/plantuml.jar",
-        "/usr/share/plantuml/plantuml.jar",
-        "/usr/local/opt/plantuml/libexec/plantuml.jar",
-    ):
-        try:
-            subprocess.run(
-                ["java", "-jar", jar_path, "-version"],
-                capture_output=True,
-                check=True,
-                timeout=5,
-            )
-            plantuml = f'java -jar "{jar_path}"'
-            break
-        except Exception:
-            continue
+    env_jar = os.environ.get("PLANTUML_JAR")
+    if env_jar and Path(env_jar).is_file():
+        plantuml = f'java -jar "{env_jar}"'
+    elif shutil.which("plantuml"):
+        plantuml = "plantuml"
+    elif shutil.which("java"):
+        for jar_path in (
+            "/opt/plantuml/plantuml.jar",
+            "/usr/share/plantuml/plantuml.jar",
+            "/usr/local/opt/plantuml/libexec/plantuml.jar",
+        ):
+            try:
+                subprocess.run(
+                    ["java", "-jar", jar_path, "-version"],
+                    capture_output=True,
+                    check=True,
+                    timeout=5,
+                )
+                plantuml = f'java -jar "{jar_path}"'
+                break
+            except Exception:
+                continue
+        else:
+            plantuml_server = "https://www.plantuml.com/plantuml"
     else:
         plantuml_server = "https://www.plantuml.com/plantuml"
-else:
-    plantuml_server = "https://www.plantuml.com/plantuml"

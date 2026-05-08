@@ -21,9 +21,13 @@ author = "OSQAr Team"
 
 extensions = [
     "sphinx_needs",
-    "sphinxcontrib.plantuml",
     "sphinx.ext.ifconfig",
 ]
+
+# PlantUML is only loaded when diagrams are not explicitly disabled.
+_NO_DIAGRAMS = os.environ.get("OSQAR_NO_DIAGRAMS", "").lower() in ("1", "true")
+if not _NO_DIAGRAMS:
+    extensions.append("sphinxcontrib.plantuml")
 
 try:
     import sphinxcontrib.test_reports  # noqa: F401
