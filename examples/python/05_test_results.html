@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-test-results/common.css?v=9ec2c1d5" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e7c89827" />
+    <link rel="stylesheet" type="text/css" href="_static/furo-fixes.css?v=329a8f2f" />
     
     
 
@@ -258,11 +259,11 @@
 <h1>Test Results &amp; Traceability<a class="headerlink" href="#test-results-traceability" title="Link to this heading">¶</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
-<p>This section demonstrates how OSQAr auto-imports test results into the documentation, establishing a complete <strong>compliance artifact chain</strong> from safety goals through implementation code to automated test reporting.</p>
+<p>This section demonstrates how OSQAr auto-imports test results into the documentation, establishing a traceable chain from goals through implementation code to automated test reporting.</p>
 <p>The traceability flow is:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ISO 26262 Safety Goal
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Example Safety Goal
      ↓
-Safety Requirement (REQ_SAFETY_*)
+Example Requirement (REQ_SAFETY_*)
      ↓
 Functional Requirement (REQ_FUNC_*, ARCH_*)
      ↓
@@ -274,13 +275,13 @@ JUnit XML Test Results
      ↓
 Sphinx Auto-Import &amp; HTML Report
      ↓
-Compliance Artifact Package
+Traceability Outputs
 </pre></div>
 </div>
 </section>
 <section id="test-suite-execution">
 <h2>Test Suite Execution<a class="headerlink" href="#test-suite-execution" title="Link to this heading">¶</a></h2>
-<p>The test suite can be run locally to generate compliance artifacts:</p>
+<p>The test suite can be run locally to generate traceability outputs:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pick one language example and run its end-to-end script.</span>
 <span class="c1"># This generates JUnit XML + builds HTML docs with imported test results.</span>
 <span class="nb">cd</span><span class="w"> </span>examples/&lt;language&gt;_hello_world
@@ -412,7 +413,7 @@ open<span class="w"> </span>_build/html/index.html
 <h3>Imported JUnit results<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
 <h3>pytest<a class="headerlink" href="#imported-junit-results" title="Link to this heading">¶</a></h3>
 <p>Tests: 13, Failures: 0, Errors: 0, Skips: 0</p>
-<p>Time: 0.111</p>
+<p>Time: 0.115</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -588,9 +589,9 @@ Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc 
 </pre></div>
 </div>
 </section>
-<section id="building-compliance-artifacts">
-<h2>Building Compliance Artifacts<a class="headerlink" href="#building-compliance-artifacts" title="Link to this heading">¶</a></h2>
-<p>The complete compliance artifact package is generated via:</p>
+<section id="building-traceability-outputs">
+<h2>Building Traceability Outputs<a class="headerlink" href="#building-traceability-outputs" title="Link to this heading">¶</a></h2>
+<p>The complete traceability output package is generated via:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Run tests, emit JUnit XML, build docs</span>
 <span class="nb">cd</span><span class="w"> </span>examples/&lt;language&gt;_hello_world
 ./build-and-test.sh
@@ -600,12 +601,12 @@ Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc 
 <span class="c1">#    - Architecture diagrams with PlantUML</span>
 <span class="c1">#    - Test results integrated into HTML</span>
 <span class="c1">#    - Searchable traceability matrix</span>
-<span class="c1">#    - Compliance documentation suitable for assessment/audit</span>
+<span class="c1">#    - Traceability documentation with linked needs and reports</span>
 </pre></div>
 </div>
 </section>
-<section id="compliance-artifact-checklist">
-<h2>Compliance Artifact Checklist<a class="headerlink" href="#compliance-artifact-checklist" title="Link to this heading">¶</a></h2>
+<section id="traceability-output-checklist">
+<h2>Traceability Output Checklist<a class="headerlink" href="#traceability-output-checklist" title="Link to this heading">¶</a></h2>
 <p>Use this checklist to verify complete traceability:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[✓] Requirements documented with needs IDs (REQ_*, ARCH_*)
 [✓] Architecture diagrams with PlantUML (SVG format)
@@ -701,8 +702,8 @@ Total nloc   Avg.NLOC  AvgCCN  Avg.token   Fun Cnt  Warning cnt   Fun Rt   nloc 
 </li>
 <li><a class="reference internal" href="#code-coverage">Code Coverage</a></li>
 <li><a class="reference internal" href="#complexity-report">Complexity report</a></li>
-<li><a class="reference internal" href="#building-compliance-artifacts">Building Compliance Artifacts</a></li>
-<li><a class="reference internal" href="#compliance-artifact-checklist">Compliance Artifact Checklist</a></li>
+<li><a class="reference internal" href="#building-traceability-outputs">Building Traceability Outputs</a></li>
+<li><a class="reference internal" href="#traceability-output-checklist">Traceability Output Checklist</a></li>
 <li><a class="reference internal" href="#next-steps">Next Steps</a></li>
 </ul>
 </li>

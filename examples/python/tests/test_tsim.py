@@ -2,7 +2,7 @@
 TSIM Test Suite
 
 Comprehensive unit and integration tests for the Thermal Sensor Interface Module.
-All tests are mapped to requirements for ISO 26262 compliance verification.
+All tests are mapped to requirements via OSQAr traceability IDs.
 
 Test Traceability:
   - TEST_CONVERSION_001: ADC range conversion accuracy

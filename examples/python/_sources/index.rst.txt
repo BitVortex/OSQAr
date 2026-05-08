@@ -21,13 +21,9 @@ This **Python** example is intentionally easy to run on a developer workstation 
 
 It is **not** intended as an embedded implementation language for safety-related systems. For safety-related embedded projects, prefer **C** or **Rust** (and treat C++ with caution).
 
-This documentation specifies the **Thermal Sensor Interface Module (TSIM)**, a domain-agnostic safety component for monitoring temperature in safety-critical systems.
+This documentation demonstrates the **Thermal Sensor Interface Module (TSIM)** pattern, using OSQAr to annotate and trace requirements through architecture, implementation, and tests.
 
-**Applicable Standards**: ISO 26262 (Automotive Functional Safety), IEC 61508 (Functional Safety), ISO 13849 (Machinery Safety)
-
-**Safety Goal**: Monitor temperature and provide safe state notification to prevent thermal damage or unsafe operation.
-
-**Domain Applicability**: This component pattern applies to:
+**Illustrative Domain Examples**: This component pattern could apply to domains such as:
 
 - Medical devices (incubators, sterilizers)
 - Industrial machinery (process monitoring)
@@ -38,17 +34,17 @@ This documentation specifies the **Thermal Sensor Interface Module (TSIM)**, a d
 Key Documents
 =============
 
-1. :doc:`01_requirements` - Safety, functional, and design requirements
+1. :doc:`01_requirements` - Example safety, functional, and design requirements
 2. :doc:`02_architecture` - System architecture and data flow
 3. :doc:`03_verification` - Test methods and verification approach
 4. :doc:`04_implementation` - Code examples and test suite implementation
 5. :doc:`05_test_results` - Automated test integration and traceability reporting
 
-Compliance Artifacts
+Traceability Outputs
 ====================
 
-This documentation serves as:
+This documentation produces:
 
-- **Requirements Specification** for qualification under ISO 26262 / IEC 61508
+- **Linked Requirements** with traceability IDs and cross-references
 - **Traceability Matrix** linking requirements → design → verification
-- **Verification & Validation Plan** with test case mapping
+- **Verification Mapping** with test case documentation

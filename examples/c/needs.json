@@ -2794,7 +2794,7 @@
                     "content_id": "TEST_REPORT_001",
                     "created_at": "",
                     "delete": null,
-                    "description": "**Integration**: Configure sphinx-test-reports in ``conf.py`` to import test results into this documentation for automated compliance artifact generation.",
+                    "description": "**Integration**: Configure sphinx-test-reports in ``conf.py`` to import test results into this documentation for automated traceability output generation.",
                     "docname": "03_verification",
                     "doctype": ".rst",
                     "duration": "",
