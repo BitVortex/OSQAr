@@ -70,6 +70,10 @@ def _doctor_run_traceability(
     enforce_req_has_test: bool,
     enforce_arch_traces_req: bool,
     enforce_test_traces_req: bool,
+    req_prefix: list[str] | None = None,
+    arch_prefix: list[str] | None = None,
+    test_prefix: list[str] | None = None,
+    code_prefix: list[str] | None = None,
 ) -> tuple[int, Optional[dict]]:
     tmp_path = u.temp_json_report_path()
     try:
@@ -80,6 +84,21 @@ def _doctor_run_traceability(
             argv += ["--enforce-arch-traces-req"]
         if enforce_test_traces_req:
             argv += ["--enforce-test-traces-req"]
+
+        for prefix_attr, flag_name in [
+            ("req_prefix", "--req-prefix"),
+            ("arch_prefix", "--arch-prefix"),
+            ("test_prefix", "--test-prefix"),
+            ("code_prefix", "--code-prefix"),
+        ]:
+            values = {
+                "req_prefix": req_prefix,
+                "arch_prefix": arch_prefix,
+                "test_prefix": test_prefix,
+                "code_prefix": code_prefix,
+            }.get(prefix_attr) or []
+            for v in values:
+                argv.extend([flag_name, str(v)])
 
         rc = int(traceability_cli(argv))
         try:
@@ -426,6 +445,10 @@ def cmd_doctor(args: argparse.Namespace) -> int:
                         enforce_test_traces_req=bool(
                             getattr(args, "enforce_test_traces_req", False)
                         ),
+                        req_prefix=list(getattr(args, "req_prefix", []) or []),
+                        arch_prefix=list(getattr(args, "arch_prefix", []) or []),
+                        test_prefix=list(getattr(args, "test_prefix", []) or []),
+                        code_prefix=list(getattr(args, "code_prefix", []) or []),
                     )
                     if trc == 0:
                         good(f"traceability OK: {needs_json}")
@@ -532,4 +555,20 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_doc.add_argument("--enforce-req-has-test", action="store_true")
     p_doc.add_argument("--enforce-arch-traces-req", action="store_true")
     p_doc.add_argument("--enforce-test-traces-req", action="store_true")
+    p_doc.add_argument(
+        "--req-prefix", action="append", default=[],
+        help="Requirement ID prefix for traceability (repeatable)",
+    )
+    p_doc.add_argument(
+        "--arch-prefix", action="append", default=[],
+        help="Architecture ID prefix for traceability (repeatable)",
+    )
+    p_doc.add_argument(
+        "--test-prefix", action="append", default=[],
+        help="Test ID prefix for traceability (repeatable)",
+    )
+    p_doc.add_argument(
+        "--code-prefix", action="append", default=[],
+        help="Implementation/code ID prefix for traceability (repeatable)",
+    )
     p_doc.set_defaults(func=cmd_doctor)

@@ -278,6 +278,12 @@ def cmd_shipment_traceability(args: argparse.Namespace) -> int:
     if bool(getattr(args, "enforce_test_traces_req", False)):
         argv += ["--enforce-test-traces-req"]
 
+    for prefix_attr in ("req_prefix", "arch_prefix", "test_prefix", "code_prefix"):
+        values = getattr(args, prefix_attr, None) or []
+        flag = "--" + prefix_attr.replace("_", "-")
+        for v in values:
+            argv.extend([flag, str(v)])
+
     return int(traceability_cli(argv))
 
 
@@ -770,6 +776,10 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
             enforce_req_has_test=bool(getattr(args, "enforce_req_has_test", False)),
             enforce_arch_traces_req=bool(getattr(args, "enforce_arch_traces_req", False)),
             enforce_test_traces_req=bool(getattr(args, "enforce_test_traces_req", False)),
+            req_prefix=list(getattr(args, "req_prefix", []) or []),
+            arch_prefix=list(getattr(args, "arch_prefix", []) or []),
+            test_prefix=list(getattr(args, "test_prefix", []) or []),
+            code_prefix=list(getattr(args, "code_prefix", []) or []),
         )
     )
     if rc != 0:
@@ -795,6 +805,10 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
                     enforce_req_has_test=bool(getattr(args, "enforce_req_has_test", False)),
                     enforce_arch_traces_req=bool(getattr(args, "enforce_arch_traces_req", False)),
                     enforce_test_traces_req=bool(getattr(args, "enforce_test_traces_req", False)),
+                    req_prefix=list(getattr(args, "req_prefix", []) or []),
+                    arch_prefix=list(getattr(args, "arch_prefix", []) or []),
+                    test_prefix=list(getattr(args, "test_prefix", []) or []),
+                    code_prefix=list(getattr(args, "code_prefix", []) or []),
                 )
             )
         )
@@ -999,6 +1013,10 @@ def _shipment_verify_impl(args: argparse.Namespace, *, label: str) -> int:
                     enforce_req_has_test=bool(getattr(args, "enforce_req_has_test", False)),
                     enforce_arch_traces_req=bool(getattr(args, "enforce_arch_traces_req", False)),
                     enforce_test_traces_req=bool(getattr(args, "enforce_test_traces_req", False)),
+                    req_prefix=list(getattr(args, "req_prefix", []) or []),
+                    arch_prefix=list(getattr(args, "arch_prefix", []) or []),
+                    test_prefix=list(getattr(args, "test_prefix", []) or []),
+                    code_prefix=list(getattr(args, "code_prefix", []) or []),
                 )
             )
         )
@@ -1253,6 +1271,22 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_prep.add_argument("--enforce-arch-traces-req", action="store_true")
     p_prep.add_argument("--enforce-test-traces-req", action="store_true")
     p_prep.add_argument(
+        "--req-prefix", action="append", default=[],
+        help="Requirement ID prefix for traceability (repeatable; default: REQ_)",
+    )
+    p_prep.add_argument(
+        "--arch-prefix", action="append", default=[],
+        help="Architecture ID prefix for traceability (repeatable; default: ARCH_)",
+    )
+    p_prep.add_argument(
+        "--test-prefix", action="append", default=[],
+        help="Test ID prefix for traceability (repeatable; default: TEST_)",
+    )
+    p_prep.add_argument(
+        "--code-prefix", action="append", default=[],
+        help="Implementation/code ID prefix for traceability (repeatable; default: CODE_, IMPL_)",
+    )
+    p_prep.add_argument(
         "--archive",
         action="store_true",
         help="Also create a .zip of the shipment directory",
@@ -1365,6 +1399,22 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_ver.add_argument("--enforce-req-has-test", action="store_true")
     p_ver.add_argument("--enforce-arch-traces-req", action="store_true")
     p_ver.add_argument("--enforce-test-traces-req", action="store_true")
+    p_ver.add_argument(
+        "--req-prefix", action="append", default=[],
+        help="Requirement ID prefix for traceability (repeatable)",
+    )
+    p_ver.add_argument(
+        "--arch-prefix", action="append", default=[],
+        help="Architecture ID prefix for traceability (repeatable)",
+    )
+    p_ver.add_argument(
+        "--test-prefix", action="append", default=[],
+        help="Test ID prefix for traceability (repeatable)",
+    )
+    p_ver.add_argument(
+        "--code-prefix", action="append", default=[],
+        help="Implementation/code ID prefix for traceability (repeatable)",
+    )
     p_ver.set_defaults(func=cmd_shipment_verify)
 
     p_list = ship_sub.add_parser("list", help="Discover shipment projects under a directory")
@@ -1478,6 +1528,22 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_tr2.add_argument("--enforce-req-has-test", action="store_true")
     p_tr2.add_argument("--enforce-arch-traces-req", action="store_true")
     p_tr2.add_argument("--enforce-test-traces-req", action="store_true")
+    p_tr2.add_argument(
+        "--req-prefix", action="append", default=[],
+        help="Requirement ID prefix (repeatable; default: REQ_)",
+    )
+    p_tr2.add_argument(
+        "--arch-prefix", action="append", default=[],
+        help="Architecture ID prefix (repeatable; default: ARCH_)",
+    )
+    p_tr2.add_argument(
+        "--test-prefix", action="append", default=[],
+        help="Test ID prefix (repeatable; default: TEST_)",
+    )
+    p_tr2.add_argument(
+        "--code-prefix", action="append", default=[],
+        help="Implementation/code ID prefix (repeatable; default: CODE_, IMPL_)",
+    )
     p_tr2.set_defaults(func=cmd_shipment_traceability)
 
     p_cs = ship_sub.add_parser(
