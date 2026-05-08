@@ -24,9 +24,13 @@ Typical roles and workflows:
 - Render architecture diagrams with PlantUML (embedded in the docs)
 - Export machine-readable traceability (`needs.json`) alongside HTML
 - Generate traceability views (e.g., matrices) and keep verification coverage reviewable
-- Verify traceability rules and produce audit-friendly reports
 - Trace requirements, architecture and tests into the actual code and check for consistency
+- Exempt read-only third-party source code from code traceability enforcement (``--external-source``)
+- Verify traceability rules and produce audit-friendly reports, with custom ID prefix overrides (``--req-prefix``, ``--arch-prefix``, ``--test-prefix``, ``--code-prefix``)
 - Package documentation + evidence artifacts and protect them with checksum manifests
+- Auto-generate gap documentation from ``osqar_project.json`` for ISO 26262-8 §11.4.8 compliance, with structured status/reason/mitigation entries
+- Run configurable verification activities (sanitizers, static analysis, fuzzing) as part of ``shipment prepare`` with automatic report collection
+- Build PlantUML-free documentation with ``OSQAR_NO_DIAGRAMS=1`` for offline/CI environments; scaffold projects with ``osqar new --no-diagrams`` to permanently disable diagrams
 - Integrate multiple shipments in a workspace and review a consolidated overview
 - Declare and enforce workspace dependency closure for OSQAr-qualified libraries (id/version/pin), including logical deduplication when a single dependency shipment satisfies multiple dependents
 - Extend workflows via project and workspace configuration (custom commands + hooks)

@@ -5,7 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.7.0] - 2026-05-08
+
+### Added
+- PlantUML-free build mode via ``OSQAR_NO_DIAGRAMS`` environment variable (#2, #11). When set to ``1`` or ``true``, ``sphinxcontrib.plantuml`` is excluded from the extension list and the entire PlantUML configuration block is skipped — enabling builds in offline/CI environments without Java or internet access. ``osqar new --no-diagrams`` permanently disables diagrams in scaffolded projects.
+- Traceability CLI prefix overrides: ``--req-prefix``, ``--arch-prefix``, ``--test-prefix``, ``--code-prefix`` flags (all repeatable) available on ``osqar traceability``, ``osqar shipment prepare``, ``osqar shipment verify``, ``osqar shipment traceability``, and ``osqar doctor --traceability`` (#1, #12). Enables qualification projects (e.g., cJSON with ``VER_``/``IMPL_`` prefixes) to use custom need-ID conventions without modifying the framework.
+- External source exemption for code traceability: ``--external-source`` flag (repeatable) on ``code_trace_check.py`` and ``osqar code-trace`` marks third-party/vendor directories as exempt from enforcement (#5, #8). External sources are still scanned for informational purposes, but IDs found only in external sources do not trigger enforcement violations — essential for qualifying read-only upstream libraries.
+- Auto-generated gap documentation from ``osqar_project.json`` (#4, #9). The ``verification.gaps`` section supports structured entries (activity, status, reason, description, mitigation) and ``osqar shipment prepare`` auto-generates an RST list-table into ``_static/gaps.rst`` with human-readable labels. When no gaps are configured, a valid placeholder ensures the ``.. include`` directive in ``05_test_results.rst`` never breaks the Sphinx build.
+- Configurable verification activity runner embedded in ``osqar shipment prepare`` (#3, #10). ``verification.run`` entries in ``osqar_project.json`` specify ``id``, ``label``, ``command`` (shell command), and ``report`` (glob pattern). Reports are collected into ``<shipment>/verification/``. ``--skip-verification`` flag bypasses all activities.
+- PyPI template robustness improvements (#6, #7): ``osqar doctor`` now reports example template availability with source identification (git checkout or ``OSQAR_EXAMPLES_DIR``), ``--fallback-basic`` flag silently downgrades to the built-in basic template when examples are unavailable, and ``OSQAR_EXAMPLES_DIR`` env-var points to a local git checkout for pip-installed OSQAr.
+
+### Changed
+- All 14 ``conf.py`` files (root, examples, templates) now conditionally load PlantUML via the ``_NO_DIAGRAMS`` env-var guard, replacing the previous unconditional extension loading.
+- ``osqar code-trace`` and ``code_trace_check.py`` now include external source metadata (``external_only`` counts, per-file/per-ID stats) in their reports.
+- Template ``osqar_project.json`` includes commented examples for ``verification.run`` (sanitizer, cppcheck, gcov) and ``verification.gaps`` (valgrind, MISRA, MC/DC).
+
+### Fixed
+- Sphinx builds no longer fail when ``sphinxcontrib.plantuml`` is not installed and ``OSQAR_NO_DIAGRAMS`` is set — the extension is never imported.
+- Code traceability enforcement no longer falsely reports violations for third-party source files that cannot be modified.
 
 ## [0.6.0] - 2026-02-12
 
