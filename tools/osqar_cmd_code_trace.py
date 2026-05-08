@@ -20,6 +20,8 @@ def cmd_code_trace(args: argparse.Namespace) -> int:
         argv += ["--impl-dir", str(d)]
     for d in getattr(args, "test_dir", []) or []:
         argv += ["--test-dir", str(d)]
+    for es in getattr(args, "external_source", []) or []:
+        argv += ["--external-source", str(es)]
     for ex in getattr(args, "exclude", []) or []:
         argv += ["--exclude", str(ex)]
     for ext in getattr(args, "ext", []) or []:
@@ -75,6 +77,12 @@ def register(sub: argparse._SubParsersAction) -> None:
         action="append",
         default=[],
         help="Test directory/file relative to --root (repeatable; default: auto-detect)",
+    )
+    p_ct.add_argument(
+        "--external-source",
+        action="append",
+        default=[],
+        help="External/third-party source directory (repeatable). Scanned but exempt from enforcement.",
     )
     p_ct.add_argument(
         "--exclude",

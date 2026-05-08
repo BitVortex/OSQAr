@@ -241,6 +241,16 @@ def cli(argv: list[str]) -> int:
             "Default: auto-detect (tests/test)"
         ),
     )
+    parser.add_argument(
+        "--external-source",
+        action="append",
+        default=[],
+        help=(
+            "External/third-party source directory relative to --root (repeatable). "
+            "Scanned for informational purposes but never produces violations. "
+            "Use for vendor libraries whose source cannot be modified to embed OSQAr IDs."
+        ),
+    )
 
     parser.add_argument(
         "--req-prefix",
@@ -413,8 +423,23 @@ def cli(argv: list[str]) -> int:
         max_bytes=int(args.max_bytes),
     )
 
+    # External/third-party sources: scanned for information but exempt from enforcement.
+    external_roots: list[Path] = []
+    for es in args.external_source or []:
+        p = (root / es).resolve()
+        if p.exists():
+            external_roots.append(p)
+    external_files = _iter_text_files(
+        root,
+        external_roots,
+        exts=exts,
+        exclude_globs=exclude_globs,
+        max_bytes=int(args.max_bytes),
+    )
+
     impl_by_id, impl_by_file = _scan_files_for_ids(root, impl_files, id_re=id_re)
     test_by_id, test_by_file = _scan_files_for_ids(root, test_files, id_re=id_re)
+    external_by_id, external_by_file = _scan_files_for_ids(root, external_files, id_re=id_re)
 
     expected_ids: list[str] = []
     if needs_json is not None:
@@ -440,20 +465,37 @@ def cli(argv: list[str]) -> int:
 
     impl_found_ids = set(impl_by_id.keys())
     test_found_ids = set(test_by_id.keys())
+    external_found_ids = set(external_by_id.keys())
+
+    # IDs found only in external sources (informational, not violations).
+    external_only_req = sorted(
+        {i for i in expected_req if i in external_found_ids and i not in impl_found_ids}
+    )
+    external_only_arch = sorted(
+        {i for i in expected_arch if i in external_found_ids and i not in impl_found_ids}
+    )
 
     missing_req_in_impl = [i for i in expected_req if i not in impl_found_ids]
     missing_arch_in_impl = [i for i in expected_arch if i not in impl_found_ids]
     missing_test_in_tests = [i for i in expected_test if i not in test_found_ids]
 
+    # Enforcement violations: missing AND not found in external sources.
+    missing_req_in_impl_enforced = [
+        i for i in missing_req_in_impl if i not in external_found_ids
+    ]
+    missing_arch_in_impl_enforced = [
+        i for i in missing_arch_in_impl if i not in external_found_ids
+    ]
+
     unknown_ids: list[str] = []
     if needs_json is not None:
-        unknown_ids = sorted((impl_found_ids | test_found_ids) - expected_set)
+        unknown_ids = sorted((impl_found_ids | test_found_ids | external_found_ids) - expected_set)
 
     violations: list[str] = []
-    if args.enforce_req_in_impl and missing_req_in_impl:
-        violations.append(f"REQ_IN_IMPL missing={len(missing_req_in_impl)}")
-    if args.enforce_arch_in_impl and missing_arch_in_impl:
-        violations.append(f"ARCH_IN_IMPL missing={len(missing_arch_in_impl)}")
+    if args.enforce_req_in_impl and missing_req_in_impl_enforced:
+        violations.append(f"REQ_IN_IMPL missing={len(missing_req_in_impl_enforced)}")
+    if args.enforce_arch_in_impl and missing_arch_in_impl_enforced:
+        violations.append(f"ARCH_IN_IMPL missing={len(missing_arch_in_impl_enforced)}")
     if args.enforce_test_in_tests and missing_test_in_tests:
         violations.append(f"TEST_IN_TESTS missing={len(missing_test_in_tests)}")
     if args.enforce_no_unknown_ids and unknown_ids:
@@ -467,6 +509,7 @@ def cli(argv: list[str]) -> int:
             "needs_json": str(needs_json) if needs_json else None,
             "impl_roots": [str(p) for p in impl_roots],
             "test_roots": [str(p) for p in test_roots],
+            "external_sources": [str(p) for p in external_roots],
             "exclude": exclude_globs,
             "ext": sorted(exts),
             "max_bytes": int(args.max_bytes),
@@ -486,14 +529,18 @@ def cli(argv: list[str]) -> int:
         "counts": {
             "impl_files_scanned": len(impl_files),
             "test_files_scanned": len(test_files),
+            "external_files_scanned": len(external_files),
             "impl_ids_found": len(impl_by_id),
             "test_ids_found": len(test_by_id),
+            "external_ids_found": len(external_by_id),
             "expected_req": len(expected_req),
             "expected_arch": len(expected_arch),
             "expected_test": len(expected_test),
             "missing_req_in_impl": len(missing_req_in_impl),
             "missing_arch_in_impl": len(missing_arch_in_impl),
             "missing_test_in_tests": len(missing_test_in_tests),
+            "external_only_req": len(external_only_req),
+            "external_only_arch": len(external_only_arch),
             "unknown_ids": len(unknown_ids),
             "violations": len(violations),
         },
@@ -506,6 +553,12 @@ def cli(argv: list[str]) -> int:
             "req_in_impl": missing_req_in_impl,
             "arch_in_impl": missing_arch_in_impl,
             "test_in_tests": missing_test_in_tests,
+            "req_in_impl_enforced": missing_req_in_impl_enforced,
+            "arch_in_impl_enforced": missing_arch_in_impl_enforced,
+        },
+        "external_only": {
+            "req": external_only_req,
+            "arch": external_only_arch,
         },
         "unknown_ids": unknown_ids,
         "found": {
@@ -525,6 +578,14 @@ def cli(argv: list[str]) -> int:
                     k: dict(sorted(v.items())) for k, v in sorted(test_by_file.items())
                 },
             },
+            "external": {
+                "by_id": {
+                    k: dict(sorted(v.items())) for k, v in sorted(external_by_id.items())
+                },
+                "by_file": {
+                    k: dict(sorted(v.items())) for k, v in sorted(external_by_file.items())
+                },
+            },
         },
         "ok": not violations,
         "violations": violations,
@@ -534,8 +595,10 @@ def cli(argv: list[str]) -> int:
         "Code trace summary: "
         f"impl_files={report['counts']['impl_files_scanned']} "
         f"test_files={report['counts']['test_files_scanned']} "
+        f"external_files={report['counts']['external_files_scanned']} "
         f"expected(req/arch/test)={report['counts']['expected_req']}/{report['counts']['expected_arch']}/{report['counts']['expected_test']} "
         f"missing(req/arch/test)={report['counts']['missing_req_in_impl']}/{report['counts']['missing_arch_in_impl']}/{report['counts']['missing_test_in_tests']} "
+        f"external_only(req/arch)={report['counts']['external_only_req']}/{report['counts']['external_only_arch']} "
         f"unknown_ids={report['counts']['unknown_ids']} "
         f"violations={report['counts']['violations']}"
     )
@@ -547,17 +610,21 @@ def cli(argv: list[str]) -> int:
         )
 
     if violations:
-        if args.enforce_req_in_impl and missing_req_in_impl:
-            print(f"Missing REQ_* in implementation: {len(missing_req_in_impl)}")
-        if args.enforce_arch_in_impl and missing_arch_in_impl:
-            print(f"Missing ARCH_* in implementation: {len(missing_arch_in_impl)}")
+        if args.enforce_req_in_impl and missing_req_in_impl_enforced:
+            print(f"Missing REQ_* in implementation: {len(missing_req_in_impl_enforced)}")
+        if args.enforce_arch_in_impl and missing_arch_in_impl_enforced:
+            print(f"Missing ARCH_* in implementation: {len(missing_arch_in_impl_enforced)}")
         if args.enforce_test_in_tests and missing_test_in_tests:
             print(f"Missing TEST_* in tests: {len(missing_test_in_tests)}")
         if args.enforce_no_unknown_ids and unknown_ids:
             print(f"Unknown IDs referenced in code: {len(unknown_ids)}")
-        return 1
+    if external_only_req or external_only_arch:
+        if external_only_req:
+            print(f"INFO: REQ_* found only in external sources (exempt): {len(external_only_req)}")
+        if external_only_arch:
+            print(f"INFO: ARCH_* found only in external sources (exempt): {len(external_only_arch)}")
 
-    return 0
+    return 1 if violations else 0
 
 
 def main() -> int:
