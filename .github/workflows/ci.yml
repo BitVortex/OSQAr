@@ -85,7 +85,7 @@ jobs:
         # Impact analysis
         echo "== osqar impact"
         ./osqar impact examples/python_hello_world/_build/html/needs.json \
-          --need-id REQ_TEMP_MON_001 --direction downstream
+          --need-id ARCH_001 --direction downstream
 
         # CSV traceability matrix export
         echo "== osqar traceability --format csv"
