@@ -347,6 +347,8 @@ by scanning for <code class="docutils literal notranslate"><span class="pre">SHA
 <p>Some commands can write JSON reports for CI and audit trails:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">doctor</span> <span class="pre">--json-report</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.doctor_report.v1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">impact</span> <span class="pre">--format</span> <span class="pre">json</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.impact_report.v1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">baseline</span> <span class="pre">diff</span> <span class="pre">--format</span> <span class="pre">json</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.baseline_diff.v1</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">checksum</span> <span class="pre">...</span> <span class="pre">--json-report</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.checksums_report.v1</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">code-trace</span> <span class="pre">--json-report</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.code_trace_report.v1</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">verify</span> <span class="pre">--report-json</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.shipment_verify_report.v1</span></code></p></li>
@@ -410,9 +412,11 @@ Only use workspace config from a location you control.</p>
 <li><p><a class="reference internal" href="#cli-open-docs"><span class="std std-ref">open-docs</span></a> — Open built HTML documentation (<code class="docutils literal notranslate"><span class="pre">index.html</span></code>).</p></li>
 <li><p><a class="reference internal" href="#cli-setup"><span class="std std-ref">setup</span></a> — Verify/extract a downloaded ZIP and run verification.</p></li>
 <li><p><a class="reference internal" href="#cli-doctor"><span class="std std-ref">doctor</span></a> — Environment + shipment diagnostics.</p></li>
+<li><p><a class="reference internal" href="#cli-impact"><span class="std std-ref">impact</span></a> — Change impact analysis via traceability graph traversal.</p></li>
 <li><p><a class="reference internal" href="#cli-new"><span class="std std-ref">new</span></a> — Scaffold a new OSQAr project.</p></li>
-<li><p><a class="reference internal" href="#cli-traceability"><span class="std std-ref">traceability</span></a> — Validate traceability rules from <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>.</p></li>
+<li><p><a class="reference internal" href="#cli-traceability"><span class="std std-ref">traceability</span></a> — Validate traceability rules from <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> (supports CSV export).</p></li>
 <li><p><a class="reference internal" href="#cli-code-trace"><span class="std std-ref">code-trace</span></a> — Scan code for need IDs (optional enforcement).</p></li>
+<li><p><a class="reference internal" href="#cli-baseline"><span class="std std-ref">baseline</span></a> — Versioned requirement baselines (snapshot, list, diff).</p></li>
 <li><p><a class="reference internal" href="#cli-checksum"><span class="std std-ref">checksum</span></a> — Generate/verify checksum manifests.</p></li>
 <li><p><a class="reference internal" href="#cli-framework"><span class="std std-ref">framework</span></a> — Framework bundle helpers (release/CI).</p></li>
 <li><p><a class="reference internal" href="#cli-shipment"><span class="std std-ref">shipment</span></a> — Shipment workflows (build, prepare, verify, package).</p></li>
@@ -600,18 +604,90 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 </div>
 </section>
 </section>
-<section id="new">
-<span id="cli-new"></span><h3>new<a class="headerlink" href="#new" title="Link to this heading">¶</a></h3>
-<p>Create a new OSQAr project from a language template.</p>
+<section id="impact">
+<span id="cli-impact"></span><h3>impact<a class="headerlink" href="#impact" title="Link to this heading">¶</a></h3>
+<p>Analyze change impact by traversing traceability links from a seed need ID.</p>
+<p>This command answers <em>“if I change this requirement, what else is affected?”</em> — supporting
+ISO 26262-8 §9.4.2.4 impact analysis workflows. It performs bidirectional graph traversal
+on the <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> traceability graph and shows all reachable needs with their type,
+status, and title.</p>
 <section id="id10">
 <h4>Synopsis<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar new --language {c,cpp,python,rust} --name &lt;name&gt;</span>
-<span class="go">      [--destination &lt;dir&gt;] [--template {basic,example}] [--force]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar impact &lt;needs_json&gt; --need-id &lt;id&gt;</span>
+<span class="go">       [--direction {downstream,upstream,both}] [--max-depth &lt;n&gt;]</span>
+<span class="go">       [--format {tree,json}] [--json-report &lt;path&gt;]</span>
 </pre></div>
 </div>
 </section>
 <section id="id11">
 <h4>Options<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">needs_json</span></code>: path to <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> produced by sphinx-needs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--need-id</span></code>: required; seed need ID to start traversal from</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--direction</span></code>: traversal direction (default: <code class="docutils literal notranslate"><span class="pre">both</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--max-depth</span></code>: maximum traversal depth (0 = unlimited; default: 0)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--format</span></code>: output format (default: <code class="docutils literal notranslate"><span class="pre">tree</span></code>; <code class="docutils literal notranslate"><span class="pre">json</span></code> for machine-readable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--json-report</span></code>: write JSON report to this path (only with <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">json</span></code>)</p></li>
+</ul>
+</section>
+<section id="output-formats">
+<h4>Output formats<a class="headerlink" href="#output-formats" title="Link to this heading">¶</a></h4>
+<p><strong>Tree</strong> (default) — renders an ASCII tree showing each affected need with its type,
+status, and title. The tree follows parent-child relationships derived from
+traceability link depth:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REQ_CJSON_ARITH_SAFE (requirement)
+└── REQ_CJSON_ARITH_SAFE (requirement, active) — All integer arithmetic...
+    ├── ARCH_PRINTER_FLOW (architecture, active) — The cJSON printer...
+    │   └── REQ_CJSON_PRINT_VALID (requirement, active) — The cJSON printer...
+    │       └── VER_CJSON_TEST_SUITE (verification, active) — Execute the full...
+    ├── VER_CJSON_ARITH (verification, active) — Audit integer operations...
+    └── VER_CJSON_STATIC (verification, active) — Run static analysis...
+
+Summary: 35 affected needs (7 architectures, 3 implementations, 11 requirements, 13 verifications)
+</pre></div>
+</div>
+<p><strong>JSON</strong> — structured report with <code class="docutils literal notranslate"><span class="pre">affected_total</span></code>, <code class="docutils literal notranslate"><span class="pre">affected_by_type</span></code> counts, and
+a sorted <code class="docutils literal notranslate"><span class="pre">needs</span></code> array:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;osqar.impact_report.v1&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;seed&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;REQ_CJSON_ARITH_SAFE&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;affected_total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;affected_by_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;architecture&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;implementation&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;requirement&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;verification&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h4>Examples<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Show<span class="w"> </span>what<span class="w"> </span>would<span class="w"> </span>be<span class="w"> </span>affected<span class="w"> </span><span class="k">if</span><span class="w"> </span>a<span class="w"> </span>requirement<span class="w"> </span>changes
+<span class="go">osqar impact ./_build/html/needs.json --need-id REQ_CJSON_PARSE_VALID</span>
+
+<span class="gp"># </span>Downstream-only<span class="w"> </span><span class="o">(</span>what<span class="w"> </span>does<span class="w"> </span>this<span class="w"> </span>requirement<span class="w"> </span>feed<span class="w"> </span>into?<span class="o">)</span>
+<span class="go">osqar impact ./_build/html/needs.json --need-id REQ_CJSON_MEMORY_SAFE --direction downstream</span>
+
+<span class="gp"># </span>Machine-readable<span class="w"> </span><span class="k">for</span><span class="w"> </span>CI
+<span class="go">osqar impact ./_build/html/needs.json --need-id REQ_CJSON_ARITH_SAFE --format json --json-report impact_report.json</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="new">
+<span id="cli-new"></span><h3>new<a class="headerlink" href="#new" title="Link to this heading">¶</a></h3>
+<p>Create a new OSQAr project from a language template.</p>
+<section id="id13">
+<h4>Synopsis<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar new --language {c,cpp,python,rust} --name &lt;name&gt;</span>
+<span class="go">      [--destination &lt;dir&gt;] [--template {basic,example}] [--force]</span>
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h4>Options<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--language</span></code>: required; one of <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">cpp</span></code>, <code class="docutils literal notranslate"><span class="pre">python</span></code>, <code class="docutils literal notranslate"><span class="pre">rust</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code>: required; project name</p></li>
@@ -625,8 +701,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <li><p><code class="docutils literal notranslate"><span class="pre">--force</span></code>: overwrite destination if it exists</p></li>
 </ul>
 </section>
-<section id="id12">
-<h4>Example<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h4>
+<section id="id15">
+<h4>Example<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar new --language c --name MySEooC --destination ../MySEooC</span>
 </pre></div>
 </div>
@@ -634,27 +710,68 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 </section>
 <section id="traceability">
 <span id="cli-traceability"></span><h3>traceability<a class="headerlink" href="#traceability" title="Link to this heading">¶</a></h3>
-<p>Run traceability checks on a <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> export (from sphinx-needs).</p>
-<section id="id13">
-<h4>Synopsis<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar traceability &lt;needs_json&gt; [--json-report &lt;path&gt;]</span>
+<p>Run traceability checks on a <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> export (from sphinx-needs), or
+export a CSV traceability matrix for auditor review.</p>
+<section id="id16">
+<h4>Synopsis<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Violation<span class="w"> </span>check<span class="w"> </span><span class="o">(</span>default<span class="o">)</span>
+<span class="go">osqar traceability &lt;needs_json&gt; [--json-report &lt;path&gt;]</span>
 <span class="go">            [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
+<span class="go">            [--req-prefix &lt;prefix&gt; ...] [--arch-prefix &lt;prefix&gt; ...]</span>
+<span class="go">            [--test-prefix &lt;prefix&gt; ...] [--code-prefix &lt;prefix&gt; ...]</span>
+
+<span class="gp"># </span>CSV<span class="w"> </span><span class="nb">export</span>
+<span class="go">osqar traceability &lt;needs_json&gt; --format csv --format-output &lt;path&gt;</span>
+<span class="go">            [--req-prefix &lt;prefix&gt; ...] [--test-prefix &lt;prefix&gt; ...]</span>
+<span class="go">            [--arch-prefix &lt;prefix&gt; ...] [--code-prefix &lt;prefix&gt; ...]</span>
+<span class="go">            [--lm-prefix &lt;prefix&gt; ...]</span>
 </pre></div>
 </div>
 </section>
-<section id="id14">
-<h4>Options<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<section id="id17">
+<h4>Options<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h4>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">needs_json</span></code>: path to <code class="docutils literal notranslate"><span class="pre">needs.json</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--json-report</span></code>: write a JSON report</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--format</span></code>: output mode — <code class="docutils literal notranslate"><span class="pre">check</span></code> (default) for violation checking, <code class="docutils literal notranslate"><span class="pre">csv</span></code> for traceability matrix export</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--format-output</span></code>: file path for CSV export (required with <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">csv</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--lm-prefix</span></code>: lifecycle management ID prefix for CSV columns (repeatable; default: <code class="docutils literal notranslate"><span class="pre">LM_</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--enforce-req-has-test</span></code>: fail if any <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code> has no linked <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--enforce-arch-traces-req</span></code>: fail if any <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code> has no linked <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--enforce-test-traces-req</span></code>: fail if any <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code> has no linked <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code></p></li>
 </ul>
+<p>Prefix overrides apply to both check and CSV modes:
+<code class="docutils literal notranslate"><span class="pre">--req-prefix</span></code>, <code class="docutils literal notranslate"><span class="pre">--arch-prefix</span></code>, <code class="docutils literal notranslate"><span class="pre">--test-prefix</span></code>, <code class="docutils literal notranslate"><span class="pre">--code-prefix</span></code> (all repeatable).</p>
 </section>
-<section id="id15">
-<h4>Example<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json</span>
+<section id="csv-export-format">
+<h4>CSV export format<a class="headerlink" href="#csv-export-format" title="Link to this heading">¶</a></h4>
+<p>When <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">csv</span></code> is used, the tool writes a spreadsheet-ready CSV with these
+columns per requirement:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">REQ_ID</span></code> — requirement identifier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REQ_Title</span></code> — human-readable title/description</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Status</span></code> — need status (e.g., <code class="docutils literal notranslate"><span class="pre">active</span></code>, <code class="docutils literal notranslate"><span class="pre">draft</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Tags</span></code> — semicolon-delimited need tags</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ARCH_Linked</span></code> — semicolon-delimited architecture IDs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VER_Linked</span></code> — semicolon-delimited verification IDs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IMPL_Linked</span></code> — semicolon-delimited implementation IDs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LM_Linked</span></code> — semicolon-delimited lifecycle management IDs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Other_Linked</span></code> — any other linked IDs not matching the above prefixes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Total_Links</span></code> — total number of outgoing links</p></li>
+</ul>
+<p>The CSV can be opened directly in Excel, Google Sheets, or LibreOffice Calc.</p>
+</section>
+<section id="id18">
+<h4>Examples<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Standard<span class="w"> </span>traceability<span class="w"> </span>check
+<span class="go">osqar traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json</span>
+
+<span class="gp"># </span>Export<span class="w"> </span>traceability<span class="w"> </span>matrix<span class="w"> </span><span class="k">for</span><span class="w"> </span>auditors
+<span class="go">osqar traceability ./_build/html/needs.json --format csv --format-output traceability_matrix.csv</span>
+
+<span class="gp"># </span>Export<span class="w"> </span>with<span class="w"> </span>custom<span class="w"> </span><span class="nb">test</span><span class="w"> </span>prefix
+<span class="go">osqar traceability ./_build/html/needs.json --format csv --format-output matrix.csv \\</span>
+<span class="go">  --test-prefix VER_ --code-prefix IMPL_</span>
 </pre></div>
 </div>
 </section>
@@ -669,8 +786,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <li><p>Enforcement: ensure IDs defined in <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> are referenced in code/tests.</p></li>
 </ul>
 </section>
-<section id="id16">
-<h4>Synopsis<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<section id="id19">
+<h4>Synopsis<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar code-trace [--root &lt;dir&gt;] [--needs-json &lt;path&gt;] [--json-report &lt;path&gt;]</span>
 <span class="go">           [--impl-dir &lt;path&gt; ...] [--test-dir &lt;path&gt; ...]</span>
 <span class="go">           [--exclude &lt;glob&gt; ...] [--ext &lt;.ext&gt; ...] [--max-bytes &lt;n&gt;]</span>
@@ -679,8 +796,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 </section>
-<section id="id17">
-<h4>Options<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h4>
+<section id="id20">
+<h4>Options<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--root</span></code>: project root to scan (default: <code class="docutils literal notranslate"><span class="pre">.</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--needs-json</span></code>: optional; defines the expected <code class="docutils literal notranslate"><span class="pre">REQ_/ARCH_/TEST_</span></code> IDs</p></li>
@@ -702,8 +819,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <li><p><code class="docutils literal notranslate"><span class="pre">--enforce-no-unknown-ids</span></code>: fail if code mentions IDs not present in needs.json</p></li>
 </ul>
 </section>
-<section id="id18">
-<h4>Examples<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h4>
+<section id="id21">
+<h4>Examples<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Generate<span class="w"> </span>a<span class="w"> </span>report
 <span class="go">osqar code-trace --root . --needs-json ./_build/html/needs.json --json-report ./_build/html/code_trace_report.json</span>
 
@@ -717,8 +834,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <section id="checksum">
 <span id="cli-checksum"></span><h3>checksum<a class="headerlink" href="#checksum" title="Link to this heading">¶</a></h3>
 <p>Generate or verify checksum manifests for a directory.</p>
-<section id="id19">
-<h4>Synopsis<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h4>
+<section id="id22">
+<h4>Synopsis<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar checksum generate --root &lt;dir&gt; --output &lt;manifest&gt;</span>
 <span class="go">               [--exclude &lt;glob&gt; ...] [--json-report &lt;path&gt;]</span>
 
@@ -742,8 +859,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <li><p><code class="docutils literal notranslate"><span class="pre">verify</span> <span class="pre">--manifest</span></code>: path of the manifest file to verify against</p></li>
 </ul>
 </section>
-<section id="id20">
-<h4>Example<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
+<section id="id23">
+<h4>Example<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar checksum generate --root ./_build/html --output ./_build/html/SHA256SUMS</span>
 </pre></div>
 </div>
@@ -755,15 +872,15 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <section id="subcommand-bundle">
 <h4>Subcommand: bundle<a class="headerlink" href="#subcommand-bundle" title="Link to this heading">¶</a></h4>
 </section>
-<section id="id21">
-<h4>Synopsis<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h4>
+<section id="id24">
+<h4>Synopsis<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar framework bundle --version &lt;tag&gt;</span>
 <span class="go">               [--docs-dir &lt;dir&gt;] [--output-dir &lt;dir&gt;]</span>
 </pre></div>
 </div>
 </section>
-<section id="id22">
-<h4>Options<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h4>
+<section id="id25">
+<h4>Options<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h4>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--version</span></code>: required; release/tag version, e.g. <code class="docutils literal notranslate"><span class="pre">v0.4.2</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--docs-dir</span></code>: path to built framework HTML docs (default: <code class="docutils literal notranslate"><span class="pre">_build/html</span></code>)</p></li>
@@ -796,8 +913,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment prepare<a class="headerlink" href="#shipment-prepare" title="Link to this heading">¶</a></h4>
 <p>Build docs, run checks, and optionally create an archive.</p>
 </section>
-<section id="id23">
-<h4>Synopsis<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h4>
+<section id="id26">
+<h4>Synopsis<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment prepare --project &lt;dir&gt;</span>
 <span class="go">   [--config &lt;path&gt;] [--no-hooks]</span>
 <span class="go">   [--shipment &lt;dir&gt;] [--clean] [--dry-run]</span>
@@ -823,8 +940,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <li><p><code class="docutils literal notranslate"><span class="pre">--doctor</span></code>: write a doctor report into the shipped directory before generating checksums</p></li>
 </ul>
 </section>
-<section id="id24">
-<h4>Examples<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h4>
+<section id="id27">
+<h4>Examples<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Prepare<span class="w"> </span>a<span class="w"> </span>shippable<span class="w"> </span>bundle<span class="w"> </span><span class="k">for</span><span class="w"> </span>a<span class="w"> </span>project
 <span class="go">osqar shipment prepare --project examples/python_hello_world</span>
 
@@ -837,8 +954,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment verify<a class="headerlink" href="#shipment-verify" title="Link to this heading">¶</a></h4>
 <p>Verify a received shipment directory (integrity plus optional traceability re-check).</p>
 </section>
-<section id="id25">
-<h4>Synopsis<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h4>
+<section id="id28">
+<h4>Synopsis<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment verify --shipment &lt;dir&gt;</span>
 <span class="go">   [--config-root &lt;dir&gt;] [--config &lt;path&gt;] [--no-hooks]</span>
 <span class="go">   [--verify-command &lt;cmd&gt; ...]</span>
@@ -851,8 +968,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 </section>
-<section id="id26">
-<h4>Notes<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h4>
+<section id="id29">
+<h4>Notes<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h4>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--config</span></code> here refers to <strong>workspace</strong> config (integrator side).</p></li>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">--verify-command</span></code> to run additional integrator-side checks after built-in checks.</p></li>
@@ -862,8 +979,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment list<a class="headerlink" href="#shipment-list" title="Link to this heading">¶</a></h4>
 <p>Discover shipment projects (directories containing <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> and <code class="docutils literal notranslate"><span class="pre">index.rst</span></code>).</p>
 </section>
-<section id="id27">
-<h4>Synopsis<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h4>
+<section id="id30">
+<h4>Synopsis<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment list [--root &lt;dir&gt;] [--recursive] [--format {pretty,paths}]</span>
 </pre></div>
 </div>
@@ -879,8 +996,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment run-tests<a class="headerlink" href="#shipment-run-tests" title="Link to this heading">¶</a></h4>
 <p>Run a shipment’s build/test step.</p>
 </section>
-<section id="id28">
-<h4>Synopsis<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h4>
+<section id="id31">
+<h4>Synopsis<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment run-tests --project &lt;dir&gt;</span>
 <span class="go">   [--config &lt;path&gt;] [--no-hooks]</span>
 <span class="go">   [--command &lt;cmd&gt;] [--script &lt;name&gt;]</span>
@@ -892,8 +1009,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment run-build<a class="headerlink" href="#shipment-run-build" title="Link to this heading">¶</a></h4>
 <p>Run a project-specific build command (usually configured via <code class="docutils literal notranslate"><span class="pre">commands.build</span></code> in <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code>).</p>
 </section>
-<section id="id29">
-<h4>Synopsis<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h4>
+<section id="id32">
+<h4>Synopsis<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment run-build --project &lt;dir&gt;</span>
 <span class="go">   [--config &lt;path&gt;] [--no-hooks]</span>
 <span class="go">   [--command &lt;cmd&gt;]</span>
@@ -905,8 +1022,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment clean<a class="headerlink" href="#shipment-clean" title="Link to this heading">¶</a></h4>
 <p>Remove generated outputs (conservative by default).</p>
 </section>
-<section id="id30">
-<h4>Synopsis<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h4>
+<section id="id33">
+<h4>Synopsis<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment clean --project &lt;dir&gt; [--dry-run] [--aggressive]</span>
 </pre></div>
 </div>
@@ -915,8 +1032,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment traceability<a class="headerlink" href="#shipment-traceability" title="Link to this heading">¶</a></h4>
 <p>Run traceability checks for a built shipment directory.</p>
 </section>
-<section id="id31">
-<h4>Synopsis<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h4>
+<section id="id34">
+<h4>Synopsis<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment traceability --shipment &lt;dir&gt;</span>
 <span class="go">   [--needs-json &lt;path&gt;] [--json-report &lt;path&gt;]</span>
 <span class="go">   [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
@@ -927,8 +1044,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <h4>shipment checksums<a class="headerlink" href="#shipment-checksums" title="Link to this heading">¶</a></h4>
 <p>Generate or verify checksum manifests for a shipment directory.</p>
 </section>
-<section id="id32">
-<h4>Synopsis<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h4>
+<section id="id35">
+<h4>Synopsis<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment checksums --shipment &lt;dir&gt; [--manifest &lt;path&gt;] [--exclude &lt;glob&gt; ...]</span>
 <span class="go">                [--json-report &lt;path&gt;] {generate,verify}</span>
 </pre></div>
@@ -940,8 +1057,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <p>This prints a hex SHA-256 digest of the manifest file bytes. It can be used to
 identify an OSQAr-qualified dependency precisely.</p>
 </section>
-<section id="id33">
-<h4>Synopsis<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h4>
+<section id="id36">
+<h4>Synopsis<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment pin --shipment &lt;dir&gt; [--manifest &lt;path&gt;] [--json-report &lt;path&gt;]</span>
 </pre></div>
 </div>
@@ -950,8 +1067,8 @@ identify an OSQAr-qualified dependency precisely.</p>
 <h4>shipment copy-test-reports<a class="headerlink" href="#shipment-copy-test-reports" title="Link to this heading">¶</a></h4>
 <p>Copy raw JUnit XML test reports into a shipment directory.</p>
 </section>
-<section id="id34">
-<h4>Synopsis<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h4>
+<section id="id37">
+<h4>Synopsis<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment copy-test-reports --project &lt;dir&gt; [--shipment &lt;dir&gt;]</span>
 <span class="go">                      [--glob &lt;pattern&gt; ...] [--dry-run]</span>
 </pre></div>
@@ -961,8 +1078,8 @@ identify an OSQAr-qualified dependency precisely.</p>
 <h4>shipment package<a class="headerlink" href="#shipment-package" title="Link to this heading">¶</a></h4>
 <p>Archive a shipment directory into a <code class="docutils literal notranslate"><span class="pre">.zip</span></code>.</p>
 </section>
-<section id="id35">
-<h4>Synopsis<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h4>
+<section id="id38">
+<h4>Synopsis<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment package --shipment &lt;dir&gt; [--output &lt;path&gt;] [--dry-run]</span>
 </pre></div>
 </div>
@@ -971,8 +1088,8 @@ identify an OSQAr-qualified dependency precisely.</p>
 <h4>shipment metadata write<a class="headerlink" href="#shipment-metadata-write" title="Link to this heading">¶</a></h4>
 <p>Write <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> into a shipment directory.</p>
 </section>
-<section id="id36">
-<h4>Synopsis<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h4>
+<section id="id39">
+<h4>Synopsis<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment metadata write --shipment &lt;dir&gt;</span>
 <span class="go">   [--name &lt;text&gt;] [--id &lt;stable-id&gt;] [--version &lt;ver&gt;] [--description &lt;text&gt;]</span>
 <span class="go">   [--url KEY=VALUE ...] [--origin KEY=VALUE ...] [--set KEY=VALUE ...]</span>
@@ -989,8 +1106,8 @@ identify an OSQAr-qualified dependency precisely.</p>
 <p>Workspace commands that produce an output directory (e.g., <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code> / <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">intake</span></code>)
 also write a machine-readable <code class="docutils literal notranslate"><span class="pre">subproject_overview.json</span></code> which includes <code class="docutils literal notranslate"><span class="pre">dependency_analysis</span></code>
 (summary counts, dependency resolutions, and any detected issues).</p>
-<section id="id37">
-<h4>Subcommands<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h4>
+<section id="id40">
+<h4>Subcommands<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h4>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">list</span></code> — list discovered shipments (scan for <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code> — generate a workspace overview (JSON + HTML)</p></li>
@@ -1002,8 +1119,8 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 <section id="workspace-list">
 <h4>workspace list<a class="headerlink" href="#workspace-list" title="Link to this heading">¶</a></h4>
 </section>
-<section id="id38">
-<h4>Synopsis<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h4>
+<section id="id41">
+<h4>Synopsis<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace list [--root &lt;dir&gt;] [--config &lt;path&gt;] [--recursive]</span>
 <span class="go">              [--format {table,paths,json}] [--json-report &lt;path&gt;]</span>
 </pre></div>
@@ -1013,8 +1130,8 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 <h4>workspace report<a class="headerlink" href="#workspace-report" title="Link to this heading">¶</a></h4>
 <p>Generate a subproject overview without copying shipments.</p>
 </section>
-<section id="id39">
-<h4>Synopsis<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h4>
+<section id="id42">
+<h4>Synopsis<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace report [--root &lt;dir&gt;] [--config &lt;path&gt;] [--no-hooks] [--recursive]</span>
 <span class="go">               --output &lt;dir&gt;</span>
 <span class="go">               [--checksums] [--traceability] [--doctor]</span>
@@ -1025,8 +1142,8 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 </pre></div>
 </div>
 </section>
-<section id="id40">
-<h4>Examples<a class="headerlink" href="#id40" title="Link to this heading">¶</a></h4>
+<section id="id43">
+<h4>Examples<a class="headerlink" href="#id43" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>List<span class="w"> </span>shipments<span class="w"> </span>under<span class="w"> </span>a<span class="w"> </span>folder
 <span class="go">osqar workspace list --root intake/received --recursive</span>
 
@@ -1044,8 +1161,8 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 <section id="workspace-diff">
 <h4>workspace diff<a class="headerlink" href="#workspace-diff" title="Link to this heading">¶</a></h4>
 </section>
-<section id="id41">
-<h4>Synopsis<a class="headerlink" href="#id41" title="Link to this heading">¶</a></h4>
+<section id="id44">
+<h4>Synopsis<a class="headerlink" href="#id44" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace diff &lt;old_report.json&gt; &lt;new_report.json&gt;</span>
 </pre></div>
 </div>
@@ -1054,8 +1171,8 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 <h4>workspace verify<a class="headerlink" href="#workspace-verify" title="Link to this heading">¶</a></h4>
 <p>Verify many shipments (discover by scanning for <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>).</p>
 </section>
-<section id="id42">
-<h4>Synopsis<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h4>
+<section id="id45">
+<h4>Synopsis<a class="headerlink" href="#id45" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace verify [--root &lt;dir&gt;] [--config &lt;path&gt;] [--no-hooks]</span>
 <span class="go">               [--verify-command &lt;cmd&gt; ...] [--recursive]</span>
 <span class="go">               [--exclude &lt;glob&gt; ...]</span>
@@ -1070,8 +1187,8 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 <h4>workspace intake<a class="headerlink" href="#workspace-intake" title="Link to this heading">¶</a></h4>
 <p>Verify and archive multiple shipments into a single intake directory.</p>
 </section>
-<section id="id43">
-<h4>Synopsis<a class="headerlink" href="#id43" title="Link to this heading">¶</a></h4>
+<section id="id46">
+<h4>Synopsis<a class="headerlink" href="#id46" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace intake [&lt;shipment_dir&gt; ...]</span>
 <span class="go">               [--root &lt;dir&gt;] [--config &lt;path&gt;] [--no-hooks] [--recursive]</span>
 <span class="go">               --output &lt;dir&gt; [--force] [--dry-run]</span>
@@ -1080,6 +1197,109 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 <span class="go">               [--enforce-deps]</span>
 <span class="go">               [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
 <span class="go">               [--continue-on-error]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="baseline">
+<span id="cli-baseline"></span><h3>baseline<a class="headerlink" href="#baseline" title="Link to this heading">¶</a></h3>
+<p>Versioned requirement baselines for change management. Supports
+ISO 26262-8 §9 configuration management requirements — snapshot the
+current <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> as a named baseline, list stored baselines, and
+compute structured diffs between any two baselines.</p>
+<p>Baselines are stored in <code class="docutils literal notranslate"><span class="pre">.osqar-baselines/&lt;tag&gt;/</span></code> within the project
+directory, each containing a <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> copy and a
+<code class="docutils literal notranslate"><span class="pre">baseline-manifest.json</span></code> with metadata.</p>
+<section id="id47">
+<h4>Subcommands<a class="headerlink" href="#id47" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">baseline</span> <span class="pre">snapshot</span></code> — capture the current <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> as a named baseline</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">baseline</span> <span class="pre">list</span></code> — list all stored baselines with metadata</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">baseline</span> <span class="pre">diff</span></code> — compute a structured diff between two baselines</p></li>
+</ul>
+</section>
+<section id="baseline-snapshot">
+<h4>baseline snapshot<a class="headerlink" href="#baseline-snapshot" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id48">
+<h4>Synopsis<a class="headerlink" href="#id48" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar baseline snapshot --tag &lt;tag&gt; [--project &lt;dir&gt;]</span>
+<span class="go">       [--message &lt;text&gt;] [--parent &lt;tag&gt;] [--needs-json &lt;path&gt;] [--force]</span>
+</pre></div>
+</div>
+</section>
+<section id="id49">
+<h4>Options<a class="headerlink" href="#id49" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--tag</span></code>: required; baseline tag (alphanumeric, hyphens, dots, underscores)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--project</span></code>: project directory (default: <code class="docutils literal notranslate"><span class="pre">.</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--message</span></code>: human-readable description of this baseline</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--parent</span></code>: parent baseline tag (for lineage tracking)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--needs-json</span></code>: path to needs.json (default: <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/_build/html/needs.json</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--force</span></code>: overwrite existing baseline with the same tag</p></li>
+</ul>
+</section>
+<section id="id50">
+<h4>Examples<a class="headerlink" href="#id50" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Create<span class="w"> </span>a<span class="w"> </span>baseline
+<span class="go">osqar baseline snapshot --tag v1.0 --message &quot;Initial cJSON qualification baseline&quot;</span>
+
+<span class="gp"># </span>Snapshot<span class="w"> </span>with<span class="w"> </span>explicit<span class="w"> </span>needs.json<span class="w"> </span>path
+<span class="go">osqar baseline snapshot --tag v1.0 --needs-json ./_build/html/needs.json</span>
+</pre></div>
+</div>
+</section>
+<section id="baseline-list">
+<h4>baseline list<a class="headerlink" href="#baseline-list" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id51">
+<h4>Synopsis<a class="headerlink" href="#id51" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar baseline list [--project &lt;dir&gt;]</span>
+</pre></div>
+</div>
+<p>Output shows each baseline’s tag, date, need count, and message:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>v1.0  2026-05-11    45 needs  Initial cJSON qualification baseline
+v1.1  2026-05-12    47 needs  Added UTF-16 validation requirements
+</pre></div>
+</div>
+</section>
+<section id="baseline-diff">
+<h4>baseline diff<a class="headerlink" href="#baseline-diff" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id52">
+<h4>Synopsis<a class="headerlink" href="#id52" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar baseline diff &lt;tag_old&gt; &lt;tag_new&gt; [--project &lt;dir&gt;]</span>
+<span class="go">       [--format {text,json}] [--verbose] [--json-report &lt;path&gt;]</span>
+</pre></div>
+</div>
+</section>
+<section id="output">
+<h4>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h4>
+<p><strong>Text</strong> (default) — summary counts plus per-need change details:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Baseline diff: v1.0 → v1.1
+  45 → 47 needs (+2 added, 0 modified, 0 removed, 45 unchanged)
+
+  [ADDED]    REQ_CJSON_UTF16_VALIDATION
+             The parser shall reject invalid UTF-16 surrogate pairs
+
+  [ADDED]    REQ_CJSON_UTF16_ENCODE
+             UTF-16 encoding shall produce valid output per RFC 8259
+</pre></div>
+</div>
+<p><strong>JSON</strong> — structured report with <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.baseline_diff.v1</span></code>, counts,
+and detailed <code class="docutils literal notranslate"><span class="pre">added</span></code>/<code class="docutils literal notranslate"><span class="pre">removed</span></code>/<code class="docutils literal notranslate"><span class="pre">modified</span></code> arrays with <code class="docutils literal notranslate"><span class="pre">changes</span></code> objects
+tracking field-level deltas (<code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">links</span></code>, <code class="docutils literal notranslate"><span class="pre">tags</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>).</p>
+</section>
+<section id="id53">
+<h4>Examples<a class="headerlink" href="#id53" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Text<span class="w"> </span>diff
+<span class="go">osqar baseline diff v1.0 v1.1</span>
+
+<span class="gp"># </span>Verbose<span class="w"> </span>diff<span class="w"> </span>showing<span class="w"> </span>field-level<span class="w"> </span>changes
+<span class="go">osqar baseline diff v1.0 v1.1 --verbose</span>
+
+<span class="gp"># </span>Machine-readable<span class="w"> </span><span class="k">for</span><span class="w"> </span>CI
+<span class="go">osqar baseline diff v1.0 v1.1 --format json --json-report baseline_diff.json</span>
 </pre></div>
 </div>
 </section>
@@ -1203,84 +1423,106 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 <li><a class="reference internal" href="#id9">Examples</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#new">new</a><ul>
+<li><a class="reference internal" href="#impact">impact</a><ul>
 <li><a class="reference internal" href="#id10">Synopsis</a></li>
 <li><a class="reference internal" href="#id11">Options</a></li>
-<li><a class="reference internal" href="#id12">Example</a></li>
+<li><a class="reference internal" href="#output-formats">Output formats</a></li>
+<li><a class="reference internal" href="#id12">Examples</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#traceability">traceability</a><ul>
+<li><a class="reference internal" href="#new">new</a><ul>
 <li><a class="reference internal" href="#id13">Synopsis</a></li>
 <li><a class="reference internal" href="#id14">Options</a></li>
 <li><a class="reference internal" href="#id15">Example</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#code-trace">code-trace</a><ul>
-<li><a class="reference internal" href="#typical-uses">Typical uses</a></li>
+<li><a class="reference internal" href="#traceability">traceability</a><ul>
 <li><a class="reference internal" href="#id16">Synopsis</a></li>
 <li><a class="reference internal" href="#id17">Options</a></li>
-<li><a class="reference internal" href="#enforcement-options">Enforcement options</a></li>
+<li><a class="reference internal" href="#csv-export-format">CSV export format</a></li>
 <li><a class="reference internal" href="#id18">Examples</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#checksum">checksum</a><ul>
+<li><a class="reference internal" href="#code-trace">code-trace</a><ul>
+<li><a class="reference internal" href="#typical-uses">Typical uses</a></li>
 <li><a class="reference internal" href="#id19">Synopsis</a></li>
+<li><a class="reference internal" href="#id20">Options</a></li>
+<li><a class="reference internal" href="#enforcement-options">Enforcement options</a></li>
+<li><a class="reference internal" href="#id21">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#checksum">checksum</a><ul>
+<li><a class="reference internal" href="#id22">Synopsis</a></li>
 <li><a class="reference internal" href="#options-both-subcommands">Options (both subcommands)</a></li>
 <li><a class="reference internal" href="#subcommand-specific">Subcommand-specific</a></li>
-<li><a class="reference internal" href="#id20">Example</a></li>
+<li><a class="reference internal" href="#id23">Example</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#framework">framework</a><ul>
 <li><a class="reference internal" href="#subcommand-bundle">Subcommand: bundle</a></li>
-<li><a class="reference internal" href="#id21">Synopsis</a></li>
-<li><a class="reference internal" href="#id22">Options</a></li>
+<li><a class="reference internal" href="#id24">Synopsis</a></li>
+<li><a class="reference internal" href="#id25">Options</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#shipment">shipment</a><ul>
 <li><a class="reference internal" href="#subcommands">Subcommands</a></li>
 <li><a class="reference internal" href="#shipment-prepare">shipment prepare</a></li>
-<li><a class="reference internal" href="#id23">Synopsis</a></li>
+<li><a class="reference internal" href="#id26">Synopsis</a></li>
 <li><a class="reference internal" href="#key-options">Key options</a></li>
-<li><a class="reference internal" href="#id24">Examples</a></li>
+<li><a class="reference internal" href="#id27">Examples</a></li>
 <li><a class="reference internal" href="#shipment-verify">shipment verify</a></li>
-<li><a class="reference internal" href="#id25">Synopsis</a></li>
-<li><a class="reference internal" href="#id26">Notes</a></li>
+<li><a class="reference internal" href="#id28">Synopsis</a></li>
+<li><a class="reference internal" href="#id29">Notes</a></li>
 <li><a class="reference internal" href="#shipment-list">shipment list</a></li>
-<li><a class="reference internal" href="#id27">Synopsis</a></li>
+<li><a class="reference internal" href="#id30">Synopsis</a></li>
 <li><a class="reference internal" href="#shipment-build-docs">shipment build-docs</a></li>
 <li><a class="reference internal" href="#shipment-run-tests">shipment run-tests</a></li>
-<li><a class="reference internal" href="#id28">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-run-build">shipment run-build</a></li>
-<li><a class="reference internal" href="#id29">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-clean">shipment clean</a></li>
-<li><a class="reference internal" href="#id30">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-traceability">shipment traceability</a></li>
 <li><a class="reference internal" href="#id31">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-checksums">shipment checksums</a></li>
+<li><a class="reference internal" href="#shipment-run-build">shipment run-build</a></li>
 <li><a class="reference internal" href="#id32">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-pin">shipment pin</a></li>
+<li><a class="reference internal" href="#shipment-clean">shipment clean</a></li>
 <li><a class="reference internal" href="#id33">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-copy-test-reports">shipment copy-test-reports</a></li>
+<li><a class="reference internal" href="#shipment-traceability">shipment traceability</a></li>
 <li><a class="reference internal" href="#id34">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-package">shipment package</a></li>
+<li><a class="reference internal" href="#shipment-checksums">shipment checksums</a></li>
 <li><a class="reference internal" href="#id35">Synopsis</a></li>
-<li><a class="reference internal" href="#shipment-metadata-write">shipment metadata write</a></li>
+<li><a class="reference internal" href="#shipment-pin">shipment pin</a></li>
 <li><a class="reference internal" href="#id36">Synopsis</a></li>
+<li><a class="reference internal" href="#shipment-copy-test-reports">shipment copy-test-reports</a></li>
+<li><a class="reference internal" href="#id37">Synopsis</a></li>
+<li><a class="reference internal" href="#shipment-package">shipment package</a></li>
+<li><a class="reference internal" href="#id38">Synopsis</a></li>
+<li><a class="reference internal" href="#shipment-metadata-write">shipment metadata write</a></li>
+<li><a class="reference internal" href="#id39">Synopsis</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#workspace">workspace</a><ul>
-<li><a class="reference internal" href="#id37">Subcommands</a></li>
+<li><a class="reference internal" href="#id40">Subcommands</a></li>
 <li><a class="reference internal" href="#workspace-list">workspace list</a></li>
-<li><a class="reference internal" href="#id38">Synopsis</a></li>
-<li><a class="reference internal" href="#workspace-report">workspace report</a></li>
-<li><a class="reference internal" href="#id39">Synopsis</a></li>
-<li><a class="reference internal" href="#id40">Examples</a></li>
-<li><a class="reference internal" href="#workspace-diff">workspace diff</a></li>
 <li><a class="reference internal" href="#id41">Synopsis</a></li>
-<li><a class="reference internal" href="#workspace-verify">workspace verify</a></li>
+<li><a class="reference internal" href="#workspace-report">workspace report</a></li>
 <li><a class="reference internal" href="#id42">Synopsis</a></li>
+<li><a class="reference internal" href="#id43">Examples</a></li>
+<li><a class="reference internal" href="#workspace-diff">workspace diff</a></li>
+<li><a class="reference internal" href="#id44">Synopsis</a></li>
+<li><a class="reference internal" href="#workspace-verify">workspace verify</a></li>
+<li><a class="reference internal" href="#id45">Synopsis</a></li>
 <li><a class="reference internal" href="#workspace-intake">workspace intake</a></li>
-<li><a class="reference internal" href="#id43">Synopsis</a></li>
+<li><a class="reference internal" href="#id46">Synopsis</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#baseline">baseline</a><ul>
+<li><a class="reference internal" href="#id47">Subcommands</a></li>
+<li><a class="reference internal" href="#baseline-snapshot">baseline snapshot</a></li>
+<li><a class="reference internal" href="#id48">Synopsis</a></li>
+<li><a class="reference internal" href="#id49">Options</a></li>
+<li><a class="reference internal" href="#id50">Examples</a></li>
+<li><a class="reference internal" href="#baseline-list">baseline list</a></li>
+<li><a class="reference internal" href="#id51">Synopsis</a></li>
+<li><a class="reference internal" href="#baseline-diff">baseline diff</a></li>
+<li><a class="reference internal" href="#id52">Synopsis</a></li>
+<li><a class="reference internal" href="#output">Output</a></li>
+<li><a class="reference internal" href="#id53">Examples</a></li>
 </ul>
 </li>
 </ul>
