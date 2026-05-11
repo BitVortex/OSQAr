@@ -419,8 +419,10 @@ Only use workspace config from a location you control.</p>
 <li><p><a class="reference internal" href="#cli-baseline"><span class="std std-ref">baseline</span></a> — Versioned requirement baselines (snapshot, list, diff).</p></li>
 <li><p><a class="reference internal" href="#cli-checksum"><span class="std std-ref">checksum</span></a> — Generate/verify checksum manifests.</p></li>
 <li><p><a class="reference internal" href="#cli-framework"><span class="std std-ref">framework</span></a> — Framework bundle helpers (release/CI).</p></li>
-<li><p><a class="reference internal" href="#cli-shipment"><span class="std std-ref">shipment</span></a> — Shipment workflows (build, prepare, verify, package).</p></li>
-<li><p><a class="reference internal" href="#cli-workspace"><span class="std std-ref">workspace</span></a> — Workspace workflows (list, report, verify, intake).</p></li>
+<li><p><a class="reference internal" href="#cli-gsn"><span class="std std-ref">gsn</span></a> — GSN safety case support (generate gsn2x specifications).</p></li>
+<li><p><a class="reference internal" href="#cli-shipment"><span class="std std-ref">shipment</span></a> — Shipment workflows (build, prepare, verify, package, incremental).</p></li>
+<li><p><a class="reference internal" href="#cli-sign"><span class="std std-ref">sign</span></a> — Cryptographic manifest signing (GPG detached signatures).</p></li>
+<li><p><a class="reference internal" href="#cli-workspace"><span class="std std-ref">workspace</span></a> — Workspace workflows (list, report, verify, intake, combine).</p></li>
 </ul>
 </section>
 </section>
@@ -921,6 +923,7 @@ columns per requirement:</p>
 <span class="go">   [--script &lt;name&gt;] [--reproducible | --no-reproducible]</span>
 <span class="go">   [--skip-build] [--build-command &lt;cmd&gt;]</span>
 <span class="go">   [--skip-tests] [--test-command &lt;cmd&gt;]</span>
+<span class="go">   [--incremental] [--force]</span>
 <span class="go">   [--exclude &lt;glob&gt; ...]</span>
 <span class="go">   [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
 <span class="go">   [--archive] [--archive-output &lt;path&gt;]</span>
@@ -936,6 +939,10 @@ columns per requirement:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">--shipment</span></code>: output shipment directory (default: <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/_build/html</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--reproducible</span></code> / <code class="docutils literal notranslate"><span class="pre">--no-reproducible</span></code>: toggle reproducible mode (default: enabled)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--test-command</span></code> / <code class="docutils literal notranslate"><span class="pre">--build-command</span></code>: override commands from config</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--incremental</span></code>: only re-run stages (build, test, verification, docs, code-trace,
+traceability) whose inputs have changed since the last successful run. Cache stored
+in <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/.osqar-cache/stages.json</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--force</span></code>: with <code class="docutils literal notranslate"><span class="pre">--incremental</span></code>, clear the cache and run all stages regardless.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--archive</span></code>: also create a zip archive of the shipment directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--doctor</span></code>: write a doctor report into the shipped directory before generating checksums</p></li>
 </ul>
@@ -1114,6 +1121,8 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">diff</span></code> — diff two workspace reports</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">verify</span></code> — verify many shipments</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">intake</span></code> — verify and archive many shipments into a single intake directory</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">combine</span></code> — merge multiple project <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> exports with namespace prefixes for cross-project traceability</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">traceability</span></code> — run traceability checks on a combined workspace <code class="docutils literal notranslate"><span class="pre">needs.json</span></code></p></li>
 </ul>
 </section>
 <section id="workspace-list">

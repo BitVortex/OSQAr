@@ -175,8 +175,10 @@ Top-level commands
 - :ref:`cli-baseline` — Versioned requirement baselines (snapshot, list, diff).
 - :ref:`cli-checksum` — Generate/verify checksum manifests.
 - :ref:`cli-framework` — Framework bundle helpers (release/CI).
-- :ref:`cli-shipment` — Shipment workflows (build, prepare, verify, package).
-- :ref:`cli-workspace` — Workspace workflows (list, report, verify, intake).
+- :ref:`cli-gsn` — GSN safety case support (generate gsn2x specifications).
+- :ref:`cli-shipment` — Shipment workflows (build, prepare, verify, package, incremental).
+- :ref:`cli-sign` — Cryptographic manifest signing (GPG detached signatures).
+- :ref:`cli-workspace` — Workspace workflows (list, report, verify, intake, combine).
 
 
 Top-Level Commands
@@ -735,6 +737,7 @@ Synopsis
      [--script <name>] [--reproducible | --no-reproducible]
      [--skip-build] [--build-command <cmd>]
      [--skip-tests] [--test-command <cmd>]
+     [--incremental] [--force]
      [--exclude <glob> ...]
      [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
      [--archive] [--archive-output <path>]
@@ -748,6 +751,10 @@ Key options
 - ``--shipment``: output shipment directory (default: ``<project>/_build/html``)
 - ``--reproducible`` / ``--no-reproducible``: toggle reproducible mode (default: enabled)
 - ``--test-command`` / ``--build-command``: override commands from config
+- ``--incremental``: only re-run stages (build, test, verification, docs, code-trace,
+  traceability) whose inputs have changed since the last successful run. Cache stored
+  in ``<project>/.osqar-cache/stages.json``.
+- ``--force``: with ``--incremental``, clear the cache and run all stages regardless.
 - ``--archive``: also create a zip archive of the shipment directory
 - ``--doctor``: write a doctor report into the shipped directory before generating checksums
 
@@ -968,6 +975,8 @@ Subcommands
 - ``workspace diff`` — diff two workspace reports
 - ``workspace verify`` — verify many shipments
 - ``workspace intake`` — verify and archive many shipments into a single intake directory
+- ``workspace combine`` — merge multiple project ``needs.json`` exports with namespace prefixes for cross-project traceability
+- ``workspace traceability`` — run traceability checks on a combined workspace ``needs.json``
 
 
 workspace list
