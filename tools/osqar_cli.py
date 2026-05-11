@@ -14,10 +14,12 @@ from __future__ import annotations
 
 import argparse
 
+from tools import osqar_cmd_baseline
 from tools import osqar_cmd_checksum
 from tools import osqar_cmd_code_trace
 from tools import osqar_cmd_doctor
 from tools import osqar_cmd_framework
+from tools import osqar_cmd_impact
 from tools import osqar_cmd_new
 from tools import osqar_cmd_open_docs
 from tools import osqar_cmd_setup
@@ -35,6 +37,7 @@ def build_parser() -> argparse.ArgumentParser:
     osqar_cmd_open_docs.register(sub)
     osqar_cmd_setup.register(sub)
     osqar_cmd_doctor.register(sub)
+    osqar_cmd_impact.register(sub)
     osqar_cmd_new.register(sub)
     osqar_cmd_traceability.register(sub)
     osqar_cmd_code_trace.register(sub)
@@ -44,6 +47,7 @@ def build_parser() -> argparse.ArgumentParser:
     # Groups
     osqar_cmd_shipment.register(sub)
     osqar_cmd_workspace.register(sub)
+    osqar_cmd_baseline.register(sub)
 
     return parser
 

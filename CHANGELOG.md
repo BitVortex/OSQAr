@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.2] - 2026-05-11
+
+### Added
+- **Change impact analysis** (`osqar impact`): new command that performs transitive
+  closure analysis on traceability links from a seed need ID. Shows all affected
+  needs in an ASCII tree with type, status, and title. Supports ``--direction``
+  (downstream/upstream/both), ``--max-depth``, and ``--format json``. Implements
+  ISO 26262-8 §9.4.2.4 impact analysis requirements. (#14)
+- **Requirement baseline versioning** (`osqar baseline`): snapshot, list, and diff
+  commands for versioned requirement baselines. ``baseline snapshot`` copies the
+  current ``needs.json`` with a manifest; ``baseline list`` shows all stored
+  baselines with metadata; ``baseline diff`` computes structured diffs between
+  two baselines (added/removed/modified needs, link changes, tag changes). Supports
+  ``--format json`` and ``--verbose``. Implements ISO 26262-8 §9 configuration
+  management requirements. (#15)
+- **CSV traceability matrix export**: ``osqar traceability --format csv`` exports
+  a spreadsheet-ready traceability matrix with columns for requirement ID, title,
+  status, tags, and linked architecture/verification/implementation/lifecycle
+  artifacts. Provides the auditor-friendly matrix format expected in ISO 26262
+  assessments. (#19)
+
 ## [0.7.1] - 2026-05-08
 
 ### Added
