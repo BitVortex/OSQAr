@@ -96,6 +96,8 @@ Machine-readable reports
 Some commands can write JSON reports for CI and audit trails:
 
 - ``doctor --json-report`` writes ``schema: osqar.doctor_report.v1``
+- ``impact --format json`` writes ``schema: osqar.impact_report.v1``
+- ``baseline diff --format json`` writes ``schema: osqar.baseline_diff.v1``
 - ``checksum ... --json-report`` writes ``schema: osqar.checksums_report.v1``
 - ``code-trace --json-report`` writes ``schema: osqar.code_trace_report.v1``
 - ``shipment verify --report-json`` writes ``schema: osqar.shipment_verify_report.v1``
@@ -166,9 +168,11 @@ Top-level commands
 - :ref:`cli-open-docs` — Open built HTML documentation (``index.html``).
 - :ref:`cli-setup` — Verify/extract a downloaded ZIP and run verification.
 - :ref:`cli-doctor` — Environment + shipment diagnostics.
+- :ref:`cli-impact` — Change impact analysis via traceability graph traversal.
 - :ref:`cli-new` — Scaffold a new OSQAr project.
-- :ref:`cli-traceability` — Validate traceability rules from ``needs.json``.
+- :ref:`cli-traceability` — Validate traceability rules from ``needs.json`` (supports CSV export).
 - :ref:`cli-code-trace` — Scan code for need IDs (optional enforcement).
+- :ref:`cli-baseline` — Versioned requirement baselines (snapshot, list, diff).
 - :ref:`cli-checksum` — Generate/verify checksum manifests.
 - :ref:`cli-framework` — Framework bundle helpers (release/CI).
 - :ref:`cli-shipment` — Shipment workflows (build, prepare, verify, package).
@@ -372,6 +376,88 @@ Examples
   osqar doctor --shipment /path/to/shipment --skip-env-checks --json-report doctor_report.json
 
 
+.. _cli-impact:
+
+impact
+------
+
+Analyze change impact by traversing traceability links from a seed need ID.
+
+This command answers *"if I change this requirement, what else is affected?"* — supporting
+ISO 26262-8 §9.4.2.4 impact analysis workflows. It performs bidirectional graph traversal
+on the ``needs.json`` traceability graph and shows all reachable needs with their type,
+status, and title.
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar impact <needs_json> --need-id <id>
+         [--direction {downstream,upstream,both}] [--max-depth <n>]
+         [--format {tree,json}] [--json-report <path>]
+
+Options
+^^^^^^^
+
+- ``needs_json``: path to ``needs.json`` produced by sphinx-needs
+- ``--need-id``: required; seed need ID to start traversal from
+- ``--direction``: traversal direction (default: ``both``)
+- ``--max-depth``: maximum traversal depth (0 = unlimited; default: 0)
+- ``--format``: output format (default: ``tree``; ``json`` for machine-readable)
+- ``--json-report``: write JSON report to this path (only with ``--format json``)
+
+Output formats
+^^^^^^^^^^^^^^
+
+**Tree** (default) — renders an ASCII tree showing each affected need with its type,
+status, and title. The tree follows parent-child relationships derived from
+traceability link depth:
+
+.. code-block:: text
+
+  REQ_CJSON_ARITH_SAFE (requirement)
+  └── REQ_CJSON_ARITH_SAFE (requirement, active) — All integer arithmetic...
+      ├── ARCH_PRINTER_FLOW (architecture, active) — The cJSON printer...
+      │   └── REQ_CJSON_PRINT_VALID (requirement, active) — The cJSON printer...
+      │       └── VER_CJSON_TEST_SUITE (verification, active) — Execute the full...
+      ├── VER_CJSON_ARITH (verification, active) — Audit integer operations...
+      └── VER_CJSON_STATIC (verification, active) — Run static analysis...
+
+  Summary: 35 affected needs (7 architectures, 3 implementations, 11 requirements, 13 verifications)
+
+**JSON** — structured report with ``affected_total``, ``affected_by_type`` counts, and
+a sorted ``needs`` array:
+
+.. code-block:: json
+
+  {
+    "schema": "osqar.impact_report.v1",
+    "seed": "REQ_CJSON_ARITH_SAFE",
+    "affected_total": 35,
+    "affected_by_type": {
+      "architecture": 7,
+      "implementation": 3,
+      "requirement": 11,
+      "verification": 13
+    }
+  }
+
+Examples
+^^^^^^^^
+
+.. code-block:: console
+
+  # Show what would be affected if a requirement changes
+  osqar impact ./_build/html/needs.json --need-id REQ_CJSON_PARSE_VALID
+
+  # Downstream-only (what does this requirement feed into?)
+  osqar impact ./_build/html/needs.json --need-id REQ_CJSON_MEMORY_SAFE --direction downstream
+
+  # Machine-readable for CI
+  osqar impact ./_build/html/needs.json --need-id REQ_CJSON_ARITH_SAFE --format json --json-report impact_report.json
+
+
 .. _cli-new:
 
 new
@@ -413,31 +499,74 @@ Example
 traceability
 ------------
 
-Run traceability checks on a ``needs.json`` export (from sphinx-needs).
+Run traceability checks on a ``needs.json`` export (from sphinx-needs), or
+export a CSV traceability matrix for auditor review.
 
 Synopsis
 ^^^^^^^^
 
 .. code-block:: console
 
+  # Violation check (default)
   osqar traceability <needs_json> [--json-report <path>]
               [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
+              [--req-prefix <prefix> ...] [--arch-prefix <prefix> ...]
+              [--test-prefix <prefix> ...] [--code-prefix <prefix> ...]
+
+  # CSV export
+  osqar traceability <needs_json> --format csv --format-output <path>
+              [--req-prefix <prefix> ...] [--test-prefix <prefix> ...]
+              [--arch-prefix <prefix> ...] [--code-prefix <prefix> ...]
+              [--lm-prefix <prefix> ...]
 
 Options
 ^^^^^^^
 
 - ``needs_json``: path to ``needs.json``
 - ``--json-report``: write a JSON report
+- ``--format``: output mode — ``check`` (default) for violation checking, ``csv`` for traceability matrix export
+- ``--format-output``: file path for CSV export (required with ``--format csv``)
+- ``--lm-prefix``: lifecycle management ID prefix for CSV columns (repeatable; default: ``LM_``)
 - ``--enforce-req-has-test``: fail if any ``REQ_*`` has no linked ``TEST_*``
 - ``--enforce-arch-traces-req``: fail if any ``ARCH_*`` has no linked ``REQ_*``
 - ``--enforce-test-traces-req``: fail if any ``TEST_*`` has no linked ``REQ_*``
 
-Example
-^^^^^^^
+Prefix overrides apply to both check and CSV modes:
+``--req-prefix``, ``--arch-prefix``, ``--test-prefix``, ``--code-prefix`` (all repeatable).
+
+CSV export format
+^^^^^^^^^^^^^^^^^
+
+When ``--format csv`` is used, the tool writes a spreadsheet-ready CSV with these
+columns per requirement:
+
+- ``REQ_ID`` — requirement identifier
+- ``REQ_Title`` — human-readable title/description
+- ``Status`` — need status (e.g., ``active``, ``draft``)
+- ``Tags`` — semicolon-delimited need tags
+- ``ARCH_Linked`` — semicolon-delimited architecture IDs
+- ``VER_Linked`` — semicolon-delimited verification IDs
+- ``IMPL_Linked`` — semicolon-delimited implementation IDs
+- ``LM_Linked`` — semicolon-delimited lifecycle management IDs
+- ``Other_Linked`` — any other linked IDs not matching the above prefixes
+- ``Total_Links`` — total number of outgoing links
+
+The CSV can be opened directly in Excel, Google Sheets, or LibreOffice Calc.
+
+Examples
+^^^^^^^^
 
 .. code-block:: console
 
+  # Standard traceability check
   osqar traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json
+
+  # Export traceability matrix for auditors
+  osqar traceability ./_build/html/needs.json --format csv --format-output traceability_matrix.csv
+
+  # Export with custom test prefix
+  osqar traceability ./_build/html/needs.json --format csv --format-output matrix.csv \\
+    --test-prefix VER_ --code-prefix IMPL_
 
 
 .. _cli-code-trace:
@@ -937,3 +1066,119 @@ Synopsis
                  [--enforce-deps]
                  [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
                  [--continue-on-error]
+
+
+.. _cli-baseline:
+
+baseline
+--------
+
+Versioned requirement baselines for change management. Supports
+ISO 26262-8 §9 configuration management requirements — snapshot the
+current ``needs.json`` as a named baseline, list stored baselines, and
+compute structured diffs between any two baselines.
+
+Baselines are stored in ``.osqar-baselines/<tag>/`` within the project
+directory, each containing a ``needs.json`` copy and a
+``baseline-manifest.json`` with metadata.
+
+Subcommands
+^^^^^^^^^^^
+
+- ``baseline snapshot`` — capture the current ``needs.json`` as a named baseline
+- ``baseline list`` — list all stored baselines with metadata
+- ``baseline diff`` — compute a structured diff between two baselines
+
+baseline snapshot
+^^^^^^^^^^^^^^^^^
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar baseline snapshot --tag <tag> [--project <dir>]
+         [--message <text>] [--parent <tag>] [--needs-json <path>] [--force]
+
+Options
+^^^^^^^
+
+- ``--tag``: required; baseline tag (alphanumeric, hyphens, dots, underscores)
+- ``--project``: project directory (default: ``.``)
+- ``--message``: human-readable description of this baseline
+- ``--parent``: parent baseline tag (for lineage tracking)
+- ``--needs-json``: path to needs.json (default: ``<project>/_build/html/needs.json``)
+- ``--force``: overwrite existing baseline with the same tag
+
+Examples
+^^^^^^^^
+
+.. code-block:: console
+
+  # Create a baseline
+  osqar baseline snapshot --tag v1.0 --message "Initial cJSON qualification baseline"
+
+  # Snapshot with explicit needs.json path
+  osqar baseline snapshot --tag v1.0 --needs-json ./_build/html/needs.json
+
+baseline list
+^^^^^^^^^^^^^
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar baseline list [--project <dir>]
+
+Output shows each baseline's tag, date, need count, and message:
+
+.. code-block:: text
+
+  v1.0  2026-05-11    45 needs  Initial cJSON qualification baseline
+  v1.1  2026-05-12    47 needs  Added UTF-16 validation requirements
+
+baseline diff
+^^^^^^^^^^^^^
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar baseline diff <tag_old> <tag_new> [--project <dir>]
+         [--format {text,json}] [--verbose] [--json-report <path>]
+
+Output
+^^^^^^
+
+**Text** (default) — summary counts plus per-need change details:
+
+.. code-block:: text
+
+  Baseline diff: v1.0 → v1.1
+    45 → 47 needs (+2 added, 0 modified, 0 removed, 45 unchanged)
+
+    [ADDED]    REQ_CJSON_UTF16_VALIDATION
+               The parser shall reject invalid UTF-16 surrogate pairs
+
+    [ADDED]    REQ_CJSON_UTF16_ENCODE
+               UTF-16 encoding shall produce valid output per RFC 8259
+
+**JSON** — structured report with ``schema: osqar.baseline_diff.v1``, counts,
+and detailed ``added``/``removed``/``modified`` arrays with ``changes`` objects
+tracking field-level deltas (``status``, ``links``, ``tags``, ``title``).
+
+Examples
+^^^^^^^^
+
+.. code-block:: console
+
+  # Text diff
+  osqar baseline diff v1.0 v1.1
+
+  # Verbose diff showing field-level changes
+  osqar baseline diff v1.0 v1.1 --verbose
+
+  # Machine-readable for CI
+  osqar baseline diff v1.0 v1.1 --format json --json-report baseline_diff.json
