@@ -22,6 +22,12 @@ from typing import Optional
 from tools import osqar_cli_util as u
 from tools.code_trace_check import cli as code_trace_cli
 from tools.generate_checksums import cli as checksums_cli
+from tools.osqar_incremental import (
+    clear_cache,
+    compute_stage_inputs,
+    load_cache,
+    save_cache,
+)
 from tools.traceability_check import cli as traceability_cli
 
 
@@ -667,7 +673,40 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
         if rc != 0:
             return int(rc)
 
-    if not bool(getattr(args, "skip_build", False)):
+    # --- Incremental mode: compute stage hashes and decide what to skip ---
+    incremental = bool(getattr(args, "incremental", False))
+    force_all = bool(getattr(args, "force", False))
+    cached: dict[str, str] = {}
+    current: dict[str, str] = {}
+
+    if incremental:
+        if force_all:
+            clear_cache(project_dir)
+            print("  [incremental] --force: cache cleared, running all stages")
+        else:
+            cached = load_cache(project_dir)
+            current = compute_stage_inputs(
+                project_dir, config,
+                skip_build=bool(getattr(args, "skip_build", False)),
+                skip_tests=bool(getattr(args, "skip_tests", False)),
+                skip_verification=bool(getattr(args, "skip_verification", False)),
+            )
+            if cached:
+                print("  [incremental] comparing stage inputs against cache...")
+
+    def _skip_stage(name: str) -> bool:
+        if not incremental or force_all:
+            return False
+        if not cached:
+            return False
+        cv = current.get(name, "")
+        ch = cached.get(name, "")
+        if cv and ch and cv == ch:
+            print(f"  [{name:>14}] SKIP (inputs unchanged)")
+            return True
+        return False
+
+    if not _skip_stage("build") and not bool(getattr(args, "skip_build", False)):
         build_command = getattr(args, "build_command", None)
         if not build_command:
             commands = config.get("commands") if isinstance(config, dict) else None
@@ -687,7 +726,7 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
             if rc != 0:
                 return int(rc)
 
-    if not bool(getattr(args, "skip_tests", False)):
+    if not _skip_stage("test") and not bool(getattr(args, "skip_tests", False)):
         script = project_dir / (getattr(args, "script", None) or "build-and-test.sh")
         rc = cmd_shipment_run_tests(
             argparse.Namespace(
@@ -707,12 +746,15 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
     _generate_gap_documentation(config, gaps_rst)
 
     # Run verification activities (sanitizers, static analysis, coverage, etc.).
-    if not bool(getattr(args, "skip_verification", False)):
+    if not _skip_stage("verification") and not bool(getattr(args, "skip_verification", False)):
         rc = _run_verification_activities(config, project_dir, shipment_dir, env)
         if rc != 0:
             return int(rc)
 
-    rc = u.run_docs_build(project_dir, shipment_dir, config=config)
+    if _skip_stage("docs"):
+        rc = 0
+    else:
+        rc = u.run_docs_build(project_dir, shipment_dir, config=config)
     if rc != 0:
         return int(rc)
 
@@ -721,7 +763,7 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
     u.copy_test_reports(project_dir, shipment_dir, dry_run=bool(getattr(args, "dry_run", False)), globs=u.DEFAULT_TEST_REPORT_GLOBS)
 
     # Code traceability check (source-level ID tags) against needs.json.
-    if not bool(getattr(args, "skip_code_trace", False)):
+    if not _skip_stage("code_trace") and not bool(getattr(args, "skip_code_trace", False)):
         language = u.detect_language(project_dir)
         needs_json = shipment_dir / "needs.json"
         code_trace_report = shipment_dir / "code_trace_report.json"
@@ -768,7 +810,10 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
                 return int(rc_ct)
 
     # Traceability report into shipment root.
-    rc = cmd_shipment_traceability(
+    if _skip_stage("traceability"):
+        rc = 0
+    else:
+        rc = cmd_shipment_traceability(
         argparse.Namespace(
             shipment=str(shipment_dir),
             needs_json=None,
@@ -780,10 +825,10 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
             arch_prefix=list(getattr(args, "arch_prefix", []) or []),
             test_prefix=list(getattr(args, "test_prefix", []) or []),
             code_prefix=list(getattr(args, "code_prefix", []) or []),
+            )
         )
-    )
-    if rc != 0:
-        return int(rc)
+        if rc != 0:
+            return int(rc)
 
     if bool(getattr(args, "doctor", False)):
         from tools.osqar_cmd_doctor import cmd_doctor
@@ -854,6 +899,11 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
         )
         if rc != 0:
             return int(rc)
+
+    # Save cache for next incremental run
+    if incremental and not force_all and current:
+        save_cache(project_dir, current)
+        print("  [incremental] stage cache updated")
 
     print(f"{label} ready: {shipment_dir}")
     rc = u.run_hooks(
@@ -1305,6 +1355,16 @@ def register(sub: argparse._SubParsersAction) -> None:
         "--skip-code-trace",
         action="store_true",
         help="Skip source-level code traceability check (code-trace)",
+    )
+    p_prep.add_argument(
+        "--incremental",
+        action="store_true",
+        help="Only re-run stages whose inputs have changed since the last successful run",
+    )
+    p_prep.add_argument(
+        "--force",
+        action="store_true",
+        help="With --incremental: clear the cache and run all stages (overrides skip)",
     )
     p_prep.add_argument(
         "--skip-verification",

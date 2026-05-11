@@ -1678,6 +1678,161 @@ def cmd_workspace_intake(args: argparse.Namespace) -> int:
     return 0 if not any_failures else 1
 
 
+def cmd_workspace_combine(args: argparse.Namespace) -> int:
+    """Combine multiple project needs.json exports into a single namespace-prefixed needs.json."""
+    root = Path(args.root).expanduser().resolve() if getattr(args, "root", None) else Path(".").resolve()
+    output = Path(args.output).expanduser().resolve() if getattr(args, "output", None) else (root / "_build" / "workspace" / "needs.json")
+
+    if not root.is_dir():
+        print(f"ERROR: root directory not found: {root}", file=sys.stderr)
+        return 2
+
+    # Discover projects: scan for conf.py/index.rst or explicit --project args
+    project_dirs: list[Path] = []
+    explicit = getattr(args, "project", None)
+    if explicit:
+        for p in (explicit if isinstance(explicit, list) else [explicit]):
+            pd = Path(p).expanduser().resolve()
+            if pd.is_dir():
+                project_dirs.append(pd)
+
+    if not project_dirs:
+        # Auto-discover: look for directories with conf.py/index.rst one level deep
+        for d in sorted(root.iterdir()):
+            if d.is_dir() and not d.name.startswith(".") and not d.name.startswith("_"):
+                if (d / "conf.py").is_file() and (d / "index.rst").is_file():
+                    project_dirs.append(d)
+
+    if not project_dirs:
+        print("ERROR: no projects found. Use --project or place project dirs under the root.", file=sys.stderr)
+        return 2
+
+    print(f"Combining {len(project_dirs)} projects:")
+    for pd in project_dirs:
+        print(f"  - {pd.name} ({pd})")
+
+    all_needs: dict[str, dict] = {}
+    total_needs = 0
+
+    import json as _json
+    for pd in project_dirs:
+        # Find needs.json
+        needs_paths = [
+            pd / "_build" / "html" / "needs.json",
+            pd / "needs.json",
+        ]
+        needs_path = None
+        for np in needs_paths:
+            if np.is_file():
+                needs_path = np
+                break
+
+        if needs_path is None:
+            print(f"  WARNING: no needs.json found for {pd.name}, skipping")
+            continue
+
+        try:
+            data = _json.loads(needs_path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            print(f"  WARNING: failed to parse {needs_path}: {exc}")
+            continue
+
+        # Extract needs with namespace prefix
+        prefix = pd.name + ":"
+        raw_needs: list[dict] = []
+        if isinstance(data, list):
+            raw_needs = [n for n in data if isinstance(n, dict)]
+        elif isinstance(data, dict):
+            if isinstance(data.get("needs"), list):
+                raw_needs = [n for n in data["needs"] if isinstance(n, dict)]
+            elif isinstance(data.get("versions"), dict):
+                versions = data["versions"]
+                current = data.get("current_version", "")
+                if current in versions and isinstance(versions[current], dict):
+                    v = versions[current]
+                    if isinstance(v.get("needs"), dict):
+                        raw_needs = [{"id": str(k), **n} for k, n in v["needs"].items() if isinstance(n, dict)]
+                    elif isinstance(v.get("needs"), list):
+                        raw_needs = [n for n in v["needs"] if isinstance(n, dict)]
+
+        count = 0
+        for need in raw_needs:
+            nid = str(need.get("id", ""))
+            if not nid:
+                continue
+            new_need = dict(need)
+            new_need["id"] = prefix + nid
+            # Rewrite links with namespace prefixes
+            for key in ("links", "links_back"):
+                links = new_need.get(key)
+                if isinstance(links, list):
+                    new_links = []
+                    for link in links:
+                        link_s = str(link)
+                        # Only prefix if not already prefixed
+                        if ":" not in link_s:
+                            new_links.append(prefix + link_s)
+                        else:
+                            new_links.append(link_s)
+                    new_need[key] = new_links
+            new_need["_project"] = pd.name
+            all_needs[new_need["id"]] = new_need
+            count += 1
+
+        total_needs += count
+        print(f"  {pd.name}: {count} needs (prefix: {prefix})")
+
+    # Write combined needs.json
+    combined = {
+        "schema": "osqar.workspace_combined_needs.v1",
+        "projects": [pd.name for pd in project_dirs],
+        "needs": dict(sorted(all_needs.items())),
+        "needs_count": len(all_needs),
+    }
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(_json.dumps(combined, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"\nCombined needs.json written: {output}")
+    print(f"  {total_needs} needs from {len(project_dirs)} projects")
+    return 0
+
+
+def cmd_workspace_traceability(args: argparse.Namespace) -> int:
+    """Run traceability checks on a combined workspace needs.json."""
+    needs_json = (
+        Path(args.needs_json).expanduser().resolve()
+        if getattr(args, "needs_json", None)
+        else Path("_build/workspace/needs.json").resolve()
+    )
+
+    if not needs_json.is_file():
+        print(f"ERROR: combined needs.json not found: {needs_json}", file=sys.stderr)
+        print("Run 'osqar workspace combine' first.", file=sys.stderr)
+        return 2
+
+    # Build argv for traceability_cli with namespace-aware prefixes
+    argv: list[str] = [str(needs_json)]
+    if getattr(args, "json_report", None):
+        argv += ["--json-report", str(args.json_report)]
+
+    # In workspace mode, REQ_/ARCH_/etc. may be prefixed like "project:REQ_"
+    # Pass all known prefixes
+    for prefix_attr, flag in [
+        ("req_prefix", "--req-prefix"),
+        ("arch_prefix", "--arch-prefix"),
+        ("test_prefix", "--test-prefix"),
+        ("code_prefix", "--code-prefix"),
+    ]:
+        values = getattr(args, prefix_attr, []) or []
+        for v in values:
+            argv.extend([flag, str(v)])
+
+    if bool(getattr(args, "enforce_req_has_test", False)):
+        argv.append("--enforce-req-has-test")
+
+    return int(traceability_cli(argv))
+
+
 def register(sub: argparse._SubParsersAction) -> None:
     p_ws = sub.add_parser(
         "workspace",
@@ -1915,3 +2070,25 @@ def register(sub: argparse._SubParsersAction) -> None:
         help="Continue intaking after a failure",
     )
     p_wi.set_defaults(func=cmd_workspace_intake)
+
+    p_wc = ws_sub.add_parser(
+        "combine",
+        help="Combine multiple project needs.json exports into a namespace-prefixed combined needs.json",
+    )
+    p_wc.add_argument("--root", default=".", help="Root directory containing project subdirectories")
+    p_wc.add_argument("--project", action="append", default=None, help="Explicit project directory (repeatable; auto-discovered if omitted)")
+    p_wc.add_argument("--output", default=None, help="Output path (default: _build/workspace/needs.json)")
+    p_wc.set_defaults(func=cmd_workspace_combine)
+
+    p_wt = ws_sub.add_parser(
+        "traceability",
+        help="Run traceability checks on a combined workspace needs.json",
+    )
+    p_wt.add_argument("--needs-json", default=None, help="Path to combined needs.json (default: _build/workspace/needs.json)")
+    p_wt.add_argument("--json-report", default=None, help="Write JSON traceability report")
+    p_wt.add_argument("--req-prefix", action="append", default=[], help="Requirement ID prefix for workspace (repeatable)")
+    p_wt.add_argument("--arch-prefix", action="append", default=[], help="Architecture ID prefix (repeatable)")
+    p_wt.add_argument("--test-prefix", action="append", default=[], help="Test ID prefix (repeatable)")
+    p_wt.add_argument("--code-prefix", action="append", default=[], help="Code/impl ID prefix (repeatable)")
+    p_wt.add_argument("--enforce-req-has-test", action="store_true", help="Also enforce REQ_* -> TEST_* coverage")
+    p_wt.set_defaults(func=cmd_workspace_traceability)

@@ -27,6 +27,10 @@ Typical roles and workflows:
 - Export auditor-ready CSV traceability matrices from needs.json (``osqar traceability --format csv``)
 - Analyze change impact by traversing traceability links from a seed need ID (``osqar impact``)
 - Snapshot and diff versioned requirement baselines for ISO 26262-8 §9 configuration management (``osqar baseline``)
+- Re-run only changed stages with ``osqar shipment prepare --incremental`` for fast iteration during qualification authoring
+- Multi-project workspace orchestration with ``osqar workspace combine`` for cross-project traceability
+- Cryptographically sign shipment manifests with GPG (``osqar sign sign`` / ``osqar sign verify``)
+- Generate GSN (Goal Structuring Notation) safety case diagrams via gsn2x integration (``osqar gsn generate``)
 - Trace requirements, architecture and tests into the actual code and check for consistency
 - Exempt read-only third-party source code from code traceability enforcement (``--external-source``)
 - Verify traceability rules and produce audit-friendly reports, with custom ID prefix overrides (``--req-prefix``, ``--arch-prefix``, ``--test-prefix``, ``--code-prefix``)
