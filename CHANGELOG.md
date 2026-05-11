@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.2] - 2026-05-11
+## [0.7.3] - 2026-05-11
 
 ### Added
 - **Change impact analysis** (`osqar impact`): new command that performs transitive
@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   status, tags, and linked architecture/verification/implementation/lifecycle
   artifacts. Provides the auditor-friendly matrix format expected in ISO 26262
   assessments. (#19)
+
+## [0.7.2] - 2026-05-11
+
+*(v0.7.2 was re-tagged after adding CLI reference documentation; PyPI publish succeeded on the initial tag. v0.7.3 is the complete release including docs.)*
 
 ## [0.7.1] - 2026-05-08
 
