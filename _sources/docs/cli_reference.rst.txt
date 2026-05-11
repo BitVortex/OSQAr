@@ -1182,3 +1182,185 @@ Examples
 
   # Machine-readable for CI
   osqar baseline diff v1.0 v1.1 --format json --json-report baseline_diff.json
+
+
+
+.. _cli-gsn:
+
+gsn
+---
+
+Generate GSN (Goal Structuring Notation) safety case specifications from
+``.. safety-case::`` needs in a sphinx-needs ``needs.json`` export.
+
+The output is a `gsn2x <https://github.com/jonasthewolf/gsn2x>`_-compatible
+YAML specification that can be rendered to PlantUML, TikZ, or Graphviz diagrams.
+When ``--render`` is passed and ``gsn2x`` is installed, the diagram is rendered
+immediately. When ``gsn2x`` is not available, the YAML spec is still produced
+and can be rendered separately.
+
+Safety-case needs are identified by the ``SC_`` ID prefix.
+
+Subcommands
+^^^^^^^^^^^
+
+- ``gsn generate`` — generate gsn2x YAML from needs.json
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar gsn generate <needs_json> [--output <path>] [--render]
+
+Options
+^^^^^^^
+
+- ``needs_json``: path to ``needs.json`` produced by sphinx-needs
+- ``--output``: output YAML path (default: ``gsn_safety_case.yaml``)
+- ``--render``: also render via gsn2x (requires ``pip install gsn2x``)
+
+Example
+^^^^^^^
+
+.. code-block:: console
+
+  # Generate gsn2x YAML from safety-case needs
+  osqar gsn generate ./_build/html/needs.json --output gsn_safety_case.yaml
+
+  # Generate and render (requires gsn2x)
+  osqar gsn generate ./_build/html/needs.json --render
+
+
+.. _cli-sign:
+
+sign
+----
+
+Cryptographically sign shipment manifests using GPG detached signatures.
+
+Provides integrity *and authenticity* evidence for auditable shipments.
+ISO 26262-8 §11.4.4 expects authenticity evidence for tool chains.
+
+Subcommands
+^^^^^^^^^^^
+
+- ``sign sign`` — create a detached signature for a manifest file
+- ``sign verify`` — verify a detached signature against a manifest
+
+sign sign
+^^^^^^^^^
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar sign sign --manifest <path> [--key <id>] [--output <path>] [--armor]
+
+Options
+^^^^^^^
+
+- ``--manifest``: required; path to manifest file (e.g., ``SHA256SUMS``)
+- ``--key``: GPG key ID or email to sign with (optional; uses default key if omitted)
+- ``--output``: output signature path (default: ``<manifest>.sig``)
+- ``--armor``: ASCII-armor the signature (``.asc`` extension)
+
+sign verify
+^^^^^^^^^^^
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar sign verify --manifest <path> [--signature <path>]
+
+Options
+^^^^^^^
+
+- ``--manifest``: required; path to signed manifest file
+- ``--signature``: path to signature file (default: ``<manifest>.sig``)
+
+Examples
+^^^^^^^^
+
+.. code-block:: console
+
+  # Sign a shipment manifest
+  osqar sign sign --manifest _build/html/SHA256SUMS --key qualification@example.com
+
+  # Verify before unpacking a received shipment
+  osqar sign verify --manifest _build/html/SHA256SUMS
+
+
+.. _cli-workspace-combine:
+
+workspace combine
+^^^^^^^^^^^^^^^^^
+
+Merge ``needs.json`` exports from multiple OSQAr projects into a single
+namespace-prefixed needs.json for cross-project traceability.
+
+Each project's needs are prefixed with ``<project-name>:`` to avoid ID
+collisions. Links are rewritten to use prefixed IDs within each project's
+scope.
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar workspace combine [--root <dir>] [--project <dir> ...] [--output <path>]
+
+Options
+^^^^^^^
+
+- ``--root``: root directory containing project subdirectories (default: ``.``)
+- ``--project``: explicit project directory (repeatable; auto-discovered if omitted)
+- ``--output``: output path (default: ``_build/workspace/needs.json``)
+
+Auto-discovery looks for subdirectories containing ``conf.py`` and ``index.rst``.
+
+Example
+^^^^^^^
+
+.. code-block:: console
+
+  # Combine example projects under examples/
+  osqar workspace combine --root examples
+
+  # Combine explicit projects
+  osqar workspace combine --project ./osqar-cjson --project ./osqar-base64 --output combined.json
+
+
+workspace traceability
+^^^^^^^^^^^^^^^^^^^^^^
+
+Run traceability checks on a combined workspace ``needs.json``.
+
+Synopsis
+^^^^^^^^
+
+.. code-block:: console
+
+  osqar workspace traceability [--needs-json <path>] [--json-report <path>]
+         [--req-prefix <prefix> ...] [--arch-prefix <prefix> ...]
+         [--enforce-req-has-test]
+
+Options
+^^^^^^^
+
+- ``--needs-json``: path to combined needs.json (default: ``_build/workspace/needs.json``)
+- ``--json-report``: write JSON traceability report
+- ``--req-prefix``, ``--arch-prefix``, ``--test-prefix``, ``--code-prefix``: ID prefix overrides (repeatable)
+- ``--enforce-req-has-test``: also enforce REQ_* → TEST_* coverage
+
+Example
+^^^^^^^
+
+.. code-block:: console
+
+  # Combine first, then check traceability
+  osqar workspace combine --root examples
+  osqar workspace traceability

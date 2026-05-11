@@ -3,7 +3,7 @@
     "counts": {
       "arch_total": 14,
       "code_total": 2,
-      "needs_total": 39,
+      "needs_total": 40,
       "req_total": 7,
       "test_total": 14,
       "violations_total": 0

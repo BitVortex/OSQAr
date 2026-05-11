@@ -1304,6 +1304,166 @@ tracking field-level deltas (<code class="docutils literal notranslate"><span cl
 </div>
 </section>
 </section>
+<section id="gsn">
+<span id="cli-gsn"></span><h3>gsn<a class="headerlink" href="#gsn" title="Link to this heading">¶</a></h3>
+<p>Generate GSN (Goal Structuring Notation) safety case specifications from
+<code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">safety-case::</span></code> needs in a sphinx-needs <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> export.</p>
+<p>The output is a <a class="reference external" href="https://github.com/jonasthewolf/gsn2x">gsn2x</a>-compatible
+YAML specification that can be rendered to PlantUML, TikZ, or Graphviz diagrams.
+When <code class="docutils literal notranslate"><span class="pre">--render</span></code> is passed and <code class="docutils literal notranslate"><span class="pre">gsn2x</span></code> is installed, the diagram is rendered
+immediately. When <code class="docutils literal notranslate"><span class="pre">gsn2x</span></code> is not available, the YAML spec is still produced
+and can be rendered separately.</p>
+<p>Safety-case needs are identified by the <code class="docutils literal notranslate"><span class="pre">SC_</span></code> ID prefix.</p>
+<section id="id54">
+<h4>Subcommands<a class="headerlink" href="#id54" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gsn</span> <span class="pre">generate</span></code> — generate gsn2x YAML from needs.json</p></li>
+</ul>
+</section>
+<section id="id55">
+<h4>Synopsis<a class="headerlink" href="#id55" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar gsn generate &lt;needs_json&gt; [--output &lt;path&gt;] [--render]</span>
+</pre></div>
+</div>
+</section>
+<section id="id56">
+<h4>Options<a class="headerlink" href="#id56" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">needs_json</span></code>: path to <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> produced by sphinx-needs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: output YAML path (default: <code class="docutils literal notranslate"><span class="pre">gsn_safety_case.yaml</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--render</span></code>: also render via gsn2x (requires <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">gsn2x</span></code>)</p></li>
+</ul>
+</section>
+<section id="id57">
+<h4>Example<a class="headerlink" href="#id57" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Generate<span class="w"> </span>gsn2x<span class="w"> </span>YAML<span class="w"> </span>from<span class="w"> </span>safety-case<span class="w"> </span>needs
+<span class="go">osqar gsn generate ./_build/html/needs.json --output gsn_safety_case.yaml</span>
+
+<span class="gp"># </span>Generate<span class="w"> </span>and<span class="w"> </span>render<span class="w"> </span><span class="o">(</span>requires<span class="w"> </span>gsn2x<span class="o">)</span>
+<span class="go">osqar gsn generate ./_build/html/needs.json --render</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="sign">
+<span id="cli-sign"></span><h3>sign<a class="headerlink" href="#sign" title="Link to this heading">¶</a></h3>
+<p>Cryptographically sign shipment manifests using GPG detached signatures.</p>
+<p>Provides integrity <em>and authenticity</em> evidence for auditable shipments.
+ISO 26262-8 §11.4.4 expects authenticity evidence for tool chains.</p>
+<section id="id58">
+<h4>Subcommands<a class="headerlink" href="#id58" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sign</span> <span class="pre">sign</span></code> — create a detached signature for a manifest file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sign</span> <span class="pre">verify</span></code> — verify a detached signature against a manifest</p></li>
+</ul>
+</section>
+<section id="sign-sign">
+<h4>sign sign<a class="headerlink" href="#sign-sign" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id59">
+<h4>Synopsis<a class="headerlink" href="#id59" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar sign sign --manifest &lt;path&gt; [--key &lt;id&gt;] [--output &lt;path&gt;] [--armor]</span>
+</pre></div>
+</div>
+</section>
+<section id="id60">
+<h4>Options<a class="headerlink" href="#id60" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--manifest</span></code>: required; path to manifest file (e.g., <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--key</span></code>: GPG key ID or email to sign with (optional; uses default key if omitted)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: output signature path (default: <code class="docutils literal notranslate"><span class="pre">&lt;manifest&gt;.sig</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--armor</span></code>: ASCII-armor the signature (<code class="docutils literal notranslate"><span class="pre">.asc</span></code> extension)</p></li>
+</ul>
+</section>
+<section id="sign-verify">
+<h4>sign verify<a class="headerlink" href="#sign-verify" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id61">
+<h4>Synopsis<a class="headerlink" href="#id61" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar sign verify --manifest &lt;path&gt; [--signature &lt;path&gt;]</span>
+</pre></div>
+</div>
+</section>
+<section id="id62">
+<h4>Options<a class="headerlink" href="#id62" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--manifest</span></code>: required; path to signed manifest file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--signature</span></code>: path to signature file (default: <code class="docutils literal notranslate"><span class="pre">&lt;manifest&gt;.sig</span></code>)</p></li>
+</ul>
+</section>
+<section id="id63">
+<h4>Examples<a class="headerlink" href="#id63" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Sign<span class="w"> </span>a<span class="w"> </span>shipment<span class="w"> </span>manifest
+<span class="go">osqar sign sign --manifest _build/html/SHA256SUMS --key qualification@example.com</span>
+
+<span class="gp"># </span>Verify<span class="w"> </span>before<span class="w"> </span>unpacking<span class="w"> </span>a<span class="w"> </span>received<span class="w"> </span>shipment
+<span class="go">osqar sign verify --manifest _build/html/SHA256SUMS</span>
+</pre></div>
+</div>
+</section>
+<section id="workspace-combine">
+<span id="cli-workspace-combine"></span><h4>workspace combine<a class="headerlink" href="#workspace-combine" title="Link to this heading">¶</a></h4>
+<p>Merge <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> exports from multiple OSQAr projects into a single
+namespace-prefixed needs.json for cross-project traceability.</p>
+<p>Each project’s needs are prefixed with <code class="docutils literal notranslate"><span class="pre">&lt;project-name&gt;:</span></code> to avoid ID
+collisions. Links are rewritten to use prefixed IDs within each project’s
+scope.</p>
+</section>
+<section id="id64">
+<h4>Synopsis<a class="headerlink" href="#id64" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace combine [--root &lt;dir&gt;] [--project &lt;dir&gt; ...] [--output &lt;path&gt;]</span>
+</pre></div>
+</div>
+</section>
+<section id="id65">
+<h4>Options<a class="headerlink" href="#id65" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--root</span></code>: root directory containing project subdirectories (default: <code class="docutils literal notranslate"><span class="pre">.</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--project</span></code>: explicit project directory (repeatable; auto-discovered if omitted)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: output path (default: <code class="docutils literal notranslate"><span class="pre">_build/workspace/needs.json</span></code>)</p></li>
+</ul>
+<p>Auto-discovery looks for subdirectories containing <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> and <code class="docutils literal notranslate"><span class="pre">index.rst</span></code>.</p>
+</section>
+<section id="id66">
+<h4>Example<a class="headerlink" href="#id66" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Combine<span class="w"> </span>example<span class="w"> </span>projects<span class="w"> </span>under<span class="w"> </span>examples/
+<span class="go">osqar workspace combine --root examples</span>
+
+<span class="gp"># </span>Combine<span class="w"> </span>explicit<span class="w"> </span>projects
+<span class="go">osqar workspace combine --project ./osqar-cjson --project ./osqar-base64 --output combined.json</span>
+</pre></div>
+</div>
+</section>
+<section id="workspace-traceability">
+<h4>workspace traceability<a class="headerlink" href="#workspace-traceability" title="Link to this heading">¶</a></h4>
+<p>Run traceability checks on a combined workspace <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>.</p>
+</section>
+<section id="id67">
+<h4>Synopsis<a class="headerlink" href="#id67" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar workspace traceability [--needs-json &lt;path&gt;] [--json-report &lt;path&gt;]</span>
+<span class="go">       [--req-prefix &lt;prefix&gt; ...] [--arch-prefix &lt;prefix&gt; ...]</span>
+<span class="go">       [--enforce-req-has-test]</span>
+</pre></div>
+</div>
+</section>
+<section id="id68">
+<h4>Options<a class="headerlink" href="#id68" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--needs-json</span></code>: path to combined needs.json (default: <code class="docutils literal notranslate"><span class="pre">_build/workspace/needs.json</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--json-report</span></code>: write JSON traceability report</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--req-prefix</span></code>, <code class="docutils literal notranslate"><span class="pre">--arch-prefix</span></code>, <code class="docutils literal notranslate"><span class="pre">--test-prefix</span></code>, <code class="docutils literal notranslate"><span class="pre">--code-prefix</span></code>: ID prefix overrides (repeatable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enforce-req-has-test</span></code>: also enforce REQ_* → TEST_* coverage</p></li>
+</ul>
+</section>
+<section id="id69">
+<h4>Example<a class="headerlink" href="#id69" title="Link to this heading">¶</a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Combine<span class="w"> </span>first,<span class="w"> </span><span class="k">then</span><span class="w"> </span>check<span class="w"> </span>traceability
+<span class="go">osqar workspace combine --root examples</span>
+<span class="go">osqar workspace traceability</span>
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 </section>
 
@@ -1523,6 +1683,32 @@ tracking field-level deltas (<code class="docutils literal notranslate"><span cl
 <li><a class="reference internal" href="#id52">Synopsis</a></li>
 <li><a class="reference internal" href="#output">Output</a></li>
 <li><a class="reference internal" href="#id53">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gsn">gsn</a><ul>
+<li><a class="reference internal" href="#id54">Subcommands</a></li>
+<li><a class="reference internal" href="#id55">Synopsis</a></li>
+<li><a class="reference internal" href="#id56">Options</a></li>
+<li><a class="reference internal" href="#id57">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sign">sign</a><ul>
+<li><a class="reference internal" href="#id58">Subcommands</a></li>
+<li><a class="reference internal" href="#sign-sign">sign sign</a></li>
+<li><a class="reference internal" href="#id59">Synopsis</a></li>
+<li><a class="reference internal" href="#id60">Options</a></li>
+<li><a class="reference internal" href="#sign-verify">sign verify</a></li>
+<li><a class="reference internal" href="#id61">Synopsis</a></li>
+<li><a class="reference internal" href="#id62">Options</a></li>
+<li><a class="reference internal" href="#id63">Examples</a></li>
+<li><a class="reference internal" href="#workspace-combine">workspace combine</a></li>
+<li><a class="reference internal" href="#id64">Synopsis</a></li>
+<li><a class="reference internal" href="#id65">Options</a></li>
+<li><a class="reference internal" href="#id66">Example</a></li>
+<li><a class="reference internal" href="#workspace-traceability">workspace traceability</a></li>
+<li><a class="reference internal" href="#id67">Synopsis</a></li>
+<li><a class="reference internal" href="#id68">Options</a></li>
+<li><a class="reference internal" href="#id69">Example</a></li>
 </ul>
 </li>
 </ul>

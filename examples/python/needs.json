@@ -1879,6 +1879,87 @@
                     "url_postfix": "",
                     "user": ""
                 },
+                "SC_TSIM_TEMP_SAFETY": {
+                    "arch": {},
+                    "avatar": "",
+                    "case": "",
+                    "case_name": "",
+                    "case_parameter": "",
+                    "cases": "",
+                    "classname": "",
+                    "closed_at": "",
+                    "completion": "",
+                    "constraints": [],
+                    "constraints_passed": true,
+                    "constraints_results": {},
+                    "content_id": "SC_TSIM_TEMP_SAFETY",
+                    "created_at": "",
+                    "delete": null,
+                    "description": "",
+                    "docname": "02_architecture",
+                    "doctype": ".rst",
+                    "duration": "",
+                    "errors": "",
+                    "external_css": "external_link",
+                    "external_url": null,
+                    "failed": "",
+                    "file": "",
+                    "full_title": "SC_TSIM_TEMP_SAFETY: The TSIM temperature monitor is free from undetected failures",
+                    "has_dead_links": false,
+                    "has_forbidden_dead_links": false,
+                    "id": "SC_TSIM_TEMP_SAFETY",
+                    "id_prefix": "",
+                    "is_external": false,
+                    "is_modified": false,
+                    "is_need": true,
+                    "is_part": false,
+                    "jinja_content": null,
+                    "layout": "",
+                    "links": [
+                        "REQ_SAFETY_001",
+                        "TEST_FAIL_SAFE_001"
+                    ],
+                    "max_amount": "",
+                    "max_content_lines": "",
+                    "modifications": 0,
+                    "params": "",
+                    "parent_need": "",
+                    "parent_needs": [],
+                    "parts": {},
+                    "passed": "",
+                    "post_template": null,
+                    "pre_template": null,
+                    "prefix": "",
+                    "query": "",
+                    "result": "",
+                    "section_name": "Safety Case (GSN)",
+                    "sections": [
+                        "Safety Case (GSN)",
+                        "System Architecture"
+                    ],
+                    "service": "",
+                    "signature": "",
+                    "skipped": "",
+                    "specific": "",
+                    "status": "active",
+                    "style": null,
+                    "suite": "",
+                    "suites": "",
+                    "tags": [
+                        "safety-case",
+                        "gsn"
+                    ],
+                    "target_id": "SC_TSIM_TEMP_SAFETY",
+                    "template": null,
+                    "time": "",
+                    "title": "SC_TSIM_TEMP_SAFETY: The TSIM temperature monitor is free from undetected failures",
+                    "type": "need",
+                    "type_name": "Need",
+                    "updated_at": "",
+                    "url": "",
+                    "url_postfix": "",
+                    "user": ""
+                },
                 "TEST_CODE_001": {
                     "arch": {},
                     "avatar": "",
@@ -3173,7 +3254,7 @@
                     "user": ""
                 }
             },
-            "needs_amount": 39
+            "needs_amount": 40
         }
     }
 }
