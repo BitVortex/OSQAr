@@ -144,3 +144,13 @@ SEooC Boundary Definition
    :links: ARCH_SEOOC_001, ARCH_001
 
    **Rationale**: Enables domain-agnostic reuse across medical (controlled environments), industrial (process control), robotics (motor shutdown), and automotive (powertrain management).
+
+
+Safety Case (GSN)
+=================
+
+.. need:: SC_TSIM_TEMP_SAFETY: The TSIM temperature monitor is free from undetected failures
+   :id: SC_TSIM_TEMP_SAFETY
+   :status: active
+   :tags: safety-case, gsn
+   :links: REQ_SAFETY_001;TEST_FAIL_SAFE_001

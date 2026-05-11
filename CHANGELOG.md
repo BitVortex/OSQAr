@@ -8,23 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.7.3] - 2026-05-11
 
 ### Added
-- **Change impact analysis** (`osqar impact`): new command that performs transitive
-  closure analysis on traceability links from a seed need ID. Shows all affected
-  needs in an ASCII tree with type, status, and title. Supports ``--direction``
-  (downstream/upstream/both), ``--max-depth``, and ``--format json``. Implements
-  ISO 26262-8 §9.4.2.4 impact analysis requirements. (#14)
+- **Change impact analysis** (`osqar impact`): transitive closure analysis on
+  traceability links from a seed need ID. Tree/JSON output, configurable direction
+  and depth. (#14)
 - **Requirement baseline versioning** (`osqar baseline`): snapshot, list, and diff
-  commands for versioned requirement baselines. ``baseline snapshot`` copies the
-  current ``needs.json`` with a manifest; ``baseline list`` shows all stored
-  baselines with metadata; ``baseline diff`` computes structured diffs between
-  two baselines (added/removed/modified needs, link changes, tag changes). Supports
-  ``--format json`` and ``--verbose``. Implements ISO 26262-8 §9 configuration
-  management requirements. (#15)
-- **CSV traceability matrix export**: ``osqar traceability --format csv`` exports
-  a spreadsheet-ready traceability matrix with columns for requirement ID, title,
-  status, tags, and linked architecture/verification/implementation/lifecycle
-  artifacts. Provides the auditor-friendly matrix format expected in ISO 26262
-  assessments. (#19)
+  commands for versioned requirement baselines with structured change tracking. (#15)
+- **CSV traceability matrix export** (`osqar traceability --format csv`):
+  spreadsheet-ready export with linked artifact columns. (#19)
+- **Incremental shipment preparation** (`osqar shipment prepare --incremental`):
+  skip pipeline stages whose inputs haven't changed since last successful run,
+  with `--force` to clear cache. (#13)
+- **Workspace combine** (`osqar workspace combine`): merge multiple project
+  ``needs.json`` exports with namespace prefixes for cross-project traceability.
+  ``workspace traceability`` runs checks on the combined output. (#17)
+- **GPG manifest signing** (`osqar sign sign` / ``sign verify``): detached
+  signature support for shipment manifest authenticity (ISO 26262-8 §11.4.4). (#18)
+- **GSN safety case support** (`osqar gsn generate`): generate gsn2x-compatible
+  YAML from ``.. safety-case::`` needs, with optional rendering via gsn2x. (#18)
 
 ## [0.7.2] - 2026-05-11
 

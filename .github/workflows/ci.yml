@@ -70,12 +70,41 @@ jobs:
     - name: Generate checksums for documentation dump
       run: |
         chmod +x ./osqar
-        ./osqar checksum generate \
-          --root examples/python_hello_world/_build/html \
+        ./osqar checksum generate \\
+          --root examples/python_hello_world/_build/html \\
           --output examples/python_hello_world/_build/html/SHA256SUMS
-        ./osqar checksum verify \
-          --root examples/python_hello_world/_build/html \
+        ./osqar checksum verify \\
+          --root examples/python_hello_world/_build/html \\
           --manifest examples/python_hello_world/_build/html/SHA256SUMS
+
+    - name: Exercise new commands (impact, CSV, workspace combine, gsn)
+      run: |
+        set -euo pipefail
+        chmod +x ./osqar
+
+        # Impact analysis
+        echo "== osqar impact"
+        ./osqar impact examples/python_hello_world/_build/html/needs.json \\
+          --need-id REQ_TEMP_MON_001 --direction downstream
+
+        # CSV traceability matrix export
+        echo "== osqar traceability --format csv"
+        ./osqar traceability examples/python_hello_world/_build/html/needs.json \\
+          --format csv --format-output examples/python_hello_world/_build/html/traceability_matrix.csv \\
+          --test-prefix TEST_ --code-prefix CODE_
+        test -s examples/python_hello_world/_build/html/traceability_matrix.csv
+
+        # Workspace combine + traceability (auto-discovers example projects)
+        echo "== osqar workspace combine"
+        ./osqar workspace combine --root examples --output _build/workspace/needs.json
+        test -s _build/workspace/needs.json
+        ./osqar workspace traceability --needs-json _build/workspace/needs.json \\
+          --json-report _build/workspace/traceability_report.json
+
+        # GSN generate (may have no SC_ needs — still shouldn't crash)
+        echo "== osqar gsn generate"
+        ./osqar gsn generate examples/python_hello_world/_build/html/needs.json \\
+          --output _build/gsn_safety_case.yaml || true
 
     - name: Upload documentation
       uses: actions/upload-artifact@v4
