@@ -347,6 +347,7 @@ by scanning for <code class="docutils literal notranslate"><span class="pre">SHA
 <p>Some commands can write JSON reports for CI and audit trails:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">doctor</span> <span class="pre">--json-report</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.doctor_report.v1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">traceability</span> <span class="pre">--json-report</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.traceability_report.v1</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">impact</span> <span class="pre">--format</span> <span class="pre">json</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.impact_report.v1</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">baseline</span> <span class="pre">diff</span> <span class="pre">--format</span> <span class="pre">json</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.baseline_diff.v1</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">checksum</span> <span class="pre">...</span> <span class="pre">--json-report</span></code> writes <code class="docutils literal notranslate"><span class="pre">schema:</span> <span class="pre">osqar.checksums_report.v1</span></code></p></li>
@@ -414,7 +415,7 @@ Only use workspace config from a location you control.</p>
 <li><p><a class="reference internal" href="#cli-doctor"><span class="std std-ref">doctor</span></a> — Environment + shipment diagnostics.</p></li>
 <li><p><a class="reference internal" href="#cli-impact"><span class="std std-ref">impact</span></a> — Change impact analysis via traceability graph traversal.</p></li>
 <li><p><a class="reference internal" href="#cli-new"><span class="std std-ref">new</span></a> — Scaffold a new OSQAr project.</p></li>
-<li><p><a class="reference internal" href="#cli-traceability"><span class="std std-ref">traceability</span></a> — Validate traceability rules from <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> (supports CSV export).</p></li>
+<li><p><a class="reference internal" href="#cli-traceability"><span class="std std-ref">traceability</span></a> — Validate traceability rules from <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> (supports CSV and Excel export).</p></li>
 <li><p><a class="reference internal" href="#cli-code-trace"><span class="std std-ref">code-trace</span></a> — Scan code for need IDs (optional enforcement).</p></li>
 <li><p><a class="reference internal" href="#cli-baseline"><span class="std std-ref">baseline</span></a> — Versioned requirement baselines (snapshot, list, diff).</p></li>
 <li><p><a class="reference internal" href="#cli-checksum"><span class="std std-ref">checksum</span></a> — Generate/verify checksum manifests.</p></li>
@@ -422,7 +423,7 @@ Only use workspace config from a location you control.</p>
 <li><p><a class="reference internal" href="#cli-gsn"><span class="std std-ref">gsn</span></a> — GSN safety case support (generate gsn2x specifications).</p></li>
 <li><p><a class="reference internal" href="#cli-shipment"><span class="std std-ref">shipment</span></a> — Shipment workflows (build, prepare, verify, package, incremental).</p></li>
 <li><p><a class="reference internal" href="#cli-sign"><span class="std std-ref">sign</span></a> — Cryptographic manifest signing (GPG detached signatures).</p></li>
-<li><p><a class="reference internal" href="#cli-workspace"><span class="std std-ref">workspace</span></a> — Workspace workflows (list, report, verify, intake, combine).</p></li>
+<li><p><a class="reference internal" href="#cli-workspace"><span class="std std-ref">workspace</span></a> — Workspace workflows (list, report, diff, verify, intake, combine, traceability).</p></li>
 </ul>
 </section>
 </section>
@@ -577,6 +578,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <span class="go">        [--skip-checksums] [--skip-traceability]</span>
 <span class="go">        [--skip-shipment-checks] [--skip-env-checks]</span>
 <span class="go">        [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
+<span class="go">        [--req-prefix &lt;prefix&gt; ...] [--arch-prefix &lt;prefix&gt; ...]</span>
+<span class="go">        [--test-prefix &lt;prefix&gt; ...] [--code-prefix &lt;prefix&gt; ...]</span>
 </pre></div>
 </div>
 </section>
@@ -685,6 +688,7 @@ a sorted <code class="docutils literal notranslate"><span class="pre">needs</spa
 <h4>Synopsis<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar new --language {c,cpp,python,rust} --name &lt;name&gt;</span>
 <span class="go">      [--destination &lt;dir&gt;] [--template {basic,example}] [--force]</span>
+<span class="go">      [--fallback-basic] [--no-diagrams]</span>
 </pre></div>
 </div>
 </section>
@@ -701,6 +705,8 @@ a sorted <code class="docutils literal notranslate"><span class="pre">needs</spa
 </ul>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--force</span></code>: overwrite destination if it exists</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--fallback-basic</span></code>: silently fall back to <code class="docutils literal notranslate"><span class="pre">--template</span> <span class="pre">basic</span></code> when example templates are unavailable (e.g., from a PyPI install)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--no-diagrams</span></code>: generate <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> with PlantUML disabled (no diagram dependencies)</p></li>
 </ul>
 </section>
 <section id="id15">
@@ -713,7 +719,7 @@ a sorted <code class="docutils literal notranslate"><span class="pre">needs</spa
 <section id="traceability">
 <span id="cli-traceability"></span><h3>traceability<a class="headerlink" href="#traceability" title="Link to this heading">¶</a></h3>
 <p>Run traceability checks on a <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> export (from sphinx-needs), or
-export a CSV traceability matrix for auditor review.</p>
+export a traceability matrix as CSV or Excel (XLSX) for auditor review.</p>
 <section id="id16">
 <h4>Synopsis<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Violation<span class="w"> </span>check<span class="w"> </span><span class="o">(</span>default<span class="o">)</span>
@@ -727,6 +733,12 @@ export a CSV traceability matrix for auditor review.</p>
 <span class="go">            [--req-prefix &lt;prefix&gt; ...] [--test-prefix &lt;prefix&gt; ...]</span>
 <span class="go">            [--arch-prefix &lt;prefix&gt; ...] [--code-prefix &lt;prefix&gt; ...]</span>
 <span class="go">            [--lm-prefix &lt;prefix&gt; ...]</span>
+
+<span class="gp"># </span>Excel<span class="w"> </span><span class="o">(</span>XLSX<span class="o">)</span><span class="w"> </span><span class="nb">export</span>
+<span class="go">osqar traceability &lt;needs_json&gt; --format xlsx --format-output &lt;path&gt;</span>
+<span class="go">            [--req-prefix &lt;prefix&gt; ...] [--test-prefix &lt;prefix&gt; ...]</span>
+<span class="go">            [--arch-prefix &lt;prefix&gt; ...] [--code-prefix &lt;prefix&gt; ...]</span>
+<span class="go">            [--lm-prefix &lt;prefix&gt; ...]</span>
 </pre></div>
 </div>
 </section>
@@ -735,8 +747,8 @@ export a CSV traceability matrix for auditor review.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">needs_json</span></code>: path to <code class="docutils literal notranslate"><span class="pre">needs.json</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--json-report</span></code>: write a JSON report</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--format</span></code>: output mode — <code class="docutils literal notranslate"><span class="pre">check</span></code> (default) for violation checking, <code class="docutils literal notranslate"><span class="pre">csv</span></code> for traceability matrix export</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--format-output</span></code>: file path for CSV export (required with <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">csv</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--format</span></code>: output mode — <code class="docutils literal notranslate"><span class="pre">check</span></code> (default) for violation checking, <code class="docutils literal notranslate"><span class="pre">csv</span></code> for traceability matrix export, <code class="docutils literal notranslate"><span class="pre">xlsx</span></code> for Excel spreadsheet export</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--format-output</span></code>: file path for CSV/XLSX export (required with <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">csv</span></code> or <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">xlsx</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--lm-prefix</span></code>: lifecycle management ID prefix for CSV columns (repeatable; default: <code class="docutils literal notranslate"><span class="pre">LM_</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--enforce-req-has-test</span></code>: fail if any <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code> has no linked <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--enforce-arch-traces-req</span></code>: fail if any <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code> has no linked <code class="docutils literal notranslate"><span class="pre">REQ_*</span></code></p></li>
@@ -763,13 +775,24 @@ columns per requirement:</p>
 </ul>
 <p>The CSV can be opened directly in Excel, Google Sheets, or LibreOffice Calc.</p>
 </section>
+<section id="xlsx-export-format">
+<h4>XLSX export format<a class="headerlink" href="#xlsx-export-format" title="Link to this heading">¶</a></h4>
+<p>When <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">xlsx</span></code> is used, the tool writes a native Excel <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> spreadsheet
+with the same columns and schema as the CSV export (see above). The XLSX file
+includes bold headers and auto-fitted column widths. Requires <code class="docutils literal notranslate"><span class="pre">openpyxl</span></code> to be
+installed (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">openpyxl</span></code>); the command prints a clear error if it is
+missing.</p>
+</section>
 <section id="id18">
 <h4>Examples<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Standard<span class="w"> </span>traceability<span class="w"> </span>check
 <span class="go">osqar traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json</span>
 
-<span class="gp"># </span>Export<span class="w"> </span>traceability<span class="w"> </span>matrix<span class="w"> </span><span class="k">for</span><span class="w"> </span>auditors
+<span class="gp"># </span>Export<span class="w"> </span>traceability<span class="w"> </span>matrix<span class="w"> </span><span class="k">for</span><span class="w"> </span>auditors<span class="w"> </span><span class="o">(</span>CSV<span class="o">)</span>
 <span class="go">osqar traceability ./_build/html/needs.json --format csv --format-output traceability_matrix.csv</span>
+
+<span class="gp"># </span>Export<span class="w"> </span>as<span class="w"> </span>native<span class="w"> </span>Excel<span class="w"> </span>spreadsheet
+<span class="go">osqar traceability ./_build/html/needs.json --format xlsx --format-output traceability_matrix.xlsx</span>
 
 <span class="gp"># </span>Export<span class="w"> </span>with<span class="w"> </span>custom<span class="w"> </span><span class="nb">test</span><span class="w"> </span>prefix
 <span class="go">osqar traceability ./_build/html/needs.json --format csv --format-output matrix.csv \\</span>
@@ -924,8 +947,11 @@ columns per requirement:</p>
 <span class="go">   [--skip-build] [--build-command &lt;cmd&gt;]</span>
 <span class="go">   [--skip-tests] [--test-command &lt;cmd&gt;]</span>
 <span class="go">   [--incremental] [--force]</span>
+<span class="go">   [--skip-verification]</span>
 <span class="go">   [--exclude &lt;glob&gt; ...]</span>
 <span class="go">   [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
+<span class="go">   [--req-prefix &lt;prefix&gt; ...] [--arch-prefix &lt;prefix&gt; ...]</span>
+<span class="go">   [--test-prefix &lt;prefix&gt; ...] [--code-prefix &lt;prefix&gt; ...]</span>
 <span class="go">   [--archive] [--archive-output &lt;path&gt;]</span>
 <span class="go">   [--doctor]</span>
 <span class="go">   [--skip-code-trace] [--code-trace-warn-only] [--enforce-no-unknown-ids]</span>
@@ -972,6 +998,8 @@ in <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/
 <span class="go">   [--skip-code-trace] [--code-trace-warn-only]</span>
 <span class="go">   [--enforce-no-unknown-ids]</span>
 <span class="go">   [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
+<span class="go">   [--req-prefix &lt;prefix&gt; ...] [--arch-prefix &lt;prefix&gt; ...]</span>
+<span class="go">   [--test-prefix &lt;prefix&gt; ...] [--code-prefix &lt;prefix&gt; ...]</span>
 </pre></div>
 </div>
 </section>
@@ -1044,6 +1072,8 @@ in <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar shipment traceability --shipment &lt;dir&gt;</span>
 <span class="go">   [--needs-json &lt;path&gt;] [--json-report &lt;path&gt;]</span>
 <span class="go">   [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
+<span class="go">   [--req-prefix &lt;prefix&gt; ...] [--arch-prefix &lt;prefix&gt; ...]</span>
+<span class="go">   [--test-prefix &lt;prefix&gt; ...] [--code-prefix &lt;prefix&gt; ...]</span>
 </pre></div>
 </div>
 </section>
@@ -1609,6 +1639,7 @@ scope.</p>
 <li><a class="reference internal" href="#id16">Synopsis</a></li>
 <li><a class="reference internal" href="#id17">Options</a></li>
 <li><a class="reference internal" href="#csv-export-format">CSV export format</a></li>
+<li><a class="reference internal" href="#xlsx-export-format">XLSX export format</a></li>
 <li><a class="reference internal" href="#id18">Examples</a></li>
 </ul>
 </li>
