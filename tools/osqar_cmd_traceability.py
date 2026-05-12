@@ -145,7 +145,151 @@ def _export_csv(
     return 0
 
 
+def _export_xlsx(
+    needs_json_path: Path,
+    output_path: Path,
+    *,
+    req_prefixes: tuple[str, ...] = ("REQ_",),
+    arch_prefixes: tuple[str, ...] = ("ARCH_",),
+    test_prefixes: tuple[str, ...] = ("TEST_", "VER_"),
+    code_prefixes: tuple[str, ...] = ("CODE_", "IMPL_"),
+    lm_prefixes: tuple[str, ...] = ("LM_",),
+) -> int:
+    """Export a traceability matrix as .xlsx from needs.json."""
+    try:
+        import openpyxl
+    except ImportError:
+        print(
+            "ERROR: openpyxl is required for XLSX export. Install it with:\n"
+            "  pip install openpyxl",
+            file=__import__("sys").stderr,
+        )
+        return 2
+
+    try:
+        needs = _load_needs(needs_json_path)
+    except Exception as exc:
+        print(f"ERROR: Failed to read {needs_json_path}: {exc}")
+        return 2
+
+    if not needs:
+        print("WARNING: no needs found in needs.json")
+        return 1
+
+    needs_by_id: dict[str, dict] = {str(n.get("id", "")): n for n in needs if n.get("id")}
+    all_ids = set(needs_by_id)
+
+    req_rows: list[dict] = []
+    for nid, need in sorted(needs_by_id.items()):
+        if nid.startswith(req_prefixes):
+            req_rows.append(need)
+
+    if not req_rows:
+        print("WARNING: no requirements found (check --req-prefix)")
+        return 1
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Traceability Matrix"
+
+    # Header
+    headers = [
+        "REQ_ID", "REQ_Title", "Status", "Tags",
+        "ARCH_Linked", "VER_Linked", "IMPL_Linked", "LM_Linked",
+        "Other_Linked", "Total_Links",
+    ]
+    header_font = openpyxl.styles.Font(bold=True)
+    for col, h in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col, value=h)
+        cell.font = header_font
+
+    # Data rows
+    for row_idx, req in enumerate(req_rows, 2):
+        nid = str(req.get("id", ""))
+        linked = _collect_trace_links(req)
+
+        arch_links: list[str] = []
+        ver_links: list[str] = []
+        impl_links: list[str] = []
+        lm_links: list[str] = []
+        other_links: list[str] = []
+
+        for target in sorted(linked):
+            if not target:
+                continue
+            if target.startswith(arch_prefixes):
+                arch_links.append(target)
+            elif target.startswith(test_prefixes):
+                ver_links.append(target)
+            elif target.startswith(code_prefixes):
+                impl_links.append(target)
+            elif target.startswith(lm_prefixes):
+                lm_links.append(target)
+            else:
+                other_links.append(target)
+
+        tags = req.get("tags")
+        if isinstance(tags, list):
+            tags_str = ";".join(str(t) for t in tags if t)
+        elif isinstance(tags, str):
+            tags_str = tags
+        else:
+            tags_str = ""
+
+        row_data = [
+            nid,
+            _need_title(req),
+            str(req.get("status", "")),
+            tags_str,
+            ";".join(arch_links),
+            ";".join(ver_links),
+            ";".join(impl_links),
+            ";".join(lm_links),
+            ";".join(other_links),
+            len(linked),
+        ]
+        for col, val in enumerate(row_data, 1):
+            ws.cell(row=row_idx, column=col, value=val)
+
+    # Auto-fit column widths (approximate)
+    for col_cells in ws.columns:
+        max_len = 0
+        col_letter = col_cells[0].column_letter
+        for cell in col_cells:
+            if cell.value:
+                max_len = max(max_len, len(str(cell.value)))
+        ws.column_dimensions[col_letter].width = min(max_len + 2, 60)
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(str(output_path))
+
+    print(f"Traceability matrix (XLSX) written: {output_path}")
+    print(f"  {len(req_rows)} requirements, columns: {', '.join(headers)}")
+    return 0
+
+
 def cmd_traceability(args: argparse.Namespace) -> int:
+    # XLSX export mode
+    fmt = getattr(args, "format", None)
+    if fmt == "xlsx":
+        output = getattr(args, "format_output", None)
+        if not output:
+            print(
+                "ERROR: --format-output is required with --format xlsx",
+                __import__("sys").stderr,
+            )
+            return 2
+        output_path = Path(output).expanduser().resolve()
+        return _export_xlsx(
+            Path(str(args.needs_json)).expanduser().resolve(),
+            output_path,
+            req_prefixes=tuple(getattr(args, "req_prefix", []) or ["REQ_"]),
+            arch_prefixes=tuple(getattr(args, "arch_prefix", []) or ["ARCH_"]),
+            test_prefixes=tuple(getattr(args, "test_prefix", []) or ["TEST_", "VER_"]),
+            code_prefixes=tuple(getattr(args, "code_prefix", []) or ["CODE_", "IMPL_"]),
+            lm_prefixes=tuple(getattr(args, "lm_prefix", []) or ["LM_"]),
+        )
+
     # CSV export mode
     fmt = getattr(args, "format", None)
     if fmt == "csv":
@@ -195,9 +339,9 @@ def register(sub: argparse._SubParsersAction) -> None:
     )
     p_tr.add_argument(
         "--format",
-        choices=["csv"],
+        choices=["csv", "xlsx"],
         default="check",
-        help="Output mode: 'check' (default) for violations, 'csv' for traceability matrix export",
+        help="Output mode: 'check' (default) for violations, 'csv' for traceability matrix export, 'xlsx' for Excel spreadsheet export",
     )
     p_tr.add_argument(
         "--format-output",

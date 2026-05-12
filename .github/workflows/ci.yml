@@ -94,6 +94,13 @@ jobs:
           --test-prefix TEST_ --code-prefix CODE_
         test -s examples/python_hello_world/_build/html/traceability_matrix.csv
 
+        # XLSX (Excel) traceability matrix export
+        echo "== osqar traceability --format xlsx"
+        ./osqar traceability examples/python_hello_world/_build/html/needs.json \
+          --format xlsx --format-output examples/python_hello_world/_build/html/traceability_matrix.xlsx \
+          --test-prefix TEST_ --code-prefix CODE_
+        test -s examples/python_hello_world/_build/html/traceability_matrix.xlsx
+
         # Workspace combine + traceability (auto-discovers example projects)
         echo "== osqar workspace combine"
         ./osqar workspace combine --root examples --output _build/workspace/needs.json

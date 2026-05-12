@@ -96,6 +96,7 @@ Machine-readable reports
 Some commands can write JSON reports for CI and audit trails:
 
 - ``doctor --json-report`` writes ``schema: osqar.doctor_report.v1``
+- ``traceability --json-report`` writes ``schema: osqar.traceability_report.v1``
 - ``impact --format json`` writes ``schema: osqar.impact_report.v1``
 - ``baseline diff --format json`` writes ``schema: osqar.baseline_diff.v1``
 - ``checksum ... --json-report`` writes ``schema: osqar.checksums_report.v1``
@@ -170,7 +171,7 @@ Top-level commands
 - :ref:`cli-doctor` — Environment + shipment diagnostics.
 - :ref:`cli-impact` — Change impact analysis via traceability graph traversal.
 - :ref:`cli-new` — Scaffold a new OSQAr project.
-- :ref:`cli-traceability` — Validate traceability rules from ``needs.json`` (supports CSV export).
+- :ref:`cli-traceability` — Validate traceability rules from ``needs.json`` (supports CSV and Excel export).
 - :ref:`cli-code-trace` — Scan code for need IDs (optional enforcement).
 - :ref:`cli-baseline` — Versioned requirement baselines (snapshot, list, diff).
 - :ref:`cli-checksum` — Generate/verify checksum manifests.
@@ -178,7 +179,7 @@ Top-level commands
 - :ref:`cli-gsn` — GSN safety case support (generate gsn2x specifications).
 - :ref:`cli-shipment` — Shipment workflows (build, prepare, verify, package, incremental).
 - :ref:`cli-sign` — Cryptographic manifest signing (GPG detached signatures).
-- :ref:`cli-workspace` — Workspace workflows (list, report, verify, intake, combine).
+- :ref:`cli-workspace` — Workspace workflows (list, report, diff, verify, intake, combine, traceability).
 
 
 Top-Level Commands
@@ -351,6 +352,8 @@ Synopsis
           [--skip-checksums] [--skip-traceability]
           [--skip-shipment-checks] [--skip-env-checks]
           [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
+          [--req-prefix <prefix> ...] [--arch-prefix <prefix> ...]
+          [--test-prefix <prefix> ...] [--code-prefix <prefix> ...]
 
 Options
 ^^^^^^^
@@ -474,6 +477,7 @@ Synopsis
 
   osqar new --language {c,cpp,python,rust} --name <name>
         [--destination <dir>] [--template {basic,example}] [--force]
+        [--fallback-basic] [--no-diagrams]
 
 Options
 ^^^^^^^
@@ -487,6 +491,8 @@ Options
   - ``example`` copies from the repo examples (not available in the PyPI distribution)
 
 - ``--force``: overwrite destination if it exists
+- ``--fallback-basic``: silently fall back to ``--template basic`` when example templates are unavailable (e.g., from a PyPI install)
+- ``--no-diagrams``: generate ``conf.py`` with PlantUML disabled (no diagram dependencies)
 
 Example
 ^^^^^^^
@@ -502,7 +508,7 @@ traceability
 ------------
 
 Run traceability checks on a ``needs.json`` export (from sphinx-needs), or
-export a CSV traceability matrix for auditor review.
+export a traceability matrix as CSV or Excel (XLSX) for auditor review.
 
 Synopsis
 ^^^^^^^^
@@ -521,13 +527,19 @@ Synopsis
               [--arch-prefix <prefix> ...] [--code-prefix <prefix> ...]
               [--lm-prefix <prefix> ...]
 
+  # Excel (XLSX) export
+  osqar traceability <needs_json> --format xlsx --format-output <path>
+              [--req-prefix <prefix> ...] [--test-prefix <prefix> ...]
+              [--arch-prefix <prefix> ...] [--code-prefix <prefix> ...]
+              [--lm-prefix <prefix> ...]
+
 Options
 ^^^^^^^
 
 - ``needs_json``: path to ``needs.json``
 - ``--json-report``: write a JSON report
-- ``--format``: output mode — ``check`` (default) for violation checking, ``csv`` for traceability matrix export
-- ``--format-output``: file path for CSV export (required with ``--format csv``)
+- ``--format``: output mode — ``check`` (default) for violation checking, ``csv`` for traceability matrix export, ``xlsx`` for Excel spreadsheet export
+- ``--format-output``: file path for CSV/XLSX export (required with ``--format csv`` or ``--format xlsx``)
 - ``--lm-prefix``: lifecycle management ID prefix for CSV columns (repeatable; default: ``LM_``)
 - ``--enforce-req-has-test``: fail if any ``REQ_*`` has no linked ``TEST_*``
 - ``--enforce-arch-traces-req``: fail if any ``ARCH_*`` has no linked ``REQ_*``
@@ -555,6 +567,15 @@ columns per requirement:
 
 The CSV can be opened directly in Excel, Google Sheets, or LibreOffice Calc.
 
+XLSX export format
+^^^^^^^^^^^^^^^^^^
+
+When ``--format xlsx`` is used, the tool writes a native Excel ``.xlsx`` spreadsheet
+with the same columns and schema as the CSV export (see above). The XLSX file
+includes bold headers and auto-fitted column widths. Requires ``openpyxl`` to be
+installed (``pip install openpyxl``); the command prints a clear error if it is
+missing.
+
 Examples
 ^^^^^^^^
 
@@ -563,8 +584,11 @@ Examples
   # Standard traceability check
   osqar traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json
 
-  # Export traceability matrix for auditors
+  # Export traceability matrix for auditors (CSV)
   osqar traceability ./_build/html/needs.json --format csv --format-output traceability_matrix.csv
+
+  # Export as native Excel spreadsheet
+  osqar traceability ./_build/html/needs.json --format xlsx --format-output traceability_matrix.xlsx
 
   # Export with custom test prefix
   osqar traceability ./_build/html/needs.json --format csv --format-output matrix.csv \\
@@ -738,8 +762,11 @@ Synopsis
      [--skip-build] [--build-command <cmd>]
      [--skip-tests] [--test-command <cmd>]
      [--incremental] [--force]
+     [--skip-verification]
      [--exclude <glob> ...]
      [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
+     [--req-prefix <prefix> ...] [--arch-prefix <prefix> ...]
+     [--test-prefix <prefix> ...] [--code-prefix <prefix> ...]
      [--archive] [--archive-output <path>]
      [--doctor]
      [--skip-code-trace] [--code-trace-warn-only] [--enforce-no-unknown-ids]
@@ -789,6 +816,8 @@ Synopsis
      [--skip-code-trace] [--code-trace-warn-only]
      [--enforce-no-unknown-ids]
      [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
+     [--req-prefix <prefix> ...] [--arch-prefix <prefix> ...]
+     [--test-prefix <prefix> ...] [--code-prefix <prefix> ...]
 
 Notes
 ^^^^^
@@ -878,6 +907,8 @@ Synopsis
   osqar shipment traceability --shipment <dir>
      [--needs-json <path>] [--json-report <path>]
      [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
+     [--req-prefix <prefix> ...] [--arch-prefix <prefix> ...]
+     [--test-prefix <prefix> ...] [--code-prefix <prefix> ...]
 
 
 shipment checksums
