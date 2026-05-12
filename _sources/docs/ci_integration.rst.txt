@@ -219,9 +219,11 @@ PlantUML command vs server
    ``conf.py`` template handles this automatically (see the PlantUML
    configuration in :doc:`cli_reference`).
 
-lizard and coverage are pip-only
-   These tools are **not** available via ``apt`` on Ubuntu 24.04.  Install with
-   ``pip install lizard coverage`` in the CI workflow.
+lizard is pip-only
+   The complexity analysis tool ``lizard`` is **not** available via ``apt`` on
+   Ubuntu 24.04.  Install with ``pip install lizard`` in the CI workflow.  All
+   other Python dependencies (Sphinx, sphinx-needs, sphinxcontrib-plantuml,
+   furo, pyyaml) are pulled transitively by installing OSQAr itself.
 
 PlantUML ``!theme`` on older CI runners
    Ubuntu's ``apt install plantuml`` ships v1.2020.2, which does not support

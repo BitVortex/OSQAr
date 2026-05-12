@@ -477,8 +477,10 @@ with the shipment ZIP and SHA256SUMS attached.</p>
 <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> template handles this automatically (see the PlantUML
 configuration in <a class="reference internal" href="cli_reference.html"><span class="doc">CLI Reference</span></a>).</p>
 </dd>
-<dt>lizard and coverage are pip-only</dt><dd><p>These tools are <strong>not</strong> available via <code class="docutils literal notranslate"><span class="pre">apt</span></code> on Ubuntu 24.04.  Install with
-<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lizard</span> <span class="pre">coverage</span></code> in the CI workflow.</p>
+<dt>lizard is pip-only</dt><dd><p>The complexity analysis tool <code class="docutils literal notranslate"><span class="pre">lizard</span></code> is <strong>not</strong> available via <code class="docutils literal notranslate"><span class="pre">apt</span></code> on
+Ubuntu 24.04.  Install with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lizard</span></code> in the CI workflow.  All
+other Python dependencies (Sphinx, sphinx-needs, sphinxcontrib-plantuml,
+furo, pyyaml) are pulled transitively by installing OSQAr itself.</p>
 </dd>
 <dt>PlantUML <code class="docutils literal notranslate"><span class="pre">!theme</span></code> on older CI runners</dt><dd><p>Ubuntu’s <code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">plantuml</span></code> ships v1.2020.2, which does not support
 <code class="docutils literal notranslate"><span class="pre">!theme</span></code>.  Use <code class="docutils literal notranslate"><span class="pre">skinparam</span></code> directives instead to keep diagrams portable
