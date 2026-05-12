@@ -2,8 +2,9 @@
 Using the OSQAr Boilerplate
 ===========================
 
-This chapter is the main entrypoint for OSQAr.
-It explains the **mental model** (project → shipment → workspace) and provides **copy/paste workflows**.
+This chapter explains the **mental model** (project → shipment → workspace) and provides **copy/paste workflows** for day-to-day OSQAr work.
+
+If you're new and just want a quick start, see :doc:`getting_started` first.
 
 For the full per-command reference (all flags, exit codes, and resolution rules), see :doc:`cli_reference`.
 
