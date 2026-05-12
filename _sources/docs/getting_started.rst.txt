@@ -73,4 +73,4 @@ Where to go next
 
 **Real-world demonstration:**
 
-- `OSQAr-cJSON <https://github.com/BitVortex/OSQAr-cJSON>`_ — a full ISO 26262 ASIL D SEooC qualification of the cJSON library using OSQAr, with CI-driven evidence shipments, 88% statement coverage, and a published academic paper.
+- `OSQAr-cJSON <https://github.com/BitVortex/OSQAr-cJSON>`_ — an ISO 26262 SEooC qualification attempt of the cJSON library using OSQAr, targeting ASIL D, with CI-driven evidence shipments and 88% statement coverage.
