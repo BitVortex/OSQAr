@@ -62,6 +62,25 @@ fi
 
 echo "[osqar] pre-commit: building all examples" >&2
 
+# When using project .venv, create a 'poetry' wrapper so example scripts
+# use the already-installed venv instead of doing slow 'poetry install'.
+if [ -n "${_OSQAR_PYTHON:-}" ] && [ -x "$repo_root/.venv/bin/python" ]; then
+  _wrapper_dir="$repo_root/_build/.hook_poetry_wrapper"
+  rm -rf "$_wrapper_dir"
+  mkdir -p "$_wrapper_dir"
+  cat > "$_wrapper_dir/poetry" << 'POETRY_WRAPPER'
+#!/bin/bash
+case "${1:-}" in
+  run) shift; exec "$@";;    # PATH already includes .venv/bin
+  install) exit 0;;           # no-op — deps already installed
+  *)    exec python "$@";;
+esac
+POETRY_WRAPPER
+  chmod +x "$_wrapper_dir/poetry"
+  export PATH="$_wrapper_dir:$repo_root/.venv/bin:$PATH"
+  echo "[osqar] pre-commit: overriding poetry → project .venv" >&2
+fi
+
 example_scripts="$(find examples -maxdepth 2 -type f -name build-and-test.sh | sort)"
 if [[ -z "${example_scripts}" ]]; then
   echo "[osqar] pre-commit: no examples/**/build-and-test.sh found" >&2
