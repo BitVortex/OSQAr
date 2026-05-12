@@ -29,19 +29,20 @@ unset VIRTUAL_ENV
 # Ensure local tool paths are available (poetry, lcov, cppcheck, etc.)
 export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$PATH"
 
-if [[ ! -x "./osqar" ]]; then
-  echo "[osqar] pre-push: expected ./osqar in repo root" >&2
+# Detect Python: prefer project .venv if it exists and has sphinx-needs
+_OSQAR_PYTHON=""
+if [ -x "$repo_root/.venv/bin/python" ] && "$repo_root/.venv/bin/python" -c "import sphinx_needs" 2>/dev/null; then
+  _OSQAR_PYTHON="$repo_root/.venv/bin/python"
+  echo "[osqar] pre-push: using project .venv" >&2
+elif command -v poetry >/dev/null 2>&1; then
+  echo "[osqar] pre-push: ensuring python deps (poetry install)" >&2
+  poetry install --no-interaction --with evidence >/dev/null 2>&1 || poetry install --no-interaction >/dev/null
+  _OSQAR_PYTHON="poetry run python"
+else
+  echo "[osqar] pre-push: poetry not found and no project .venv" >&2
+  echo "[osqar] pre-push: install poetry or create .venv, or bypass via OSQAR_SKIP_FULL_BUILD_HOOKS=1" >&2
   exit 2
 fi
-
-if ! command -v poetry >/dev/null 2>&1; then
-  echo "[osqar] pre-push: poetry not found in PATH" >&2
-  echo "[osqar] pre-push: install poetry or bypass via OSQAR_SKIP_FULL_BUILD_HOOKS=1" >&2
-  exit 2
-fi
-
-echo "[osqar] pre-push: ensuring python deps (poetry install)" >&2
-poetry install --no-interaction --with evidence >/dev/null 2>&1 || poetry install --no-interaction >/dev/null
 
 log_dir="_build/hook_logs"
 mkdir -p "${log_dir}"
@@ -49,7 +50,7 @@ mkdir -p "${log_dir}"
 python3 tools/fix_rst_title_underlines.py --check docs index.rst examples
 
 echo "[osqar] pre-push: building framework docs" >&2
-if ! ./osqar build-docs --output _build/html_prepush_check >"${log_dir}/framework_docs.log" 2>&1; then
+if ! $_OSQAR_PYTHON -m tools.osqar_cli build-docs --output _build/html_prepush_check >"${log_dir}/framework_docs.log" 2>&1; then
   echo "[osqar] pre-push: framework docs build FAILED" >&2
   echo "[osqar] pre-push: log: ${log_dir}/framework_docs.log" >&2
   tail -n 80 "${log_dir}/framework_docs.log" >&2 || true
