@@ -344,6 +344,29 @@ In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx document
 <li><p>document renames/migrations explicitly</p></li>
 </ul>
 </section>
+<section id="using-osqar-baseline">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">baseline</span></code><a class="headerlink" href="#using-osqar-baseline" title="Link to this heading">¶</a></h3>
+<p>OSQAr provides versioned requirement baselines via <a class="reference internal" href="cli_reference.html#cli-baseline"><span class="std std-ref">baseline</span></a> to support
+ISO 26262-8 §9 configuration management.  Baselines are stored as snapshots of
+<code class="docutils literal notranslate"><span class="pre">needs.json</span></code> in <code class="docutils literal notranslate"><span class="pre">.osqar-baselines/&lt;tag&gt;/</span></code> within the project directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Snapshot the current requirements as a named baseline</span>
+osqar<span class="w"> </span>baseline<span class="w"> </span>snapshot<span class="w"> </span>--tag<span class="w"> </span>v1.0<span class="w"> </span>--message<span class="w"> </span><span class="s2">&quot;Initial qualification baseline&quot;</span>
+
+<span class="c1"># List all stored baselines</span>
+osqar<span class="w"> </span>baseline<span class="w"> </span>list
+
+<span class="c1"># Compute a structured diff between two baselines</span>
+osqar<span class="w"> </span>baseline<span class="w"> </span>diff<span class="w"> </span>v1.0<span class="w"> </span>v1.1
+
+<span class="c1"># Machine-readable diff for CI / audit trail</span>
+osqar<span class="w"> </span>baseline<span class="w"> </span>diff<span class="w"> </span>v1.0<span class="w"> </span>v1.1<span class="w"> </span>--format<span class="w"> </span>json<span class="w"> </span>--json-report<span class="w"> </span>baseline_diff.json
+</pre></div>
+</div>
+<p>Create a baseline at every release and before every safety-relevant change.
+The <code class="docutils literal notranslate"><span class="pre">diff</span></code> command answers <em>“what changed between versions?”</em> — complementing
+<a class="reference internal" href="cli_reference.html#cli-impact"><span class="std std-ref">impact</span></a> which answers <em>“what would be affected?”</em>.  Together they
+provide a complete change management audit trail.</p>
+</section>
 </section>
 <section id="change-control">
 <h2>Change control<a class="headerlink" href="#change-control" title="Link to this heading">¶</a></h2>
@@ -372,6 +395,28 @@ In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx document
 <li><p>verification updates (new/changed tests)</p></li>
 <li><p>updated shipment evidence</p></li>
 </ul>
+</section>
+<section id="running-impact-analysis-with-osqar">
+<h3>Running impact analysis with OSQAr<a class="headerlink" href="#running-impact-analysis-with-osqar" title="Link to this heading">¶</a></h3>
+<p>OSQAr automates step 2 of the change control process — identifying what is affected
+by a change — with <a class="reference internal" href="cli_reference.html#cli-impact"><span class="std std-ref">impact</span></a>. It performs bidirectional graph traversal on the
+<code class="docutils literal notranslate"><span class="pre">needs.json</span></code> traceability graph:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># What would be affected if REQ_CJSON_PARSE_VALID changes?</span>
+osqar<span class="w"> </span>impact<span class="w"> </span>./_build/html/needs.json<span class="w"> </span>--need-id<span class="w"> </span>REQ_CJSON_PARSE_VALID
+
+<span class="c1"># Downstream-only: what does this requirement feed into?</span>
+osqar<span class="w"> </span>impact<span class="w"> </span>./_build/html/needs.json<span class="w"> </span>--need-id<span class="w"> </span>REQ_CJSON_MEMORY_SAFE<span class="w"> </span>--direction<span class="w"> </span>downstream
+
+<span class="c1"># Machine-readable for CI / audit trail</span>
+osqar<span class="w"> </span>impact<span class="w"> </span>./_build/html/needs.json<span class="w"> </span>--need-id<span class="w"> </span>REQ_CJSON_ARITH_SAFE<span class="w"> </span><span class="se">\\</span>
+<span class="w">  </span>--format<span class="w"> </span>json<span class="w"> </span>--json-report<span class="w"> </span>impact_report.json
+</pre></div>
+</div>
+<p>Use impact analysis before every safety-relevant change to answer
+<em>“if I modify this requirement, what else must I review?”</em> — supporting
+ISO 26262-8 §9.4.2.4 impact analysis workflows.</p>
+<p>The command can be integrated into CI so that every pull request that changes
+requirements automatically produces an impact report.</p>
 </section>
 </section>
 <section id="configuration-management">
@@ -608,11 +653,13 @@ In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx document
 <li><a class="reference internal" href="#version-policy">Version policy</a></li>
 <li><a class="reference internal" href="#baseline-content">Baseline content</a></li>
 <li><a class="reference internal" href="#stable-identifiers">Stable identifiers</a></li>
+<li><a class="reference internal" href="#using-osqar-baseline">Using <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">baseline</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#change-control">Change control</a><ul>
 <li><a class="reference internal" href="#minimal-process-recommended">Minimal process (recommended)</a></li>
 <li><a class="reference internal" href="#safety-impact-classification-practical">Safety impact classification (practical)</a></li>
+<li><a class="reference internal" href="#running-impact-analysis-with-osqar">Running impact analysis with OSQAr</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#configuration-management">Configuration management</a><ul>

@@ -761,6 +761,36 @@ osqar<span class="w"> </span>checksum<span class="w"> </span>verify<span class="
 </pre></div>
 </div>
 </section>
+<section id="gsn-safety-case-diagrams">
+<h3>GSN safety case diagrams<a class="headerlink" href="#gsn-safety-case-diagrams" title="Link to this heading">¶</a></h3>
+<p>If your project defines safety-case needs (<code class="docutils literal notranslate"><span class="pre">SC_*</span></code> IDs with <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">safety-case::</span></code>
+directives), you can generate GSN (Goal Structuring Notation) diagrams from the
+<code class="docutils literal notranslate"><span class="pre">needs.json</span></code> traceability graph with <a class="reference internal" href="cli_reference.html#cli-gsn"><span class="std std-ref">gsn</span></a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate PlantUML GSN diagram (quick, CI-friendly)</span>
+osqar<span class="w"> </span>gsn<span class="w"> </span>generate<span class="w"> </span>./_build/html/needs.json<span class="w"> </span>--output<span class="w"> </span>_static/gsn_safety_case.puml
+
+<span class="c1"># Render PlantUML to PNG</span>
+osqar<span class="w"> </span>gsn<span class="w"> </span>generate<span class="w"> </span>./_build/html/needs.json<span class="w"> </span>--render
+
+<span class="c1"># Generate formally-correct GSN diagram (gsn2x backend, for auditor review)</span>
+osqar<span class="w"> </span>gsn<span class="w"> </span>generate<span class="w"> </span>./_build/html/needs.json<span class="w"> </span>--backend<span class="w"> </span>gsn2x-yaml<span class="w"> </span>--render
+</pre></div>
+</div>
+<p>Embed the generated diagram in your Sphinx documentation:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">plantuml</span><span class="p">::</span> _static/gsn_safety_case.puml
+   <span class="nc">:caption:</span> Safety Case — GSN argument structure
+</pre></div>
+</div>
+<p>Or use the pre-rendered SVG for formally-correct shapes (strategies as
+parallelograms, context as rounded rectangles per the GSN Community Standard):</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">image</span><span class="p">::</span> _static/gsn_safety_case.svg
+   <span class="nc">:alt:</span> GSN Safety Case Diagram
+</pre></div>
+</div>
+<p>Two backends are available — see the <a class="reference internal" href="cli_reference.html#cli-gsn"><span class="std std-ref">backend comparison</span></a> for
+guidance on choosing between PlantUML (quick, CI-friendly) and gsn2x (formally
+correct shapes for ISO 26262 auditor review).</p>
+</section>
 </section>
 <section id="core-authoring-workflow">
 <h2>Core authoring workflow<a class="headerlink" href="#core-authoring-workflow" title="Link to this heading">¶</a></h2>
@@ -1129,6 +1159,7 @@ the workflow if the tool is not installed). For CI, you can tighten this to enfo
 <li><a class="reference internal" href="#scaffold-a-new-project">Scaffold a new project</a></li>
 <li><a class="reference internal" href="#id2">Verify traceability</a></li>
 <li><a class="reference internal" href="#id3">Checksum manifest (shipment integrity)</a></li>
+<li><a class="reference internal" href="#gsn-safety-case-diagrams">GSN safety case diagrams</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#core-authoring-workflow">Core authoring workflow</a><ul>

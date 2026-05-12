@@ -375,6 +375,18 @@ with, and re-transfer the artifact.</p></li>
 <li><p>Do not regenerate <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> on the receiver side as a substitute for verification.</p></li>
 </ul>
 </li>
+</ol>
+<dl>
+<dt>2a. <strong>Optional: verify a GPG detached signature</strong> (authenticity). If the supplier</dt><dd><p>signed the manifest, verify the signature before relying on the shipment content:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osqar<span class="w"> </span>sign<span class="w"> </span>verify<span class="w"> </span>--manifest<span class="w"> </span>/path/to/shipment/SHA256SUMS<span class="w"> </span>--signature<span class="w"> </span>/path/to/SHA256SUMS.sig
+</pre></div>
+</div>
+<p>If verification fails, reject the shipment as unauthentic.  The checksum manifest
+alone proves <em>integrity</em>; the signature proves <em>authenticity</em> — that the shipment was
+produced by the claimed supplier.  For higher integrity levels, prefer verifying both.</p>
+</dd>
+</dl>
+<ol class="arabic" start="3">
 <li><p>Verify traceability artifacts (machine-readable) as part of intake:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">needs.json</span></code>: the exported traceability graph</p></li>

@@ -623,6 +623,7 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 ISO 26262-8 §9.4.2.4 impact analysis workflows. It performs bidirectional graph traversal
 on the <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> traceability graph and shows all reachable needs with their type,
 status, and title.</p>
+<p>See <a class="reference internal" href="lifecycle_management.html"><span class="doc">Lifecycle Management</span></a> for integrating impact analysis into your change control process.</p>
 <section id="id10">
 <h4>Synopsis<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar impact &lt;needs_json&gt; --need-id &lt;id&gt;</span>
@@ -1256,6 +1257,7 @@ compute structured diffs between any two baselines.</p>
 <p>Baselines are stored in <code class="docutils literal notranslate"><span class="pre">.osqar-baselines/&lt;tag&gt;/</span></code> within the project
 directory, each containing a <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> copy and a
 <code class="docutils literal notranslate"><span class="pre">baseline-manifest.json</span></code> with metadata.</p>
+<p>See <a class="reference internal" href="lifecycle_management.html"><span class="doc">Lifecycle Management</span></a> for integrating baselines into your versioning and change control process.</p>
 <section id="id47">
 <h4>Subcommands<a class="headerlink" href="#id47" title="Link to this heading">¶</a></h4>
 <ul class="simple">
@@ -1372,6 +1374,7 @@ gsn2x binary (~2.7 MB download from GitHub releases).</p></li>
 <p>When <code class="docutils literal notranslate"><span class="pre">--render</span></code> is passed with the PlantUML backend, the <code class="docutils literal notranslate"><span class="pre">.puml</span></code>
 is rendered to PNG via the system <code class="docutils literal notranslate"><span class="pre">plantuml</span></code> binary.</p>
 <p>Safety-case needs are identified by the <code class="docutils literal notranslate"><span class="pre">SC_</span></code> ID prefix.</p>
+<p>See <a class="reference internal" href="using_the_boilerplate.html"><span class="doc">Using the OSQAr Boilerplate</span></a> for embedding GSN diagrams in your documentation workflow.</p>
 <section id="id54">
 <h4>Subcommands<a class="headerlink" href="#id54" title="Link to this heading">¶</a></h4>
 <ul class="simple">
@@ -1518,6 +1521,7 @@ auditor review</p></td>
 <p>Cryptographically sign shipment manifests using GPG detached signatures.</p>
 <p>Provides integrity <em>and authenticity</em> evidence for auditable shipments.
 ISO 26262-8 §11.4.4 expects authenticity evidence for tool chains.</p>
+<p>See <a class="reference internal" href="suppliers_guide.html"><span class="doc">Supplier’s Guide</span></a> (supplier signing) and <a class="reference internal" href="integrators_guide.html"><span class="doc">Integrator’s Guide</span></a> (verification).</p>
 <section id="id58">
 <h4>Subcommands<a class="headerlink" href="#id58" title="Link to this heading">¶</a></h4>
 <ul class="simple">

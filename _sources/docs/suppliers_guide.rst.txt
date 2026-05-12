@@ -168,7 +168,7 @@ Notes
 
 - Generate checksums **per example build output**, not site-wide. The OSQAr framework docs (repo root build) are not part of the example shipment.
 - Keep requirement IDs stable across releases; the exported artifacts are designed to be diffed and archived.
-- For higher assurance, sign ``SHA256SUMS`` externally (e.g., detached signature) and store it separately from the shipment.
+- For higher assurance, cryptographically sign the ``SHA256SUMS`` manifest using :ref:`cli-sign` and store the signature alongside the shipment. See :ref:`supplier-signing` below.
 
 Change control and versioning
 =============================
@@ -178,6 +178,33 @@ Version the supplier package and include:
 - a changelog describing safety-impacting changes
 - compatibility notes (interfaces, configuration)
 - migration guidance for integrators
+
+.. _supplier-signing:
+
+Signing the shipment manifest
+=============================
+
+For medium-to-high assurance, sign the ``SHA256SUMS`` manifest cryptographically
+using a GPG detached signature (:ref:`cli-sign`). This provides **authenticity**
+evidence — the integrator can verify that the shipment came from you and was not
+tampered with after signing.
+
+.. code-block:: bash
+
+   # Sign the manifest with your GPG key
+   osqar sign sign --manifest _build/html/SHA256SUMS --key qualification@example.com
+
+   # With ASCII armor (human-readable .asc)
+   osqar sign sign --manifest _build/html/SHA256SUMS --armor
+
+   # Ship SHA256SUMS, SHA256SUMS.sig (or .asc), and the GPG public key
+
+For lower assurance or open-source qualification: the unsigned checksum manifest
+(SHA-256) already provides integrity (tamper detection). Signing adds authenticity
+(provenance). Choose based on your integrity level.
+
+Store your GPG public key alongside the signature so integrators can verify
+without contacting you out-of-band.
 
 How to use OSQAr as a supplier
 ==============================

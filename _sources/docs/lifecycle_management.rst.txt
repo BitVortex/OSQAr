@@ -78,6 +78,32 @@ IDs are contracts:
 - avoid reusing IDs for different intent (prefer deprecate + introduce)
 - document renames/migrations explicitly
 
+Using ``osqar baseline``
+-------------------------
+
+OSQAr provides versioned requirement baselines via :ref:`cli-baseline` to support
+ISO 26262-8 §9 configuration management.  Baselines are stored as snapshots of
+``needs.json`` in ``.osqar-baselines/<tag>/`` within the project directory.
+
+.. code-block:: bash
+
+   # Snapshot the current requirements as a named baseline
+   osqar baseline snapshot --tag v1.0 --message "Initial qualification baseline"
+
+   # List all stored baselines
+   osqar baseline list
+
+   # Compute a structured diff between two baselines
+   osqar baseline diff v1.0 v1.1
+
+   # Machine-readable diff for CI / audit trail
+   osqar baseline diff v1.0 v1.1 --format json --json-report baseline_diff.json
+
+Create a baseline at every release and before every safety-relevant change.
+The ``diff`` command answers *"what changed between versions?"* — complementing
+:ref:`cli-impact` which answers *"what would be affected?"*.  Together they
+provide a complete change management audit trail.
+
 Change control
 ==============
 
@@ -105,6 +131,32 @@ For anything in the last two categories, require:
 - explicit traceability updates
 - verification updates (new/changed tests)
 - updated shipment evidence
+
+Running impact analysis with OSQAr
+-----------------------------------
+
+OSQAr automates step 2 of the change control process — identifying what is affected
+by a change — with :ref:`cli-impact`. It performs bidirectional graph traversal on the
+``needs.json`` traceability graph:
+
+.. code-block:: bash
+
+   # What would be affected if REQ_CJSON_PARSE_VALID changes?
+   osqar impact ./_build/html/needs.json --need-id REQ_CJSON_PARSE_VALID
+
+   # Downstream-only: what does this requirement feed into?
+   osqar impact ./_build/html/needs.json --need-id REQ_CJSON_MEMORY_SAFE --direction downstream
+
+   # Machine-readable for CI / audit trail
+   osqar impact ./_build/html/needs.json --need-id REQ_CJSON_ARITH_SAFE \\
+     --format json --json-report impact_report.json
+
+Use impact analysis before every safety-relevant change to answer
+*"if I modify this requirement, what else must I review?"* — supporting
+ISO 26262-8 §9.4.2.4 impact analysis workflows.
+
+The command can be integrated into CI so that every pull request that changes
+requirements automatically produces an impact report.
 
 Configuration management
 ========================

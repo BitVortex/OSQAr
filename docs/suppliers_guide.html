@@ -434,7 +434,7 @@ integrator-side configuration.</p>
 <ul class="simple">
 <li><p>Generate checksums <strong>per example build output</strong>, not site-wide. The OSQAr framework docs (repo root build) are not part of the example shipment.</p></li>
 <li><p>Keep requirement IDs stable across releases; the exported artifacts are designed to be diffed and archived.</p></li>
-<li><p>For higher assurance, sign <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> externally (e.g., detached signature) and store it separately from the shipment.</p></li>
+<li><p>For higher assurance, cryptographically sign the <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> manifest using <a class="reference internal" href="cli_reference.html#cli-sign"><span class="std std-ref">sign</span></a> and store the signature alongside the shipment. See <a class="reference internal" href="#supplier-signing"><span class="std std-ref">Signing the shipment manifest</span></a> below.</p></li>
 </ul>
 </section>
 </section>
@@ -447,6 +447,27 @@ integrator-side configuration.</p>
 <li><p>compatibility notes (interfaces, configuration)</p></li>
 <li><p>migration guidance for integrators</p></li>
 </ul>
+</section>
+<section id="signing-the-shipment-manifest">
+<span id="supplier-signing"></span><h2>Signing the shipment manifest<a class="headerlink" href="#signing-the-shipment-manifest" title="Link to this heading">¶</a></h2>
+<p>For medium-to-high assurance, sign the <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> manifest cryptographically
+using a GPG detached signature (<a class="reference internal" href="cli_reference.html#cli-sign"><span class="std std-ref">sign</span></a>). This provides <strong>authenticity</strong>
+evidence — the integrator can verify that the shipment came from you and was not
+tampered with after signing.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sign the manifest with your GPG key</span>
+osqar<span class="w"> </span>sign<span class="w"> </span>sign<span class="w"> </span>--manifest<span class="w"> </span>_build/html/SHA256SUMS<span class="w"> </span>--key<span class="w"> </span>qualification@example.com
+
+<span class="c1"># With ASCII armor (human-readable .asc)</span>
+osqar<span class="w"> </span>sign<span class="w"> </span>sign<span class="w"> </span>--manifest<span class="w"> </span>_build/html/SHA256SUMS<span class="w"> </span>--armor
+
+<span class="c1"># Ship SHA256SUMS, SHA256SUMS.sig (or .asc), and the GPG public key</span>
+</pre></div>
+</div>
+<p>For lower assurance or open-source qualification: the unsigned checksum manifest
+(SHA-256) already provides integrity (tamper detection). Signing adds authenticity
+(provenance). Choose based on your integrity level.</p>
+<p>Store your GPG public key alongside the signature so integrators can verify
+without contacting you out-of-band.</p>
 </section>
 <section id="how-to-use-osqar-as-a-supplier">
 <h2>How to use OSQAr as a supplier<a class="headerlink" href="#how-to-use-osqar-as-a-supplier" title="Link to this heading">¶</a></h2>
@@ -540,6 +561,7 @@ integrator-side configuration.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#change-control-and-versioning">Change control and versioning</a></li>
+<li><a class="reference internal" href="#signing-the-shipment-manifest">Signing the shipment manifest</a></li>
 <li><a class="reference internal" href="#how-to-use-osqar-as-a-supplier">How to use OSQAr as a supplier</a></li>
 <li><a class="reference internal" href="#integrator-handoff">Integrator handoff</a></li>
 </ul>
