@@ -176,7 +176,7 @@ Top-level commands
 - :ref:`cli-baseline` — Versioned requirement baselines (snapshot, list, diff).
 - :ref:`cli-checksum` — Generate/verify checksum manifests.
 - :ref:`cli-framework` — Framework bundle helpers (release/CI).
-- :ref:`cli-gsn` — GSN safety case diagrams (PlantUML) and specifications.
+- :ref:`cli-gsn` — GSN safety case diagrams (PlantUML and gsn2x backends).
 - :ref:`cli-shipment` — Shipment workflows (build, prepare, verify, package, incremental).
 - :ref:`cli-sign` — Cryptographic manifest signing (GPG detached signatures).
 - :ref:`cli-workspace` — Workspace workflows (list, report, diff, verify, intake, combine, traceability).
@@ -1270,8 +1270,8 @@ Options
 - ``--output``: output path (default: ``gsn_safety_case.puml`` for plantuml,
   ``gsn_safety_case.yaml`` for gsn2x-yaml)
 - ``--backend``: output backend, ``plantuml`` (default) or ``gsn2x-yaml``
-- ``--render``: also render to PNG via system ``plantuml`` (PlantUML backend only;
-  requires ``apt install plantuml``)
+- ``--render``: also render to PNG/SVG via system ``plantuml`` or ``gsn2x`` binary
+  (depending on ``--backend``). Requires ``apt install plantuml`` or ``gsn2x`` on PATH.
 
 Example
 ^^^^^^^
@@ -1281,11 +1281,94 @@ Example
   # Generate PlantUML GSN diagram (default)
   osqar gsn generate ./_build/html/needs.json --output gsn_safety_case.puml
 
-  # Generate, render, and embed in Sphinx docs
-  osqar gsn generate ./_build/html/needs.json --output _static/gsn_safety_case.puml --render
+  # Generate and render to PNG
+  osqar gsn generate ./_build/html/needs.json --render
 
-  # Legacy gsn2x YAML
+  # Generate gsn2x YAML and render to SVG
+  osqar gsn generate ./_build/html/needs.json --backend gsn2x-yaml --render
+
+  # Generate gsn2x YAML only (no render)
   osqar gsn generate ./_build/html/needs.json --backend gsn2x-yaml
+
+Backend Comparison
+^^^^^^^^^^^^^^^^^^
+
+.. list-table:: PlantUML vs gsn2x Backend
+   :header-rows: 1
+   :align: left
+
+   * - Feature
+     - ``plantuml`` (default)
+     - ``gsn2x-yaml``
+   * - Output format
+     - ``.puml`` (PlantUML source)
+     - ``.yaml`` (gsn2x spec)
+   * - Rendered format
+     - PNG (``--render``)
+     - SVG (``--render``)
+   * - Sphinx integration
+     - ``.. plantuml::`` directive
+       (``sphinxcontrib.plantuml``)
+     - ``.. image::`` directive
+       (pre-rendered SVG)
+   * - Renderer dependency
+     - ``plantuml`` (apt) + Graphviz
+     - ``gsn2x`` binary (GitHub
+       releases, ~2.7 MB)
+   * - Goals
+     - Green rectangles with
+       ``<<goal>>`` stereotype
+     - GSN-standard rectangles
+   * - Strategies
+     - Orange hexagons
+       (no parallelogram shape)
+     - GSN-standard
+       **parallelograms** ✓
+   * - Solutions
+     - Blue circles ✓
+     - GSN-standard circles ✓
+   * - Context
+     - Cyan rectangles with
+       ``<<context>>`` stereotype
+     - GSN-standard rounded
+       rectangles ✓
+   * - Assumptions
+     - Yellow ellipses
+       (via ``usecase`` shape)
+     - GSN-standard ellipses ✓
+   * - In-context-of edge
+     - Dashed arrow with label
+       ``context``
+     - Solid hollow-head arrow ✓
+   * - Supported-by edge
+     - Solid arrow with label
+       ``supported by``
+     - Solid filled-head arrow ✓
+   * - Auto-layout
+     - Graphviz (via PlantUML)
+     - Built-in layered layout
+   * - Unicode / multiline
+     - Full ✓
+     - Limited (ASCII labels)
+   * - CI availability
+     - ``apt install plantuml``
+       (standard package)
+     - Download binary from
+       GitHub releases
+   * - GSN formal fidelity
+     - Approximate (strategy
+       shape differs, context
+       shape differs)
+     - **Formally correct** ✓
+       (all element shapes
+       match GSN standard)
+   * - Best for
+     - Quick diagrams, Sphinx
+       embedding, CI without
+       extra downloads
+     - Formal safety case
+       submissions, ISO 26262
+       auditor review
 
 
 .. _cli-sign:

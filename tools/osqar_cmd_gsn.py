@@ -400,80 +400,168 @@ def _to_gsn2x_yaml(
     safety_cases: list[dict[str, Any]],
     needs_by_id: dict[str, dict[str, Any]],
 ) -> str:
-    """Generate gsn2x YAML spec from safety-case needs.
+    """Generate gsn2x-compatible YAML from safety-case needs.
 
-    NOTE: The actual gsn2x tool uses a different format (flat ID-keyed map).
-    This YAML is a best-effort approximation. For renderable diagrams,
-    use the PlantUML backend (default).
+    Produces a flat ID-keyed map with `text`, `supportedBy`, and `inContextOf`
+    fields — matching the format expected by the gsn2x Rust binary
+    (jonasthewolf/gsn2x v4.x).
+
+    ID prefix mapping (gsn2x type inference):
+    - SC_* → G* (goals)
+    - LM_*  → C_* (context)
+    - REQ_* → A_* (assumptions)
+    - VER_* → reused as solution IDs in Sn* nodes
+    - S* → strategies (auto-generated)
+    - Sn* → solutions (auto-generated for evidence)
     """
-    lines: list[str] = [
+    import yaml as _yaml_module
+
+    tree = _build_gsn_tree(safety_cases, needs_by_id)
+    root = tree["root"]
+
+    nodes: dict[str, dict[str, Any]] = {}
+    strategy_counter = 0
+    solution_counter = 0
+    context_counter = 0
+    assumption_counter = 0
+
+    # ID mapping: OSQAr ID → gsn2x ID
+    id_map: dict[str, str] = {}
+
+    # Pre-compute pure-context SC_ needs (they should map to C* not G*)
+    if root:
+        _pure_ctx = set(tree["context"].get(root, []))
+    else:
+        _pure_ctx = set()
+
+    def _gsn2x_id(osqar_id: str) -> str:
+        """Map an OSQAr need ID to a gsn2x-compatible ID."""
+        if osqar_id in id_map:
+            return id_map[osqar_id]
+        nonlocal context_counter, assumption_counter, solution_counter
+        if osqar_id.startswith("SC_"):
+            if osqar_id in _pure_ctx:
+                context_counter += 1
+                mapped = f"C{context_counter}"
+            else:
+                mapped = osqar_id.replace("SC_", "G")
+        elif osqar_id.startswith("LM_"):
+            context_counter += 1
+            mapped = f"C{context_counter}"
+        elif osqar_id.startswith("REQ_"):
+            assumption_counter += 1
+            mapped = f"A{assumption_counter}"
+        else:
+            mapped = osqar_id
+        id_map[osqar_id] = mapped
+        return mapped
+
+    def _clean(text: str) -> str:
+        return text.replace("\n", " ").replace('"', "'").strip()
+
+    # --- Context/assumption nodes (emit all LM_ and REQ_ needs) ---
+    for nid in sorted(needs_by_id):
+        if nid.startswith("LM_"):
+            gid = _gsn2x_id(nid)
+            nodes[gid] = {"text": _clean(_need_title(needs_by_id[nid]))}
+        elif nid.startswith("REQ_"):
+            gid = _gsn2x_id(nid)
+            nodes[gid] = {"text": _clean(_need_title(needs_by_id[nid]))}
+
+    # --- Top-level goal ---
+    if root and root in needs_by_id:
+        nodes[_gsn2x_id(root)] = {"text": _clean(_need_title(needs_by_id[root]))}
+
+        # Context for root
+        ctx = tree["context"].get(root, [])
+        ctx_mapped = [_gsn2x_id(c) for c in ctx]
+        if ctx_mapped:
+            nodes[_gsn2x_id(root)]["inContextOf"] = ctx_mapped
+
+        # Sub-goals under strategy
+        sub_goals = tree["children"].get(root, [])
+        sub_goals = [sg for sg in sub_goals if sg not in tree["context"].get(root, [])]
+
+        if sub_goals:
+            strategy_counter += 1
+            strat_id = f"S{strategy_counter}"
+            nodes[strat_id] = {
+                "text": f"Argument by {len(sub_goals)} safety goals",
+            }
+            nodes[_gsn2x_id(root)].setdefault("supportedBy", [])
+            nodes[_gsn2x_id(root)]["supportedBy"].append(strat_id)
+
+            for sg_id in sub_goals:
+                if sg_id in needs_by_id:
+                    g_id = _gsn2x_id(sg_id)
+                    nodes[g_id] = {"text": _clean(_need_title(needs_by_id[sg_id]))}
+                    nodes[strat_id].setdefault("supportedBy", [])
+                    nodes[strat_id]["supportedBy"].append(g_id)
+
+                    # Evidence for this sub-goal
+                    ev_ids = tree["evidence"].get(sg_id, [])
+                    for ev_id in ev_ids:
+                        solution_counter += 1
+                        sn_id = f"Sn{solution_counter}"
+                        if ev_id in needs_by_id:
+                            nodes[sn_id] = {
+                                "text": _clean(_need_title(needs_by_id[ev_id])),
+                            }
+                            nodes[g_id].setdefault("supportedBy", [])
+                            nodes[g_id]["supportedBy"].append(sn_id)
+
+                    # Context for this sub-goal
+                    sg_ctx = tree["context"].get(sg_id, [])
+                    sg_ctx_mapped = [_gsn2x_id(c) for c in sg_ctx]
+                    if sg_ctx_mapped:
+                        nodes[g_id]["inContextOf"] = sg_ctx_mapped
+
+    # --- Any unconnected SC_ needs as standalone goals ---
+    # Skip pure-context SC_ needs (reclassified to context in tree building)
+    pure_context_sc = set(tree["context"].get(root, [])) if root else set()
+    structural_sc = {nid for nid in needs_by_id
+                     if nid.startswith("SC_") and not _is_evidence_sc(needs_by_id[nid])
+                     and nid not in pure_context_sc}
+    for nid in structural_sc:
+        g_id = _gsn2x_id(nid)
+        if g_id not in nodes:
+            nodes[g_id] = {"text": _clean(_need_title(needs_by_id[nid]))}
+
+    # Emit pure-context SC_ needs as actual context nodes
+    for nid in pure_context_sc:
+        if nid in needs_by_id:
+            cid = _gsn2x_id(nid)
+            if cid not in nodes:
+                nodes[cid] = {"text": _clean(_need_title(needs_by_id[nid]))}
+
+    # Serialize as YAML
+    output_lines = [
         "# Auto-generated by OSQAr — gsn2x safety case specification",
-        "# WARNING: This format may not be directly renderable by gsn2x.",
-        "# The gsn2x tool expects a flat ID-keyed map, not nested goal/strategy/solution.",
-        "# For renderable GSN diagrams, use: osqar gsn generate --backend plantuml",
+        "# Render with: gsn2x gsn_safety_case.yaml",
+        "# Install from: https://github.com/jonasthewolf/gsn2x/releases",
         "",
     ]
 
-    for sc in safety_cases:
-        sc_id = str(sc.get("id", ""))
-        goal_text = _need_title(sc)
-        strategy_text = str(sc.get("strategy", "")).strip()
-        context_text = str(sc.get("context", "")).strip()
-        assumption_text = str(sc.get("assumption", "")).strip()
+    class _GsnDumper(_yaml_module.Dumper):
+        pass
 
-        lines.append(f"goal: \"{goal_text}\"")
-        lines.append(f"id: {sc_id}")
+    def _str_representer(dumper, data):
+        if "\n" in data:
+            return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data)
 
-        if context_text:
-            lines.append(f"context: \"{context_text}\"")
-        if assumption_text:
-            lines.append(f"assumption: \"{assumption_text}\"")
+    _GsnDumper.add_representer(str, _str_representer)
 
-        # Find linked evidence via traceability links
-        forward = _as_str_list(sc.get("links"))
-        backward = _as_str_list(sc.get("links_back"))
-        linked = set(forward) | set(backward)
-        evidence_ids = sorted(
-            lid for lid in linked
-            if lid.startswith(("VER_", "TEST_")) and lid in needs_by_id
-        )
-        arch_ids = sorted(
-            lid for lid in linked
-            if lid.startswith("ARCH_") and lid in needs_by_id
-        )
-
-        if strategy_text or evidence_ids or arch_ids:
-            lines.append("strategies:")
-            strat_id = f"{sc_id}_ST"
-
-            if strategy_text:
-                lines.append(f"  - id: {strat_id}")
-                lines.append(f'    description: "{strategy_text}"')
-            else:
-                lines.append(f"  - id: {strat_id}")
-
-            # Solutions from evidence
-            if evidence_ids:
-                lines.append("    solutions:")
-                for eid in evidence_ids:
-                    sn_id = f"{strat_id}_SN_{eid}"
-                    etitle = _need_title(needs_by_id.get(eid, {}))
-                    lines.append(f"      - id: {sn_id}")
-                    lines.append(f'        description: "{etitle}"')
-                    lines.append(f"        evidence: [{eid}]")
-
-            if arch_ids and not evidence_ids:
-                lines.append("    solutions:")
-                for aid in arch_ids:
-                    sn_id = f"{strat_id}_SN_{aid}"
-                    atitle = _need_title(needs_by_id.get(aid, {}))
-                    lines.append(f"      - id: {sn_id}")
-                    lines.append(f'        description: "{atitle}"')
-                    lines.append(f"        evidence: [{aid}]")
-
-        lines.append("")
-
-    return "\n".join(lines)
+    yaml_str = _yaml_module.dump(
+        nodes,
+        Dumper=_GsnDumper,
+        default_flow_style=False,
+        allow_unicode=True,
+        sort_keys=False,
+        width=120,
+    )
+    output_lines.append(yaml_str)
+    return "\n".join(output_lines)
 
 
 # ── CLI command ───────────────────────────────────────────────────────────
@@ -544,14 +632,39 @@ def cmd_gsn_generate(args: argparse.Namespace) -> int:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(yaml_spec, encoding="utf-8")
 
-        print(f"GSN specification written: {output}")
+        print(f"GSN gsn2x specification written: {output}")
         print(f"  {len(scs)} safety-case needs processed")
-        print("  NOTE: gsn2x YAML format is approximate. Use --backend plantuml for renderable diagrams.")
 
-        # Try rendering with gsn2x if requested (legacy — likely to fail)
+        # Render with gsn2x if requested
         if getattr(args, "render", False):
-            print("  WARNING: gsn2x rendering is experimental. Install gsn2x binary from GitHub releases.")
-            print("  The YAML spec can be rendered manually: gsn2x gsn_safety_case.yaml")
+            gsn2x_bin = shutil.which("gsn2x")
+            if gsn2x_bin:
+                try:
+                    svg_name = output.with_suffix(".svg").name
+                    result = subprocess.run(
+                        [gsn2x_bin, str(output),
+                         f"--output-dir={output.parent}",
+                         f"--full={svg_name}",
+                         "--no-arch", "--no-evidence"],
+                        capture_output=True, text=True, timeout=60,
+                    )
+                    if result.returncode == 0:
+                        svg_path = output.with_suffix(".svg")
+                        # gsn2x appends input stem: input.yaml → input.svg
+                        alt_svg = output.parent / f"{output.stem}.svg"
+                        if alt_svg.is_file() and not svg_path.is_file():
+                            svg_path = alt_svg
+                        if svg_path.is_file():
+                            print(f"  GSN diagram rendered via gsn2x: {svg_path} ({svg_path.stat().st_size} bytes)")
+                        else:
+                            print(f"  WARNING: gsn2x ran but no SVG output found (tried {svg_path}, {alt_svg})")
+                    else:
+                        print(f"  WARNING: gsn2x render failed: {result.stderr.strip()}")
+                except Exception as exc:
+                    print(f"  WARNING: gsn2x invocation failed: {exc}")
+            else:
+                print("  WARNING: gsn2x binary not found. Install from: https://github.com/jonasthewolf/gsn2x/releases")
+                print("  Download the Linux binary to ~/bin/gsn2x (or any PATH directory)")
         return 0
 
 
@@ -570,10 +683,10 @@ def register(sub: argparse._SubParsersAction) -> None:
     )
     p_gen.add_argument(
         "--backend", default="plantuml", choices=["plantuml", "gsn2x-yaml"],
-        help="Output backend (default: plantuml). gsn2x-yaml is legacy — use plantuml for renderable diagrams.",
+        help="Output backend (default: plantuml). gsn2x-yaml produces YAML for the gsn2x binary.",
     )
     p_gen.add_argument(
         "--render", action="store_true",
-        help="Also render via system plantuml (PlantUML backend only). Requires: apt install plantuml",
+        help="Also render via system plantuml or gsn2x binary (depending on --backend). Requires: apt install plantuml or gsn2x binary on PATH.",
     )
     p_gen.set_defaults(func=cmd_gsn_generate)
