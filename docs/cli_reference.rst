@@ -176,7 +176,7 @@ Top-level commands
 - :ref:`cli-baseline` — Versioned requirement baselines (snapshot, list, diff).
 - :ref:`cli-checksum` — Generate/verify checksum manifests.
 - :ref:`cli-framework` — Framework bundle helpers (release/CI).
-- :ref:`cli-gsn` — GSN safety case support (generate gsn2x specifications).
+- :ref:`cli-gsn` — GSN safety case diagrams (PlantUML) and specifications.
 - :ref:`cli-shipment` — Shipment workflows (build, prepare, verify, package, incremental).
 - :ref:`cli-sign` — Cryptographic manifest signing (GPG detached signatures).
 - :ref:`cli-workspace` — Workspace workflows (list, report, diff, verify, intake, combine, traceability).
@@ -1230,46 +1230,62 @@ Examples
 gsn
 ---
 
-Generate GSN (Goal Structuring Notation) safety case specifications from
-``.. safety-case::`` needs in a sphinx-needs ``needs.json`` export.
+Generate GSN (Goal Structuring Notation) safety case diagrams and
+specifications from ``.. safety-case::`` needs in a sphinx-needs
+``needs.json`` export.
 
-The output is a `gsn2x <https://github.com/jonasthewolf/gsn2x>`_-compatible
-YAML specification that can be rendered to PlantUML, TikZ, or Graphviz diagrams.
-When ``--render`` is passed and ``gsn2x`` is installed, the diagram is rendered
-immediately. When ``gsn2x`` is not available, the YAML spec is still produced
-and can be rendered separately.
+**Two backends:**
+
+- ``plantuml`` (default) — produces a ``.puml`` file with GSN elements:
+  goals (rectangles), strategies (hexagons), solutions (circles),
+  context (rectangles), and assumptions (ellipses). Renderable via
+  ``plantuml`` or directly embeddable in Sphinx via
+  ``sphinxcontrib.plantuml``.
+- ``gsn2x-yaml`` (legacy) — produces a gsn2x-compatible YAML
+  specification. **Note:** the actual gsn2x tool
+  (`jonasthewolf/gsn2x <https://github.com/jonasthewolf/gsn2x>`_)
+  is a Rust binary not on PyPI and uses a different format.
+
+When ``--render`` is passed with the PlantUML backend, the ``.puml``
+is rendered to PNG via the system ``plantuml`` binary.
 
 Safety-case needs are identified by the ``SC_`` ID prefix.
 
 Subcommands
 ^^^^^^^^^^^
 
-- ``gsn generate`` — generate gsn2x YAML from needs.json
+- ``gsn generate`` — generate a GSN diagram or specification from needs.json
 
 Synopsis
 ^^^^^^^^
 
 .. code-block:: console
 
-  osqar gsn generate <needs_json> [--output <path>] [--render]
+  osqar gsn generate <needs_json> [--output <path>] [--backend {plantuml|gsn2x-yaml}] [--render]
 
 Options
 ^^^^^^^
 
 - ``needs_json``: path to ``needs.json`` produced by sphinx-needs
-- ``--output``: output YAML path (default: ``gsn_safety_case.yaml``)
-- ``--render``: also render via gsn2x (requires ``pip install gsn2x``)
+- ``--output``: output path (default: ``gsn_safety_case.puml`` for plantuml,
+  ``gsn_safety_case.yaml`` for gsn2x-yaml)
+- ``--backend``: output backend, ``plantuml`` (default) or ``gsn2x-yaml``
+- ``--render``: also render to PNG via system ``plantuml`` (PlantUML backend only;
+  requires ``apt install plantuml``)
 
 Example
 ^^^^^^^
 
 .. code-block:: console
 
-  # Generate gsn2x YAML from safety-case needs
-  osqar gsn generate ./_build/html/needs.json --output gsn_safety_case.yaml
+  # Generate PlantUML GSN diagram (default)
+  osqar gsn generate ./_build/html/needs.json --output gsn_safety_case.puml
 
-  # Generate and render (requires gsn2x)
-  osqar gsn generate ./_build/html/needs.json --render
+  # Generate, render, and embed in Sphinx docs
+  osqar gsn generate ./_build/html/needs.json --output _static/gsn_safety_case.puml --render
+
+  # Legacy gsn2x YAML
+  osqar gsn generate ./_build/html/needs.json --backend gsn2x-yaml
 
 
 .. _cli-sign:
