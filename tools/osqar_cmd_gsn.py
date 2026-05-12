@@ -417,7 +417,12 @@ def _to_gsn2x_yaml(
     - S* → strategies (auto-generated)
     - Sn* → solutions (auto-generated for evidence)
     """
-    import yaml as _yaml_module
+    try:
+        import yaml as _yaml_module
+    except ImportError:
+        raise ImportError(
+            "gsn2x YAML backend requires PyYAML. Install: pip install pyyaml"
+        ) from None
 
     tree = _build_gsn_tree(safety_cases, needs_by_id)
     root = tree["root"]
