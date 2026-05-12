@@ -53,7 +53,7 @@ python3 tools/fix_rst_title_underlines.py --check docs index.rst examples
 # 2) Ensure the framework docs build succeeds.
 # Use a separate output directory to avoid clobbering local dev builds.
 echo "[osqar] pre-commit: building framework docs" >&2
-if ! $_OSQAR_PYTHON -m tools.osqar_cli build-docs --output _build/html_precommit_check >"${log_dir}/framework_docs.log" 2>&1; then
+if ! $_OSQAR_PYTHON -m sphinx -b html . _build/html_precommit_check >"${log_dir}/framework_docs.log" 2>&1; then
   echo "[osqar] pre-commit: framework docs build FAILED" >&2
   echo "[osqar] pre-commit: log: ${log_dir}/framework_docs.log" >&2
   tail -n 80 "${log_dir}/framework_docs.log" >&2 || true

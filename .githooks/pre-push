@@ -50,7 +50,7 @@ mkdir -p "${log_dir}"
 python3 tools/fix_rst_title_underlines.py --check docs index.rst examples
 
 echo "[osqar] pre-push: building framework docs" >&2
-if ! $_OSQAR_PYTHON -m tools.osqar_cli build-docs --output _build/html_prepush_check >"${log_dir}/framework_docs.log" 2>&1; then
+if ! $_OSQAR_PYTHON -m sphinx -b html . _build/html_prepush_check >"${log_dir}/framework_docs.log" 2>&1; then
   echo "[osqar] pre-push: framework docs build FAILED" >&2
   echo "[osqar] pre-push: log: ${log_dir}/framework_docs.log" >&2
   tail -n 80 "${log_dir}/framework_docs.log" >&2 || true
