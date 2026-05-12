@@ -1362,10 +1362,12 @@ goals (rectangles), strategies (hexagons), solutions (circles),
 context (rectangles), and assumptions (ellipses). Renderable via
 <code class="docutils literal notranslate"><span class="pre">plantuml</span></code> or directly embeddable in Sphinx via
 <code class="docutils literal notranslate"><span class="pre">sphinxcontrib.plantuml</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">gsn2x-yaml</span></code> (legacy) — produces a gsn2x-compatible YAML
-specification. <strong>Note:</strong> the actual gsn2x tool
-(<a class="reference external" href="https://github.com/jonasthewolf/gsn2x">jonasthewolf/gsn2x</a>)
-is a Rust binary not on PyPI and uses a different format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gsn2x-yaml</span></code> — produces a gsn2x-compatible YAML specification for the
+<a class="reference external" href="https://github.com/jonasthewolf/gsn2x">jonasthewolf/gsn2x</a> Rust binary.
+gsn2x renders <strong>formally correct</strong> GSN diagrams per the GSN Community
+Standard: parallelogram strategies, rounded-rectangle context nodes with
+side-connectors, solid hollow-head in-context-of arrows. Requires the
+gsn2x binary (~2.7 MB download from GitHub releases).</p></li>
 </ul>
 <p>When <code class="docutils literal notranslate"><span class="pre">--render</span></code> is passed with the PlantUML backend, the <code class="docutils literal notranslate"><span class="pre">.puml</span></code>
 is rendered to PNG via the system <code class="docutils literal notranslate"><span class="pre">plantuml</span></code> binary.</p>
