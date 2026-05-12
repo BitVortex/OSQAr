@@ -427,7 +427,7 @@ Only use workspace config from a location you control.</p>
 <li><p><a class="reference internal" href="#cli-baseline"><span class="std std-ref">baseline</span></a> — Versioned requirement baselines (snapshot, list, diff).</p></li>
 <li><p><a class="reference internal" href="#cli-checksum"><span class="std std-ref">checksum</span></a> — Generate/verify checksum manifests.</p></li>
 <li><p><a class="reference internal" href="#cli-framework"><span class="std std-ref">framework</span></a> — Framework bundle helpers (release/CI).</p></li>
-<li><p><a class="reference internal" href="#cli-gsn"><span class="std std-ref">gsn</span></a> — GSN safety case diagrams (PlantUML) and specifications.</p></li>
+<li><p><a class="reference internal" href="#cli-gsn"><span class="std std-ref">gsn</span></a> — GSN safety case diagrams (PlantUML and gsn2x backends).</p></li>
 <li><p><a class="reference internal" href="#cli-shipment"><span class="std std-ref">shipment</span></a> — Shipment workflows (build, prepare, verify, package, incremental).</p></li>
 <li><p><a class="reference internal" href="#cli-sign"><span class="std std-ref">sign</span></a> — Cryptographic manifest signing (GPG detached signatures).</p></li>
 <li><p><a class="reference internal" href="#cli-workspace"><span class="std std-ref">workspace</span></a> — Workspace workflows (list, report, diff, verify, intake, combine, traceability).</p></li>
@@ -1389,8 +1389,8 @@ is rendered to PNG via the system <code class="docutils literal notranslate"><sp
 <li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: output path (default: <code class="docutils literal notranslate"><span class="pre">gsn_safety_case.puml</span></code> for plantuml,
 <code class="docutils literal notranslate"><span class="pre">gsn_safety_case.yaml</span></code> for gsn2x-yaml)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--backend</span></code>: output backend, <code class="docutils literal notranslate"><span class="pre">plantuml</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">gsn2x-yaml</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--render</span></code>: also render to PNG via system <code class="docutils literal notranslate"><span class="pre">plantuml</span></code> (PlantUML backend only;
-requires <code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">plantuml</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--render</span></code>: also render to PNG/SVG via system <code class="docutils literal notranslate"><span class="pre">plantuml</span></code> or <code class="docutils literal notranslate"><span class="pre">gsn2x</span></code> binary
+(depending on <code class="docutils literal notranslate"><span class="pre">--backend</span></code>). Requires <code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">plantuml</span></code> or <code class="docutils literal notranslate"><span class="pre">gsn2x</span></code> on PATH.</p></li>
 </ul>
 </section>
 <section id="id57">
@@ -1398,12 +1398,116 @@ requires <code class="docutils literal notranslate"><span class="pre">apt</span>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Generate<span class="w"> </span>PlantUML<span class="w"> </span>GSN<span class="w"> </span>diagram<span class="w"> </span><span class="o">(</span>default<span class="o">)</span>
 <span class="go">osqar gsn generate ./_build/html/needs.json --output gsn_safety_case.puml</span>
 
-<span class="gp"># </span>Generate,<span class="w"> </span>render,<span class="w"> </span>and<span class="w"> </span>embed<span class="w"> </span><span class="k">in</span><span class="w"> </span>Sphinx<span class="w"> </span>docs
-<span class="go">osqar gsn generate ./_build/html/needs.json --output _static/gsn_safety_case.puml --render</span>
+<span class="gp"># </span>Generate<span class="w"> </span>and<span class="w"> </span>render<span class="w"> </span>to<span class="w"> </span>PNG
+<span class="go">osqar gsn generate ./_build/html/needs.json --render</span>
 
-<span class="gp"># </span>Legacy<span class="w"> </span>gsn2x<span class="w"> </span>YAML
+<span class="gp"># </span>Generate<span class="w"> </span>gsn2x<span class="w"> </span>YAML<span class="w"> </span>and<span class="w"> </span>render<span class="w"> </span>to<span class="w"> </span>SVG
+<span class="go">osqar gsn generate ./_build/html/needs.json --backend gsn2x-yaml --render</span>
+
+<span class="gp"># </span>Generate<span class="w"> </span>gsn2x<span class="w"> </span>YAML<span class="w"> </span>only<span class="w"> </span><span class="o">(</span>no<span class="w"> </span>render<span class="o">)</span>
 <span class="go">osqar gsn generate ./_build/html/needs.json --backend gsn2x-yaml</span>
 </pre></div>
+</div>
+</section>
+<section id="backend-comparison">
+<h4>Backend Comparison<a class="headerlink" href="#backend-comparison" title="Link to this heading">¶</a></h4>
+<div class="table-wrapper docutils container" id="id70">
+<table class="docutils align-left" id="id70">
+<caption><span class="caption-text">PlantUML vs gsn2x Backend</span><a class="headerlink" href="#id70" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">plantuml</span></code> (default)</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">gsn2x-yaml</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Output format</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.puml</span></code> (PlantUML source)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.yaml</span></code> (gsn2x spec)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rendered format</p></td>
+<td><p>PNG (<code class="docutils literal notranslate"><span class="pre">--render</span></code>)</p></td>
+<td><p>SVG (<code class="docutils literal notranslate"><span class="pre">--render</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>Sphinx integration</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">plantuml::</span></code> directive
+(<code class="docutils literal notranslate"><span class="pre">sphinxcontrib.plantuml</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">image::</span></code> directive
+(pre-rendered SVG)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Renderer dependency</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">plantuml</span></code> (apt) + Graphviz</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gsn2x</span></code> binary (GitHub
+releases, ~2.7 MB)</p></td>
+</tr>
+<tr class="row-even"><td><p>Goals</p></td>
+<td><p>Green rectangles with
+<code class="docutils literal notranslate"><span class="pre">&lt;&lt;goal&gt;&gt;</span></code> stereotype</p></td>
+<td><p>GSN-standard rectangles</p></td>
+</tr>
+<tr class="row-odd"><td><p>Strategies</p></td>
+<td><p>Orange hexagons
+(no parallelogram shape)</p></td>
+<td><p>GSN-standard
+<strong>parallelograms</strong> ✓</p></td>
+</tr>
+<tr class="row-even"><td><p>Solutions</p></td>
+<td><p>Blue circles ✓</p></td>
+<td><p>GSN-standard circles ✓</p></td>
+</tr>
+<tr class="row-odd"><td><p>Context</p></td>
+<td><p>Cyan rectangles with
+<code class="docutils literal notranslate"><span class="pre">&lt;&lt;context&gt;&gt;</span></code> stereotype</p></td>
+<td><p>GSN-standard rounded
+rectangles ✓</p></td>
+</tr>
+<tr class="row-even"><td><p>Assumptions</p></td>
+<td><p>Yellow ellipses
+(via <code class="docutils literal notranslate"><span class="pre">usecase</span></code> shape)</p></td>
+<td><p>GSN-standard ellipses ✓</p></td>
+</tr>
+<tr class="row-odd"><td><p>In-context-of edge</p></td>
+<td><p>Dashed arrow with label
+<code class="docutils literal notranslate"><span class="pre">context</span></code></p></td>
+<td><p>Solid hollow-head arrow ✓</p></td>
+</tr>
+<tr class="row-even"><td><p>Supported-by edge</p></td>
+<td><p>Solid arrow with label
+<code class="docutils literal notranslate"><span class="pre">supported</span> <span class="pre">by</span></code></p></td>
+<td><p>Solid filled-head arrow ✓</p></td>
+</tr>
+<tr class="row-odd"><td><p>Auto-layout</p></td>
+<td><p>Graphviz (via PlantUML)</p></td>
+<td><p>Built-in layered layout</p></td>
+</tr>
+<tr class="row-even"><td><p>Unicode / multiline</p></td>
+<td><p>Full ✓</p></td>
+<td><p>Limited (ASCII labels)</p></td>
+</tr>
+<tr class="row-odd"><td><p>CI availability</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">plantuml</span></code>
+(standard package)</p></td>
+<td><p>Download binary from
+GitHub releases</p></td>
+</tr>
+<tr class="row-even"><td><p>GSN formal fidelity</p></td>
+<td><p>Approximate (strategy
+shape differs, context
+shape differs)</p></td>
+<td><p><strong>Formally correct</strong> ✓
+(all element shapes
+match GSN standard)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Best for</p></td>
+<td><p>Quick diagrams, Sphinx
+embedding, CI without
+extra downloads</p></td>
+<td><p>Formal safety case
+submissions, ISO 26262
+auditor review</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
 </section>
@@ -1753,6 +1857,7 @@ scope.</p>
 <li><a class="reference internal" href="#id55">Synopsis</a></li>
 <li><a class="reference internal" href="#id56">Options</a></li>
 <li><a class="reference internal" href="#id57">Example</a></li>
+<li><a class="reference internal" href="#backend-comparison">Backend Comparison</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#sign">sign</a><ul>
