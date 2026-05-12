@@ -55,7 +55,7 @@ The shell script is the heart of the pipeline.  It must:
 - Exit non-zero on any failure (``set -euo pipefail``).
 
 Reference: `OSQAr-cJSON build-and-test.sh`_ (411 lines, covers all verification
-activities required for ISO 26262 ASIL D).
+activities relevant for an ISO 26262 SEooC qualification attempt targeting ASIL D).
 
 .. _`OSQAr-cJSON build-and-test.sh`: https://github.com/BitVortex/OSQAr-cJSON/blob/main/build-and-test.sh
 

@@ -32,3 +32,4 @@ examples/**/coverage.xml
 
 # Editor settings
 .vscode/
+uv.lock

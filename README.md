@@ -24,7 +24,7 @@ osqar build-docs && osqar open-docs
 
 - 📖 **Docs**: [bitvortex.github.io/OSQAr](https://bitvortex.github.io/OSQAr/) — full framework documentation
 - 📦 **Examples**: [bitvortex.github.io/OSQAr/examples](https://bitvortex.github.io/OSQAr/examples/) — C, C++, Rust, Python reference projects
-- 🔬 **Full demo**: [OSQAr‑cJSON](https://github.com/BitVortex/OSQAr-cJSON) — real ISO 26262 ASIL D qualification (88% coverage, 162 tests, academic paper)
+- 🔬 **Full demo**: [OSQAr‑cJSON](https://github.com/BitVortex/OSQAr-cJSON) — ISO 26262 SEooC qualification attempt targeting ASIL D (88% coverage, 162 tests)
 - 📥 **Downloads**: [GitHub Releases](https://github.com/bitvortex/OSQAr/releases) — pre-built framework bundles and example workspaces
 
 ## Features
