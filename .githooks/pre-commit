@@ -23,6 +23,12 @@ fi
 repo_root="$(git rev-parse --show-toplevel)"
 cd "$repo_root"
 
+# Poetry 2.x respects VIRTUAL_ENV — unset it so it uses $repo_root/.venv.
+unset VIRTUAL_ENV
+
+# Ensure local tool paths are available (poetry, lcov, cppcheck, etc.)
+export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$PATH"
+
 if [[ ! -x "./osqar" ]]; then
   echo "[osqar] pre-commit: expected ./osqar in repo root" >&2
   exit 2
