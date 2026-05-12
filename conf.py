@@ -103,6 +103,8 @@ if html_theme == "furo":
 else:
     html_css_files = ["custom.css", "furo-fixes.css"]
 
+html_js_files = ["figure-zoom.js"]
+
 
 # -- sphinx-needs ------------------------------------------------------------
 needs_id_regex = "^[A-Z0-9_]{3,}"

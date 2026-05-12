@@ -29,6 +29,7 @@ else:
 html_theme = os.environ.get("OSQAR_SPHINX_THEME", "furo")
 html_static_path = ["_static"]
 html_css_files = ["custom.css", "furo-fixes.css"]
+html_js_files = ["figure-zoom.js"]
 
 exclude_patterns = [
     "_build",

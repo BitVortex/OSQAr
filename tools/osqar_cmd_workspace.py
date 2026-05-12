@@ -619,21 +619,21 @@ def _write_workspace_overview_sphinx_source(
     static_dir.mkdir(parents=True, exist_ok=True)
 
     # Keep the workspace overview styling consistent with the main OSQAr docs.
-    # Prefer the packaged CSS resources (PyPI install), but fall back to the repo
-    # path when running from the git checkout.
-    for css_name in ("custom.css", "furo-fixes.css"):
-        dst = static_dir / css_name
+    # Prefer the packaged CSS/JS resources (PyPI install), but fall back to the
+    # repo path when running from the git checkout.
+    for asset_name in ("custom.css", "furo-fixes.css", "figure-zoom.js"):
+        dst = static_dir / asset_name
         try:
-            css_res = resources.files("osqar_data").joinpath("static", css_name)
-            if css_res.is_file():
-                dst.write_text(css_res.read_text(encoding="utf-8"), encoding="utf-8")
+            res = resources.files("osqar_data").joinpath("static", asset_name)
+            if res.is_file():
+                dst.write_text(res.read_text(encoding="utf-8"), encoding="utf-8")
                 continue
         except Exception:
             pass
 
         try:
             repo_static = Path(__file__).resolve().parent.parent / "_static"
-            src = repo_static / css_name
+            src = repo_static / asset_name
             if src.is_file():
                 dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
         except OSError:
@@ -668,6 +668,8 @@ elif html_theme == "press" and importlib.util.find_spec("sphinx_press_theme") is
     html_theme = "alabaster"
 
 html_static_path = ["_static"]
+
+html_js_files = ["figure-zoom.js"]
 
 if html_theme == "furo":
     html_css_files = ["furo-fixes.css"]
