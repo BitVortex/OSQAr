@@ -1241,10 +1241,12 @@ specifications from ``.. safety-case::`` needs in a sphinx-needs
   context (rectangles), and assumptions (ellipses). Renderable via
   ``plantuml`` or directly embeddable in Sphinx via
   ``sphinxcontrib.plantuml``.
-- ``gsn2x-yaml`` (legacy) — produces a gsn2x-compatible YAML
-  specification. **Note:** the actual gsn2x tool
-  (`jonasthewolf/gsn2x <https://github.com/jonasthewolf/gsn2x>`_)
-  is a Rust binary not on PyPI and uses a different format.
+- ``gsn2x-yaml`` — produces a gsn2x-compatible YAML specification for the
+  `jonasthewolf/gsn2x <https://github.com/jonasthewolf/gsn2x>`_ Rust binary.
+  gsn2x renders **formally correct** GSN diagrams per the GSN Community
+  Standard: parallelogram strategies, rounded-rectangle context nodes with
+  side-connectors, solid hollow-head in-context-of arrows. Requires the
+  gsn2x binary (~2.7 MB download from GitHub releases).
 
 When ``--render`` is passed with the PlantUML backend, the ``.puml``
 is rendered to PNG via the system ``plantuml`` binary.

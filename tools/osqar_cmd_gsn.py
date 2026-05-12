@@ -8,9 +8,12 @@ PlantUML backend (default): produces .puml with goals (rectangles), strategies
 (hexagons), solutions (circles), context (rectangles), and assumptions (ellipses).
 Renders via system ``plantuml`` when --render is passed.
 
-gsn2x YAML backend (--backend gsn2x-yaml): produces gsn2x-compatible YAML.
+gsn2x YAML backend (--backend gsn2x-yaml): produces gsn2x-compatible YAML
+for the formally correct GSN renderer. gsn2x produces diagrams with
+GSN Community Standard shapes (parallelogram strategies, rounded-rectangle
+context with side-connectors, solid hollow-head in-context-of arrows).
+
 NOTE: The actual gsn2x tool (jonasthewolf/gsn2x) is a Rust binary not on PyPI.
-The YAML format is approximate — direct rendering may require format adaptation.
 Install gsn2x binary from: https://github.com/jonasthewolf/gsn2x/releases
 """
 
@@ -394,7 +397,7 @@ def _render_plantuml(puml_path: Path, output_dir: Path | None = None) -> bool:
     return False
 
 
-# ── gsn2x YAML backend (legacy) ──────────────────────────────────────────
+# ── gsn2x YAML backend (formally correct GSN) ──────────────────────────────
 
 def _to_gsn2x_yaml(
     safety_cases: list[dict[str, Any]],
