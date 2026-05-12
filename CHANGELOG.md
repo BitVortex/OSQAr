@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-05-12
+
+### Added
+- **PlantUML GSN backend** (`osqar gsn generate --backend plantuml`, default): generates
+  `.puml` diagrams embeddable via `.. plantuml::` in Sphinx. Aproximate GSN shapes
+  (strategy→hexagon) with zero extra CI dependencies. The `--render` flag now invokes
+  the system `plantuml` binary. (#20, #21)
+- **Formally correct gsn2x backend** (`osqar gsn generate --backend gsn2x-yaml --render`):
+  produces proper GSN parallelograms and context side-connectors via the gsn2x Rust
+  binary. YAML format matches actual gsn2x v4.x expectations.
+- **YAML exchange format**: all CLI commands now accept `.yaml`/`.yml` alongside
+  `.json` for `needs.json` inputs. Auto-detection by file extension with JSON fallback.
+  Requires PyYAML (now a core dependency).
+- **`figure-zoom.js` as reusable framework asset**: click-to-zoom CSS lightbox for all
+  diagram types — PlantUML (`<object>`), `.gsn-figure` containers, and any `<figure>`
+  with images. Works without manual wrapping. Shipped in `osqar_data/static/`.
+- **Application-focused documentation** for `osqar impact`, `osqar sign`, `osqar gsn`,
+  and `osqar baseline` — each CLI command now has a corresponding workflow section
+  explaining *when* and *why* to use it, cross-linked bidirectionally with the CLI
+  reference. (#20, #18, #15)
+
+### Changed
+- `pyyaml>=6.0` added as a declared core dependency (was installed ad-hoc by downstream
+  projects). `poetry.lock` regenerated.
+- GSN module documentation re-framed: `gsn2x-yaml` described as "formally correct",
+  not "legacy"; `plantuml` described as "quick/CI-friendly default".
+- Figure zoom CSS: removed broken `:target`-based lightbox and `scale(1.02)` hover
+  hack; replaced with JS-driven inline overlay (× close, Escape to dismiss).
+
+### Fixed
+- `osqar gsn generate --render` was dead code: it tried `python -m gsn2x --backend
+  plantuml`, but gsn2x is a Rust binary with no Python module or `--backend` flag.
+  Now invokes the correct backend-appropriate renderer.
+- gsn2x YAML format: output now matches the flat `G1: {text: ..., supportedBy: [...]}`
+  map expected by the actual gsn2x binary.
+- Git hooks: use project `.venv` instead of Poetry's managed env, invoke `sphinx-build`
+  directly to avoid fragile Poetry fallback. Poetry wrapper script replaces exported
+  bash functions for reliable subshell inheritance.
+- Graceful error when PyYAML is not installed for gsn2x-yaml backend.
+
 ## [0.8.0] - 2026-05-12
 
 ### Added
