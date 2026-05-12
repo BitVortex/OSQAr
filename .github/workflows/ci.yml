@@ -108,10 +108,20 @@ jobs:
         ./osqar workspace traceability --needs-json _build/workspace/needs.json \
           --json-report _build/workspace/traceability_report.json
 
-        # GSN generate (may have no SC_ needs — still shouldn't crash)
-        echo "== osqar gsn generate"
+        # GSN generate — PlantUML backend (default)
+        echo "== osqar gsn generate (PlantUML)"
         ./osqar gsn generate examples/python_hello_world/_build/html/needs.json \
-          --output _build/gsn_safety_case.yaml || true
+          --output _build/gsn_safety_case.puml || true
+        # Verify output is valid PlantUML
+        if [ -f _build/gsn_safety_case.puml ]; then
+          grep -q '@startuml' _build/gsn_safety_case.puml && echo "  ✓ Valid PlantUML" || echo "  ! Missing @startuml"
+          grep -q '@enduml' _build/gsn_safety_case.puml && echo "  ✓ Valid closing" || echo "  ! Missing @enduml"
+        fi
+
+        # GSN generate — gsn2x-yaml backend (legacy)
+        echo "== osqar gsn generate (gsn2x-yaml)"
+        ./osqar gsn generate examples/python_hello_world/_build/html/needs.json \
+          --backend gsn2x-yaml --output _build/gsn_safety_case.yaml || true
 
     - name: Upload documentation
       uses: actions/upload-artifact@v4
