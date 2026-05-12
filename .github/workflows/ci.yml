@@ -77,10 +77,11 @@ jobs:
           --root examples/python_hello_world/_build/html \
           --manifest examples/python_hello_world/_build/html/SHA256SUMS
 
-    - name: Exercise new commands (impact, CSV, workspace combine, gsn)
+    - name: Exercise new commands (impact, CSV, XLSX, workspace combine, gsn)
       run: |
         set -euo pipefail
         chmod +x ./osqar
+        pip install openpyxl
 
         # Impact analysis
         echo "== osqar impact"
