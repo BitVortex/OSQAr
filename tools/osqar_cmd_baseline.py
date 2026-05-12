@@ -31,28 +31,16 @@ def _valid_tag(tag: str) -> bool:
     return all(c.isalnum() or c in "-._" for c in tag)
 
 
-def _count_needs(needs_json: Path) -> int:
+from tools.traceability_check import _load_needs
+
+
+def _count_needs(needs_path: Path) -> int:
+    """Count needs in a JSON or YAML file."""
     try:
-        data = json.loads(needs_json.read_text(encoding="utf-8"))
+        needs = _load_needs(needs_path)
+        return len(needs)
     except Exception:
         return 0
-    if isinstance(data, list):
-        return len(data)
-    if isinstance(data, dict):
-        for key in ("needs", "versions"):
-            val = data.get(key)
-            if isinstance(val, list):
-                return len(val)
-            if isinstance(val, dict):
-                # versions format
-                for vk, vv in val.items():
-                    if isinstance(vv, dict) and isinstance(vv.get("needs"), list):
-                        return len(vv["needs"])
-                    if isinstance(vv, dict) and isinstance(vv.get("needs"), dict):
-                        return len(vv["needs"])
-        if isinstance(data.get("needs"), dict):
-            return len(data["needs"])
-    return 0
 
 
 def cmd_baseline_snapshot(args: argparse.Namespace) -> int:
@@ -69,7 +57,7 @@ def cmd_baseline_snapshot(args: argparse.Namespace) -> int:
     )
 
     if not needs_json.is_file():
-        print(f"ERROR: needs.json not found: {needs_json}", file=sys.stderr)
+        print(f"ERROR: needs file not found: {needs_json}", file=sys.stderr)
         print(
             "Hint: build docs first (osqar shipment build-docs) or pass --needs-json",
             file=sys.stderr,
@@ -90,8 +78,9 @@ def cmd_baseline_snapshot(args: argparse.Namespace) -> int:
 
     tag_dir.mkdir(parents=True, exist_ok=True)
 
-    # Copy needs.json
-    shutil.copy2(needs_json, tag_dir / "needs.json")
+    # Copy needs file (preserve extension for YAML support)
+    needs_filename = needs_json.name  # e.g. "needs.json" or "needs.yaml"
+    shutil.copy2(needs_json, tag_dir / needs_filename)
 
     # Write manifest
     needs_count = _count_needs(needs_json)
@@ -101,7 +90,7 @@ def cmd_baseline_snapshot(args: argparse.Namespace) -> int:
         "tag": tag,
         "created_at": _utc_now_iso(),
         "message": str(getattr(args, "message", "") or "").strip(),
-        "needs_json": "needs.json",
+        "needs_file": needs_filename,
         "needs_count": needs_count,
     }
     if parent:
@@ -119,25 +108,39 @@ def cmd_baseline_snapshot(args: argparse.Namespace) -> int:
 def _load_baseline(dirpath: Path) -> Optional[dict[str, Any]]:
     """Load a baseline's manifest + needs. Returns None if invalid."""
     manifest_path = dirpath / MANIFEST_FILE
-    needs_path = dirpath / "needs.json"
-    if not manifest_path.is_file() or not needs_path.is_file():
+    if not manifest_path.is_file():
         return None
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        needs_data = json.loads(needs_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+    # Support both old (needs_json) and new (needs_file) manifest keys
+    needs_filename = manifest.get("needs_file") or manifest.get("needs_json", "needs.json")
+    needs_path = dirpath / needs_filename
+    if not needs_path.is_file():
+        return None
+
+    try:
+        needs_data = _load_needs(needs_path)
     except Exception:
         return None
     return {"manifest": manifest, "needs_data": needs_data}
 
 
 def _extract_needs(data: Any) -> dict[str, dict[str, Any]]:
-    """Normalize needs.json into {id: need_dict}."""
+    """Normalize needs data (list from _load_needs or raw dict) into {id: need_dict}."""
     needs: dict[str, dict[str, Any]] = {}
-    raw: list[dict[str, Any]] = []
 
     if isinstance(data, list):
-        raw = [n for n in data if isinstance(n, dict)]
-    elif isinstance(data, dict):
+        # Already normalized by _load_needs
+        for n in data:
+            if isinstance(n, dict) and n.get("id"):
+                needs[str(n["id"])] = n
+        return needs
+
+    raw: list[dict[str, Any]] = []
+    if isinstance(data, dict):
         if isinstance(data.get("needs"), list):
             raw = [n for n in data["needs"] if isinstance(n, dict)]
         elif isinstance(data.get("versions"), dict):
@@ -352,7 +355,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_snap.add_argument("--tag", required=True, help="Baseline tag (e.g., v1.0, release-2026Q2)")
     p_snap.add_argument("--message", default="", help="Human-readable description of this baseline")
     p_snap.add_argument("--parent", default=None, help="Parent baseline tag (for lineage)")
-    p_snap.add_argument("--needs-json", type=Path, default=None, help="Path to needs.json")
+    p_snap.add_argument("--needs-json", type=Path, default=None, help="Path to needs.json or needs.yaml")
     p_snap.add_argument("--project", default=".", help="Project directory (default: .)")
     p_snap.add_argument("--force", action="store_true", help="Overwrite existing baseline")
     p_snap.set_defaults(func=cmd_baseline_snapshot)

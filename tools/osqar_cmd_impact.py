@@ -252,7 +252,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_impact.add_argument(
         "needs_json",
         type=Path,
-        help="Path to needs.json produced by sphinx-needs",
+        help="Path to needs.json or needs.yaml produced by sphinx-needs",
     )
     p_impact.add_argument(
         "--need-id",

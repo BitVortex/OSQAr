@@ -7,12 +7,15 @@ This tool scans implementation and test source trees for OSQAr need IDs such as:
 - TEST_* (verification)
 
 It optionally compares IDs found in code to IDs defined in a sphinx-needs
-`needs.json` export and can enforce simple, CI-friendly rules like:
+``needs.json`` (or ``needs.yaml``) export and can enforce simple, CI-friendly rules like:
 - every REQ_/ARCH_ must appear at least once in implementation sources
 - every TEST_ must appear at least once in test sources
 
+YAML support is provided via PyYAML (optional dependency). Install with
+``pip install pyyaml``.
+
 Design goals:
-- dependency-free (stdlib only)
+- dependency-free (stdlib only) for JSON mode
 - robust across languages by treating files as text
 - safe defaults (reporting by default; enforcement is opt-in)
 """
@@ -34,7 +37,54 @@ def _utc_now_iso() -> str:
 
 
 def _load_needs_ids(path: Path) -> list[str]:
-    data = json.loads(path.read_text(encoding="utf-8"))
+    """Load need IDs from a JSON or YAML file. Auto-detects format by extension."""
+    suffix = path.suffix.lower()
+    raw = path.read_text(encoding="utf-8")
+
+    if suffix in (".yaml", ".yml"):
+        try:
+            import yaml as _yaml
+        except ImportError:
+            raise ImportError("YAML support requires PyYAML. Install: pip install pyyaml") from None
+        data = _yaml.safe_load(raw)
+
+        def normalize_ids(needs: Any) -> list[str]:
+            out: list[str] = []
+            if isinstance(needs, list):
+                for n in needs:
+                    if isinstance(n, dict) and n.get("id"):
+                        out.append(str(n["id"]))
+            elif isinstance(needs, dict):
+                for need_id, need_data in needs.items():
+                    if isinstance(need_data, dict) and need_data.get("id"):
+                        out.append(str(need_data["id"]))
+                    else:
+                        out.append(str(need_id))
+            return out
+
+        # Walk the sphinx-needs YAML structure (same JSON formats)
+        if isinstance(data, dict):
+            if isinstance(data.get("needs"), list):
+                return normalize_ids(data["needs"])
+            if isinstance(data.get("needs"), dict):
+                return normalize_ids(data["needs"])
+            if isinstance(data.get("versions"), dict):
+                versions = data["versions"]
+                current_version = str(data.get("current_version") or "")
+                chosen_version = current_version if current_version in versions else None
+                if chosen_version is None:
+                    keys = sorted(str(k) for k in versions.keys())
+                    chosen_version = keys[0] if keys else None
+                if chosen_version is not None and chosen_version in versions and isinstance(versions[chosen_version], dict):
+                    v = versions[chosen_version]
+                    if "needs" in v:
+                        return normalize_ids(v.get("needs"))
+        if isinstance(data, list):
+            return normalize_ids(data)
+        raise ValueError("Unrecognized needs format")
+    else:
+        # JSON path (original logic, unchanged)
+        data = json.loads(raw)
 
     def normalize_ids(needs: Any) -> list[str]:
         out: list[str] = []

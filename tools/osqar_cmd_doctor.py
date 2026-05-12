@@ -524,7 +524,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_doc.add_argument(
         "--needs-json",
         default=None,
-        help="Override needs.json path for --traceability",
+        help="Override needs.json path for --traceability (also accepts .yaml)",
     )
     p_doc.add_argument(
         "--exclude",

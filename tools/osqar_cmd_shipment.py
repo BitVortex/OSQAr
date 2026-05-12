@@ -1425,7 +1425,7 @@ def register(sub: argparse._SubParsersAction) -> None:
         action="store_true",
         help="Also validate needs.json traceability",
     )
-    p_ver.add_argument("--needs-json", default=None, help="Override needs.json path")
+    p_ver.add_argument("--needs-json", default=None, help="Override needs.json path (also accepts .yaml)")
     p_ver.add_argument(
         "--json-report",
         default=None,
@@ -1578,7 +1578,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_tr2.add_argument(
         "--needs-json",
         default=None,
-        help="Override needs.json path (default: <shipment>/needs.json)",
+        help="Override needs.json path (default: <shipment>/needs.json, also accepts .yaml)",
     )
     p_tr2.add_argument(
         "--json-report",

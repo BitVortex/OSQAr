@@ -306,10 +306,27 @@ def default_shipment_dir(project_dir: Path) -> Path:
 
 
 def find_needs_json(shipment_dir: Path) -> Optional[Path]:
+    """Find needs.json or needs.yaml/.yml in a shipment directory.
+
+    Returns the JSON path if available, otherwise the YAML path.
+    Prefers JSON for backward compatibility with sphinx-needs output.
+    """
+    # Prefer JSON (sphinx-needs native output)
     candidate = shipment_dir / "needs.json"
     if candidate.is_file():
         return candidate
+    # Try YAML (exchange format from external tools)
+    for yaml_candidate in (shipment_dir / "needs.yaml", shipment_dir / "needs.yml"):
+        if yaml_candidate.is_file():
+            return yaml_candidate
+    # Walk the tree for any needs file
     for p in shipment_dir.rglob("needs.json"):
+        if p.is_file():
+            return p
+    for p in shipment_dir.rglob("needs.yaml"):
+        if p.is_file():
+            return p
+    for p in shipment_dir.rglob("needs.yml"):
         if p.is_file():
             return p
     return None

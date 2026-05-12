@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """Traceability checks for OSQAr sphinx-needs exports.
 
-This tool consumes the `needs.json` produced by sphinx-needs (via `needs_build_json=True`)
-and enforces basic, audit-friendly traceability rules.
+This tool consumes the ``needs.json`` (or ``needs.yaml``) produced by
+sphinx-needs (via ``needs_build_json=True``) and enforces basic,
+audit-friendly traceability rules.
 
-It is intentionally dependency-free (stdlib only) so it can run in CI reliably.
+YAML support is provided via PyYAML (optional dependency). Install with
+``pip install pyyaml`` for YAML exchange format support alongside JSON.
+
+It is intentionally dependency-free (stdlib only) for JSON mode so it can
+run in CI reliably without extra packages.
 """
 
 from __future__ import annotations
@@ -34,17 +39,17 @@ def _as_str_list(value: Any) -> list[str]:
     return [str(value)]
 
 
-def _load_needs(path: Path) -> list[dict[str, Any]]:
-    data = json.loads(path.read_text(encoding="utf-8"))
-
-    if isinstance(data, dict):
-        if "needs" in data:
-            if isinstance(data["needs"], list):
-                return [n for n in data["needs"] if isinstance(n, dict)]
+def _normalize_needs_list(needs_data: Any) -> list[dict[str, Any]]:
+    """Normalize loaded needs data (from JSON or YAML) into a list of dicts
+    with 'id' keys, regardless of sphinx-needs export format variant."""
+    if isinstance(needs_data, dict):
+        if "needs" in needs_data:
+            if isinstance(needs_data["needs"], list):
+                return [n for n in needs_data["needs"] if isinstance(n, dict)]
             # workspace-combined format: needs as dict keyed by ID
-            if isinstance(data["needs"], dict):
+            if isinstance(needs_data["needs"], dict):
                 out: list[dict[str, Any]] = []
-                for need_id, need_data in data["needs"].items():
+                for need_id, need_data in needs_data["needs"].items():
                     if not isinstance(need_data, dict):
                         continue
                     if "id" not in need_data:
@@ -52,9 +57,9 @@ def _load_needs(path: Path) -> list[dict[str, Any]]:
                     out.append(need_data)
                 return out
         # sphinx-needs builder format: top-level has 'versions' keyed by version name.
-        if "versions" in data and isinstance(data.get("versions"), dict):
-            versions = data["versions"]
-            current_version = data.get("current_version", "")
+        if "versions" in needs_data and isinstance(needs_data.get("versions"), dict):
+            versions = needs_data["versions"]
+            current_version = needs_data.get("current_version", "")
             if current_version in versions and isinstance(
                 versions[current_version], dict
             ):
@@ -66,16 +71,56 @@ def _load_needs(path: Path) -> list[dict[str, Any]]:
                     for need_id, need_data in needs.items():
                         if not isinstance(need_data, dict):
                             continue
-                        # Some formats store the id only as the dict key.
                         if "id" not in need_data:
                             need_data = {"id": str(need_id), **need_data}
                         out.append(need_data)
                     return out
 
-    if isinstance(data, list):
-        return [n for n in data if isinstance(n, dict)]
+    if isinstance(needs_data, list):
+        return [n for n in needs_data if isinstance(n, dict)]
 
-    raise ValueError("Unrecognized needs.json format")
+    raise ValueError("Unrecognized needs format")
+
+
+def _load_needs(path: Path) -> list[dict[str, Any]]:
+    """Load needs from a JSON or YAML file. Auto-detects format by extension.
+
+    ``.yaml`` / ``.yml`` → YAML (requires ``pip install pyyaml``)
+    ``.json`` / other → JSON (stdlib, no dependencies)
+    """
+    suffix = path.suffix.lower()
+    raw = path.read_text(encoding="utf-8")
+
+    if suffix in (".yaml", ".yml"):
+        # --- YAML path ---
+        try:
+            import yaml as _yaml
+        except ImportError:
+            raise ImportError(
+                "YAML support requires PyYAML. Install: pip install pyyaml"
+            ) from None
+        data = _yaml.safe_load(raw)  # type: ignore[union-attr]
+        if data is None:
+            raise ValueError(f"Empty YAML file: {path}")
+        return _normalize_needs_list(data)
+
+    # --- JSON path (default) ---
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        # Fallback: try YAML if JSON parsing fails (e.g. .json extension on YAML content)
+        try:
+            import yaml as _yaml
+        except ImportError:
+            raise ValueError(
+                f"Failed to parse {path} as JSON and PyYAML is not installed. "
+                f"Install with: pip install pyyaml"
+            ) from None
+        data = _yaml.safe_load(raw)  # type: ignore[union-attr]
+        if data is None:
+            raise ValueError(f"Empty file: {path}")
+
+    return _normalize_needs_list(data)
 
 
 def _collect_trace_links(need: dict[str, Any]) -> set[str]:

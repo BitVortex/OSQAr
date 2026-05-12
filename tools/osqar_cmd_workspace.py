@@ -1908,7 +1908,7 @@ def register(sub: argparse._SubParsersAction) -> None:
         action="store_true",
         help="Also run doctor (shipment-mode) for each discovered shipment and write per-shipment JSON reports",
     )
-    p_wr.add_argument("--needs-json", default=None, help="Override needs.json path")
+    p_wr.add_argument("--needs-json", default=None, help="Override needs.json path (also accepts .yaml)")
     p_wr.add_argument(
         "--exclude",
         action="append",
@@ -1986,7 +1986,7 @@ def register(sub: argparse._SubParsersAction) -> None:
         action="store_true",
         help="Also run doctor (shipment-mode) for each discovered shipment",
     )
-    p_wv.add_argument("--needs-json", default=None, help="Override needs.json path")
+    p_wv.add_argument("--needs-json", default=None, help="Override needs.json path (also accepts .yaml)")
     p_wv.add_argument("--enforce-req-has-test", action="store_true")
     p_wv.add_argument("--enforce-arch-traces-req", action="store_true")
     p_wv.add_argument("--enforce-test-traces-req", action="store_true")
@@ -2054,7 +2054,7 @@ def register(sub: argparse._SubParsersAction) -> None:
         action="store_true",
         help="Also run doctor (shipment-mode) for each intaked shipment and write per-shipment JSON reports",
     )
-    p_wi.add_argument("--needs-json", default=None, help="Override needs.json path")
+    p_wi.add_argument("--needs-json", default=None, help="Override needs.json path (also accepts .yaml)")
     p_wi.add_argument("--enforce-req-has-test", action="store_true")
     p_wi.add_argument("--enforce-arch-traces-req", action="store_true")
     p_wi.add_argument("--enforce-test-traces-req", action="store_true")
@@ -2084,7 +2084,7 @@ def register(sub: argparse._SubParsersAction) -> None:
         "traceability",
         help="Run traceability checks on a combined workspace needs.json",
     )
-    p_wt.add_argument("--needs-json", default=None, help="Path to combined needs.json (default: _build/workspace/needs.json)")
+    p_wt.add_argument("--needs-json", default=None, help="Path to combined needs.json or needs.yaml (default: _build/workspace/needs.json)")
     p_wt.add_argument("--json-report", default=None, help="Write JSON traceability report")
     p_wt.add_argument("--req-prefix", action="append", default=[], help="Requirement ID prefix for workspace (repeatable)")
     p_wt.add_argument("--arch-prefix", action="append", default=[], help="Architecture ID prefix (repeatable)")

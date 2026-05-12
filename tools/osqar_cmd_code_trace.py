@@ -58,7 +58,7 @@ def register(sub: argparse._SubParsersAction) -> None:
         "--needs-json",
         type=Path,
         default=None,
-        help="Optional needs.json to define expected REQ_/ARCH_/TEST_ IDs",
+        help="Optional needs.json or needs.yaml to define expected REQ_/ARCH_/TEST_ IDs",
     )
     p_ct.add_argument(
         "--json-report",

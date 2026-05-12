@@ -676,7 +676,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     gsn_sub = p_gsn.add_subparsers(dest="gsn_cmd", required=True)
 
     p_gen = gsn_sub.add_parser("generate", help="Generate GSN diagram/spec from needs.json")
-    p_gen.add_argument("needs_json", type=Path, help="Path to needs.json")
+    p_gen.add_argument("needs_json", type=Path, help="Path to needs.json or needs.yaml")
     p_gen.add_argument(
         "--output", default=None,
         help="Output path (default: gsn_safety_case.puml for plantuml, gsn_safety_case.yaml for gsn2x-yaml)",

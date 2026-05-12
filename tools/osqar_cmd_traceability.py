@@ -333,7 +333,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_tr = sub.add_parser(
         "traceability", help="Run traceability checks or export traceability matrix"
     )
-    p_tr.add_argument("needs_json", type=Path, help="Path to needs.json")
+    p_tr.add_argument("needs_json", type=Path, help="Path to needs.json or needs.yaml")
     p_tr.add_argument(
         "--json-report", type=Path, default=None, help="Write JSON report to this path"
     )
