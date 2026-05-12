@@ -38,8 +38,19 @@ def _load_needs(path: Path) -> list[dict[str, Any]]:
     data = json.loads(path.read_text(encoding="utf-8"))
 
     if isinstance(data, dict):
-        if "needs" in data and isinstance(data["needs"], list):
-            return [n for n in data["needs"] if isinstance(n, dict)]
+        if "needs" in data:
+            if isinstance(data["needs"], list):
+                return [n for n in data["needs"] if isinstance(n, dict)]
+            # workspace-combined format: needs as dict keyed by ID
+            if isinstance(data["needs"], dict):
+                out: list[dict[str, Any]] = []
+                for need_id, need_data in data["needs"].items():
+                    if not isinstance(need_data, dict):
+                        continue
+                    if "id" not in need_data:
+                        need_data = {"id": str(need_id), **need_data}
+                    out.append(need_data)
+                return out
         # sphinx-needs builder format: top-level has 'versions' keyed by version name.
         if "versions" in data and isinstance(data.get("versions"), dict):
             versions = data["versions"]
