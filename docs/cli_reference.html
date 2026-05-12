@@ -427,7 +427,7 @@ Only use workspace config from a location you control.</p>
 <li><p><a class="reference internal" href="#cli-baseline"><span class="std std-ref">baseline</span></a> — Versioned requirement baselines (snapshot, list, diff).</p></li>
 <li><p><a class="reference internal" href="#cli-checksum"><span class="std std-ref">checksum</span></a> — Generate/verify checksum manifests.</p></li>
 <li><p><a class="reference internal" href="#cli-framework"><span class="std std-ref">framework</span></a> — Framework bundle helpers (release/CI).</p></li>
-<li><p><a class="reference internal" href="#cli-gsn"><span class="std std-ref">gsn</span></a> — GSN safety case support (generate gsn2x specifications).</p></li>
+<li><p><a class="reference internal" href="#cli-gsn"><span class="std std-ref">gsn</span></a> — GSN safety case diagrams (PlantUML) and specifications.</p></li>
 <li><p><a class="reference internal" href="#cli-shipment"><span class="std std-ref">shipment</span></a> — Shipment workflows (build, prepare, verify, package, incremental).</p></li>
 <li><p><a class="reference internal" href="#cli-sign"><span class="std std-ref">sign</span></a> — Cryptographic manifest signing (GPG detached signatures).</p></li>
 <li><p><a class="reference internal" href="#cli-workspace"><span class="std std-ref">workspace</span></a> — Workspace workflows (list, report, diff, verify, intake, combine, traceability).</p></li>
@@ -1352,23 +1352,33 @@ tracking field-level deltas (<code class="docutils literal notranslate"><span cl
 </section>
 <section id="gsn">
 <span id="cli-gsn"></span><h3>gsn<a class="headerlink" href="#gsn" title="Link to this heading">¶</a></h3>
-<p>Generate GSN (Goal Structuring Notation) safety case specifications from
-<code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">safety-case::</span></code> needs in a sphinx-needs <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> export.</p>
-<p>The output is a <a class="reference external" href="https://github.com/jonasthewolf/gsn2x">gsn2x</a>-compatible
-YAML specification that can be rendered to PlantUML, TikZ, or Graphviz diagrams.
-When <code class="docutils literal notranslate"><span class="pre">--render</span></code> is passed and <code class="docutils literal notranslate"><span class="pre">gsn2x</span></code> is installed, the diagram is rendered
-immediately. When <code class="docutils literal notranslate"><span class="pre">gsn2x</span></code> is not available, the YAML spec is still produced
-and can be rendered separately.</p>
+<p>Generate GSN (Goal Structuring Notation) safety case diagrams and
+specifications from <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">safety-case::</span></code> needs in a sphinx-needs
+<code class="docutils literal notranslate"><span class="pre">needs.json</span></code> export.</p>
+<p><strong>Two backends:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">plantuml</span></code> (default) — produces a <code class="docutils literal notranslate"><span class="pre">.puml</span></code> file with GSN elements:
+goals (rectangles), strategies (hexagons), solutions (circles),
+context (rectangles), and assumptions (ellipses). Renderable via
+<code class="docutils literal notranslate"><span class="pre">plantuml</span></code> or directly embeddable in Sphinx via
+<code class="docutils literal notranslate"><span class="pre">sphinxcontrib.plantuml</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gsn2x-yaml</span></code> (legacy) — produces a gsn2x-compatible YAML
+specification. <strong>Note:</strong> the actual gsn2x tool
+(<a class="reference external" href="https://github.com/jonasthewolf/gsn2x">jonasthewolf/gsn2x</a>)
+is a Rust binary not on PyPI and uses a different format.</p></li>
+</ul>
+<p>When <code class="docutils literal notranslate"><span class="pre">--render</span></code> is passed with the PlantUML backend, the <code class="docutils literal notranslate"><span class="pre">.puml</span></code>
+is rendered to PNG via the system <code class="docutils literal notranslate"><span class="pre">plantuml</span></code> binary.</p>
 <p>Safety-case needs are identified by the <code class="docutils literal notranslate"><span class="pre">SC_</span></code> ID prefix.</p>
 <section id="id54">
 <h4>Subcommands<a class="headerlink" href="#id54" title="Link to this heading">¶</a></h4>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">gsn</span> <span class="pre">generate</span></code> — generate gsn2x YAML from needs.json</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gsn</span> <span class="pre">generate</span></code> — generate a GSN diagram or specification from needs.json</p></li>
 </ul>
 </section>
 <section id="id55">
 <h4>Synopsis<a class="headerlink" href="#id55" title="Link to this heading">¶</a></h4>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar gsn generate &lt;needs_json&gt; [--output &lt;path&gt;] [--render]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar gsn generate &lt;needs_json&gt; [--output &lt;path&gt;] [--backend {plantuml|gsn2x-yaml}] [--render]</span>
 </pre></div>
 </div>
 </section>
@@ -1376,17 +1386,23 @@ and can be rendered separately.</p>
 <h4>Options<a class="headerlink" href="#id56" title="Link to this heading">¶</a></h4>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">needs_json</span></code>: path to <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> produced by sphinx-needs</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: output YAML path (default: <code class="docutils literal notranslate"><span class="pre">gsn_safety_case.yaml</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--render</span></code>: also render via gsn2x (requires <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">gsn2x</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: output path (default: <code class="docutils literal notranslate"><span class="pre">gsn_safety_case.puml</span></code> for plantuml,
+<code class="docutils literal notranslate"><span class="pre">gsn_safety_case.yaml</span></code> for gsn2x-yaml)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--backend</span></code>: output backend, <code class="docutils literal notranslate"><span class="pre">plantuml</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">gsn2x-yaml</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--render</span></code>: also render to PNG via system <code class="docutils literal notranslate"><span class="pre">plantuml</span></code> (PlantUML backend only;
+requires <code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">plantuml</span></code>)</p></li>
 </ul>
 </section>
 <section id="id57">
 <h4>Example<a class="headerlink" href="#id57" title="Link to this heading">¶</a></h4>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Generate<span class="w"> </span>gsn2x<span class="w"> </span>YAML<span class="w"> </span>from<span class="w"> </span>safety-case<span class="w"> </span>needs
-<span class="go">osqar gsn generate ./_build/html/needs.json --output gsn_safety_case.yaml</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Generate<span class="w"> </span>PlantUML<span class="w"> </span>GSN<span class="w"> </span>diagram<span class="w"> </span><span class="o">(</span>default<span class="o">)</span>
+<span class="go">osqar gsn generate ./_build/html/needs.json --output gsn_safety_case.puml</span>
 
-<span class="gp"># </span>Generate<span class="w"> </span>and<span class="w"> </span>render<span class="w"> </span><span class="o">(</span>requires<span class="w"> </span>gsn2x<span class="o">)</span>
-<span class="go">osqar gsn generate ./_build/html/needs.json --render</span>
+<span class="gp"># </span>Generate,<span class="w"> </span>render,<span class="w"> </span>and<span class="w"> </span>embed<span class="w"> </span><span class="k">in</span><span class="w"> </span>Sphinx<span class="w"> </span>docs
+<span class="go">osqar gsn generate ./_build/html/needs.json --output _static/gsn_safety_case.puml --render</span>
+
+<span class="gp"># </span>Legacy<span class="w"> </span>gsn2x<span class="w"> </span>YAML
+<span class="go">osqar gsn generate ./_build/html/needs.json --backend gsn2x-yaml</span>
 </pre></div>
 </div>
 </section>
