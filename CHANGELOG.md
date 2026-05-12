@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-05-12
+
+### Added
+- **XLSX traceability matrix export** (`osqar traceability --format xlsx`): Excel export
+  with bold headers and auto-fit columns. Requires `openpyxl` (optional). (#20)
+- **Incremental shipment** (`osqar shipment prepare --incremental`): skip pipeline stages
+  whose inputs haven't changed since last successful run. (#13)
+- **Workspace combine** (`osqar workspace combine`): merge multiple project
+  ``needs.json`` exports with namespace prefixes. (#17)
+- **GPG manifest signing** (`osqar sign sign` / `sign verify`): detached signatures for
+  shipment manifest authenticity (ISO 26262-8 §11.4.4). (#18)
+- **GSN safety case support** (`osqar gsn generate`): generate gsn2x-compatible YAML from
+  ``.. safety-case::`` needs, with optional PlantUML rendering. (#18)
+- **Change impact analysis** (`osqar impact`): transitive closure on traceability links
+  from a seed need ID. Tree/JSON output, configurable direction and depth. (#14)
+- **Requirement baseline versioning** (`osqar baseline`): snapshot, list, and diff commands
+  for versioned requirement baselines. (#15)
+- **CSV traceability matrix export** (`osqar traceability --format csv`): spreadsheet-
+  ready export with linked artifact columns. (#19)
+
+### Changed
+- **Documentation restructured**: new Getting Started guide, role-based guides (Supplier,
+  Integrator), and Professional Deployment section (lifecycle management, multi-project
+  workflows, collaboration). Complete CLI reference with all prefix flags.
+- **CI integration guide**: uses OSQAr-cJSON as canonical reference with direct file links.
+- **ASIL D claim language**: consistently framed as "ISO 26262 SEooC qualification attempt
+  targeting ASIL D" across all public-facing documentation. Academic paper references
+  removed from OSQAr-cJSON descriptions.
+
+### Fixed
+- `_load_needs` handles workspace-combined `needs.json` dict format (key regression after
+  `osqar workspace combine`).
+- `openpyxl` properly integrated as optional dependency in `pyproject.toml` evidence group;
+  `poetry.lock` regenerated and in sync.
+- Git hooks fixed for container environments: unset `VIRTUAL_ENV` so Poetry targets
+  `$repo_root/.venv` instead of the agent's own venv; add `~/.local/bin`, `~/bin`,
+  `~/.cargo/bin` to `PATH` in hooks.
+- Rust toolchain (`cargo`, `rustc`) installed for `rust_hello_world` example validation.
+
 ## [0.7.3] - 2026-05-11
 
 ### Added

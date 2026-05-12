@@ -87,13 +87,13 @@ Replace the ``<PLACEHOLDER>`` tokens:
      - ``IMPL_``
    * - ``<OSQAR_VERSION>``
      - Pinned OSQAr CLI version
-     - ``0.7.0``
+     - ``0.8.0``
    * - ``<SOURCE_FILES>``
      - Shell commands to copy source into shipment
      - ``cp cjson-source/cJSON.c ...``
 
 The workflow triggers on pushes to ``main`` and on tags matching
-``<libversion>-<osqarversion>`` (e.g., ``1.7.19-0.7.0``).
+``<libversion>-<osqarversion>`` (e.g., ``1.7.19-0.8.0``).
 
 CI job summary
 --------------
@@ -181,8 +181,8 @@ When the pipeline passes, tag a release to trigger the automated shipment:
 
 .. code-block:: bash
 
-   git tag -a "1.7.19-0.7.0" -m "Library v1.7.19 — OSQAr v0.7.0 qualification"
-   git push origin "1.7.19-0.7.0"
+   git tag -a "1.7.19-0.8.0" -m "Library v1.7.19 — OSQAr v0.8.0 qualification"
+   git push origin "1.7.19-0.8.0"
 
 CI runs on the tag push, assembles the shipment, and creates a GitHub Release
 with the shipment ZIP and SHA256SUMS attached.
