@@ -100,6 +100,17 @@ Recommended integrator procedure
      with, and re-transfer the artifact.
    - Do not regenerate ``SHA256SUMS`` on the receiver side as a substitute for verification.
 
+2a. **Optional: verify a GPG detached signature** (authenticity). If the supplier
+   signed the manifest, verify the signature before relying on the shipment content:
+
+   .. code-block:: bash
+
+      osqar sign verify --manifest /path/to/shipment/SHA256SUMS --signature /path/to/SHA256SUMS.sig
+
+   If verification fails, reject the shipment as unauthentic.  The checksum manifest
+   alone proves *integrity*; the signature proves *authenticity* — that the shipment was
+   produced by the claimed supplier.  For higher integrity levels, prefer verifying both.
+
 3. Verify traceability artifacts (machine-readable) as part of intake:
 
    - ``needs.json``: the exported traceability graph

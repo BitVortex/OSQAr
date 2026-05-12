@@ -393,6 +393,8 @@ ISO 26262-8 §9.4.2.4 impact analysis workflows. It performs bidirectional graph
 on the ``needs.json`` traceability graph and shows all reachable needs with their type,
 status, and title.
 
+See :doc:`lifecycle_management` for integrating impact analysis into your change control process.
+
 Synopsis
 ^^^^^^^^
 
@@ -1122,6 +1124,8 @@ Baselines are stored in ``.osqar-baselines/<tag>/`` within the project
 directory, each containing a ``needs.json`` copy and a
 ``baseline-manifest.json`` with metadata.
 
+See :doc:`lifecycle_management` for integrating baselines into your versioning and change control process.
+
 Subcommands
 ^^^^^^^^^^^
 
@@ -1253,6 +1257,8 @@ is rendered to PNG via the system ``plantuml`` binary.
 
 Safety-case needs are identified by the ``SC_`` ID prefix.
 
+See :doc:`using_the_boilerplate` for embedding GSN diagrams in your documentation workflow.
+
 Subcommands
 ^^^^^^^^^^^
 
@@ -1382,6 +1388,8 @@ Cryptographically sign shipment manifests using GPG detached signatures.
 
 Provides integrity *and authenticity* evidence for auditable shipments.
 ISO 26262-8 §11.4.4 expects authenticity evidence for tool chains.
+
+See :doc:`suppliers_guide` (supplier signing) and :doc:`integrators_guide` (verification).
 
 Subcommands
 ^^^^^^^^^^^

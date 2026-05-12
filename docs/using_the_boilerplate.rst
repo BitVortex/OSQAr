@@ -521,6 +521,43 @@ Generate and verify a checksum manifest (default: SHA-256) for a shipped directo
       --manifest ./_build/html/SHA256SUMS \
       --json-report ./_build/html/checksums_report.verify.json
 
+GSN safety case diagrams
+------------------------
+
+If your project defines safety-case needs (``SC_*`` IDs with ``.. safety-case::``
+directives), you can generate GSN (Goal Structuring Notation) diagrams from the
+``needs.json`` traceability graph with :ref:`cli-gsn`:
+
+.. code-block:: bash
+
+   # Generate PlantUML GSN diagram (quick, CI-friendly)
+   osqar gsn generate ./_build/html/needs.json --output _static/gsn_safety_case.puml
+
+   # Render PlantUML to PNG
+   osqar gsn generate ./_build/html/needs.json --render
+
+   # Generate formally-correct GSN diagram (gsn2x backend, for auditor review)
+   osqar gsn generate ./_build/html/needs.json --backend gsn2x-yaml --render
+
+Embed the generated diagram in your Sphinx documentation:
+
+.. code-block:: rst
+
+   .. plantuml:: _static/gsn_safety_case.puml
+      :caption: Safety Case — GSN argument structure
+
+Or use the pre-rendered SVG for formally-correct shapes (strategies as
+parallelograms, context as rounded rectangles per the GSN Community Standard):
+
+.. code-block:: rst
+
+   .. image:: _static/gsn_safety_case.svg
+      :alt: GSN Safety Case Diagram
+
+Two backends are available — see the :ref:`backend comparison <cli-gsn>` for
+guidance on choosing between PlantUML (quick, CI-friendly) and gsn2x (formally
+correct shapes for ISO 26262 auditor review).
+
 Core authoring workflow
 =======================
 
