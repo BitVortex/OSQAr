@@ -6,8 +6,7 @@
      clash with dark mode; override it to be transparent.
    - sphinx-needs "need" tables use their own backgrounds; align them with
      theme CSS variables so they follow the active theme.
-   - PlantUML diagrams are constrained to the text column width, with
-     click-to-zoom via a CSS-only lightbox (:target).
+   - Figure zoom is handled by figure-zoom.js + #osqar-lightbox styles below.
 */
 
 /* --- PlantUML ------------------------------------------------------------ */
@@ -26,59 +25,51 @@ body[data-theme="dark"] p.plantuml img {
 }
 
 /* Constrain PlantUML diagrams to the text column width.
-   SVGs are vector graphics — they remain crisp when scaled down.
-   The user can right-click → Open Image in New Tab for full resolution. */
+   SVGs are vector graphics — they remain crisp when scaled down. */
 p.plantuml object,
 p.plantuml img {
   max-width: 100%;
   height: auto !important;
-  cursor: zoom-in;
 }
 
-/* Subtle scale-up on hover to hint at zoomability. */
-p.plantuml object:hover,
-p.plantuml img:hover {
-  transform: scale(1.02);
-  transition: transform 0.15s ease;
-}
+/* ---- OSQAr Figure Zoom Lightbox (see figure-zoom.js) ---- */
 
-/* CSS-only lightbox for PlantUML diagrams.
-   Click the diagram's parent section heading link (¶) to trigger,
-   or use the diagram's own ID if wrapped in an <a>. */
-.plantuml-lightbox {
-  display: none;
+#osqar-lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 9999;
-  cursor: zoom-out;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
   align-items: center;
   justify-content: center;
+  cursor: zoom-out;
 }
 
-.plantuml-lightbox:target {
-  display: flex;
-}
-
-.plantuml-lightbox img,
-.plantuml-lightbox object {
+#osqar-lightbox img {
   max-width: 95vw;
   max-height: 95vh;
+  object-fit: contain;
   background: #fff;
   border-radius: 4px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
+  cursor: default;
 }
 
-/* Close hint */
-.plantuml-lightbox::after {
-  content: "✕  Click anywhere to close";
+.osqar-lightbox-close {
   position: fixed;
   top: 16px;
   right: 24px;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 10001;
   font-family: system-ui, sans-serif;
-  pointer-events: none;
+  user-select: none;
+}
+
+.osqar-lightbox-close:hover {
+  color: #fff;
 }
 
 
