@@ -278,7 +278,7 @@ Per ISO 26262-8 §7:
    :tags: configuration_management;baseline
 
    **Repository:** <repo-url>
-   **Tag:** v1.7.19-0.8.0
+   **Tag:** v1.7.19-0.9.0
    **Artifacts:** 01-06 RST, conf.py, osqar_project.json, source code
 ```
 
