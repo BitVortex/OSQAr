@@ -39,6 +39,15 @@ osqar build-docs && osqar open-docs
 - Versioned requirement baselines with snapshot/list/diff (`osqar baseline`)
 - Requirement ID prefix overrides (`--req-prefix`, `--arch-prefix`, etc.)
 
+**Scaffolding & skills**
+
+- Language templates for C, C++, Rust, Python (`osqar new --language`)
+- **ASIL‑D C template** (`osqar new --language c --template asil-d_c`) with pre‑populated
+  ISO 26262‑6 software safety requirements, architecture, verification, and lifecycle needs
+- Agent‑ready content‑authoring skills (ISO 26262‑6, ISO 21434, ISO 21448, vehicle programs,
+  compliance documentation) — see `skills/` and the Agent Skills usage guide
+- GSN safety case generation (`osqar gsn generate`) with PlantUML and gsn2x backends
+
 **Shipment & integrity**
 
 - One-shot shipment preparation (`osqar shipment prepare --archive`)
