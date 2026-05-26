@@ -2,7 +2,7 @@
 name: security-coengineering
 description: Add ISO/SAE 21434 cybersecurity qualification content to OSQAr projects. Map TARA results to OSQAr REQ/ARCH/VER needs, integrate with ISO 26262 safety case, and address UN R155/R156 regulatory requirements.
 version: 1.0.0
-license: MIT
+license: Apache-2.0
 ---
 
 # Cybersecurity-Safety Co-Engineering with OSQAr

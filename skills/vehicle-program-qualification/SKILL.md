@@ -2,7 +2,7 @@
 name: vehicle-program-qualification
 description: Scale OSQAr qualification from single-component SEooC to multi-ECU vehicle programs. Covers distributed development, DIA management, cross-ECU safety case composition, and supplier evidence aggregation.
 version: 1.0.0
-license: MIT
+license: Apache-2.0
 ---
 
 # Industry-Scale Automotive Qualification with OSQAr

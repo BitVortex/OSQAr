@@ -2,7 +2,7 @@
 name: compliance-documentation
 description: Generate audit-ready qualification documentation from OSQAr needs. Automate traceability matrices, compliance checklists, gap analyses, evidence indices, and assessment-ready reports mapped to ISO 26262, ISO 21434, and ISO 21448 clauses.
 version: 1.0.0
-license: MIT
+license: Apache-2.0
 ---
 
 # Compliance Documentation Generation with OSQAr

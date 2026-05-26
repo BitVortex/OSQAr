@@ -2,7 +2,7 @@
 name: sotif-qualification
 description: Add ISO 21448 SOTIF qualification content to OSQAr projects. Map triggering events, sensor/algorithm limitations, scenario-based validation, and residual risk to OSQAr REQ/VER/SC needs.
 version: 1.0.0
-license: MIT
+license: Apache-2.0
 ---
 
 # SOTIF Qualification with OSQAr

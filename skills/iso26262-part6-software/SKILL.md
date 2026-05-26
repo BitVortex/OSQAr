@@ -2,7 +2,7 @@
 name: iso26262-part6-software
 description: Author ISO 26262-6 software requirements, architecture, and verification content for OSQAr qualification projects. ASIL-differentiated guidance with clause references.
 version: 1.0.0
-license: MIT
+license: Apache-2.0
 ---
 
 # ISO 26262 Part 6 — Software Development for OSQAr Qualification
