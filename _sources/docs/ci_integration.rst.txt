@@ -181,8 +181,8 @@ When the pipeline passes, tag a release to trigger the automated shipment:
 
 .. code-block:: bash
 
-   git tag -a "1.7.19-0.8.0" -m "Library v1.7.19 — OSQAr v0.8.0 qualification"
-   git push origin "1.7.19-0.8.0"
+   git tag -a "1.7.19-0.9.0" -m "Library v1.7.19 — OSQAr v0.9.0 qualification"
+   git push origin "1.7.19-0.9.0"
 
 CI runs on the tag push, assembles the shipment, and creates a GitHub Release
 with the shipment ZIP and SHA256SUMS attached.

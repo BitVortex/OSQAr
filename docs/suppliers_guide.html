@@ -459,10 +459,10 @@ using a GPG detached signature (<a class="reference internal" href="cli_referenc
 evidence — the integrator can verify that the shipment came from you and was not
 tampered with after signing.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sign the manifest with your GPG key</span>
-osqar<span class="w"> </span>sign<span class="w"> </span>sign<span class="w"> </span>--manifest<span class="w"> </span>_build/html/SHA256SUMS<span class="w"> </span>--key<span class="w"> </span>qualification@example.com
+osqar<span class="w"> </span>sign<span class="w"> </span>create<span class="w"> </span>--manifest<span class="w"> </span>_build/html/SHA256SUMS<span class="w"> </span>--key<span class="w"> </span>qualification@example.com
 
 <span class="c1"># With ASCII armor (human-readable .asc)</span>
-osqar<span class="w"> </span>sign<span class="w"> </span>sign<span class="w"> </span>--manifest<span class="w"> </span>_build/html/SHA256SUMS<span class="w"> </span>--armor
+osqar<span class="w"> </span>sign<span class="w"> </span>create<span class="w"> </span>--manifest<span class="w"> </span>_build/html/SHA256SUMS<span class="w"> </span>--armor
 
 <span class="c1"># Ship SHA256SUMS, SHA256SUMS.sig (or .asc), and the GPG public key</span>
 </pre></div>

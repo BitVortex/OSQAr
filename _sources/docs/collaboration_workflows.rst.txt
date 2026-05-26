@@ -70,7 +70,7 @@ Release branches (useful when multiple releases are supported)
 
 Guidelines:
 
-- Tag releases (e.g., ``v0.2.2``) and keep the shipped documentation reproducible.
+- Tag releases (e.g., ``v1.7.19-0.9.0``) and keep the shipped documentation reproducible.
 - Avoid large refactors on release branches.
 
 Merging strategies

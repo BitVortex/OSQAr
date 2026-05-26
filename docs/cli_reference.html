@@ -919,7 +919,7 @@ missing.</p>
 <section id="id25">
 <h4>Options<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h4>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--version</span></code>: required; release/tag version, e.g. <code class="docutils literal notranslate"><span class="pre">v0.4.2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--version</span></code>: required; release/tag version, e.g. <code class="docutils literal notranslate"><span class="pre">v0.9.0</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--docs-dir</span></code>: path to built framework HTML docs (default: <code class="docutils literal notranslate"><span class="pre">_build/html</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output-dir</span></code>: staging/output directory (default: <code class="docutils literal notranslate"><span class="pre">_dist</span></code>)</p></li>
 </ul>
@@ -1529,16 +1529,16 @@ ISO 26262-8 §11.4.4 expects authenticity evidence for tool chains.</p>
 <section id="id58">
 <h4>Subcommands<a class="headerlink" href="#id58" title="Link to this heading">¶</a></h4>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">sign</span> <span class="pre">sign</span></code> — create a detached signature for a manifest file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sign</span> <span class="pre">create</span></code> — create a detached signature for a manifest file</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">sign</span> <span class="pre">verify</span></code> — verify a detached signature against a manifest</p></li>
 </ul>
 </section>
-<section id="sign-sign">
-<h4>sign sign<a class="headerlink" href="#sign-sign" title="Link to this heading">¶</a></h4>
+<section id="sign-create">
+<h4>sign create<a class="headerlink" href="#sign-create" title="Link to this heading">¶</a></h4>
 </section>
 <section id="id59">
 <h4>Synopsis<a class="headerlink" href="#id59" title="Link to this heading">¶</a></h4>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar sign sign --manifest &lt;path&gt; [--key &lt;id&gt;] [--output &lt;path&gt;] [--armor]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar sign create --manifest &lt;path&gt; [--key &lt;id&gt;] [--output &lt;path&gt;] [--armor]</span>
 </pre></div>
 </div>
 </section>
@@ -1872,7 +1872,7 @@ scope.</p>
 </li>
 <li><a class="reference internal" href="#sign">sign</a><ul>
 <li><a class="reference internal" href="#id58">Subcommands</a></li>
-<li><a class="reference internal" href="#sign-sign">sign sign</a></li>
+<li><a class="reference internal" href="#sign-create">sign create</a></li>
 <li><a class="reference internal" href="#id59">Synopsis</a></li>
 <li><a class="reference internal" href="#id60">Options</a></li>
 <li><a class="reference internal" href="#sign-verify">sign verify</a></li>

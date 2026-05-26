@@ -98,3 +98,13 @@ Full demonstration — OSQAr-cJSON
 For a complete, real-world qualification project, see:
 
 - `OSQAr-cJSON <https://github.com/BitVortex/OSQAr-cJSON>`_ — an ISO 26262 SEooC qualification attempt of the cJSON library targeting ASIL D, with CI-driven evidence shipments, 88% statement coverage, 162 Unity tests, and reproducible builds.
+
+🧠 Agent Skills
+===============
+
+OSQAr ships with content-authoring skills that help authors — human engineers and
+AI agents alike — map ISO standards requirements onto OSQAr qualification needs.
+
+- :doc:`docs/agent_skills_usage` — how agents should navigate the two-tier skill
+  ecosystem (content-authoring + research skills), task routing, clause
+  verification, and common pitfalls

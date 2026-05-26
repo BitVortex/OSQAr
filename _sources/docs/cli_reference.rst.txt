@@ -717,7 +717,7 @@ Synopsis
 Options
 ^^^^^^^
 
-- ``--version``: required; release/tag version, e.g. ``v0.4.2``
+- ``--version``: required; release/tag version, e.g. ``v0.9.0``
 - ``--docs-dir``: path to built framework HTML docs (default: ``_build/html``)
 - ``--output-dir``: staging/output directory (default: ``_dist``)
 
@@ -1394,18 +1394,18 @@ See :doc:`suppliers_guide` (supplier signing) and :doc:`integrators_guide` (veri
 Subcommands
 ^^^^^^^^^^^
 
-- ``sign sign`` — create a detached signature for a manifest file
+- ``sign create`` — create a detached signature for a manifest file
 - ``sign verify`` — verify a detached signature against a manifest
 
-sign sign
-^^^^^^^^^
+sign create
+^^^^^^^^^^^
 
 Synopsis
 ^^^^^^^^
 
 .. code-block:: console
 
-  osqar sign sign --manifest <path> [--key <id>] [--output <path>] [--armor]
+  osqar sign create --manifest <path> [--key <id>] [--output <path>] [--armor]
 
 Options
 ^^^^^^^
