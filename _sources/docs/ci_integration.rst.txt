@@ -93,7 +93,7 @@ Replace the ``<PLACEHOLDER>`` tokens:
      - ``cp cjson-source/cJSON.c ...``
 
 The workflow triggers on pushes to ``main`` and on tags matching
-``<libversion>-<osqarversion>`` (e.g., ``1.7.19-0.8.0``).
+``<libversion>-<osqarversion>`` (e.g., ``1.7.19-0.9.0``).
 
 CI job summary
 --------------
