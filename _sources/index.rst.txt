@@ -47,6 +47,13 @@ A shipment is a reviewable bundle containing **Sphinx documentation with traceab
 
    examples/index
 
+.. toctree::
+   :maxdepth: 1
+   :caption: 🧠 Agent Skills
+   :hidden:
+
+   docs/agent_skills_usage
+
 🚀 Getting Started
 ==================
 

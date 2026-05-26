@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="search" title="Search" href="search.html" /><link rel="next" title="Verification &amp; Test Plan" href="03_verification.html" /><link rel="prev" title="Safety &amp; Functional Requirements" href="01_requirements.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>System Architecture - OSQAr: Temperature Monitor (Rust) documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
@@ -259,11 +259,11 @@
 <h1>System Architecture<a class="headerlink" href="#system-architecture" title="Link to this heading">¶</a></h1>
 <section id="component-architecture">
 <h2>Component Architecture<a class="headerlink" href="#component-architecture" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-2b3126f8">
+<div class="need_container docutils container" id="SNCB-5d5a46be">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The Thermal Sensor Interface Module (TSIM) shall consist of three components: Sensor Driver, Temperature Filter, and State Machine.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_001" title="ARCH_001">ARCH_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The Thermal Sensor Interface Module (TSIM) shall consist of three components: Sensor Driver, Temperature Filter, and State Machine.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_001" title="ARCH_001">ARCH_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -420,11 +420,11 @@ end note
 </figcaption>
 </figure>
 <p>The diagram above shows the complete data flow from sensor input through each processing stage, with timing allocations required by <a class="reference internal" href="01_requirements.html#REQ_SAFETY_002" title="REQ_SAFETY_002"><em class="xref need">(SR) The system shall detec... (REQ_SAFETY_002)</em></a>.</p>
-<div class="need_container docutils container" id="SNCB-eec5682c">
+<div class="need_container docutils container" id="SNCB-71377b2f">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_FUNC_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The Sensor Driver shall read analog input at 100Hz sampling rate.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_FUNC_001" title="ARCH_FUNC_001">ARCH_FUNC_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The Sensor Driver shall read analog input at 100Hz sampling rate.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_FUNC_001" title="ARCH_FUNC_001">ARCH_FUNC_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -445,11 +445,11 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-f3447095">
+<div class="need_container docutils container" id="SNCB-0c7cbd4b">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_FUNC_002">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The Temperature Filter shall apply a 5-sample moving average before state evaluation.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_FUNC_002" title="ARCH_FUNC_002">ARCH_FUNC_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The Temperature Filter shall apply a 5-sample moving average before state evaluation.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_FUNC_002" title="ARCH_FUNC_002">ARCH_FUNC_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -468,11 +468,11 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-4458dd6c">
+<div class="need_container docutils container" id="SNCB-d7144967">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_FUNC_003">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The State Machine shall evaluate temperature against thresholds and output state transitions within 50ms of detection.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_FUNC_003" title="ARCH_FUNC_003">ARCH_FUNC_003</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The State Machine shall evaluate temperature against thresholds and output state transitions within 50ms of detection.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_FUNC_003" title="ARCH_FUNC_003">ARCH_FUNC_003</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -496,11 +496,11 @@ end note
 </section>
 <section id="signal-definition">
 <h2>Signal Definition<a class="headerlink" href="#signal-definition" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-5f3e27ac">
+<div class="need_container docutils container" id="SNCB-e4cb3237">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SIGNAL_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) Raw Temperature Signal shall be a 12-bit analog input representing -40°C to +125°C.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SIGNAL_001" title="ARCH_SIGNAL_001">ARCH_SIGNAL_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) Raw Temperature Signal shall be a 12-bit analog input representing -40°C to +125°C.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SIGNAL_001" title="ARCH_SIGNAL_001">ARCH_SIGNAL_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -527,11 +527,11 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-149eb299">
+<div class="need_container docutils container" id="SNCB-c9d40b76">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SIGNAL_002">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) Temperature Reading shall be a 16-bit signed integer in units of 0.1°C.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SIGNAL_002" title="ARCH_SIGNAL_002">ARCH_SIGNAL_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) Temperature Reading shall be a 16-bit signed integer in units of 0.1°C.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SIGNAL_002" title="ARCH_SIGNAL_002">ARCH_SIGNAL_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -552,11 +552,11 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-236cff73">
+<div class="need_container docutils container" id="SNCB-f5ee5c41">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SIGNAL_003">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) State Output shall be a 1-bit signal: 0=SAFE, 1=UNSAFE.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SIGNAL_003" title="ARCH_SIGNAL_003">ARCH_SIGNAL_003</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) State Output shall be a 1-bit signal: 0=SAFE, 1=UNSAFE.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SIGNAL_003" title="ARCH_SIGNAL_003">ARCH_SIGNAL_003</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -578,11 +578,11 @@ end note
 </section>
 <section id="error-handling">
 <h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-e4284dd9">
+<div class="need_container docutils container" id="SNCB-ed4a121c">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_ERROR_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) If sensor reading is invalid (out of physical bounds), the module shall remain in current state and log an error.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_ERROR_001" title="ARCH_ERROR_001">ARCH_ERROR_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) If sensor reading is invalid (out of physical bounds), the module shall remain in current state and log an error.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_ERROR_001" title="ARCH_ERROR_001">ARCH_ERROR_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -601,11 +601,11 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-aa676638">
+<div class="need_container docutils container" id="SNCB-de649cd4">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_ERROR_002">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The module shall track sensor read failures; after 10 consecutive failures, it shall enter UNSAFE state.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_ERROR_002" title="ARCH_ERROR_002">ARCH_ERROR_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The module shall track sensor read failures; after 10 consecutive failures, it shall enter UNSAFE state.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_ERROR_002" title="ARCH_ERROR_002">ARCH_ERROR_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -661,11 +661,11 @@ end note
 <p><span class="caption-text">Domain-Agnostic SEooC Pattern - Architecture: <a class="reference internal" href="#ARCH_SEOOC_001" title="ARCH_SEOOC_001"><em class="xref need">(ARCH) The TSIM shall be a ... (ARCH_SEOOC_001)</em></a>, <a class="reference internal" href="#ARCH_SEOOC_002" title="ARCH_SEOOC_002"><em class="xref need">(ARCH) TSIM does not implem... (ARCH_SEOOC_002)</em></a></span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
-<div class="need_container docutils container" id="SNCB-5cbad3df">
+<div class="need_container docutils container" id="SNCB-74925cf1">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SEOOC_001">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The TSIM shall be a Safety Element out of Context (SEooC) assuming the integrating system provides safe shutdown capability.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SEOOC_001" title="ARCH_SEOOC_001">ARCH_SEOOC_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) The TSIM shall be a Safety Element out of Context (SEooC) assuming the integrating system provides safe shutdown capability.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SEOOC_001" title="ARCH_SEOOC_001">ARCH_SEOOC_001</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -698,11 +698,11 @@ end note
 </tbody>
 </table>
 </div>
-<div class="need_container docutils container" id="SNCB-cd460d18">
+<div class="need_container docutils container" id="SNCB-dcc78305">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="ARCH_SEOOC_002">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) TSIM does not implement actual shutdown or corrective action; responsibility transfers to integrating system.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SEOOC_002" title="ARCH_SEOOC_002">ARCH_SEOOC_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">(ARCH) TSIM does not implement actual shutdown or corrective action; responsibility transfers to integrating system.</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#ARCH_SEOOC_002" title="ARCH_SEOOC_002">ARCH_SEOOC_002</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -723,11 +723,11 @@ end note
 </section>
 <section id="safety-case-gsn">
 <h2>Safety Case (GSN)<a class="headerlink" href="#safety-case-gsn" title="Link to this heading">¶</a></h2>
-<div class="need_container docutils container" id="SNCB-0b6bbcf6">
+<div class="need_container docutils container" id="SNCB-5a1ed129">
 <table class="need needs_grid_simple needs_layout_clean rtd-exclude-wy-table no-sphinx-material-strip needs_style_none needs_type_need docutils align-default" id="SC_TSIM_TEMP_SAFETY">
 <tbody>
 <tr class="need head row-odd"><td class="need head"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">SC_TSIM_TEMP_SAFETY: The TSIM temperature monitor is free from undetected failures</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#SC_TSIM_TEMP_SAFETY" title="SC_TSIM_TEMP_SAFETY">SC_TSIM_TEMP_SAFETY</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" width="17px" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" width="17px" /></span></span></span> </span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Need</span></span>: </span><strong><span><span class="needs_title"><span class="needs_data">SC_TSIM_TEMP_SAFETY: The TSIM temperature monitor is free from undetected failures</span></span></span></strong><span> <span class="needs-id"><a class="reference internal" href="#SC_TSIM_TEMP_SAFETY" title="SC_TSIM_TEMP_SAFETY">SC_TSIM_TEMP_SAFETY</a></span>  <span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><span><img alt="_images/arrow-down-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-down-circle.svg" style="width: 17px;" /></span></span><span class="needs visible"><span><img alt="_images/arrow-right-circle.svg" class="sn_collapse_img no-scaled-link" src="_images/arrow-right-circle.svg" style="width: 17px;" /></span></span></span> </span></div>
 </div>
 </td>
 </tr>
@@ -824,7 +824,7 @@ end note
 </div><script src="_static/jquery.js?v=5d32c60e"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>
     <script src="_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
