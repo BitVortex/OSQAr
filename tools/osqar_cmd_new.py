@@ -17,6 +17,10 @@ TEMPLATES_BASIC: dict[str, str] = {
     "rust": "rust",
 }
 
+TEMPLATES_ASIL_D_C: dict[str, str] = {
+    "c": "c",
+}
+
 TEMPLATES_EXAMPLE: dict[str, Path] = {
     "c": Path("examples/c_hello_world"),
     "cpp": Path("examples/cpp_hello_world"),
@@ -239,6 +243,11 @@ def cmd_new(args: argparse.Namespace) -> int:
         if template is None:
             print(f"ERROR: Unsupported language: {args.language}", file=sys.stderr)
             return 2
+    elif template_kind == "asil-d_c":
+        template = TEMPLATES_ASIL_D_C.get(args.language)
+        if template is None:
+            print(f"ERROR: ASIL-D C template only supports language=c (got {args.language})", file=sys.stderr)
+            return 2
     else:
         template = None
         if args.language not in TEMPLATES_EXAMPLE:
@@ -257,10 +266,10 @@ def cmd_new(args: argparse.Namespace) -> int:
             return 2
         shutil.rmtree(dest)
 
-    if template_kind == "basic":
+    if template_kind in ("basic", "asil-d_c"):
         try:
-            shared_src = _resource_dir("templates", "basic", "shared")
-            lang_src = _resource_dir("templates", "basic", template)
+            shared_src = _resource_dir("templates", template_kind, "shared")
+            lang_src = _resource_dir("templates", template_kind, template)
         except ModuleNotFoundError:
             print(
                 "ERROR: packaged templates not available (missing osqar_data).\n"
@@ -349,9 +358,9 @@ def register(sub: argparse._SubParsersAction) -> None:
     )
     p_new.add_argument(
         "--template",
-        choices=["basic", "example"],
+        choices=["basic", "example", "asil-d_c"],
         default="basic",
-        help="Template profile (default: basic; 'example' copies the full reference examples)",
+        help="Template profile (default: basic; 'example' copies the full reference examples; 'asil-d_c' provides ASIL D scaffolding for C libraries)",
     )
     p_new.add_argument(
         "--force", action="store_true", help="Overwrite destination if it exists"

@@ -24,6 +24,14 @@ These skills are designed to be used with large language models (LLMs) to assist
 
 No LLM output, regardless of how plausible or authoritative it appears, may be accepted into a qualification baseline without human review. The LLM is a drafting assistant, not an engineer.
 
+## Skill Ecosystem
+
+OSQAr ships two categories of skills:
+
+1. **Content-Authoring Skills** (in this directory): Map ISO standards to OSQAr need types with ASIL-differentiated guidance and RST examples. These are public-safe and shipped with the OSQAr repository. See ``SKILL_INDEX.md`` for the complete catalogue.
+
+2. **Research Skills** (external, agent profile): Provide deep domain knowledge — clause-level requirements, hazard analysis methods, cross-standard navigation. These are part of the Hermes Agent research profile and are NOT shipped with OSQAr. Agents assisting with qualification should load both tiers of skills. See ``docs/agent_skills_usage.rst`` (in the OSQAr documentation) for guidance on navigating the full skill ecosystem.
+
 ## Experimental Status
 
 These skills are provided for **experimental use only**. They have not been validated against any formal qualification, have not been reviewed by an accredited functional safety assessor, and make no claims of fitness for any particular purpose. Use them at your own risk and in compliance with your organization's tool qualification and process requirements.

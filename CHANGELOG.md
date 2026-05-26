@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-05-26
+
+### Added
+- **ASIL-D C scaffolding template** (`osqar new --language c --template asil-d_c`):
+  pre-populated qualification project with 39 software safety requirements (REQ_SSR_*
+  following ISO 26262-6 conventions), 7 architecture elements, 10 verification
+  activities, implementation inventory, and 10 lifecycle management needs —
+  all with ASIL D tags, bidirectional links, and SEooC assumptions of use. (#16)
+- **Agent skills usage guide** (`docs/agent_skills_usage.rst`): comprehensive
+  documentation for LLM agents navigating the OSQAr skill ecosystem — two-tier
+  architecture (content-authoring + research skills), task routing, clause
+  verification gateway, evidence quality gate, and common pitfalls.
+- **Expanded skill index** (`skills/SKILL_INDEX.md`): now documents the full
+  skill ecosystem including external research-profile skills (functional safety
+  fundamentals, ISO 26262 clause-level requirements, hazard analysis methods)
+  with recommended reading orders for 6 qualification scenarios.
+- **Skill ecosystem documentation** in `skills/README.md`: clarifies the
+  relationship between in-repository content-authoring skills and external
+  research-profile skills, with guidance for agents assisting with qualification.
+
+### Changed
+- `skills/SKILL_INDEX.md`: restructured to separate in-repository content-authoring
+  skills from external research skills, with a skill interaction pattern diagram
+  and per-scenario recommended reading orders.
+- `skills/README.md`: expanded disclaimer to cover the full two-tier skill
+  ecosystem and include a pointer to the agent skills usage guide.
+- `index.rst`: added 🧠 Agent Skills toctree section linking to the new
+  `docs/agent_skills_usage.rst`.
+- `osqar_cmd_new.py`: `--template` now accepts `asil-d_c` in addition to
+  `basic` and `example`. Template resolution uses `template_kind` through
+  the copy pipeline (no hardcoded `"basic"` in language-specific paths).
+
 ## [0.8.1] - 2026-05-12
 
 ### Added

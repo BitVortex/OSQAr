@@ -1,0 +1,89 @@
+{
+  "version": "0.1.0",
+  "origin": {
+    "vcs": "git",
+    "path": "."
+  },
+  "commands": {
+    "build": "./build-and-test.sh build",
+    "test": "./build-and-test.sh test"
+  },
+  "verification": {
+    "run": [
+      {
+        "id": "sanitizer",
+        "label": "ASan+UBSan Test Run",
+        "command": "./build-and-test.sh test-sanitizer",
+        "report": "test_results.xml"
+      },
+      {
+        "id": "cppcheck",
+        "label": "Static Analysis (cppcheck)",
+        "command": "./build-and-test.sh static-analysis",
+        "report": "cppcheck_report.txt"
+      },
+      {
+        "id": "coverage",
+        "label": "Coverage Measurement (gcov/lcov)",
+        "command": "./build-and-test.sh coverage",
+        "report": "coverage_report.txt"
+      },
+      {
+        "id": "valgrind",
+        "label": "Valgrind Memcheck",
+        "command": "./build-and-test.sh valgrind",
+        "report": "valgrind_report.txt"
+      },
+      {
+        "id": "complexity",
+        "label": "Complexity Analysis (lizard)",
+        "command": "./build-and-test.sh complexity",
+        "report": "complexity_report.txt"
+      }
+    ],
+    "gaps": {
+      "valgrind": {
+        "activity": "Valgrind Memcheck",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "Memory leak and error detection via Valgrind Memcheck on the full test suite.",
+        "mitigation": "ASan+UBSan instrumentation covers most memory errors; Valgrind planned for CI environment where it is available."
+      },
+      "fuzzing": {
+        "activity": "Fuzzing Campaign (AFL++)",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "24-hour AFL++ fuzzing campaign with ASan+UBSan instrumentation against all external interfaces.",
+        "mitigation": "Comprehensive unit tests cover boundary conditions; fuzzing planned for dedicated CI runner."
+      },
+      "misra_c": {
+        "activity": "MISRA C:2012 Compliance",
+        "status": "not_run",
+        "reason": "commercial_tool_required",
+        "description": "Full MISRA C:2012 compliance verification requires a commercial static analysis tool.",
+        "mitigation": "cppcheck with MISRA addon covers a subset of rules; compiler -Werror -Wall -Wextra covers additional rules. Full MISRA compliance verification planned with qualified tool."
+      },
+      "mc_dc": {
+        "activity": "MC/DC Coverage (ASIL D)",
+        "status": "not_run",
+        "reason": "commercial_tool_required",
+        "description": "Full Modified Condition/Decision Coverage per ISO 26262-6 Table 10 requires commercial tooling.",
+        "mitigation": "gcov/lcov provides branch+block coverage as an approximation. Full MC/DC verification planned with qualified coverage tool."
+      },
+      "stack_depth": {
+        "activity": "Stack Depth Verification",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "Worst-case stack depth analysis for all safety-related call paths.",
+        "mitigation": "No recursion guarantees bounded stack depth; manual stack analysis via compiler -fstack-usage flag."
+      },
+      "reproducible_build": {
+        "activity": "Reproducible Build Verification",
+        "status": "not_run",
+        "reason": "tooling_constraint",
+        "description": "Bit-identical binary across independent rebuilds with SOURCE_DATE_EPOCH.",
+        "mitigation": "Build system configured with SOURCE_DATE_EPOCH support; verification pending CI environment."
+      }
+    }
+  }
+}

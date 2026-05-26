@@ -1,0 +1,130 @@
+/* Theme integration tweaks.
+
+   These rules are designed to be safe with Furo's built-in light/dark modes.
+
+   - PlantUML HTML embeds an inline `background:#...` on the <object>, which can
+     clash with dark mode; override it to be transparent.
+   - sphinx-needs "need" tables use their own backgrounds; align them with
+     theme CSS variables so they follow the active theme.
+   - Figure zoom is handled by figure-zoom.js + #osqar-lightbox styles below.
+*/
+
+/* --- PlantUML ------------------------------------------------------------ */
+
+/* Override sphinxcontrib-plantuml's inline background style. */
+p.plantuml object,
+p.plantuml img {
+  background: transparent !important;
+}
+
+/* Improve contrast for typical black-on-white diagrams in dark mode.
+   (Best-effort: this applies a filter to the rendered asset.) */
+body[data-theme="dark"] p.plantuml object,
+body[data-theme="dark"] p.plantuml img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Constrain PlantUML diagrams to the text column width.
+   SVGs are vector graphics — they remain crisp when scaled down. */
+p.plantuml object,
+p.plantuml img {
+  max-width: 100%;
+  height: auto !important;
+}
+
+/* ---- OSQAr Figure Zoom Lightbox (see figure-zoom.js) ---- */
+
+#osqar-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+
+#osqar-lightbox img {
+  max-width: 95vw;
+  max-height: 95vh;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
+  cursor: default;
+}
+
+.osqar-lightbox-close {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 10001;
+  font-family: system-ui, sans-serif;
+  user-select: none;
+}
+
+.osqar-lightbox-close:hover {
+  color: #fff;
+}
+
+
+/* --- sphinx-needs -------------------------------------------------------- */
+
+table.need {
+  background: var(--color-background-primary, transparent);
+  color: var(--color-foreground-primary, inherit);
+  border: 1px solid var(
+    --color-background-border,
+    var(--color-border, rgba(127, 127, 127, 0.35))
+  );
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+table.need td,
+table.need th {
+  border-color: var(
+    --color-background-border,
+    var(--color-border, rgba(127, 127, 127, 0.35))
+  ) !important;
+}
+
+/* Remove row striping/backgrounds that assume a light page. */
+table.need tr.row-odd,
+table.need tr.row-even {
+  background: transparent !important;
+}
+
+table.need tr.need.head td.need.head {
+  background: var(--color-background-secondary, rgba(127, 127, 127, 0.08));
+}
+
+table.need tr.need.meta td.need.meta {
+  background: var(--color-background-primary, transparent);
+}
+
+table.need tr.need.content td.need.content {
+  background: var(--color-background-primary, transparent);
+}
+
+.needs_head,
+.needs_meta {
+  color: var(--color-foreground-primary, inherit);
+}
+
+.needs_label {
+  color: var(--color-foreground-muted, var(--color-foreground-secondary, #666));
+}
+
+/* --- Responsive needs tables (prevent overflow on narrow viewports) ----- */
+
+table.need {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}

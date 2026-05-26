@@ -1,4 +1,9 @@
-"""Sphinx configuration for OSQAr framework documentation (repo root)."""
+"""Sphinx configuration for OSQAr framework documentation (repo root).
+
+Includes a Python 3.13+ compatibility shim for Sphinx 7.2.x where
+``sphinx.domains.javascript`` imports ``_pseudo_parse_arglist`` from
+``sphinx.domains.python``, but the function was renamed to ``_parse_arglist``.
+"""
 
 from __future__ import annotations
 
@@ -7,6 +12,13 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
+
+# ── Python 3.13+ / Sphinx 7.2.x compatibility ──
+import sphinx.domains.python as _py_domain  # noqa: E402
+if not hasattr(_py_domain, "_pseudo_parse_arglist"):
+    _pseudo = getattr(_py_domain, "_parse_arglist", None)
+    if _pseudo is not None:
+        _py_domain._pseudo_parse_arglist = _pseudo
 
 
 # -- Project information -----------------------------------------------------
