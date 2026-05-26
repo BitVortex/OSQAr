@@ -21,7 +21,6 @@ A shipment is a reviewable bundle containing **Sphinx documentation with traceab
 
    docs/suppliers_guide
    docs/integrators_guide
-   docs/ci_integration
 
 .. toctree::
    :maxdepth: 1
@@ -31,6 +30,7 @@ A shipment is a reviewable bundle containing **Sphinx documentation with traceab
    docs/lifecycle_management
    docs/multi_project_workflows
    docs/collaboration_workflows
+   docs/ci_integration
 
 .. toctree::
    :maxdepth: 1
@@ -66,7 +66,6 @@ A shipment is a reviewable bundle containing **Sphinx documentation with traceab
 
 - :doc:`docs/suppliers_guide` — produce auditable evidence shipments for a component
 - :doc:`docs/integrators_guide` — verify, intake, and integrate received shipments
-- :doc:`docs/ci_integration` — wire OSQAr into GitHub Actions or other CI pipelines
 
 🏢 Professional Deployment
 ==========================
@@ -76,6 +75,7 @@ For organizations adopting OSQAr across teams and projects:
 - :doc:`docs/lifecycle_management` — requirements lifecycle, baselines, change management
 - :doc:`docs/multi_project_workflows` — workspace orchestration, dependency closure, batch intake
 - :doc:`docs/collaboration_workflows` — multi-user workflows, review processes, team coordination
+- :doc:`docs/ci_integration` — wire OSQAr into GitHub Actions or other CI pipelines
 
 🔧 Reference
 ============
