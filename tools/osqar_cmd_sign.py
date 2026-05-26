@@ -117,7 +117,7 @@ def register(sub: argparse._SubParsersAction) -> None:
     )
     sign_sub = p_sign.add_subparsers(dest="sign_cmd", required=True)
 
-    p_s = sign_sub.add_parser("sign", help="Create a detached signature")
+    p_s = sign_sub.add_parser("create", help="Create a detached signature")
     p_s.add_argument("--manifest", required=True, help="Path to manifest file (e.g., SHA256SUMS)")
     p_s.add_argument("--key", default=None, help="GPG key ID or email to sign with")
     p_s.add_argument("--output", default=None, help="Output signature path (default: <manifest>.sig)")

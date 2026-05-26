@@ -43,7 +43,7 @@ osqar build-docs && osqar open-docs
 
 - One-shot shipment preparation (`osqar shipment prepare --archive`)
 - SHA256SUMS manifest generation and verification
-- GPG detached signature support (`osqar sign sign` / `osqar sign verify`)
+- GPG detached signature support (`osqar sign create` / `osqar sign verify`)
 - Incremental mode — only rebuild changed stages
 - Project metadata declaration with OSQAr-qualified dependency pins
 

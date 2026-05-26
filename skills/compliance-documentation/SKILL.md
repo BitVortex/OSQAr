@@ -318,7 +318,7 @@ osqar shipment prepare --project . --skip-verification
 # 5. Shipment packaging with GPG signature
 osqar shipment prepare --project .
 osqar checksum generate --root _shipment --output _shipment/SHA256SUMS
-osqar sign sign --manifest _shipment/SHA256SUMS --key qualification@example.com
+osqar sign create --manifest _shipment/SHA256SUMS --key qualification@example.com
 
 echo "Compliance artifacts generated in _compliance/ and _shipment/"
 ```

@@ -192,10 +192,10 @@ tampered with after signing.
 .. code-block:: bash
 
    # Sign the manifest with your GPG key
-   osqar sign sign --manifest _build/html/SHA256SUMS --key qualification@example.com
+   osqar sign create --manifest _build/html/SHA256SUMS --key qualification@example.com
 
    # With ASCII armor (human-readable .asc)
-   osqar sign sign --manifest _build/html/SHA256SUMS --armor
+   osqar sign create --manifest _build/html/SHA256SUMS --armor
 
    # Ship SHA256SUMS, SHA256SUMS.sig (or .asc), and the GPG public key
 
