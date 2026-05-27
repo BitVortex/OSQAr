@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -290,9 +290,10 @@ reviewed and approved by a competent functional safety engineer before
 inclusion in any qualification baseline. See <code class="docutils literal notranslate"><span class="pre">skills/README.md</span></code> for the
 full disclaimer on LLM usage in safety-critical contexts.</p>
 </div>
-<section id="two-tier-skill-architecture">
-<h2>Two-Tier Skill Architecture<a class="headerlink" href="#two-tier-skill-architecture" title="Link to this heading">¶</a></h2>
-<p>OSQAr skills operate in two complementary tiers:</p>
+<section id="three-tier-skill-architecture">
+<h2>Three-Tier Skill Architecture<a class="headerlink" href="#three-tier-skill-architecture" title="Link to this heading">¶</a></h2>
+<p>OSQAr skills operate in three tiers, layered from concrete tooling to
+organization-internal conventions:</p>
 <div class="table-wrapper docutils container" id="id1">
 <table class="docutils align-default" id="id1">
 <caption><span class="caption-text">Skill Tiers</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
@@ -307,18 +308,23 @@ full disclaimer on LLM usage in safety-critical contexts.</p>
 <tr class="row-even"><td><p><strong>Content-Authoring</strong> (in-repo)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">OSQAr/skills/</span></code></p></td>
 <td><p>How to write OSQAr RST needs, ASIL-differentiated guidance, concrete examples</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">iso26262-part6-software</span></code>, <code class="docutils literal notranslate"><span class="pre">iso26262-part5-hardware</span></code>, <code class="docutils literal notranslate"><span class="pre">security-coengineering</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">iso26262-part6-software</span></code>, <code class="docutils literal notranslate"><span class="pre">security-coengineering</span></code>, <code class="docutils literal notranslate"><span class="pre">sotif-qualification</span></code>, <code class="docutils literal notranslate"><span class="pre">vehicle-program-qualification</span></code>, <code class="docutils literal notranslate"><span class="pre">compliance-documentation</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>Research Skills</strong> (agent profile)</p></td>
+<tr class="row-odd"><td><p><strong>Domain-Specific</strong> (agent profile)</p></td>
 <td><p>Agent’s research skill set</p></td>
-<td><p>Deep domain knowledge: clause-level requirements, hazard analysis methods, standard cross-referencing</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">iso-26262-application</span></code> (65 clause requirements), <code class="docutils literal notranslate"><span class="pre">hazard-analysis-methods</span></code>, <code class="docutils literal notranslate"><span class="pre">functional-safety-fundamentals</span></code></p></td>
+<td><p>Deep domain expertise: clause-level requirements, hazard analysis methods, standard cross-referencing — recommended for standards compliance</p></td>
+<td><p><em>(depends on the agent’s profile and qualification scope)</em></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Organization-Specific</strong> (not shipped)</p></td>
+<td><p>Team-internal repositories</p></td>
+<td><p>Internal working guidelines, process templates, toolchain conventions, review checklists — not suitable for public distribution</p></td>
+<td><p><em>(depends on the organization’s own conventions)</em></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><strong>When assisting with qualification, agents should load BOTH tiers</strong>: research skills
-provide the domain expertise; content-authoring skills provide the OSQAr-specific mapping.</p>
+<p><strong>When assisting with qualification, agents should load the first two tiers</strong>: content-authoring
+skills provide the OSQAr-specific mapping; domain-specific skills provide the standards expertise.</p>
 </section>
 <section id="available-content-authoring-skills-in-repo">
 <h2>Available Content-Authoring Skills (In-Repo)<a class="headerlink" href="#available-content-authoring-skills-in-repo" title="Link to this heading">¶</a></h2>
@@ -372,7 +378,7 @@ provide the domain expertise; content-authoring skills provide the OSQAr-specifi
 </ul>
 <p><strong>Step 2: Load the content-authoring skill.</strong> This gives you need ID conventions,
 ASIL-differentiated guidance, RST examples, and pitfalls specific to OSQAr.</p>
-<p><strong>Step 3: Load the research skill for clause-level backing.</strong> For example:</p>
+<p><strong>Step 3: Load the domain-specific skill for clause-level backing.</strong> For example:</p>
 <ul class="simple">
 <li><p>Working on software → also load <code class="docutils literal notranslate"><span class="pre">iso-26262-application</span></code> (Part 6 sections)</p></li>
 <li><p>Need FMEA/FTA → also load <code class="docutils literal notranslate"><span class="pre">hazard-analysis-methods</span></code></p></li>
@@ -420,7 +426,7 @@ osqar<span class="w"> </span>shipment<span class="w"> </span>prepare<span class=
 claim in a qualification artifact:</p>
 <ol class="arabic simple">
 <li><p><strong>Check the content-authoring skill</strong> — does it reference the clause?</p></li>
-<li><p><strong>Check the research skill</strong> — does the clause-level requirement exist?
+<li><p><strong>Check the domain-specific skill</strong> — does the clause-level requirement exist?
 (Example: <code class="docutils literal notranslate"><span class="pre">iso-26262-application</span></code> lists R-036 through R-042 for Part 6)</p></li>
 <li><p><strong>Verify the clause exists</strong> — use <code class="docutils literal notranslate"><span class="pre">search_files</span></code> on the structure skills
 to confirm the clause number and title (e.g., search for <code class="docutils literal notranslate"><span class="pre">6.4.1</span></code> in
@@ -535,7 +541,7 @@ and should always be loaded when using OSQAr.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Agent Skills for OSQAr Qualification</a><ul>
-<li><a class="reference internal" href="#two-tier-skill-architecture">Two-Tier Skill Architecture</a></li>
+<li><a class="reference internal" href="#three-tier-skill-architecture">Three-Tier Skill Architecture</a></li>
 <li><a class="reference internal" href="#available-content-authoring-skills-in-repo">Available Content-Authoring Skills (In-Repo)</a></li>
 <li><a class="reference internal" href="#qualification-task-skill-routing">Qualification Task → Skill Routing</a></li>
 <li><a class="reference internal" href="#example-authoring-software-requirements-for-an-asil-d-c-library">Example: Authoring Software Requirements for an ASIL D C Library</a></li>
