@@ -14,22 +14,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   activities, implementation inventory, and 10 lifecycle management needs —
   all with ASIL D tags, bidirectional links, and SEooC assumptions of use. (#16)
 - **Agent skills usage guide** (`docs/agent_skills_usage.rst`): comprehensive
-  documentation for LLM agents navigating the OSQAr skill ecosystem — two-tier
-  architecture (content-authoring + research skills), task routing, clause
-  verification gateway, evidence quality gate, and common pitfalls.
+  documentation for LLM agents navigating the OSQAr skill ecosystem — three-tier
+  architecture (content-authoring + domain-specific + organization-specific),
+  task routing, clause verification gateway, evidence quality gate, and common
+  pitfalls.
 - **Expanded skill index** (`skills/SKILL_INDEX.md`): now documents the full
-  skill ecosystem including external research-profile skills (functional safety
+  skill ecosystem including external domain-specific skills (functional safety
   fundamentals, ISO 26262 clause-level requirements, hazard analysis methods)
   with recommended reading orders for 6 qualification scenarios.
 - **Skill ecosystem documentation** in `skills/README.md`: clarifies the
   relationship between in-repository content-authoring skills and external
-  research-profile skills, with guidance for agents assisting with qualification.
+  domain-specific skills, with guidance for agents assisting with qualification.
 
 ### Changed
 - `skills/SKILL_INDEX.md`: restructured to separate in-repository content-authoring
-  skills from external research skills, with a skill interaction pattern diagram
-  and per-scenario recommended reading orders.
-- `skills/README.md`: expanded disclaimer to cover the full two-tier skill
+  skills from external domain-specific skills, with a skill interaction pattern
+  diagram and per-scenario recommended reading orders.
+- `skills/README.md`: expanded disclaimer to cover the full three-tier skill
   ecosystem and include a pointer to the agent skills usage guide.
 - `index.rst`: added 🧠 Agent Skills toctree section linking to the new
   `docs/agent_skills_usage.rst`.

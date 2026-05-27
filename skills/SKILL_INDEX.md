@@ -20,19 +20,20 @@ guidance and concrete RST examples.
 | 4 | `vehicle-program-qualification` | Scale OSQAr from single-component SEooC to multi-ECU, multi-supplier vehicle programs | ISO 26262 Parts 2,4,7,8,10 |
 | 5 | `compliance-documentation` | Generate audit-ready compliance documentation from OSQAr needs — traceability matrices, gap analyses, evidence indices, assessment checklists | ISO 26262, ISO 21434, ISO 21448 |
 
-## Research Profile Skills (External, Agent-Only)
+## Domain-Specific Skills (External, Agent-Only)
 
 These skills are part of the Hermes Agent research profile and are NOT shipped
-with OSQAr. They provide **deep domain knowledge** — clause-level requirements,
-hazard analysis methods, and cross-standard navigation — that informs the
-*what* to write when using the content-authoring skills above.
+with OSQAr. They provide **deep domain expertise** — clause-level requirements,
+hazard analysis methods, and cross-standard navigation — recommended for
+standards compliance work. The specific skills available depend on the agent's
+profile and the qualification scope.
 
 When an agent is assisting with OSQAr qualification, it SHOULD load the
-relevant research skills alongside the content-authoring skills. The two
-skill sets are complementary: research skills provide the domain knowledge;
+relevant domain-specific skills alongside the content-authoring skills. The two
+skill sets are complementary: domain-specific skills provide the standards expertise;
 content-authoring skills provide the OSQAr-specific mapping.
 
-### Core Research Skills
+### Core Domain Skills
 
 | # | Skill | Purpose | Relationship to OSQAr |
 |---|-------|---------|----------------------|
@@ -43,6 +44,14 @@ content-authoring skills provide the OSQAr-specific mapping.
 | R5 | `iso-21434-application` | ISO/SAE 21434 cybersecurity: TARA, CAL determination, CSMS, incident response | Complements `security-coengineering` with deeper clause knowledge |
 | R6 | `iso-21448-application` | ISO 21448 SOTIF: zone model, triggering events, validation strategies, ML/AI gaps | Complements `sotif-qualification` with deeper clause knowledge |
 | R7 | `cyber-physical-systems-engineering` | Real-time analysis, communication protocols, safety architectures, formal verification | Needed for embedded/hardware timing analysis in qualification |
+
+## Organization-Specific Skills (Not Shipped)
+
+Organization-specific skills cover internal working guidelines, process
+templates, toolchain conventions, and review checklists. These are maintained
+by individual organizations in their own repositories and are never committed
+to the public OSQAr repository. Their content and naming conventions depend on
+each organization's internal processes.
 
 ### Structure Skills (Clause Hierarchy Reference)
 
@@ -66,14 +75,14 @@ and are usable by any agent with no Hindsight dependency:
 4. Load `vehicle-program-qualification` when scaling beyond a single component
 
 ### For agents assisting with qualification
-1. Load ``functional-safety-index`` → follow the task routing to identify needed research skills
+1. Load ``functional-safety-index`` → follow the task routing to identify needed domain-specific skills
 2. Load the content-authoring skill matching the work scope (software, cybersecurity, SOTIF)
 3. Load ``iso-26262-application`` for clause-level requirements backing
 4. Load ``hazard-analysis-methods`` if authoring safety analysis verification needs
 5. Load ``compliance-documentation`` when preparing assessment artifacts
 
 ### For automotive software SEooC qualification (most common case)
-1. ``functional-safety-index`` → routes to research skills
+1. ``functional-safety-index`` → routes to domain-specific skills
 2. ``iso-26262-application`` → Part 6 clause requirements + Part 10 SEooC guidance
 3. ``iso26262-part6-software`` → author REQ_SSR_/ARCH_/VER_ needs
 4. ``hazard-analysis-methods`` → if FMEA/FTA needs are required
@@ -103,7 +112,7 @@ and are usable by any agent with no Hindsight dependency:
 ## Skill Interaction Pattern
 
 ```
-Research Skills (domain knowledge)     Content-Authoring Skills (OSQAr mapping)
+Domain-Specific Skills (standards expertise)   Content-Authoring Skills (OSQAr mapping)
 ─────────────────────────────         ─────────────────────────────────────
 iso-26262-application                  iso26262-part6-software
   "ISO 26262-6 §9.4 requires MC/DC       "Use VER_COVERAGE_MCDC need with

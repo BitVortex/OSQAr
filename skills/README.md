@@ -26,11 +26,14 @@ No LLM output, regardless of how plausible or authoritative it appears, may be a
 
 ## Skill Ecosystem
 
-OSQAr ships two categories of skills:
+OSQAr ships two categories of skills, with a third category reserved for
+organization-internal use:
 
 1. **Content-Authoring Skills** (in this directory): Map ISO standards to OSQAr need types with ASIL-differentiated guidance and RST examples. These are public-safe and shipped with the OSQAr repository. See ``SKILL_INDEX.md`` for the complete catalogue.
 
-2. **Research Skills** (external, agent profile): Provide deep domain knowledge — clause-level requirements, hazard analysis methods, cross-standard navigation. These are part of the Hermes Agent research profile and are NOT shipped with OSQAr. Agents assisting with qualification should load both tiers of skills. See ``docs/agent_skills_usage.rst`` (in the OSQAr documentation) for guidance on navigating the full skill ecosystem.
+2. **Domain-Specific Skills** (external, agent profile): Provide deep domain expertise — clause-level requirements, hazard analysis methods, cross-standard navigation — recommended for standards compliance work. These are part of the Hermes Agent research profile and are NOT shipped with OSQAr. Agents assisting with qualification should load both content-authoring and domain-specific skills. See ``docs/agent_skills_usage.rst`` (in the OSQAr documentation) for guidance on navigating the full skill ecosystem.
+
+3. **Organization-Specific Skills** (not shipped): Internal working guidelines, process templates, toolchain conventions, review checklists. These are maintained by individual organizations in their own repositories and are never committed to the public OSQAr repository.
 
 ## Experimental Status
 

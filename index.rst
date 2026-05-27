@@ -105,6 +105,6 @@ For a complete, real-world qualification project, see:
 OSQAr ships with content-authoring skills that help authors — human engineers and
 AI agents alike — map ISO standards requirements onto OSQAr qualification needs.
 
-- :doc:`docs/agent_skills_usage` — how agents should navigate the two-tier skill
-  ecosystem (content-authoring + research skills), task routing, clause
-  verification, and common pitfalls
+- :doc:`docs/agent_skills_usage` — how agents should navigate the three-tier skill
+  ecosystem (content-authoring + domain-specific + organization-specific), task
+  routing, clause verification, and common pitfalls

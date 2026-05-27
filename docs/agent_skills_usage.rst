@@ -17,10 +17,11 @@ knowledge skills.
    inclusion in any qualification baseline. See ``skills/README.md`` for the
    full disclaimer on LLM usage in safety-critical contexts.
 
-Two-Tier Skill Architecture
-===========================
+Three-Tier Skill Architecture
+=============================
 
-OSQAr skills operate in two complementary tiers:
+OSQAr skills operate in three tiers, layered from concrete tooling to
+organization-internal conventions:
 
 .. list-table:: Skill Tiers
    :header-rows: 1
@@ -32,14 +33,18 @@ OSQAr skills operate in two complementary tiers:
    * - **Content-Authoring** (in-repo)
      - ``OSQAr/skills/``
      - How to write OSQAr RST needs, ASIL-differentiated guidance, concrete examples
-     - ``iso26262-part6-software``, ``iso26262-part5-hardware``, ``security-coengineering``
-   * - **Research Skills** (agent profile)
+     - ``iso26262-part6-software``, ``security-coengineering``, ``sotif-qualification``, ``vehicle-program-qualification``, ``compliance-documentation``
+   * - **Domain-Specific** (agent profile)
      - Agent's research skill set
-     - Deep domain knowledge: clause-level requirements, hazard analysis methods, standard cross-referencing
-     - ``iso-26262-application`` (65 clause requirements), ``hazard-analysis-methods``, ``functional-safety-fundamentals``
+     - Deep domain expertise: clause-level requirements, hazard analysis methods, standard cross-referencing — recommended for standards compliance
+     - *(depends on the agent's profile and qualification scope)*
+   * - **Organization-Specific** (not shipped)
+     - Team-internal repositories
+     - Internal working guidelines, process templates, toolchain conventions, review checklists — not suitable for public distribution
+     - *(depends on the organization's own conventions)*
 
-**When assisting with qualification, agents should load BOTH tiers**: research skills
-provide the domain expertise; content-authoring skills provide the OSQAr-specific mapping.
+**When assisting with qualification, agents should load the first two tiers**: content-authoring
+skills provide the OSQAr-specific mapping; domain-specific skills provide the standards expertise.
 
 Available Content-Authoring Skills (In-Repo)
 ============================================
@@ -81,7 +86,7 @@ Qualification Task → Skill Routing
 **Step 2: Load the content-authoring skill.** This gives you need ID conventions,
 ASIL-differentiated guidance, RST examples, and pitfalls specific to OSQAr.
 
-**Step 3: Load the research skill for clause-level backing.** For example:
+**Step 3: Load the domain-specific skill for clause-level backing.** For example:
 
 * Working on software → also load ``iso-26262-application`` (Part 6 sections)
 * Need FMEA/FTA → also load ``hazard-analysis-methods``
@@ -132,7 +137,7 @@ Every claim about a standard requirement must be verifiable. Before making a
 claim in a qualification artifact:
 
 1. **Check the content-authoring skill** — does it reference the clause?
-2. **Check the research skill** — does the clause-level requirement exist?
+2. **Check the domain-specific skill** — does the clause-level requirement exist?
    (Example: ``iso-26262-application`` lists R-036 through R-042 for Part 6)
 3. **Verify the clause exists** — use ``search_files`` on the structure skills
    to confirm the clause number and title (e.g., search for ``6.4.1`` in
