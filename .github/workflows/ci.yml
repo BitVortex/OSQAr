@@ -35,7 +35,7 @@ jobs:
       run: poetry install --with evidence
 
     - name: Run repository acceptance tests
-      run: poetry run pytest -q tests
+      run: poetry run python -m pytest -q tests
 
     - name: Sanity-check osqar CLI entrypoint
       run: |
