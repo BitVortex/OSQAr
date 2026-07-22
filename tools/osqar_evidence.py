@@ -13,6 +13,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from tools.junit_evidence import JUnitEvidenceError, validate_junit_tree
+
 ALLOWED_RESULT_STATES = {
     "not-run",
     "invalid",
@@ -65,102 +67,10 @@ def _sha256(path: Path) -> str:
 
 def _junit_rejection(path: Path) -> str | None:
     tree = ET.parse(path)
-    root = tree.getroot()
-    counter_names = ("tests", "failures", "errors", "skipped")
-
-    def local_name(element: ET.Element) -> str:
-        return element.tag.rsplit("}", 1)[-1]
-
-    def declared(element: ET.Element, name: str) -> int:
-        raw = element.attrib.get(name, "0")
-        value = int(raw)
-        if value < 0:
-            raise ValueError(f"negative {name}")
-        return value
-
-    def suite_totals(suite: ET.Element) -> dict[str, int]:
-        totals = {name: 0 for name in counter_names}
-        for child in suite:
-            name = local_name(child)
-            if name == "testcase":
-                totals["tests"] += 1
-                child_names = {local_name(descendant) for descendant in child.iter()}
-                totals["failures"] += int("failure" in child_names)
-                totals["errors"] += int("error" in child_names)
-                totals["skipped"] += int("skipped" in child_names)
-            elif name == "testsuite":
-                nested = suite_totals(child)
-                for counter in counter_names:
-                    totals[counter] += nested[counter]
-            elif name == "testsuites":
-                nested = container_totals(child)
-                for counter in counter_names:
-                    totals[counter] += nested[counter]
-        for counter in counter_names:
-            value = declared(suite, counter)
-            if value != totals[counter]:
-                raise ValueError(
-                    f"testsuite {counter} count {value} does not match "
-                    f"testcase subtree {totals[counter]}"
-                )
-        return totals
-
-    def container_totals(container: ET.Element) -> dict[str, int]:
-        totals = {name: 0 for name in counter_names}
-        for child in container:
-            name = local_name(child)
-            if name == "testsuite":
-                nested = suite_totals(child)
-            elif name == "testsuites":
-                nested = container_totals(child)
-            else:
-                continue
-            for counter in counter_names:
-                totals[counter] += nested[counter]
-        for counter in counter_names:
-            if counter in container.attrib and declared(container, counter) != totals[counter]:
-                raise ValueError(
-                    f"testsuites {counter} count {declared(container, counter)} "
-                    f"does not match descendant-suite total {totals[counter]}"
-                )
-        return totals
-
-    root_name = local_name(root)
-    if root_name not in {"testsuite", "testsuites"}:
-        return f"unexpected root element {root_name!r}"
     try:
-        if root_name == "testsuite":
-            totals = suite_totals(root)
-        else:
-            totals = container_totals(root)
-            if totals["tests"] == 0:
-                return "no testsuite elements"
-    except (TypeError, ValueError) as exc:
-        return f"invalid JUnit counters: {exc}"
-
-    all_testcases = [element for element in root.iter() if local_name(element) == "testcase"]
-    complete_totals = {
-        "tests": len(all_testcases),
-        "failures": sum(
-            any(local_name(descendant) == "failure" for descendant in case.iter())
-            for case in all_testcases
-        ),
-        "errors": sum(
-            any(local_name(descendant) == "error" for descendant in case.iter())
-            for case in all_testcases
-        ),
-        "skipped": sum(
-            any(local_name(descendant) == "skipped" for descendant in case.iter())
-            for case in all_testcases
-        ),
-    }
-    if complete_totals != totals:
-        return (
-            f"recognized JUnit totals {totals} do not match complete descendant "
-            f"testcase content {complete_totals}"
-        )
-    if totals["tests"] == 0:
-        return "zero executed tests"
+        totals = validate_junit_tree(tree.getroot())
+    except JUnitEvidenceError as exc:
+        return str(exc)
     if totals["failures"] or totals["errors"] or totals["skipped"]:
         return (
             f"tests={totals['tests']}, failures={totals['failures']}, "

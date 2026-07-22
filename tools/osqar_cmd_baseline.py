@@ -114,16 +114,43 @@ def _load_baseline(dirpath: Path) -> Optional[dict[str, Any]]:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except Exception:
         return None
+    if not isinstance(manifest, dict):
+        return None
+    if manifest.get("schema") != "osqar.baseline_manifest.v1":
+        return None
+    if manifest.get("tag") != dirpath.name:
+        return None
 
-    # Support both old (needs_json) and new (needs_file) manifest keys
+    # Support both old (needs_json) and new (needs_file) manifest keys.
     needs_filename = manifest.get("needs_file") or manifest.get("needs_json", "needs.json")
-    needs_path = dirpath / needs_filename
+    if not isinstance(needs_filename, str) or not needs_filename:
+        return None
+    needs_relative = Path(needs_filename)
+    if needs_relative.is_absolute() or len(needs_relative.parts) != 1:
+        return None
+    needs_path = dirpath / needs_relative
     if not needs_path.is_file():
         return None
 
     try:
         needs_data = _load_needs(needs_path)
     except Exception:
+        return None
+    expected_count = manifest.get("needs_count")
+    if (
+        not isinstance(expected_count, int)
+        or isinstance(expected_count, bool)
+        or expected_count != len(needs_data)
+    ):
+        return None
+    need_ids = [
+        str(need.get("id", "")).strip()
+        for need in needs_data
+        if isinstance(need, dict)
+    ]
+    if len(need_ids) != len(needs_data) or any(not need_id for need_id in need_ids):
+        return None
+    if len(set(need_ids)) != len(need_ids):
         return None
     return {"manifest": manifest, "needs_data": needs_data}
 

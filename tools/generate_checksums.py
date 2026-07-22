@@ -19,9 +19,12 @@ import argparse
 import fnmatch
 import hashlib
 import json
+import os
+import stat
 import sys
+import tempfile
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Iterable
 
 
@@ -29,6 +32,153 @@ from typing import Iterable
 class Entry:
     digest: str
     relpath: str
+
+
+class ChecksumReportError(ValueError):
+    """Raised when a requested JSON report cannot be safely published."""
+
+
+def _invalidate_json_report(path: Path) -> None:
+    try:
+        path.unlink(missing_ok=True)
+    except OSError as exc:
+        raise ChecksumReportError(f"cannot invalidate JSON report: {exc}") from exc
+
+
+def _poison_json_output(stream: object | None, descriptor: int | None, path: Path) -> str | None:
+    marker = "INVALID JSON REPORT - PUBLICATION FAILED\n"
+    errors: list[str] = []
+    if stream is not None:
+        try:
+            stream.seek(0)  # type: ignore[attr-defined]
+            stream.truncate(0)  # type: ignore[attr-defined]
+            stream.write(marker)  # type: ignore[attr-defined]
+            stream.flush()  # type: ignore[attr-defined]
+            os.fsync(stream.fileno())  # type: ignore[attr-defined]
+            return None
+        except (AttributeError, OSError, RuntimeError, TypeError, ValueError) as exc:
+            errors.append(str(exc))
+    if descriptor is not None:
+        try:
+            os.lseek(descriptor, 0, os.SEEK_SET)
+            os.ftruncate(descriptor, 0)
+            os.write(descriptor, marker.encode("utf-8"))
+            os.fsync(descriptor)
+            return None
+        except (OSError, RuntimeError, TypeError, ValueError) as exc:
+            errors.append(str(exc))
+    try:
+        fallback = os.open(path, os.O_WRONLY | os.O_TRUNC)
+        try:
+            os.write(fallback, marker.encode("utf-8"))
+            os.fsync(fallback)
+        finally:
+            os.close(fallback)
+        return None
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
+        errors.append(str(exc))
+    return "; ".join(errors)
+
+
+def _close_json_output(stream: object | None, descriptor: int | None) -> None:
+    if stream is not None:
+        close = getattr(stream, "close", None)
+        if close is None:
+            close = getattr(getattr(stream, "stream", None), "close", None)
+        if close is not None:
+            close()
+    elif descriptor is not None:
+        os.close(descriptor)
+
+
+def _write_text_atomic(path: Path, content: str, artifact_name: str) -> None:
+    """Publish text without exposing a partial final pathname."""
+    temporary: Path | None = None
+    descriptor: int | None = None
+    stream: object | None = None
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        descriptor, temporary_name = tempfile.mkstemp(
+            dir=path.parent, prefix=f".{path.name}.", suffix=".tmp"
+        )
+        temporary = Path(temporary_name)
+        stream = os.fdopen(descriptor, "w", encoding="utf-8")
+        descriptor = None
+        stream.write(content)  # type: ignore[attr-defined]
+        stream.flush()  # type: ignore[attr-defined]
+        os.fsync(stream.fileno())  # type: ignore[attr-defined]
+        # Close before replacement so a close fault cannot displace the prior
+        # final manifest. Replacement is the final fallible publication step.
+        _close_json_output(stream, descriptor)
+        stream = None
+        os.replace(temporary, path)
+        temporary = None
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
+        cleanup_path = temporary
+        cleanup_exc: OSError | None = None
+        if cleanup_path is not None:
+            try:
+                cleanup_path.unlink(missing_ok=True)
+            except OSError as unlink_exc:
+                cleanup_exc = unlink_exc
+        poison_error = None
+        if cleanup_exc is not None and cleanup_path is not None:
+            poison_error = _poison_json_output(stream, descriptor, cleanup_path)
+        try:
+            _close_json_output(stream, descriptor)
+        except OSError:
+            pass
+        message = f"cannot write {artifact_name}: {exc}"
+        if cleanup_exc is not None:
+            message += f"; temporary cleanup failed: {cleanup_exc}"
+        if poison_error is not None:
+            message += f"; temporary invalidation failed: {poison_error}"
+        raise OSError(message) from exc
+
+
+def _write_json_report(path: Path, payload: dict[str, object]) -> None:
+    temporary: Path | None = None
+    descriptor: int | None = None
+    stream: object | None = None
+    published = False
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        serialized = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+        descriptor, temporary_name = tempfile.mkstemp(
+            dir=path.parent, prefix=f".{path.name}.", suffix=".tmp"
+        )
+        temporary = Path(temporary_name)
+        stream = os.fdopen(descriptor, "w", encoding="utf-8")
+        descriptor = None
+        stream.write(serialized)  # type: ignore[attr-defined]
+        stream.flush()  # type: ignore[attr-defined]
+        os.fsync(stream.fileno())  # type: ignore[attr-defined]
+        os.replace(temporary, path)
+        published = True
+        temporary = None
+        _close_json_output(stream, descriptor)
+        stream = None
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
+        cleanup_path = path if published else temporary
+        cleanup_exc: OSError | None = None
+        if cleanup_path is not None:
+            try:
+                cleanup_path.unlink(missing_ok=True)
+            except OSError as unlink_exc:
+                cleanup_exc = unlink_exc
+        poison_error = None
+        if cleanup_exc is not None and cleanup_path is not None:
+            poison_error = _poison_json_output(stream, descriptor, cleanup_path)
+        try:
+            _close_json_output(stream, descriptor)
+        except OSError:
+            pass
+        message = f"cannot write JSON report: {exc}"
+        if cleanup_exc is not None:
+            message += f"; temporary cleanup failed: {cleanup_exc}"
+        if poison_error is not None:
+            message += f"; temporary invalidation failed: {poison_error}"
+        raise ChecksumReportError(message) from exc
 
 
 def _hash_file(path: Path, algorithm: str) -> str:
@@ -40,9 +190,31 @@ def _hash_file(path: Path, algorithm: str) -> str:
 
 
 def _iter_files(root: Path) -> Iterable[Path]:
+    root = root.resolve()
     for p in sorted(root.rglob("*")):
+        if p.is_symlink():
+            raise ValueError(f"Symlinked artifact is not permitted: {p.relative_to(root)}")
         if p.is_file():
+            try:
+                p.resolve().relative_to(root)
+            except ValueError as exc:
+                raise ValueError(
+                    f"Artifact resolves outside root: {p.relative_to(root)}"
+                ) from exc
             yield p
+
+
+def _reject_symlinked_path(root: Path, path: Path, relpath: str) -> None:
+    """Reject a declared artifact reached through any symlink component."""
+    current = root
+    for part in PurePosixPath(relpath).parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError(f"Symlinked artifact is not permitted: {relpath}")
+    try:
+        path.resolve().relative_to(root)
+    except ValueError as exc:
+        raise ValueError(f"Artifact resolves outside root: {relpath}") from exc
 
 
 def _matches_any_glob(relpath: str, globs: list[str]) -> bool:
@@ -55,6 +227,15 @@ def _write_manifest(
     root: Path, output: Path, algorithm: str, exclude_globs: list[str]
 ) -> list[Entry]:
     root = root.resolve()
+    if output.is_symlink():
+        raise ValueError(f"Checksum manifest output must not be a symlink: {output}")
+    if output.exists():
+        output_status = output.lstat()
+        if not stat.S_ISREG(output_status.st_mode) or output_status.st_nlink != 1:
+            raise ValueError(
+                "Checksum manifest output must be a single-link regular file: "
+                f"{output}"
+            )
     output = output.resolve()
 
     # Always exclude the output file itself (so the manifest is stable).
@@ -72,38 +253,66 @@ def _write_manifest(
             continue
         entries.append(Entry(digest=_hash_file(file_path, algorithm), relpath=relpath))
 
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(
+    if not entries:
+        raise ValueError("Cannot generate checksum manifest with no entries")
+
+    _write_text_atomic(
+        output,
         "".join(f"{e.digest}  {e.relpath}\n" for e in entries),
-        encoding="utf-8",
+        "checksum manifest",
     )
 
     return entries
 
 
-def _read_manifest(manifest: Path) -> list[Entry]:
+def _read_manifest(manifest: Path, algorithm: str) -> list[Entry]:
     entries: list[Entry] = []
-    for line in manifest.read_text(encoding="utf-8").splitlines():
+    seen: set[str] = set()
+    digest_length = hashlib.new(algorithm).digest_size * 2
+    for line_number, line in enumerate(
+        manifest.read_text(encoding="utf-8").splitlines(), 1
+    ):
         line = line.strip()
         if not line:
             continue
-        # Expected: <hex><two spaces><path>
         if "  " not in line:
-            raise ValueError(f"Invalid manifest line: {line}")
+            raise ValueError(f"Invalid manifest line {line_number}: {line}")
         digest, relpath = line.split("  ", 1)
         digest = digest.strip()
         relpath = relpath.strip().replace("\\", "/")
         if not digest or not relpath:
-            raise ValueError(f"Invalid manifest line: {line}")
-        entries.append(Entry(digest=digest, relpath=relpath))
+            raise ValueError(f"Invalid manifest line {line_number}: {line}")
+        if len(digest) != digest_length or any(
+            c not in "0123456789abcdefABCDEF" for c in digest
+        ):
+            raise ValueError(f"Invalid {algorithm} digest on manifest line {line_number}")
+        pure_path = PurePosixPath(relpath)
+        if pure_path.is_absolute() or ".." in pure_path.parts or relpath in {".", ""}:
+            raise ValueError(f"Manifest path must be relative and contained: {relpath}")
+        normalized = pure_path.as_posix()
+        if normalized in seen:
+            raise ValueError(f"Duplicate manifest path: {normalized}")
+        seen.add(normalized)
+        entries.append(Entry(digest=digest, relpath=normalized))
+    if not entries:
+        raise ValueError("Manifest contains no entries")
     return entries
 
 
 def _verify_manifest(
-    root: Path, manifest: Path, algorithm: str
-) -> tuple[list[str], list[str], list[str]]:
+    root: Path,
+    manifest: Path,
+    algorithm: str,
+    *,
+    closed_set: bool = False,
+    exclude_globs: list[str] | None = None,
+    exclude_paths: set[Path] | None = None,
+) -> tuple[list[str], list[str], list[str], list[str]]:
     root = root.resolve()
-    entries = _read_manifest(manifest)
+    if manifest.is_symlink():
+        raise ValueError(f"Checksum manifest must not be a symlink: {manifest}")
+    manifest = manifest.resolve()
+    entries = _read_manifest(manifest, algorithm)
 
     missing: list[str] = []
     mismatched: list[str] = []
@@ -111,6 +320,7 @@ def _verify_manifest(
 
     for entry in entries:
         file_path = root / entry.relpath
+        _reject_symlinked_path(root, file_path, entry.relpath)
         if not file_path.is_file():
             missing.append(entry.relpath)
             continue
@@ -120,7 +330,24 @@ def _verify_manifest(
         else:
             ok.append(entry.relpath)
 
-    return ok, missing, mismatched
+    unexpected: list[str] = []
+    if closed_set:
+        excluded = list(exclude_globs or [])
+        resolved_excluded_paths = {path.resolve() for path in (exclude_paths or set())}
+        try:
+            excluded.append(manifest.relative_to(root).as_posix())
+        except ValueError:
+            pass
+        declared = {entry.relpath for entry in entries}
+        actual_paths = {
+            path.relative_to(root).as_posix()
+            for path in _iter_files(root)
+            if path.resolve() not in resolved_excluded_paths
+            and not _matches_any_glob(path.relative_to(root).as_posix(), excluded)
+        }
+        unexpected = sorted(actual_paths - declared)
+
+    return ok, missing, mismatched, unexpected
 
 
 def cli(argv: list[str]) -> int:
@@ -160,6 +387,11 @@ def cli(argv: list[str]) -> int:
             "(recommended for CI / large workspaces)"
         ),
     )
+    parser.add_argument(
+        "--closed-set",
+        action="store_true",
+        help="Reject regular files not declared by the manifest (verification only)",
+    )
 
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--output", type=Path, help="Write manifest file")
@@ -167,22 +399,132 @@ def cli(argv: list[str]) -> int:
 
     args = parser.parse_args(argv)
 
-    if not args.root.is_dir():
-        print(f"ERROR: root directory not found: {args.root}", file=sys.stderr)
-        return 2
-
     try:
-        hashlib.new(args.algorithm)
+        algorithm = hashlib.new(args.algorithm)
+        if algorithm.digest_size <= 0:
+            raise ValueError("variable-length digest algorithms are not supported")
     except Exception as exc:  # noqa: BLE001
         print(
             f"ERROR: unsupported algorithm '{args.algorithm}': {exc}", file=sys.stderr
         )
         return 2
 
+    resolved_json_report: Path | None = None
+    if args.json_report is not None:
+        try:
+            root_resolved = args.root.resolve()
+            resolved_json_report = args.json_report.resolve()
+            selected_manifest = args.output if args.output is not None else args.verify
+            assert selected_manifest is not None
+            resolved_manifest = selected_manifest.resolve()
+            if resolved_json_report == resolved_manifest or (
+                args.json_report.exists()
+                and selected_manifest.exists()
+                and args.json_report.samefile(selected_manifest)
+            ):
+                message = (
+                    "ERROR: JSON report and manifest output resolve to the same path"
+                    if args.output is not None
+                    else "ERROR: JSON report resolves to the checksum manifest"
+                )
+                print(message, file=sys.stderr)
+                return 2
+
+            preflight_entries: list[Entry] | None = None
+            if args.verify is not None:
+                try:
+                    preflight_entries = _read_manifest(args.verify, args.algorithm)
+                except (OSError, UnicodeError, ValueError):
+                    # Preserve stale-report invalidation for malformed inputs. The
+                    # authoritative parser below will report the original error.
+                    preflight_entries = None
+                if preflight_entries is not None:
+                    for entry in preflight_entries:
+                        artifact = root_resolved / entry.relpath
+                        if artifact.resolve() == resolved_json_report or (
+                            args.json_report.exists()
+                            and artifact.exists()
+                            and artifact.samefile(args.json_report)
+                        ):
+                            print(
+                                "ERROR: JSON report resolves to "
+                                f"manifest-declared artifact: {entry.relpath}",
+                                file=sys.stderr,
+                            )
+                            return 2
+
+            if args.json_report.is_symlink():
+                print("ERROR: JSON report output must not be a symlink", file=sys.stderr)
+                return 2
+            if args.json_report.exists():
+                report_status = args.json_report.lstat()
+                if (
+                    not stat.S_ISREG(report_status.st_mode)
+                    or report_status.st_nlink != 1
+                ):
+                    print(
+                        "ERROR: JSON report output must be a single-link regular file",
+                        file=sys.stderr,
+                    )
+                    return 2
+
+            prior_report_matches = False
+            if args.json_report.exists():
+                try:
+                    prior_payload = json.loads(
+                        args.json_report.read_text(encoding="utf-8")
+                    )
+                    prior_report_matches = (
+                        isinstance(prior_payload, dict)
+                        and prior_payload.get("schema") == "osqar.checksums_report.v1"
+                        and prior_payload.get("root") == str(root_resolved)
+                        and prior_payload.get("manifest") == str(resolved_manifest)
+                    )
+                except (OSError, UnicodeError, ValueError):
+                    prior_report_matches = False
+
+            if args.root.is_dir():
+                for artifact in _iter_files(root_resolved):
+                    if args.json_report.exists() and artifact.samefile(args.json_report):
+                        if (
+                            artifact.resolve() != resolved_json_report
+                            or not prior_report_matches
+                        ):
+                            print(
+                                "ERROR: JSON report aliases existing root artifact: "
+                                f"{artifact.relative_to(root_resolved).as_posix()}",
+                                file=sys.stderr,
+                            )
+                            return 2
+        except (OSError, RuntimeError, UnicodeError, ValueError) as exc:
+            print(f"ERROR: cannot preflight checksum paths: {exc}", file=sys.stderr)
+            return 2
+        try:
+            _invalidate_json_report(args.json_report)
+        except ChecksumReportError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
+
+    if not args.root.is_dir():
+        print(f"ERROR: root directory not found: {args.root}", file=sys.stderr)
+        return 2
+
     if args.output is not None:
-        entries = _write_manifest(
-            args.root, args.output, args.algorithm, list(args.exclude)
-        )
+        generation_excludes = list(args.exclude)
+        if resolved_json_report is not None:
+            try:
+                generation_excludes.append(
+                    resolved_json_report.relative_to(args.root.resolve()).as_posix()
+                )
+            except ValueError:
+                pass
+        try:
+            entries = _write_manifest(
+                args.root, args.output, args.algorithm, generation_excludes
+            )
+        except (OSError, UnicodeError, ValueError) as exc:
+            print(f"ERROR: cannot generate checksum manifest: {exc}", file=sys.stderr)
+            return 2
         print(f"Wrote {len(entries)} checksums to {args.output}")
 
         if args.json_report is not None:
@@ -197,11 +539,11 @@ def cli(argv: list[str]) -> int:
                     "entries_total": len(entries),
                 },
             }
-            args.json_report.parent.mkdir(parents=True, exist_ok=True)
-            args.json_report.write_text(
-                json.dumps(report, indent=2, sort_keys=True) + "\n",
-                encoding="utf-8",
-            )
+            try:
+                _write_json_report(args.json_report, report)
+            except ChecksumReportError as exc:
+                print(f"ERROR: {exc}", file=sys.stderr)
+                return 2
         return 0
 
     manifest = args.verify
@@ -209,9 +551,21 @@ def cli(argv: list[str]) -> int:
         print(f"ERROR: manifest not found: {manifest}", file=sys.stderr)
         return 2
 
-    ok, missing, mismatched = _verify_manifest(args.root, manifest, args.algorithm)
+    try:
+        ok, missing, mismatched, unexpected = _verify_manifest(
+            args.root,
+            manifest,
+            args.algorithm,
+            closed_set=bool(args.closed_set),
+            exclude_globs=list(args.exclude),
+            exclude_paths={args.json_report} if args.json_report is not None else set(),
+        )
+    except (OSError, UnicodeError, ValueError) as exc:
+        print(f"ERROR: invalid manifest: {exc}", file=sys.stderr)
+        return 2
     print(
-        f"Verified manifest: ok={len(ok)} missing={len(missing)} mismatched={len(mismatched)}"
+        f"Verified manifest: ok={len(ok)} missing={len(missing)} "
+        f"mismatched={len(mismatched)} unexpected={len(unexpected)}"
     )
 
     if args.json_report is not None:
@@ -221,21 +575,25 @@ def cli(argv: list[str]) -> int:
             "root": str(args.root.resolve()),
             "manifest": str(manifest.resolve()),
             "algorithm": str(args.algorithm),
+            "closed_set": bool(args.closed_set),
             "excluded": list(args.exclude),
+            "status": "PASS" if not (missing or mismatched or unexpected) else "FAIL",
             "counts": {
                 "ok": len(ok),
                 "missing": len(missing),
                 "mismatched": len(mismatched),
+                "unexpected": len(unexpected),
             },
             # Keep the report scalable: store only the problem lists by default.
             "missing": missing,
             "mismatched": mismatched,
+            "unexpected": unexpected,
         }
-        args.json_report.parent.mkdir(parents=True, exist_ok=True)
-        args.json_report.write_text(
-            json.dumps(report, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
+        try:
+            _write_json_report(args.json_report, report)
+        except ChecksumReportError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
 
     if missing:
         print("Missing files:")
@@ -247,7 +605,12 @@ def cli(argv: list[str]) -> int:
         for p in mismatched:
             print(f"- {p}")
 
-    return 0 if (not missing and not mismatched) else 1
+    if unexpected:
+        print("Unexpected files:")
+        for p in unexpected:
+            print(f"- {p}")
+
+    return 0 if (not missing and not mismatched and not unexpected) else 1
 
 
 def main() -> int:

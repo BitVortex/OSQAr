@@ -16,10 +16,104 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import stat
 import sys
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
+
+
+class TraceabilityReportError(RuntimeError):
+    """Raised when a machine-readable report cannot be invalidated or published."""
+
+
+def _invalidate_report(path: Path) -> None:
+    try:
+        path.unlink(missing_ok=True)
+    except OSError as exc:
+        poison_exc: OSError | None = None
+        try:
+            with path.open("w", encoding="utf-8") as stream:
+                stream.write("OSQAR INVALID STALE TRACEABILITY REPORT\n")
+                stream.flush()
+                os.fsync(stream.fileno())
+        except OSError as invalidation_exc:
+            poison_exc = invalidation_exc
+        message = f"cannot invalidate stale JSON report {path}: {exc}"
+        if poison_exc is not None:
+            message += f"; overwrite invalidation failed: {poison_exc}"
+        raise TraceabilityReportError(message) from exc
+
+
+def _write_json_report(path: Path, payload: dict[str, object]) -> None:
+    temporary: Path | None = None
+    descriptor: int | None = None
+    stream = None
+    try:
+        serialized = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        descriptor, temporary_name = tempfile.mkstemp(
+            dir=path.parent, prefix=f".{path.name}.", suffix=".tmp"
+        )
+        temporary = Path(temporary_name)
+        stream = os.fdopen(descriptor, "w", encoding="utf-8")
+        descriptor = None
+        stream.write(serialized)
+        stream.flush()
+        os.fsync(stream.fileno())
+        stream.close()
+        stream = None
+        os.replace(temporary, path)
+        temporary = None
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
+        cleanup_exc: OSError | None = None
+        if temporary is not None:
+            try:
+                temporary.unlink(missing_ok=True)
+            except OSError as unlink_exc:
+                cleanup_exc = unlink_exc
+                marker = b"OSQAR INVALID TEMPORARY TRACEABILITY REPORT\n"
+                poisoned = False
+                if stream is not None:
+                    try:
+                        stream.seek(0)
+                        stream.truncate(0)
+                        stream.write(marker.decode("ascii"))
+                        stream.flush()
+                        os.fsync(stream.fileno())
+                        poisoned = True
+                    except (OSError, RuntimeError, ValueError):
+                        pass
+                if not poisoned:
+                    poison_descriptor: int | None = None
+                    try:
+                        poison_descriptor = os.open(temporary, os.O_WRONLY | os.O_TRUNC)
+                        os.write(poison_descriptor, marker)
+                        os.fsync(poison_descriptor)
+                    except OSError:
+                        pass
+                    finally:
+                        if poison_descriptor is not None:
+                            try:
+                                os.close(poison_descriptor)
+                            except OSError:
+                                pass
+        if stream is not None:
+            try:
+                stream.close()
+            except OSError:
+                pass
+        if descriptor is not None:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+        message = f"cannot publish JSON report {path}: {exc}"
+        if cleanup_exc is not None:
+            message += f"; temporary cleanup failed: {cleanup_exc}"
+        raise TraceabilityReportError(message) from exc
 
 
 @dataclass(frozen=True)
@@ -336,6 +430,36 @@ def cli(argv: list[str]) -> int:
 
     args = parser.parse_args(argv)
 
+    if args.json_report is not None:
+        try:
+            report_resolved = args.json_report.resolve()
+            input_resolved = args.needs_json.resolve()
+            if report_resolved == input_resolved or (
+                args.json_report.exists()
+                and args.needs_json.exists()
+                and args.json_report.samefile(args.needs_json)
+            ):
+                print("ERROR: JSON report aliases needs input", file=sys.stderr)
+                return 2
+            if args.json_report.is_symlink():
+                print("ERROR: JSON report output must not be a symlink", file=sys.stderr)
+                return 2
+            if args.json_report.exists():
+                report_status = args.json_report.lstat()
+                if (
+                    not stat.S_ISREG(report_status.st_mode)
+                    or report_status.st_nlink != 1
+                ):
+                    print(
+                        "ERROR: JSON report output must be a single-link regular file",
+                        file=sys.stderr,
+                    )
+                    return 2
+            _invalidate_report(args.json_report)
+        except (OSError, RuntimeError) as exc:
+            print(f"ERROR: cannot preflight JSON report: {exc}", file=sys.stderr)
+            return 2
+
     if not args.needs_json.is_file():
         print(f"ERROR: needs.json not found: {args.needs_json}", file=sys.stderr)
         return 2
@@ -345,6 +469,21 @@ def cli(argv: list[str]) -> int:
     except Exception as exc:  # noqa: BLE001
         print(f"ERROR: Failed to read {args.needs_json}: {exc}", file=sys.stderr)
         return 2
+
+    if not needs:
+        print(f"ERROR: no needs found in {args.needs_json}", file=sys.stderr)
+        return 2
+
+    seen_ids: set[str] = set()
+    for need in needs:
+        need_id = str(need.get("id", "")).strip()
+        if not need_id:
+            print("ERROR: need is missing a non-empty id", file=sys.stderr)
+            return 2
+        if need_id in seen_ids:
+            print(f"ERROR: duplicate need id: {need_id}", file=sys.stderr)
+            return 2
+        seen_ids.add(need_id)
 
     violations, meta = _run_checks(
         needs,
@@ -364,10 +503,11 @@ def cli(argv: list[str]) -> int:
             "meta": meta,
             "violations": [v.__dict__ for v in violations],
         }
-        args.json_report.parent.mkdir(parents=True, exist_ok=True)
-        args.json_report.write_text(
-            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-        )
+        try:
+            _write_json_report(args.json_report, report)
+        except TraceabilityReportError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
 
     counts = meta["counts"]
     print(

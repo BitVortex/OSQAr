@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import shutil
+import stat
 import subprocess
 import sys
 from pathlib import Path
@@ -24,6 +25,28 @@ def _find_gpg() -> str | None:
         if alt_path:
             return alt_path
     return None
+
+
+def _remove_failed_output(output: Path) -> str | None:
+    """Best-effort removal; return a diagnostic without masking the primary failure."""
+    try:
+        try:
+            output.unlink()
+        except FileNotFoundError:
+            return None
+        except IsADirectoryError:
+            shutil.rmtree(output)
+    except OSError as exc:
+        return str(exc)
+    return None
+
+
+def _report_cleanup_failure(cleanup_error: str | None) -> None:
+    if cleanup_error is not None:
+        print(
+            f"ERROR: failed to remove signature output: {cleanup_error}",
+            file=sys.stderr,
+        )
 
 
 def cmd_sign(args: argparse.Namespace) -> int:
@@ -49,18 +72,67 @@ def cmd_sign(args: argparse.Namespace) -> int:
         if output.suffix != ".asc":
             output = output.with_suffix(".asc")
 
+    # Resolve only for the safety comparison: keep the user-facing output path
+    # so GPG and diagnostics continue to use the requested spelling.
+    resolved_output = output.expanduser().resolve()
+    if resolved_output == manifest:
+        print("ERROR: signature output aliases manifest", file=sys.stderr)
+        return 2
+    try:
+        if output.exists() and output.samefile(manifest):
+            print("ERROR: signature output aliases manifest", file=sys.stderr)
+            return 2
+    except OSError as exc:
+        print(f"ERROR: cannot validate signature output path: {exc}", file=sys.stderr)
+        return 2
+
     argv.extend(["--output", str(output), str(manifest)])
 
     try:
+        output.unlink(missing_ok=True)
+    except OSError as exc:
+        print(f"ERROR: cannot invalidate signature output: {exc}", file=sys.stderr)
+        return 2
+
+    try:
         result = subprocess.run(argv, capture_output=True, text=True)
-    except FileNotFoundError:
-        print(f"ERROR: {gpg} not found", file=sys.stderr)
+    except OSError as exc:
+        # Process startup and execution can fail with any OSError subtype. A
+        # producer may already have created output before surfacing the error.
+        cleanup_error = _remove_failed_output(output)
+        print(f"ERROR: cannot execute signing tool {gpg}: {exc}", file=sys.stderr)
+        _report_cleanup_failure(cleanup_error)
         return 2
 
     if result.returncode != 0:
+        cleanup_error = _remove_failed_output(output)
         print(f"ERROR: signing failed (rc={result.returncode})", file=sys.stderr)
         if result.stderr.strip():
             print(result.stderr.strip(), file=sys.stderr)
+        _report_cleanup_failure(cleanup_error)
+        return 1
+    try:
+        output_status = output.lstat()
+        valid_output = (
+            stat.S_ISREG(output_status.st_mode)
+            and output_status.st_nlink == 1
+            and output_status.st_size > 0
+        )
+    except FileNotFoundError:
+        valid_output = False
+    except OSError as exc:
+        cleanup_error = _remove_failed_output(output)
+        print(f"ERROR: cannot validate signature output: {exc}", file=sys.stderr)
+        _report_cleanup_failure(cleanup_error)
+        return 2
+    if not valid_output:
+        cleanup_error = _remove_failed_output(output)
+        print(
+            "ERROR: signing tool did not create signature output: expected a "
+            "nonempty single-link regular file",
+            file=sys.stderr,
+        )
+        _report_cleanup_failure(cleanup_error)
         return 1
 
     print(f"Signature created: {output}")
