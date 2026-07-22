@@ -1,0 +1,82 @@
+schema: osqar.profile.v1
+id: qualification
+version: 1
+purpose: >-
+  Fail-closed mechanical validation of explicitly declared qualification
+  evidence. Passing does not establish semantic adequacy, compliance,
+  certification, or qualification.
+evidence:
+  activity_states:
+    - planned
+    - ready
+    - running
+    - completed
+    - failed
+    - waived
+  activity_transitions:
+    planned: [ready, waived]
+    ready: [running, waived]
+    running: [completed, failed]
+    failed: [ready, waived]
+    completed: []
+    waived: []
+  allowed_result_states:
+    - not-run
+    - invalid
+    - failed
+    - passed
+    - passed-with-deviation
+  accepted_result_states:
+    - passed
+    - passed-with-deviation
+  evidence_states:
+    - missing
+    - generated
+    - validated
+    - approved
+    - superseded
+  accepted_evidence_states:
+    - approved
+  gap_states:
+    - open
+    - approved
+    - closed
+  required_provenance:
+    - trusted_expected_source_revision
+    - trusted_expected_configuration_sha256
+    - project.source_revision
+    - project.configuration_id
+    - project.configuration_sha256
+    - activity_history
+    - command
+    - source_revision
+    - configuration_id
+    - configuration_sha256
+    - environment
+    - applicability
+    - report
+    - report_sha256
+    - tool.name
+    - tool.version
+    - findings
+    - thresholds
+  deviation:
+    required_status: approved
+    required_fields:
+      - reviewer
+      - rationale
+traceability:
+  schema: osqar.traceability.v1
+  extensions: declared-namespaces-only
+  authored_edges_are_directional: true
+  api_requirement_projection:
+    enabled: optional
+    api_kinds:
+      - api
+    legacy_prefixes:
+      - API_
+      - IMPL_
+shipment:
+  closed_set: true
+  reject_unexpected_files: true
+  reject_missing_files: true
