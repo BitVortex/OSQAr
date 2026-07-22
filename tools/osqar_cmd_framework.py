@@ -4,10 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import json
 import shutil
 import sys
 from importlib import resources
 from pathlib import Path
+
+from tools.osqar_evidence import validate_project
 
 
 def cmd_framework_bundle(args: argparse.Namespace) -> int:
@@ -129,6 +132,75 @@ def cmd_framework_bundle(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_framework_validate(args: argparse.Namespace) -> int:
+    """Validate project evidence against an explicit behavior profile."""
+    output = (
+        Path(args.report_json).expanduser().resolve()
+        if args.report_json is not None
+        else None
+    )
+    temporary: Path | None = None
+    if output is not None:
+        temporary = output.with_name(f".{output.name}.tmp")
+        try:
+            output.parent.mkdir(parents=True, exist_ok=True)
+            if output.exists():
+                if not output.is_file() and not output.is_symlink():
+                    raise OSError(f"report target is not a regular file: {output}")
+                output.unlink()
+            temporary.unlink(missing_ok=True)
+        except OSError as exc:
+            print(f"ERROR: cannot invalidate acceptance report: {exc}", file=sys.stderr)
+            return 2
+
+    result = validate_project(
+        Path(args.project),
+        profile_name=str(args.profile),
+        expected_source_revision=args.source_revision,
+        expected_configuration_sha256=args.configuration_sha256,
+    )
+    payload = result.as_dict()
+    if output is not None and temporary is not None:
+        try:
+            temporary.write_text(
+                json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+            )
+            temporary.replace(output)
+        except OSError as exc:
+            cleanup_errors: list[str] = []
+            for candidate in (temporary, output):
+                try:
+                    candidate.unlink(missing_ok=True)
+                except OSError as cleanup_exc:
+                    try:
+                        if candidate.is_file() and not candidate.is_symlink():
+                            candidate.write_bytes(b"")
+                        else:
+                            cleanup_errors.append(
+                                f"cannot remove {candidate}: {cleanup_exc}"
+                            )
+                    except OSError as neutralize_exc:
+                        cleanup_errors.append(
+                            f"cannot neutralize {candidate}: {neutralize_exc}"
+                        )
+            print(f"ERROR: failed to publish acceptance report: {exc}", file=sys.stderr)
+            for cleanup_error in cleanup_errors:
+                print(f"ERROR: publication cleanup: {cleanup_error}", file=sys.stderr)
+            return 2
+
+    stream = sys.stdout if result.status == "PASS" else sys.stderr
+    print(
+        f"Framework validation: {result.status} "
+        f"(profile={result.profile}, failures={len(result.failures)})",
+        file=stream,
+    )
+    for failure in result.failures:
+        print(f"ERROR: {failure}", file=sys.stderr)
+    for limitation in result.limitations:
+        print(f"LIMITATION: {limitation}", file=stream)
+    return 0 if result.status == "PASS" else 1
+
+
 def register(sub: argparse._SubParsersAction) -> None:
     p_fw = sub.add_parser(
         "framework",
@@ -151,3 +223,37 @@ def register(sub: argparse._SubParsersAction) -> None:
         help="Output/staging directory to create bundle under (default: _dist)",
     )
     p_fwb.set_defaults(func=cmd_framework_bundle)
+
+    p_fwv = fw_sub.add_parser(
+        "validate",
+        help="Validate evidence states and acceptance for a declared profile",
+    )
+    p_fwv.add_argument(
+        "--project",
+        type=Path,
+        default=Path("osqar_project.json"),
+        help="Project configuration (default: osqar_project.json)",
+    )
+    p_fwv.add_argument(
+        "--profile",
+        choices=("basic", "qualification"),
+        required=True,
+        help="Behavior profile; qualification is fail-closed",
+    )
+    p_fwv.add_argument(
+        "--source-revision",
+        default=None,
+        help="Trusted reviewed source revision expected by the qualification profile",
+    )
+    p_fwv.add_argument(
+        "--configuration-sha256",
+        default=None,
+        help="Trusted reviewed configuration SHA-256 expected by the qualification profile",
+    )
+    p_fwv.add_argument(
+        "--report-json",
+        type=Path,
+        default=None,
+        help="Optional machine-readable acceptance report",
+    )
+    p_fwv.set_defaults(func=cmd_framework_validate)
