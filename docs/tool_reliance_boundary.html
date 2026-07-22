@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Integrating Verification into CI" href="ci_integration.html" /><link rel="prev" title="Multi-project workflows" href="multi_project_workflows.html" />
+<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Evidence states and acceptance" href="evidence_acceptance.html" /><link rel="prev" title="Configuration and hooks" href="configuration_and_hooks.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
-        <title>Collaboration workflows (multi-user) - OSQAr 0.9.0 documentation</title>
+        <title>Safety-tool reliance boundary - OSQAr 0.9.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -217,17 +217,17 @@
 <li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🏢 Professional Deployment</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="lifecycle_management.html">Lifecycle Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multi_project_workflows.html">Multi-project workflows</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Collaboration workflows (multi-user)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collaboration_workflows.html">Collaboration workflows (multi-user)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ci_integration.html">Integrating Verification into CI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🔧 Reference</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cli_reference.html">CLI Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool_reliance_boundary.html">Safety-tool reliance boundary</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Safety-tool reliance boundary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
@@ -257,7 +257,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../_sources/docs/collaboration_workflows.rst.txt" title="View this page">
+  <a class="muted-link" href="../_sources/docs/tool_reliance_boundary.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -277,194 +277,172 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="collaboration-workflows-multi-user">
-<h1>Collaboration workflows (multi-user)<a class="headerlink" href="#collaboration-workflows-multi-user" title="Link to this heading">¶</a></h1>
-<p>OSQAr is <strong>documentation-first</strong>. That makes collaboration scalable <em>if</em> you treat the
-Sphinx sources as controlled engineering artifacts (not as free-form prose).</p>
-<p>This chapter describes practical branching/merging strategies and conventions that
-reduce merge conflicts and keep traceability stable for large teams.</p>
-<section id="principles">
-<h2>Principles<a class="headerlink" href="#principles" title="Link to this heading">¶</a></h2>
+          <section id="safety-tool-reliance-boundary">
+<h1>Safety-tool reliance boundary<a class="headerlink" href="#safety-tool-reliance-boundary" title="Link to this heading">¶</a></h1>
+<section id="status-and-standards-basis">
+<h2>Status and standards basis<a class="headerlink" href="#status-and-standards-basis" title="Link to this heading">¶</a></h2>
+<p>This strategy is a <strong>researched interpretation</strong> of ISO 26262-8:2018,
+Clause 11. It has not yet been checked against a controlled copy of the
+standard. <code class="docutils literal notranslate"><span class="pre">BitVortex</span></code> is the designated independent functional-safety
+reviewer.</p>
+<p>No OSQAr function is currently approved for safety-lifecycle reliance by this
+strategy. The packaged inventory
+<code class="docutils literal notranslate"><span class="pre">osqar_data/governance/tool-reliance-v1.json</span></code> deliberately sets
+<code class="docutils literal notranslate"><span class="pre">reliance_permitted</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code> for every function and leaves version
+applicability unresolved. This is fail-closed: implementation, tests, or
+community use alone cannot activate a reliance claim.</p>
+<p>The strategy does not assert that OSQAr, a generated component, or any work
+product is qualified, compliant, certified, or safe.</p>
+</section>
+<section id="claim-boundary">
+<h2>Claim boundary<a class="headerlink" href="#claim-boundary" title="Link to this heading">¶</a></h2>
+<p>A future reviewed disposition may permit reliance only on explicitly named,
+machine-checkable predicates for an exact OSQAr version, profile version,
+configuration, dependency set, and supported environment. Such permission
+would mean only that the documented predicate may support the identified
+lifecycle decision within its operating constraints.</p>
+<p>It would not establish:</p>
 <ul class="simple">
-<li><p><strong>Keep IDs stable</strong>: requirement/architecture/test IDs (<code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>, <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>)
-are part of the contract. Never recycle IDs.</p></li>
-<li><p><strong>Prefer additive changes</strong>: add new needs and new sections instead of rewriting existing
-paragraphs.</p></li>
-<li><p><strong>Split work by files</strong>: parallel work scales when people do not edit the same <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files.</p></li>
-<li><p><strong>Automate checks</strong>: run docs builds and traceability checks in CI for every change.</p></li>
+<li><p>correctness or completeness of requirements;</p></li>
+<li><p>adequacy of allocations or verification methods;</p></li>
+<li><p>sufficiency of evidence;</p></li>
+<li><p>validity of assumptions of use or deviations;</p></li>
+<li><p>completeness of impact analysis;</p></li>
+<li><p>soundness of a safety argument;</p></li>
+<li><p>signer authority or organizational trust;</p></li>
+<li><p>component or tool qualification;</p></li>
+<li><p>ISO 26262 conformity.</p></li>
 </ul>
 </section>
-<section id="repository-layout-for-parallel-work">
-<h2>Repository layout for parallel work<a class="headerlink" href="#repository-layout-for-parallel-work" title="Link to this heading">¶</a></h2>
-<p>To minimize conflicts, organize content so contributors naturally touch different files:</p>
+<section id="candidate-mechanical-predicates">
+<h2>Candidate mechanical predicates<a class="headerlink" href="#candidate-mechanical-predicates" title="Link to this heading">¶</a></h2>
+<p>The inventory identifies these candidates, all currently disabled:</p>
 <ul class="simple">
-<li><p>One chapter per concern (requirements / architecture / verification / lifecycle / collaboration).</p></li>
-<li><p>Split large chapters into multiple files and include them from a stable index page.</p></li>
-<li><p>Prefer “append-only” files for requirements lists (see below).</p></li>
+<li><p>checksum verification of declared bytes;</p></li>
+<li><p>exact release-manifest inventory and integrity verification;</p></li>
+<li><p>directed typed-traceability validation;</p></li>
+<li><p>mechanical evidence-state and provenance validation;</p></li>
+<li><p>detached-signature cryptographic verification;</p></li>
+<li><p>strict shipment aggregation of separately named predicates.</p></li>
 </ul>
-<p>Typical pattern:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>requirements/
-  safety_requirements.rst
-  functional_requirements.rst
-  interfaces.rst
-architecture/
-  system_context.rst
-  component_decomposition.rst
-verification/
-  verification_plan.rst
-  test_results.rst
-</pre></div>
-</div>
-<p>Use a stable top-level toctree that rarely changes, and let subtrees grow.</p>
+<p>Each candidate is provisionally treated as capable of failing to detect an
+error in a relied-upon lifecycle work product. The packaged TI, tool-error-
+detection, and TCL labels are provisional research classifications, not final
+Clause 11 determinations. <code class="docutils literal notranslate"><span class="pre">BitVortex</span></code> must confirm or replace them using the
+exact use case and controlled standard.</p>
 </section>
-<section id="branching-strategies">
-<h2>Branching strategies<a class="headerlink" href="#branching-strategies" title="Link to this heading">¶</a></h2>
-<p>Two common approaches work well with OSQAr. Choose one and apply it consistently.</p>
-<section id="trunk-based-development-recommended-for-most-teams">
-<h3>Trunk-based development (recommended for most teams)<a class="headerlink" href="#trunk-based-development-recommended-for-most-teams" title="Link to this heading">¶</a></h3>
+<section id="functions-outside-the-boundary">
+<h2>Functions outside the boundary<a class="headerlink" href="#functions-outside-the-boundary" title="Link to this heading">¶</a></h2>
+<p>The following remain convenience aids or explicitly excluded functions:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> is always releasable.</p></li>
-<li><p>Developers branch from <code class="docutils literal notranslate"><span class="pre">main</span></code> and open small pull requests.</p></li>
-<li><p>Merge frequently (at least daily) to reduce drift and conflicts.</p></li>
+<li><p>build and test orchestration until completion/report acceptance is separately
+justified;</p></li>
+<li><p>impact traversal;</p></li>
+<li><p>baseline diff reports;</p></li>
+<li><p>GSN generation;</p></li>
+<li><p>workspace combination;</p></li>
+<li><p>project scaffolding, diagnostics, metadata, and reporting.</p></li>
 </ul>
-<p>Guidelines:</p>
-<ul class="simple">
-<li><p>Keep PRs small (e.g., one feature or one document area).</p></li>
-<li><p>Prefer <strong>squash merge</strong> for clean history, unless you need full commit lineage.</p></li>
-<li><p>Use short-lived feature branches: <code class="docutils literal notranslate"><span class="pre">feature/&lt;topic&gt;</span></code>.</p></li>
-</ul>
+<p>Their outputs may inform competent review. They must not replace complete
+impact analysis, lifecycle review, evidence assessment, or safety-argument
+judgment.</p>
 </section>
-<section id="release-branches-useful-when-multiple-releases-are-supported">
-<h3>Release branches (useful when multiple releases are supported)<a class="headerlink" href="#release-branches-useful-when-multiple-releases-are-supported" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> continues forward.</p></li>
-<li><p>Cut a branch <code class="docutils literal notranslate"><span class="pre">release/x.y</span></code> when you need stabilization.</p></li>
-<li><p>Backport fixes via cherry-picks.</p></li>
-</ul>
-<p>Guidelines:</p>
-<ul class="simple">
-<li><p>Tag releases (e.g., <code class="docutils literal notranslate"><span class="pre">v1.7.19-0.9.0</span></code>) and keep the shipped documentation reproducible.</p></li>
-<li><p>Avoid large refactors on release branches.</p></li>
-</ul>
+<section id="required-per-function-argument">
+<h2>Required per-function argument<a class="headerlink" href="#required-per-function-argument" title="Link to this heading">¶</a></h2>
+<p>Before changing a function to <code class="docutils literal notranslate"><span class="pre">reliance_permitted:</span> <span class="pre">true</span></code>, its inventory
+record and supporting report shall identify:</p>
+<ol class="arabic simple">
+<li><p>the exact downstream decision allowed to rely on the result;</p></li>
+<li><p>the input, output, configuration, exclusions, and operating constraints;</p></li>
+<li><p>every material erroneous output and whether it introduces or fails to
+detect a lifecycle-work-product error;</p></li>
+<li><p>the use-case-specific Tool Impact rationale;</p></li>
+<li><p>the independent detection mechanisms and their demonstrated strength;</p></li>
+<li><p>the resulting tool-confidence disposition;</p></li>
+<li><p>exact OSQAr, profile, Python, dependency, and platform versions;</p></li>
+<li><p>immutable validation evidence;</p></li>
+<li><p>known anomalies and residual limitations;</p></li>
+<li><p>independent approval by the designated reviewer.</p></li>
+</ol>
+<p>The inventory validator rejects reliance unless all documented controls are
+machine-resolved: exact OSQAr, profile, Python, dependency, configuration, and
+environment applicability; controlled-copy-reviewed standards status; a named
+lifecycle decision and owner; nonblank independent detection; immutable
+evidence; explicit assumptions, constraints, limitations, anomalies, and
+revalidation triggers; and approval by the fixed designated reviewer
+<code class="docutils literal notranslate"><span class="pre">BitVortex</span></code>. Immutable evidence entries bind a 40- or 64-hex revision into the
+identifier, bind the evidence digest through <code class="docutils literal notranslate"><span class="pre">urn:sha256:&lt;digest&gt;</span></code>, and name a
+relative local JSON evidence artifact. Validation hashes the artifact bytes and
+requires its evidence-envelope revision to equal the declared revision.
+Placeholder, whitespace-only, or unresolved values fail closed.</p>
 </section>
-</section>
-<section id="merging-strategies">
-<h2>Merging strategies<a class="headerlink" href="#merging-strategies" title="Link to this heading">¶</a></h2>
+<section id="required-independent-evidence">
+<h2>Required independent evidence<a class="headerlink" href="#required-independent-evidence" title="Link to this heading">¶</a></h2>
+<p>Evidence should be selected per predicate. The minimum candidate set is:</p>
 <ul class="simple">
-<li><p>Prefer <strong>merge by pull request</strong>, not direct pushes to protected branches.</p></li>
-<li><p>Use a consistent merge mode:</p>
-<ul>
-<li><p><strong>Squash merge</strong>: good default; one commit per PR, easier audit trail.</p></li>
-<li><p><strong>Merge commit</strong>: useful when you want to preserve a topic branch structure.</p></li>
+<li><p>hand-authored positive and negative fixtures with independent expected
+results;</p></li>
+<li><p>fault-seeded missing, extra, corrupted, stale, duplicated, reversed,
+malformed, skipped, unavailable, and zero-test cases where applicable;</p></li>
+<li><p>differential checksum or signature verification using a separate
+implementation;</p></li>
+<li><p>an independently implemented typed-graph oracle;</p></li>
+<li><p>destination rehash and source-to-destination inventory reconciliation;</p></li>
+<li><p>source-tree and clean installed-wheel execution;</p></li>
+<li><p>deterministic machine-readable reports;</p></li>
+<li><p>captured command, OSQAr version, profile version, Python/dependency versions,
+configuration, exclusions, hooks, and platform;</p></li>
+<li><p>an independently reviewed validation report tied to an immutable revision.</p></li>
 </ul>
-</li>
-<li><p>Avoid rebasing shared branches after review starts (it rewrites history and complicates review).</p></li>
-</ul>
+<p>Reusing the same OSQAr implementation to generate and verify an artifact is
+not automatically independent error detection. The argument must state the
+specific fault detected by each external measure.</p>
 </section>
-<section id="how-to-minimize-merge-conflicts">
-<h2>How to minimize merge conflicts<a class="headerlink" href="#how-to-minimize-merge-conflicts" title="Link to this heading">¶</a></h2>
-<section id="rst-restructuredtext">
-<h3>RST (reStructuredText)<a class="headerlink" href="#rst-restructuredtext" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>Avoid re-wrapping paragraphs for style changes; it causes noisy diffs.</p></li>
-<li><p>Keep lists stable: append items instead of reordering.</p></li>
-<li><p>If two people need to edit the same chapter, split it first.</p></li>
-</ul>
+<section id="dependencies-and-coupled-failures">
+<h2>Dependencies and coupled failures<a class="headerlink" href="#dependencies-and-coupled-failures" title="Link to this heading">¶</a></h2>
+<p>The use-case assessment must include relevant dependencies and external tools,
+including Sphinx, Sphinx-Needs, report parsers, YAML/JSON libraries, packaging
+and build tooling, cryptographic tools, and external test/build commands.
+An internally consistent <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> can still be wrong because of an
+upstream transformation defect. The disposition must either control that
+failure mode or state it as a limitation.</p>
 </section>
-<section id="sphinx-needs-objects">
-<h3>Sphinx-needs objects<a class="headerlink" href="#sphinx-needs-objects" title="Link to this heading">¶</a></h3>
+<section id="anomalies-and-revalidation">
+<h2>Anomalies and revalidation<a class="headerlink" href="#anomalies-and-revalidation" title="Link to this heading">¶</a></h2>
+<p>A relied-upon version requires a known-anomaly register recording affected
+functions, versions, impact, workaround, detection status, and whether prior
+outputs require regeneration.</p>
+<p>Revalidation review is required after changes to at least:</p>
 <ul class="simple">
-<li><p>Treat IDs as immutable. If wording changes, keep the same <code class="docutils literal notranslate"><span class="pre">:id:</span></code>.</p></li>
-<li><p>Add new requirements as new needs; avoid “editing history into the same need” unless
-it is truly the same requirement.</p></li>
-<li><p>Maintain consistent prefixes (<code class="docutils literal notranslate"><span class="pre">REQ_SAFETY_*</span></code>, <code class="docutils literal notranslate"><span class="pre">REQ_FUNC_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>, <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>).</p></li>
-</ul>
-</section>
-<section id="diagrams-plantuml">
-<h3>Diagrams (PlantUML)<a class="headerlink" href="#diagrams-plantuml" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>Prefer one diagram per file.</p></li>
-<li><p>Avoid large diagram rewrites; add a new diagram revision (e.g., <code class="docutils literal notranslate"><span class="pre">03_context_v2.puml</span></code>)
-if needed.</p></li>
-</ul>
-</section>
-<section id="generated-artifacts">
-<h3>Generated artifacts<a class="headerlink" href="#generated-artifacts" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>Never commit build outputs (<code class="docutils literal notranslate"><span class="pre">_build/</span></code>, <code class="docutils literal notranslate"><span class="pre">target/</span></code>, <code class="docutils literal notranslate"><span class="pre">build/</span></code>).</p></li>
-<li><p>Treat shipments (evidence bundles) as <strong>immutable</strong> after creation.</p></li>
-</ul>
-</section>
-</section>
-<section id="collaborating-at-scale">
-<h2>Collaborating at scale<a class="headerlink" href="#collaborating-at-scale" title="Link to this heading">¶</a></h2>
-<section id="roles-and-review-gates">
-<h3>Roles and review gates<a class="headerlink" href="#roles-and-review-gates" title="Link to this heading">¶</a></h3>
-<p>For industry-scale collaboration, define a simple set of gates:</p>
-<ul class="simple">
-<li><p><strong>Author</strong>: proposes change via PR.</p></li>
-<li><p><strong>Reviewer</strong>: checks clarity, correctness, and traceability links.</p></li>
-<li><p><strong>Integrator</strong>: confirms evidence is consistent and reproducible.</p></li>
-</ul>
-<p>Recommended CI checks:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-W</span></code> to treat warnings as errors</p></li>
-<li><p>traceability check on exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code></p></li>
-<li><p>checksum generation/verification for example shipments (if you publish them)</p></li>
+<li><p>the behavior profile or acceptance policy;</p></li>
+<li><p>traceability vocabulary or cardinalities;</p></li>
+<li><p>report parsers and result-state handling;</p></li>
+<li><p>checksum, path, exclusion, or release-inventory semantics;</p></li>
+<li><p>signature handling or trust configuration;</p></li>
+<li><p>supported dependencies, Python versions, or operating platforms;</p></li>
+<li><p>a known anomaly affecting a relied-upon predicate.</p></li>
 </ul>
 </section>
-</section>
-<section id="ci-setup-github-actions">
-<span id="ci-setup"></span><h2>CI setup (GitHub Actions)<a class="headerlink" href="#ci-setup-github-actions" title="Link to this heading">¶</a></h2>
-<p>This repository uses GitHub Actions to continuously validate the boilerplate and to
-demonstrate “evidence shipment” generation.</p>
-<p>Workflow definitions:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/ci.yml</span></code> (Tests and Example Shipments)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/pages-deploy.yml</span></code> (GitHub Pages)</p></li>
-</ul>
-<section id="what-the-ci-runs">
-<h3>What the CI runs<a class="headerlink" href="#what-the-ci-runs" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>Python checks (matrix): install via Poetry, run <code class="docutils literal notranslate"><span class="pre">pytest</span></code>, build the Python demo example docs.</p></li>
-<li><p>Traceability validation: run <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">traceability</span></code> on the exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>.</p></li>
-<li><p>Integrity metadata: generate and verify <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> manifests for built documentation outputs.</p></li>
-</ul>
-</section>
-<section id="reproducible-example-shipments">
-<h3>Reproducible example shipments<a class="headerlink" href="#reproducible-example-shipments" title="Link to this heading">¶</a></h3>
-<p>The CI workflow builds deterministic archives for the native examples (C/C++/Rust):</p>
-<ul class="simple">
-<li><p>Sets <code class="docutils literal notranslate"><span class="pre">SOURCE_DATE_EPOCH</span></code> (using the latest git commit timestamp).</p></li>
-<li><p>Enables reproducible mode via <code class="docutils literal notranslate"><span class="pre">OSQAR_REPRODUCIBLE=1</span></code>.</p></li>
-<li><p>Produces per-example shipment archives and a combined example workspace archive, each with a <code class="docutils literal notranslate"><span class="pre">.sha256</span></code> file.</p></li>
-</ul>
-<p>In GitHub Actions, download the artifact named <code class="docutils literal notranslate"><span class="pre">osqar-example-workspace</span></code> from the
-<code class="docutils literal notranslate"><span class="pre">Tests</span> <span class="pre">and</span> <span class="pre">Example</span> <span class="pre">Shipments</span></code> workflow run.</p>
-</section>
-<section id="github-pages-publishing">
-<h3>GitHub Pages publishing<a class="headerlink" href="#github-pages-publishing" title="Link to this heading">¶</a></h3>
-<p>The Pages workflow builds the framework docs and publishes rendered examples under <code class="docutils literal notranslate"><span class="pre">/examples/</span></code>.
-It also runs the example end-to-end scripts (tests → evidence files → docs) so the published site
-includes embedded test results and evidence snapshots.</p>
-</section>
-<section id="working-on-multiple-subprojects-in-parallel">
-<h3>Working on multiple subprojects in parallel<a class="headerlink" href="#working-on-multiple-subprojects-in-parallel" title="Link to this heading">¶</a></h3>
-<p>When multiple teams produce shipments simultaneously:</p>
-<ul class="simple">
-<li><p>Standardize naming for shipments: <code class="docutils literal notranslate"><span class="pre">&lt;supplier&gt;_&lt;component&gt;_&lt;version&gt;</span></code>.</p></li>
-<li><p>Include <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> in each shipment to record origin, URLs, and descriptive metadata.</p></li>
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">workspace</span> <span class="pre">intake</span></code> to archive and summarize received shipments.</p></li>
-</ul>
-</section>
-</section>
-<section id="change-control-tips">
-<h2>Change control tips<a class="headerlink" href="#change-control-tips" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>Record user-facing changes in <code class="docutils literal notranslate"><span class="pre">CHANGELOG.md</span></code>.</p></li>
-<li><p>Keep a stable requirement ID namespace and allocate ID ranges if multiple teams author requirements.</p></li>
-<li><p>For safety-relevant changes, require an explicit review and update lifecycle records accordingly.</p></li>
-</ul>
+<section id="independent-review-gate">
+<h2>Independent review gate<a class="headerlink" href="#independent-review-gate" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">BitVortex</span></code> should answer, for every candidate function:</p>
+<ol class="arabic simple">
+<li><p>Is the downstream lifecycle decision stated precisely?</p></li>
+<li><p>Is the Tool Impact rationale use-case-specific?</p></li>
+<li><p>Could a warning, skipped step, exclusion, missing tool, stale report, or
+empty test suite still yield a pass?</p></li>
+<li><p>Is the claimed detection mechanism independent of the implementation being
+assessed?</p></li>
+<li><p>Are exact versions, dependencies, configuration, and operating limits
+fixed?</p></li>
+<li><p>Do the evidence identifiers resolve to immutable, reproducible results?</p></li>
+<li><p>Are semantic judgments visibly outside the automated claim?</p></li>
+<li><p>Are coupled dependency failures and anomalies addressed?</p></li>
+</ol>
+<p>Only after those questions are resolved against controlled standard text and
+versioned evidence may the inventory status become <code class="docutils literal notranslate"><span class="pre">reviewed</span></code> and an
+individual candidate become permitted. Approval is per function and use case;
+it is not blanket approval of OSQAr.</p>
 </section>
 </section>
 
@@ -473,23 +451,23 @@ includes embedded test results and evidence snapshots.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="ci_integration.html">
+          <a class="next-page" href="evidence_acceptance.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Integrating Verification into CI</div>
+                <div class="title">Evidence states and acceptance</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="multi_project_workflows.html">
+          <a class="prev-page" href="configuration_and_hooks.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Multi-project workflows</div>
+                <div class="title">Configuration and hooks</div>
                 
               </div>
             </a>
@@ -523,34 +501,16 @@ includes embedded test results and evidence snapshots.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Collaboration workflows (multi-user)</a><ul>
-<li><a class="reference internal" href="#principles">Principles</a></li>
-<li><a class="reference internal" href="#repository-layout-for-parallel-work">Repository layout for parallel work</a></li>
-<li><a class="reference internal" href="#branching-strategies">Branching strategies</a><ul>
-<li><a class="reference internal" href="#trunk-based-development-recommended-for-most-teams">Trunk-based development (recommended for most teams)</a></li>
-<li><a class="reference internal" href="#release-branches-useful-when-multiple-releases-are-supported">Release branches (useful when multiple releases are supported)</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#merging-strategies">Merging strategies</a></li>
-<li><a class="reference internal" href="#how-to-minimize-merge-conflicts">How to minimize merge conflicts</a><ul>
-<li><a class="reference internal" href="#rst-restructuredtext">RST (reStructuredText)</a></li>
-<li><a class="reference internal" href="#sphinx-needs-objects">Sphinx-needs objects</a></li>
-<li><a class="reference internal" href="#diagrams-plantuml">Diagrams (PlantUML)</a></li>
-<li><a class="reference internal" href="#generated-artifacts">Generated artifacts</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#collaborating-at-scale">Collaborating at scale</a><ul>
-<li><a class="reference internal" href="#roles-and-review-gates">Roles and review gates</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#ci-setup-github-actions">CI setup (GitHub Actions)</a><ul>
-<li><a class="reference internal" href="#what-the-ci-runs">What the CI runs</a></li>
-<li><a class="reference internal" href="#reproducible-example-shipments">Reproducible example shipments</a></li>
-<li><a class="reference internal" href="#github-pages-publishing">GitHub Pages publishing</a></li>
-<li><a class="reference internal" href="#working-on-multiple-subprojects-in-parallel">Working on multiple subprojects in parallel</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#change-control-tips">Change control tips</a></li>
+<li><a class="reference internal" href="#">Safety-tool reliance boundary</a><ul>
+<li><a class="reference internal" href="#status-and-standards-basis">Status and standards basis</a></li>
+<li><a class="reference internal" href="#claim-boundary">Claim boundary</a></li>
+<li><a class="reference internal" href="#candidate-mechanical-predicates">Candidate mechanical predicates</a></li>
+<li><a class="reference internal" href="#functions-outside-the-boundary">Functions outside the boundary</a></li>
+<li><a class="reference internal" href="#required-per-function-argument">Required per-function argument</a></li>
+<li><a class="reference internal" href="#required-independent-evidence">Required independent evidence</a></li>
+<li><a class="reference internal" href="#dependencies-and-coupled-failures">Dependencies and coupled failures</a></li>
+<li><a class="reference internal" href="#anomalies-and-revalidation">Anomalies and revalidation</a></li>
+<li><a class="reference internal" href="#independent-review-gate">Independent review gate</a></li>
 </ul>
 </li>
 </ul>
