@@ -1736,8 +1736,8 @@ def cmd_workspace_combine(args: argparse.Namespace) -> int:
         try:
             data = _json.loads(needs_path.read_text(encoding="utf-8"))
         except Exception as exc:
-            print(f"  WARNING: failed to parse {needs_path}: {exc}")
-            continue
+            print(f"ERROR: failed to parse {needs_path}: {exc}", file=sys.stderr)
+            return 2
 
         # Extract needs with namespace prefix
         prefix = pd.name + ":"
@@ -1758,10 +1758,15 @@ def cmd_workspace_combine(args: argparse.Namespace) -> int:
                         raw_needs = [n for n in v["needs"] if isinstance(n, dict)]
 
         count = 0
+        seen_need_ids: set[str] = set()
         for need in raw_needs:
-            nid = str(need.get("id", ""))
+            nid = str(need.get("id", "")).strip()
             if not nid:
                 continue
+            if nid in seen_need_ids:
+                print(f"ERROR: duplicate need id: {nid} ({needs_path})", file=sys.stderr)
+                return 2
+            seen_need_ids.add(nid)
             new_need = dict(need)
             new_need["id"] = prefix + nid
             # Rewrite links with namespace prefixes

@@ -37,6 +37,83 @@ jobs:
     - name: Run repository acceptance tests
       run: poetry run python -m pytest -q tests
 
+    - name: Framework regression and fault-injection tests
+      run: |
+        set -euo pipefail
+        poetry run python -m pytest -q tests \
+          --junitxml=framework-test-results.xml \
+          --cov=tools \
+          --cov-report=xml:framework-coverage.xml
+        poetry run python -m tools.framework_test_report \
+          framework-test-results.xml \
+          --json-report framework-test-validation.json
+
+    - name: Prove framework evidence validator fails closed
+      run: |
+        set -euo pipefail
+        printf '%s\n' '<testsuite tests="1" failures="0" errors="0" skipped="1"><testcase name="seeded-skip"><skipped/></testcase></testsuite>' > seeded-skipped.xml
+        printf '%s\n' '<testsuites tests="0" failures="0" errors="0" skipped="0"/>' > seeded-zero.xml
+        if poetry run python -m tools.framework_test_report seeded-skipped.xml; then
+          echo "ERROR: skipped-test JUnit evidence was accepted" >&2
+          exit 1
+        else
+          status=$?
+          test "${status}" -eq 2
+        fi
+        if poetry run python -m tools.framework_test_report seeded-zero.xml; then
+          echo "ERROR: zero-collection JUnit evidence was accepted" >&2
+          exit 1
+        else
+          status=$?
+          test "${status}" -eq 2
+        fi
+
+    - name: Upload source framework evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: framework-evidence-source-python-${{ matrix.python-version }}
+        path: |
+          framework-test-results.xml
+          framework-test-validation.json
+          framework-coverage.xml
+        retention-days: 30
+
+    - name: Build and test installed wheel
+      run: |
+        set -euo pipefail
+        python -m pip install build
+        python -m build --wheel
+        rm -rf /tmp/osqar-wheel /tmp/osqar-installed-suite
+        python -m venv /tmp/osqar-wheel
+        /tmp/osqar-wheel/bin/python -m pip install --upgrade pip
+        /tmp/osqar-wheel/bin/python -m pip install dist/osqar-*.whl pytest pytest-cov
+        mkdir -p /tmp/osqar-installed-suite/.github/workflows
+        cp -R tests /tmp/osqar-installed-suite/tests
+        cp .github/workflows/ci.yml /tmp/osqar-installed-suite/.github/workflows/ci.yml
+        (cd /tmp/osqar-installed-suite && /tmp/osqar-wheel/bin/python -m pytest -q tests \
+          --junitxml=$GITHUB_WORKSPACE/installed-wheel-test-results.xml \
+          --cov=tools \
+          --cov-report=xml:$GITHUB_WORKSPACE/installed-wheel-coverage.xml)
+        (cd /tmp && /tmp/osqar-wheel/bin/python -m tools.framework_test_report \
+          $GITHUB_WORKSPACE/installed-wheel-test-results.xml \
+          --json-report $GITHUB_WORKSPACE/installed-wheel-test-validation.json)
+        (cd /tmp && /tmp/osqar-wheel/bin/python -c 'import importlib.resources; import pathlib; import tools; import osqar_data; source_checkout = pathlib.Path("'"$GITHUB_WORKSPACE"'").resolve(); wheel_root = pathlib.Path("/tmp/osqar-wheel").resolve(); module_paths = [pathlib.Path(tools.__file__).resolve(), pathlib.Path(osqar_data.__file__).resolve()]; resource_path = pathlib.Path(str(importlib.resources.files(osqar_data))).resolve(); assert all(path.is_relative_to(wheel_root) and not path.is_relative_to(source_checkout) for path in [*module_paths, resource_path]), (module_paths, resource_path)')
+        (cd /tmp && /tmp/osqar-wheel/bin/osqar --help >/dev/null)
+        (cd /tmp && /tmp/osqar-wheel/bin/osqar traceability --help >/dev/null)
+        (cd /tmp && /tmp/osqar-wheel/bin/osqar shipment --help >/dev/null)
+
+    - name: Upload installed-wheel framework evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: framework-evidence-wheel-python-${{ matrix.python-version }}
+        path: |
+          installed-wheel-test-results.xml
+          installed-wheel-test-validation.json
+          installed-wheel-coverage.xml
+        retention-days: 30
+
     - name: Sanity-check osqar CLI entrypoint
       run: |
         set -euo pipefail
@@ -114,17 +191,17 @@ jobs:
         # GSN generate — PlantUML backend (default)
         echo "== osqar gsn generate (PlantUML)"
         ./osqar gsn generate examples/python_hello_world/_build/html/needs.json \
-          --output _build/gsn_safety_case.puml || true
+          --output _build/gsn_safety_case.puml
         # Verify output is valid PlantUML
-        if [ -f _build/gsn_safety_case.puml ]; then
-          grep -q '@startuml' _build/gsn_safety_case.puml && echo "  ✓ Valid PlantUML" || echo "  ! Missing @startuml"
-          grep -q '@enduml' _build/gsn_safety_case.puml && echo "  ✓ Valid closing" || echo "  ! Missing @enduml"
-        fi
+        test -s _build/gsn_safety_case.puml
+        grep -q '@startuml' _build/gsn_safety_case.puml
+        grep -q '@enduml' _build/gsn_safety_case.puml
 
         # GSN generate — gsn2x-yaml backend (legacy)
         echo "== osqar gsn generate (gsn2x-yaml)"
         ./osqar gsn generate examples/python_hello_world/_build/html/needs.json \
-          --backend gsn2x-yaml --output _build/gsn_safety_case.yaml || true
+          --backend gsn2x-yaml --output _build/gsn_safety_case.yaml
+        test -s _build/gsn_safety_case.yaml
 
     - name: Upload documentation
       uses: actions/upload-artifact@v4

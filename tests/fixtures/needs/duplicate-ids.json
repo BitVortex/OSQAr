@@ -1,0 +1,7 @@
+{
+  "needs": [
+    {"id": "REQ_DUP", "links": ["ARCH_1"]},
+    {"id": "REQ_DUP", "links": ["ARCH_1"]},
+    {"id": "ARCH_1", "links": ["REQ_DUP"]}
+  ]
+}

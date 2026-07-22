@@ -20,6 +20,8 @@ def cmd_checksums_generate(args: argparse.Namespace) -> int:
 
 def cmd_checksums_verify(args: argparse.Namespace) -> int:
     argv: list[str] = ["--root", str(args.root), "--verify", str(args.manifest)]
+    if getattr(args, "closed_set", False):
+        argv.append("--closed-set")
     for ex in getattr(args, "exclude", []) or []:
         argv += ["--exclude", str(ex)]
     if getattr(args, "json_report", None):
@@ -54,6 +56,11 @@ def register(sub: argparse._SubParsersAction) -> None:
     )
     p_ver.add_argument("--root", type=Path, required=True)
     p_ver.add_argument("--manifest", type=Path, required=True)
+    p_ver.add_argument(
+        "--closed-set",
+        action="store_true",
+        help="Reject regular files not declared by the manifest",
+    )
     p_ver.add_argument(
         "--exclude", action="append", default=[], help="Exclude glob (repeatable)"
     )
