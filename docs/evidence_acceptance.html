@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="search" title="Search" href="../search.html" /><link rel="next" title="Integrating Verification into CI" href="ci_integration.html" /><link rel="prev" title="Multi-project workflows" href="multi_project_workflows.html" />
+<link rel="search" title="Search" href="../search.html" /><link rel="next" title="OSQAr Examples" href="../examples/index.html" /><link rel="prev" title="Configuration and hooks" href="configuration_and_hooks.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
-        <title>Collaboration workflows (multi-user) - OSQAr 0.9.0 documentation</title>
+        <title>Evidence states and acceptance - OSQAr 0.9.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
@@ -217,17 +217,17 @@
 <li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🏢 Professional Deployment</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="lifecycle_management.html">Lifecycle Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multi_project_workflows.html">Multi-project workflows</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Collaboration workflows (multi-user)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collaboration_workflows.html">Collaboration workflows (multi-user)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ci_integration.html">Integrating Verification into CI</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">🔧 Reference</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cli_reference.html">CLI Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Evidence states and acceptance</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
 <ul>
@@ -256,7 +256,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../_sources/docs/collaboration_workflows.rst.txt" title="View this page">
+  <a class="muted-link" href="../_sources/docs/evidence_acceptance.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -276,194 +276,78 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="collaboration-workflows-multi-user">
-<h1>Collaboration workflows (multi-user)<a class="headerlink" href="#collaboration-workflows-multi-user" title="Link to this heading">¶</a></h1>
-<p>OSQAr is <strong>documentation-first</strong>. That makes collaboration scalable <em>if</em> you treat the
-Sphinx sources as controlled engineering artifacts (not as free-form prose).</p>
-<p>This chapter describes practical branching/merging strategies and conventions that
-reduce merge conflicts and keep traceability stable for large teams.</p>
-<section id="principles">
-<h2>Principles<a class="headerlink" href="#principles" title="Link to this heading">¶</a></h2>
+          <section id="evidence-states-and-acceptance">
+<h1>Evidence states and acceptance<a class="headerlink" href="#evidence-states-and-acceptance" title="Link to this heading">¶</a></h1>
+<p>OSQAr distinguishes authoring plans, executed results, artifact state, and
+mechanical acceptance. Generating or packaging a report does not approve it.</p>
+<section id="profiles">
+<h2>Profiles<a class="headerlink" href="#profiles" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">basic</span></code> preserves the documentation-first workflow. Its validation result
+contains <code class="docutils literal notranslate"><span class="pre">acceptance_claimed:</span> <span class="pre">false</span></code> and must not be presented as qualification
+evidence acceptance.</p>
+<p><code class="docutils literal notranslate"><span class="pre">qualification</span></code> is fail-closed. Required activities pass only when all of the
+following are true:</p>
 <ul class="simple">
-<li><p><strong>Keep IDs stable</strong>: requirement/architecture/test IDs (<code class="docutils literal notranslate"><span class="pre">REQ_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>, <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>)
-are part of the contract. Never recycle IDs.</p></li>
-<li><p><strong>Prefer additive changes</strong>: add new needs and new sections instead of rewriting existing
-paragraphs.</p></li>
-<li><p><strong>Split work by files</strong>: parallel work scales when people do not edit the same <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files.</p></li>
-<li><p><strong>Automate checks</strong>: run docs builds and traceability checks in CI for every change.</p></li>
+<li><p>activity state is <code class="docutils literal notranslate"><span class="pre">completed</span></code>;</p></li>
+<li><p>result state is <code class="docutils literal notranslate"><span class="pre">passed</span></code> or <code class="docutils literal notranslate"><span class="pre">passed-with-deviation</span></code>;</p></li>
+<li><p>evidence state is <code class="docutils literal notranslate"><span class="pre">approved</span></code> and is not <code class="docutils literal notranslate"><span class="pre">superseded</span></code>;</p></li>
+<li><p>applicability is explicit;</p></li>
+<li><p>source revision, configuration identity/hash, command, tool name/version, and
+environment are recorded;</p></li>
+<li><p>activity source/configuration values exactly match the project declarations;</p></li>
+<li><p>the project declarations exactly match trusted <code class="docutils literal notranslate"><span class="pre">--source-revision</span></code> and
+<code class="docutils literal notranslate"><span class="pre">--configuration-sha256</span></code> values supplied by the reviewing caller;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">required</span></code> values are JSON booleans, not truthy/falsy substitutes;</p></li>
+<li><p>the activity history begins at <code class="docutils literal notranslate"><span class="pre">planned</span></code>, contains known states, follows
+every permitted transition, and ends at the declared current state;</p></li>
+<li><p>the project-relative report exists, is non-empty, and matches its SHA-256;</p></li>
+<li><p>JUnit XML has a JUnit root, at least one executed test, recursively consistent
+suite/testcase counters, and zero failures, errors, or skips;</p></li>
+<li><p>configured thresholds pass;</p></li>
+<li><p>findings are closed or have an approved deviation;</p></li>
+<li><p>required gaps are not open.</p></li>
 </ul>
 </section>
-<section id="repository-layout-for-parallel-work">
-<h2>Repository layout for parallel work<a class="headerlink" href="#repository-layout-for-parallel-work" title="Link to this heading">¶</a></h2>
-<p>To minimize conflicts, organize content so contributors naturally touch different files:</p>
-<ul class="simple">
-<li><p>One chapter per concern (requirements / architecture / verification / lifecycle / collaboration).</p></li>
-<li><p>Split large chapters into multiple files and include them from a stable index page.</p></li>
-<li><p>Prefer “append-only” files for requirements lists (see below).</p></li>
-</ul>
-<p>Typical pattern:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>requirements/
-  safety_requirements.rst
-  functional_requirements.rst
-  interfaces.rst
-architecture/
-  system_context.rst
-  component_decomposition.rst
-verification/
-  verification_plan.rst
-  test_results.rst
+<section id="controlled-states">
+<h2>Controlled states<a class="headerlink" href="#controlled-states" title="Link to this heading">¶</a></h2>
+<p>Activity states are <code class="docutils literal notranslate"><span class="pre">planned</span></code>, <code class="docutils literal notranslate"><span class="pre">ready</span></code>, <code class="docutils literal notranslate"><span class="pre">running</span></code>, <code class="docutils literal notranslate"><span class="pre">completed</span></code>,
+<code class="docutils literal notranslate"><span class="pre">failed</span></code>, and <code class="docutils literal notranslate"><span class="pre">waived</span></code>. Allowed transitions are versioned in
+<code class="docutils literal notranslate"><span class="pre">osqar_data/profiles/qualification.yaml</span></code>. A completed or waived activity may
+not silently return to an execution state.</p>
+<p>Result states are <code class="docutils literal notranslate"><span class="pre">not-run</span></code>, <code class="docutils literal notranslate"><span class="pre">invalid</span></code>, <code class="docutils literal notranslate"><span class="pre">failed</span></code>, <code class="docutils literal notranslate"><span class="pre">passed</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">passed-with-deviation</span></code>. Evidence states are <code class="docutils literal notranslate"><span class="pre">missing</span></code>, <code class="docutils literal notranslate"><span class="pre">generated</span></code>,
+<code class="docutils literal notranslate"><span class="pre">validated</span></code>, <code class="docutils literal notranslate"><span class="pre">approved</span></code>, and <code class="docutils literal notranslate"><span class="pre">superseded</span></code>. Gap states are <code class="docutils literal notranslate"><span class="pre">open</span></code>,
+<code class="docutils literal notranslate"><span class="pre">approved</span></code>, and <code class="docutils literal notranslate"><span class="pre">closed</span></code>.</p>
+<p>An approved deviation requires a named reviewer and rationale. It records a
+review disposition; it does not turn a failed criterion into an ordinary pass.</p>
+</section>
+<section id="command">
+<h2>Command<a class="headerlink" href="#command" title="Link to this heading">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar framework validate \</span>
+<span class="go">  --project osqar_project.json \</span>
+<span class="go">  --profile qualification \</span>
+<span class="go">  --source-revision &quot;$REVIEWED_GIT_COMMIT&quot; \</span>
+<span class="go">  --configuration-sha256 &quot;$REVIEWED_CONFIGURATION_SHA256&quot; \</span>
+<span class="go">  --report-json _evidence/framework-acceptance.json</span>
 </pre></div>
 </div>
-<p>Use a stable top-level toctree that rarely changes, and let subtrees grow.</p>
+<p>Exit status is zero only when the selected profile passes. For
+<code class="docutils literal notranslate"><span class="pre">qualification</span></code>, the source and configuration values are independent trust
+anchors: derive them from the reviewed commit and controlled configuration,
+not from the project file being checked. Omitting either anchor fails closed.
+The JSON report uses schema <code class="docutils literal notranslate"><span class="pre">osqar.acceptance-report.v1</span></code>. A requested report
+target is invalidated before validation and published through an atomic
+replacement; an I/O failure returns status 2, cleanup failures are contained,
+and any regular temporary that cannot be removed is neutralized so stale
+successful acceptance evidence cannot survive.</p>
 </section>
-<section id="branching-strategies">
-<h2>Branching strategies<a class="headerlink" href="#branching-strategies" title="Link to this heading">¶</a></h2>
-<p>Two common approaches work well with OSQAr. Choose one and apply it consistently.</p>
-<section id="trunk-based-development-recommended-for-most-teams">
-<h3>Trunk-based development (recommended for most teams)<a class="headerlink" href="#trunk-based-development-recommended-for-most-teams" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> is always releasable.</p></li>
-<li><p>Developers branch from <code class="docutils literal notranslate"><span class="pre">main</span></code> and open small pull requests.</p></li>
-<li><p>Merge frequently (at least daily) to reduce drift and conflicts.</p></li>
-</ul>
-<p>Guidelines:</p>
-<ul class="simple">
-<li><p>Keep PRs small (e.g., one feature or one document area).</p></li>
-<li><p>Prefer <strong>squash merge</strong> for clean history, unless you need full commit lineage.</p></li>
-<li><p>Use short-lived feature branches: <code class="docutils literal notranslate"><span class="pre">feature/&lt;topic&gt;</span></code>.</p></li>
-</ul>
-</section>
-<section id="release-branches-useful-when-multiple-releases-are-supported">
-<h3>Release branches (useful when multiple releases are supported)<a class="headerlink" href="#release-branches-useful-when-multiple-releases-are-supported" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> continues forward.</p></li>
-<li><p>Cut a branch <code class="docutils literal notranslate"><span class="pre">release/x.y</span></code> when you need stabilization.</p></li>
-<li><p>Backport fixes via cherry-picks.</p></li>
-</ul>
-<p>Guidelines:</p>
-<ul class="simple">
-<li><p>Tag releases (e.g., <code class="docutils literal notranslate"><span class="pre">v1.7.19-0.9.0</span></code>) and keep the shipped documentation reproducible.</p></li>
-<li><p>Avoid large refactors on release branches.</p></li>
-</ul>
-</section>
-</section>
-<section id="merging-strategies">
-<h2>Merging strategies<a class="headerlink" href="#merging-strategies" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>Prefer <strong>merge by pull request</strong>, not direct pushes to protected branches.</p></li>
-<li><p>Use a consistent merge mode:</p>
-<ul>
-<li><p><strong>Squash merge</strong>: good default; one commit per PR, easier audit trail.</p></li>
-<li><p><strong>Merge commit</strong>: useful when you want to preserve a topic branch structure.</p></li>
-</ul>
-</li>
-<li><p>Avoid rebasing shared branches after review starts (it rewrites history and complicates review).</p></li>
-</ul>
-</section>
-<section id="how-to-minimize-merge-conflicts">
-<h2>How to minimize merge conflicts<a class="headerlink" href="#how-to-minimize-merge-conflicts" title="Link to this heading">¶</a></h2>
-<section id="rst-restructuredtext">
-<h3>RST (reStructuredText)<a class="headerlink" href="#rst-restructuredtext" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>Avoid re-wrapping paragraphs for style changes; it causes noisy diffs.</p></li>
-<li><p>Keep lists stable: append items instead of reordering.</p></li>
-<li><p>If two people need to edit the same chapter, split it first.</p></li>
-</ul>
-</section>
-<section id="sphinx-needs-objects">
-<h3>Sphinx-needs objects<a class="headerlink" href="#sphinx-needs-objects" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>Treat IDs as immutable. If wording changes, keep the same <code class="docutils literal notranslate"><span class="pre">:id:</span></code>.</p></li>
-<li><p>Add new requirements as new needs; avoid “editing history into the same need” unless
-it is truly the same requirement.</p></li>
-<li><p>Maintain consistent prefixes (<code class="docutils literal notranslate"><span class="pre">REQ_SAFETY_*</span></code>, <code class="docutils literal notranslate"><span class="pre">REQ_FUNC_*</span></code>, <code class="docutils literal notranslate"><span class="pre">ARCH_*</span></code>, <code class="docutils literal notranslate"><span class="pre">TEST_*</span></code>).</p></li>
-</ul>
-</section>
-<section id="diagrams-plantuml">
-<h3>Diagrams (PlantUML)<a class="headerlink" href="#diagrams-plantuml" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>Prefer one diagram per file.</p></li>
-<li><p>Avoid large diagram rewrites; add a new diagram revision (e.g., <code class="docutils literal notranslate"><span class="pre">03_context_v2.puml</span></code>)
-if needed.</p></li>
-</ul>
-</section>
-<section id="generated-artifacts">
-<h3>Generated artifacts<a class="headerlink" href="#generated-artifacts" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>Never commit build outputs (<code class="docutils literal notranslate"><span class="pre">_build/</span></code>, <code class="docutils literal notranslate"><span class="pre">target/</span></code>, <code class="docutils literal notranslate"><span class="pre">build/</span></code>).</p></li>
-<li><p>Treat shipments (evidence bundles) as <strong>immutable</strong> after creation.</p></li>
-</ul>
-</section>
-</section>
-<section id="collaborating-at-scale">
-<h2>Collaborating at scale<a class="headerlink" href="#collaborating-at-scale" title="Link to this heading">¶</a></h2>
-<section id="roles-and-review-gates">
-<h3>Roles and review gates<a class="headerlink" href="#roles-and-review-gates" title="Link to this heading">¶</a></h3>
-<p>For industry-scale collaboration, define a simple set of gates:</p>
-<ul class="simple">
-<li><p><strong>Author</strong>: proposes change via PR.</p></li>
-<li><p><strong>Reviewer</strong>: checks clarity, correctness, and traceability links.</p></li>
-<li><p><strong>Integrator</strong>: confirms evidence is consistent and reproducible.</p></li>
-</ul>
-<p>Recommended CI checks:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-W</span></code> to treat warnings as errors</p></li>
-<li><p>traceability check on exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code></p></li>
-<li><p>checksum generation/verification for example shipments (if you publish them)</p></li>
-</ul>
-</section>
-</section>
-<section id="ci-setup-github-actions">
-<span id="ci-setup"></span><h2>CI setup (GitHub Actions)<a class="headerlink" href="#ci-setup-github-actions" title="Link to this heading">¶</a></h2>
-<p>This repository uses GitHub Actions to continuously validate the boilerplate and to
-demonstrate “evidence shipment” generation.</p>
-<p>Workflow definitions:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/ci.yml</span></code> (Tests and Example Shipments)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/pages-deploy.yml</span></code> (GitHub Pages)</p></li>
-</ul>
-<section id="what-the-ci-runs">
-<h3>What the CI runs<a class="headerlink" href="#what-the-ci-runs" title="Link to this heading">¶</a></h3>
-<ul class="simple">
-<li><p>Python checks (matrix): install via Poetry, run <code class="docutils literal notranslate"><span class="pre">pytest</span></code>, build the Python demo example docs.</p></li>
-<li><p>Traceability validation: run <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">traceability</span></code> on the exported <code class="docutils literal notranslate"><span class="pre">needs.json</span></code>.</p></li>
-<li><p>Integrity metadata: generate and verify <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code> manifests for built documentation outputs.</p></li>
-</ul>
-</section>
-<section id="reproducible-example-shipments">
-<h3>Reproducible example shipments<a class="headerlink" href="#reproducible-example-shipments" title="Link to this heading">¶</a></h3>
-<p>The CI workflow builds deterministic archives for the native examples (C/C++/Rust):</p>
-<ul class="simple">
-<li><p>Sets <code class="docutils literal notranslate"><span class="pre">SOURCE_DATE_EPOCH</span></code> (using the latest git commit timestamp).</p></li>
-<li><p>Enables reproducible mode via <code class="docutils literal notranslate"><span class="pre">OSQAR_REPRODUCIBLE=1</span></code>.</p></li>
-<li><p>Produces per-example shipment archives and a combined example workspace archive, each with a <code class="docutils literal notranslate"><span class="pre">.sha256</span></code> file.</p></li>
-</ul>
-<p>In GitHub Actions, download the artifact named <code class="docutils literal notranslate"><span class="pre">osqar-example-workspace</span></code> from the
-<code class="docutils literal notranslate"><span class="pre">Tests</span> <span class="pre">and</span> <span class="pre">Example</span> <span class="pre">Shipments</span></code> workflow run.</p>
-</section>
-<section id="github-pages-publishing">
-<h3>GitHub Pages publishing<a class="headerlink" href="#github-pages-publishing" title="Link to this heading">¶</a></h3>
-<p>The Pages workflow builds the framework docs and publishes rendered examples under <code class="docutils literal notranslate"><span class="pre">/examples/</span></code>.
-It also runs the example end-to-end scripts (tests → evidence files → docs) so the published site
-includes embedded test results and evidence snapshots.</p>
-</section>
-<section id="working-on-multiple-subprojects-in-parallel">
-<h3>Working on multiple subprojects in parallel<a class="headerlink" href="#working-on-multiple-subprojects-in-parallel" title="Link to this heading">¶</a></h3>
-<p>When multiple teams produce shipments simultaneously:</p>
-<ul class="simple">
-<li><p>Standardize naming for shipments: <code class="docutils literal notranslate"><span class="pre">&lt;supplier&gt;_&lt;component&gt;_&lt;version&gt;</span></code>.</p></li>
-<li><p>Include <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code> in each shipment to record origin, URLs, and descriptive metadata.</p></li>
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">workspace</span> <span class="pre">intake</span></code> to archive and summarize received shipments.</p></li>
-</ul>
-</section>
-</section>
-<section id="change-control-tips">
-<h2>Change control tips<a class="headerlink" href="#change-control-tips" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>Record user-facing changes in <code class="docutils literal notranslate"><span class="pre">CHANGELOG.md</span></code>.</p></li>
-<li><p>Keep a stable requirement ID namespace and allocate ID ranges if multiple teams author requirements.</p></li>
-<li><p>For safety-relevant changes, require an explicit review and update lifecycle records accordingly.</p></li>
-</ul>
+<section id="boundary">
+<h2>Boundary<a class="headerlink" href="#boundary" title="Link to this heading">¶</a></h2>
+<p>This validator checks declared state, provenance, hashes, thresholds, and
+review dispositions. It does not determine whether requirements are correct,
+whether evidence is technically sufficient, or whether a safety argument is
+convincing. Passing does not establish ISO 26262 compliance, tool qualification,
+component qualification, certification, or safety.</p>
 </section>
 </section>
 
@@ -472,23 +356,23 @@ includes embedded test results and evidence snapshots.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="ci_integration.html">
+          <a class="next-page" href="../examples/index.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Integrating Verification into CI</div>
+                <div class="title">OSQAr Examples</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="multi_project_workflows.html">
+          <a class="prev-page" href="configuration_and_hooks.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Multi-project workflows</div>
+                <div class="title">Configuration and hooks</div>
                 
               </div>
             </a>
@@ -522,34 +406,11 @@ includes embedded test results and evidence snapshots.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Collaboration workflows (multi-user)</a><ul>
-<li><a class="reference internal" href="#principles">Principles</a></li>
-<li><a class="reference internal" href="#repository-layout-for-parallel-work">Repository layout for parallel work</a></li>
-<li><a class="reference internal" href="#branching-strategies">Branching strategies</a><ul>
-<li><a class="reference internal" href="#trunk-based-development-recommended-for-most-teams">Trunk-based development (recommended for most teams)</a></li>
-<li><a class="reference internal" href="#release-branches-useful-when-multiple-releases-are-supported">Release branches (useful when multiple releases are supported)</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#merging-strategies">Merging strategies</a></li>
-<li><a class="reference internal" href="#how-to-minimize-merge-conflicts">How to minimize merge conflicts</a><ul>
-<li><a class="reference internal" href="#rst-restructuredtext">RST (reStructuredText)</a></li>
-<li><a class="reference internal" href="#sphinx-needs-objects">Sphinx-needs objects</a></li>
-<li><a class="reference internal" href="#diagrams-plantuml">Diagrams (PlantUML)</a></li>
-<li><a class="reference internal" href="#generated-artifacts">Generated artifacts</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#collaborating-at-scale">Collaborating at scale</a><ul>
-<li><a class="reference internal" href="#roles-and-review-gates">Roles and review gates</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#ci-setup-github-actions">CI setup (GitHub Actions)</a><ul>
-<li><a class="reference internal" href="#what-the-ci-runs">What the CI runs</a></li>
-<li><a class="reference internal" href="#reproducible-example-shipments">Reproducible example shipments</a></li>
-<li><a class="reference internal" href="#github-pages-publishing">GitHub Pages publishing</a></li>
-<li><a class="reference internal" href="#working-on-multiple-subprojects-in-parallel">Working on multiple subprojects in parallel</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#change-control-tips">Change control tips</a></li>
+<li><a class="reference internal" href="#">Evidence states and acceptance</a><ul>
+<li><a class="reference internal" href="#profiles">Profiles</a></li>
+<li><a class="reference internal" href="#controlled-states">Controlled states</a></li>
+<li><a class="reference internal" href="#command">Command</a></li>
+<li><a class="reference internal" href="#boundary">Boundary</a></li>
 </ul>
 </li>
 </ul>

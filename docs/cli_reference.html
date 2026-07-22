@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -227,6 +227,7 @@
 <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">CLI Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
 <ul>
@@ -923,6 +924,25 @@ missing.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">--docs-dir</span></code>: path to built framework HTML docs (default: <code class="docutils literal notranslate"><span class="pre">_build/html</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output-dir</span></code>: staging/output directory (default: <code class="docutils literal notranslate"><span class="pre">_dist</span></code>)</p></li>
 </ul>
+</section>
+<section id="subcommand-validate">
+<h4>Subcommand: validate<a class="headerlink" href="#subcommand-validate" title="Link to this heading">¶</a></h4>
+<p>Validate declared evidence states and provenance against one explicit behavior
+profile. Qualification validation is fail-closed and returns status 1 when a
+required activity is not accepted.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar framework validate --profile {basic,qualification}</span>
+<span class="go">               [--project osqar_project.json]</span>
+<span class="go">               [--source-revision &lt;reviewed-commit&gt;]</span>
+<span class="go">               [--configuration-sha256 &lt;reviewed-config-digest&gt;]</span>
+<span class="go">               [--report-json &lt;path&gt;]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">basic</span></code> reports its limitations and never claims qualification-evidence
+acceptance. <code class="docutils literal notranslate"><span class="pre">qualification</span></code> requires both trusted source/configuration options,
+completed activities, accepted results, approved non-superseded evidence,
+content-consistent JUnit reports bound by hash, provenance, passing thresholds,
+dispositioned findings, and no open required gaps. See
+<a class="reference internal" href="evidence_acceptance.html"><span class="doc">Evidence states and acceptance</span></a>.</p>
 </section>
 </section>
 <section id="shipment">
@@ -1799,6 +1819,7 @@ scope.</p>
 <li><a class="reference internal" href="#subcommand-bundle">Subcommand: bundle</a></li>
 <li><a class="reference internal" href="#id24">Synopsis</a></li>
 <li><a class="reference internal" href="#id25">Options</a></li>
+<li><a class="reference internal" href="#subcommand-validate">Subcommand: validate</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#shipment">shipment</a><ul>

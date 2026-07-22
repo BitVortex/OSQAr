@@ -721,6 +721,28 @@ Options
 - ``--docs-dir``: path to built framework HTML docs (default: ``_build/html``)
 - ``--output-dir``: staging/output directory (default: ``_dist``)
 
+Subcommand: validate
+^^^^^^^^^^^^^^^^^^^^
+
+Validate declared evidence states and provenance against one explicit behavior
+profile. Qualification validation is fail-closed and returns status 1 when a
+required activity is not accepted.
+
+.. code-block:: console
+
+  osqar framework validate --profile {basic,qualification}
+                 [--project osqar_project.json]
+                 [--source-revision <reviewed-commit>]
+                 [--configuration-sha256 <reviewed-config-digest>]
+                 [--report-json <path>]
+
+``basic`` reports its limitations and never claims qualification-evidence
+acceptance. ``qualification`` requires both trusted source/configuration options,
+completed activities, accepted results, approved non-superseded evidence,
+content-consistent JUnit reports bound by hash, provenance, passing thresholds,
+dispositioned findings, and no open required gaps. See
+:doc:`evidence_acceptance`.
+
 
 .. _cli-shipment:
 
