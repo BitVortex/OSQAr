@@ -33,7 +33,7 @@ where = ["."]
 include = ["tools*", "osqar_data*"]
 
 [tool.setuptools.package-data]
-osqar_data = ["templates/**", "static/**", "profiles/**"]
+osqar_data = ["templates/**", "static/**", "governance/**", "profiles/**"]
 
 [tool.poetry.group.dev.dependencies]
 # Tools for maintaining the boilerplate itself

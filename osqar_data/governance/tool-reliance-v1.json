@@ -1,0 +1,793 @@
+{
+  "schema": "osqar.tool-reliance.v1",
+  "version_applicability": {
+    "status": "unresolved",
+    "osqar_version": "unresolved",
+    "baseline_revision": "93190c857b849267912fae0cd66cfb49d8f56ef6",
+    "qualification_profile_version": "unresolved",
+    "supported_environments": []
+  },
+  "standards_basis": {
+    "reference": "ISO 26262-8:2018 Clause 11",
+    "interpretation_status": "researched-pending-controlled-review",
+    "reviewer": "BitVortex",
+    "note": "Provisional use-case reasoning; verify against a controlled standard copy before approval."
+  },
+  "claim_boundary": "Only named mechanical predicates may become relied upon after exact-version evidence and independent approval. Passing a predicate does not establish semantic adequacy, safety, standards conformity, certification, or tool qualification.",
+  "functions": [
+    {
+      "id": "checksum-verify",
+      "command": "osqar checksum verify",
+      "boundary": "candidate",
+      "reliance_permitted": false,
+      "tool_impact": "TI2-provisional",
+      "tool_error_detection": "TD3-provisional",
+      "tool_confidence_level": "TCL3-provisional",
+      "erroneous_output": "A false pass could fail to detect changed or absent bytes; baseline mode also does not establish inventory closure.",
+      "independent_detection": [
+        "Differential SHA-256 verification using an independent implementation",
+        "Malformed, missing, mismatched, duplicate, and extra-file fault fixtures"
+      ],
+      "evidence": [],
+      "human_judgment": "Whether the declared inventory is complete and the artifacts are adequate remains outside this predicate.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No downstream lifecycle decision is currently permitted for checksum-verify; the predicate remains a disabled candidate.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Whether the declared inventory is complete and the artifacts are adequate remains outside this predicate."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "release-manifest-verify",
+      "command": "osqar release-manifest verify",
+      "boundary": "candidate",
+      "reliance_permitted": false,
+      "tool_impact": "TI2-provisional",
+      "tool_error_detection": "TD3-provisional",
+      "tool_confidence_level": "TCL3-provisional",
+      "erroneous_output": "A false pass could accept a shipment with missing, changed, empty, duplicate, or unexpected artifacts.",
+      "independent_detection": [
+        "Independent expected-inventory oracle",
+        "Destination rehash and adversarial closed-set fixtures"
+      ],
+      "evidence": [],
+      "human_judgment": "Inventory closure and integrity do not establish evidence adequacy or release acceptability.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No downstream lifecycle decision is currently permitted for release-manifest-verify; the predicate remains a disabled candidate.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Inventory closure and integrity do not establish evidence adequacy or release acceptability."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "typed-traceability",
+      "command": "osqar traceability --profile qualification",
+      "boundary": "candidate",
+      "reliance_permitted": false,
+      "tool_impact": "TI2-provisional",
+      "tool_error_detection": "TD3-provisional",
+      "tool_confidence_level": "TCL3-provisional",
+      "erroneous_output": "A false pass could fail to detect unknown nodes, dead links, reversed relations, or unsatisfied declared cardinalities.",
+      "independent_detection": [
+        "Independent graph oracle",
+        "Seeded reversed-edge, dead-link, duplicate, unknown-type, and cardinality mutations"
+      ],
+      "evidence": [],
+      "human_judgment": "Requirements, allocations, verification methods, and safety relevance remain subject to competent review.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No downstream lifecycle decision is currently permitted for typed-traceability; the predicate remains a disabled candidate.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Requirements, allocations, verification methods, and safety relevance remain subject to competent review."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "evidence-acceptance",
+      "command": "osqar framework validate",
+      "boundary": "candidate",
+      "reliance_permitted": false,
+      "tool_impact": "TI2-provisional",
+      "tool_error_detection": "TD3-provisional",
+      "tool_confidence_level": "TCL3-provisional",
+      "erroneous_output": "A false pass could treat missing, stale, malformed, failed, skipped, superseded, or unauthorized evidence as mechanically accepted.",
+      "independent_detection": [
+        "Independent report parser fixtures",
+        "Digest recomputation and seeded state/provenance mutations"
+      ],
+      "evidence": [],
+      "human_judgment": "Mechanical acceptance does not establish that evidence sufficiently supports a safety claim.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No downstream lifecycle decision is currently permitted for evidence-acceptance; the predicate remains a disabled candidate.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Mechanical acceptance does not establish that evidence sufficiently supports a safety claim."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "signature-verify",
+      "command": "osqar sign verify",
+      "boundary": "candidate",
+      "reliance_permitted": false,
+      "tool_impact": "TI2-provisional",
+      "tool_error_detection": "TD3-provisional",
+      "tool_confidence_level": "TCL3-provisional",
+      "erroneous_output": "A false pass could report an invalid detached signature as cryptographically valid.",
+      "independent_detection": [
+        "Independent gpgv verification using controlled trust anchors",
+        "Invalid-key, changed-manifest, and changed-signature fixtures"
+      ],
+      "evidence": [],
+      "human_judgment": "Signer authorization, trust policy, inventory completeness, and artifact adequacy remain external.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No downstream lifecycle decision is currently permitted for signature-verify; the predicate remains a disabled candidate.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Signer authorization, trust policy, inventory completeness, and artifact adequacy remain external."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "shipment-aggregate-verify",
+      "command": "osqar shipment verify --strict",
+      "boundary": "candidate",
+      "reliance_permitted": false,
+      "tool_impact": "TI2-provisional",
+      "tool_error_detection": "TD3-provisional",
+      "tool_confidence_level": "TCL3-provisional",
+      "erroneous_output": "A false aggregate pass could conceal a skipped, warned, unavailable, or failed mandatory predicate.",
+      "independent_detection": [
+        "End-to-end corrupted-bundle oracle",
+        "Reconciliation of every configured predicate and its exit status"
+      ],
+      "evidence": [],
+      "human_judgment": "Aggregate success cannot exceed its named predicates and does not establish semantic adequacy.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No downstream lifecycle decision is currently permitted for shipment-aggregate-verify; the predicate remains a disabled candidate.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Aggregate success cannot exceed its named predicates and does not establish semantic adequacy."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "build-test-orchestration",
+      "command": "osqar shipment prepare",
+      "boundary": "excluded",
+      "reliance_permitted": false,
+      "tool_impact": "TI2-provisional-if-relied-upon",
+      "tool_error_detection": "not-established",
+      "tool_confidence_level": "not-assigned",
+      "erroneous_output": "A command may be missing, crash, return success with no tests, or leave stale reports.",
+      "independent_detection": [],
+      "evidence": [],
+      "human_judgment": "Execution completion and report acceptance require separately established controls.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No safety-lifecycle reliance is permitted for build-test-orchestration.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Execution completion and report acceptance require separately established controls."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "impact-analysis",
+      "command": "osqar impact",
+      "boundary": "convenience",
+      "reliance_permitted": false,
+      "tool_impact": "not-classified",
+      "tool_error_detection": "not-classified",
+      "tool_confidence_level": "not-applicable",
+      "erroneous_output": "Untyped traversal can produce an incomplete or over-inclusive candidate impact set.",
+      "independent_detection": [],
+      "evidence": [],
+      "human_judgment": "The output is a reviewer prompt and not a complete safety-impact determination.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No safety-lifecycle reliance is permitted for impact-analysis.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "The output is a reviewer prompt and not a complete safety-impact determination."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "gsn-generation",
+      "command": "osqar gsn generate",
+      "boundary": "convenience",
+      "reliance_permitted": false,
+      "tool_impact": "not-classified",
+      "tool_error_detection": "not-classified",
+      "tool_confidence_level": "not-applicable",
+      "erroneous_output": "Heuristic root, context, and evidence classification can produce an unsound or incomplete argument view.",
+      "independent_detection": [],
+      "evidence": [],
+      "human_judgment": "A competent reviewer must establish safety-argument semantics and sufficiency.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No safety-lifecycle reliance is permitted for gsn-generation.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "A competent reviewer must establish safety-argument semantics and sufficiency."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "workspace-combine",
+      "command": "osqar workspace combine",
+      "boundary": "excluded",
+      "reliance_permitted": false,
+      "tool_impact": "TI2-provisional-if-relied-upon",
+      "tool_error_detection": "not-established",
+      "tool_confidence_level": "not-assigned",
+      "erroneous_output": "A project, identifier, or relation may be omitted or rewritten incorrectly.",
+      "independent_detection": [],
+      "evidence": [],
+      "human_judgment": "Combined output must not be treated as a complete safety interface or impact model.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No safety-lifecycle reliance is permitted for workspace-combine.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Combined output must not be treated as a complete safety interface or impact model."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "baseline-diff",
+      "command": "osqar baseline diff",
+      "boundary": "convenience",
+      "reliance_permitted": false,
+      "tool_impact": "not-classified",
+      "tool_error_detection": "not-classified",
+      "tool_confidence_level": "not-applicable",
+      "erroneous_output": "Fields outside the implemented comparison set can change without appearing in the report.",
+      "independent_detection": [],
+      "evidence": [],
+      "human_judgment": "Git and complete-schema review remain necessary for change completeness.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No safety-lifecycle reliance is permitted for baseline-diff.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Git and complete-schema review remain necessary for change completeness."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    },
+    {
+      "id": "scaffolding-reporting",
+      "command": "osqar new|doctor|open-docs|list|report|metadata",
+      "boundary": "convenience",
+      "reliance_permitted": false,
+      "tool_impact": "not-classified",
+      "tool_error_detection": "not-classified",
+      "tool_confidence_level": "not-applicable",
+      "erroneous_output": "Generated or displayed convenience information may be incomplete or stale.",
+      "independent_detection": [],
+      "evidence": [],
+      "human_judgment": "Generated content and status information require project review before lifecycle use.",
+      "review": {
+        "reviewer": "BitVortex",
+        "status": "pending"
+      },
+      "owner": "OSQAr maintainers",
+      "lifecycle_decision": {
+        "id": "unresolved",
+        "description": "No safety-lifecycle reliance is permitted for scaffolding-reporting.",
+        "owner": "unresolved",
+        "work_product": "unresolved"
+      },
+      "assumptions": [
+        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+      ],
+      "operating_constraints": [
+        "Use only as documented; outputs remain subject to competent independent review."
+      ],
+      "profile_applicability": [
+        "unresolved"
+      ],
+      "environment_applicability": [
+        "unresolved"
+      ],
+      "configuration": {
+        "status": "unresolved",
+        "identifier": "unresolved"
+      },
+      "dependencies": [],
+      "known_anomalies": [],
+      "residual_limitations": [
+        "Generated content and status information require project review before lifecycle use."
+      ],
+      "revalidation_triggers": [
+        "OSQAr behavior or acceptance-policy change",
+        "supported profile, dependency, Python, or platform change",
+        "known anomaly affecting this function"
+      ],
+      "anomaly_disposition": {
+        "status": "unresolved",
+        "review_revision": "unresolved"
+      },
+      "input": [
+        "unresolved"
+      ],
+      "output": [
+        "unresolved"
+      ],
+      "exclusions": [
+        "unresolved"
+      ]
+    }
+  ]
+}
