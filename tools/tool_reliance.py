@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Any
 
 SCHEMA = "osqar.tool-reliance.v1"
-DESIGNATED_REVIEWER = "BitVortex"
 _REQUIRED_FUNCTION_FIELDS = {
     "id",
     "command",
@@ -37,7 +36,6 @@ _REQUIRED_FUNCTION_FIELDS = {
     "anomaly_disposition",
     "residual_limitations",
     "revalidation_triggers",
-    "review",
 }
 _ALLOWED_BOUNDARIES = {"candidate", "convenience", "excluded"}
 
@@ -141,10 +139,10 @@ def _exact_dependencies(value: Any) -> bool:
     )
 
 
-def _reviewed_anomaly_disposition(value: Any) -> bool:
-    if not isinstance(value, dict) or value.get("status") not in {"none-known", "reviewed"}:
+def _resolved_anomaly_disposition(value: Any) -> bool:
+    if not isinstance(value, dict) or value.get("status") not in {"none-known", "addressed"}:
         return False
-    revision = str(value.get("review_revision") or "").strip().lower()
+    revision = str(value.get("evidence_revision") or "").strip().lower()
     return len(revision) in {40, 64} and all(
         character in "0123456789abcdef" for character in revision
     )
@@ -177,6 +175,20 @@ def _controlled_anomaly_register(
     )
 
 
+def _external_assessment_fields(value: Any, path: str = "$.") -> list[str]:
+    fields: list[str] = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            item_path = f"{path}{key}"
+            if "review" in str(key).lower():
+                fields.append(item_path)
+            fields.extend(_external_assessment_fields(item, f"{item_path}."))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            fields.extend(_external_assessment_fields(item, f"{path}[{index}]."))
+    return fields
+
+
 def validate_tool_reliance_inventory(
     payload: Any, *, evidence_root: Path | None = None
 ) -> list[str]:
@@ -184,6 +196,12 @@ def validate_tool_reliance_inventory(
     errors: list[str] = []
     if not isinstance(payload, dict):
         return ["tool-reliance inventory must be an object"]
+    external_fields = _external_assessment_fields(payload)
+    if external_fields:
+        errors.append(
+            "assessment-log fields belong outside the base inventory: "
+            + ", ".join(external_fields)
+        )
     if payload.get("schema") != SCHEMA:
         errors.append(f"unsupported schema: {payload.get('schema')!r}")
 
@@ -191,8 +209,8 @@ def validate_tool_reliance_inventory(
     if not isinstance(applicability, dict):
         errors.append("version_applicability must be an object")
         applicability = {}
-    if applicability.get("status") not in {"unresolved", "reviewed"}:
-        errors.append("version_applicability status must be unresolved or reviewed")
+    if applicability.get("status") not in {"unresolved", "established"}:
+        errors.append("version_applicability status must be unresolved or established")
     if not _non_empty(applicability.get("osqar_version")):
         errors.append("version_applicability requires osqar_version")
 
@@ -202,11 +220,11 @@ def validate_tool_reliance_inventory(
     else:
         if standards.get("reference") != "ISO 26262-8:2018 Clause 11":
             errors.append("standards_basis must identify ISO 26262-8:2018 Clause 11")
-        if standards.get("interpretation_status") not in {
-            "researched-pending-controlled-review",
-            "controlled-copy-reviewed",
+        if standards.get("basis_status") not in {
+            "provisional",
+            "controlled_copy_checked",
         }:
-            errors.append("standards interpretation status is missing or unsupported")
+            errors.append("standards basis status is missing or unsupported")
     if not _non_empty(payload.get("claim_boundary")):
         errors.append("claim_boundary is required")
 
@@ -268,12 +286,6 @@ def validate_tool_reliance_inventory(
             errors.append(f"{function_id}: lifecycle_decision must be an object")
         if not isinstance(item.get("anomaly_disposition"), dict):
             errors.append(f"{function_id}: anomaly_disposition must be an object")
-        review = item.get("review")
-        if not isinstance(review, dict) or not _non_empty(review.get("reviewer")):
-            errors.append(f"{function_id}: review must identify a reviewer")
-            review = {}
-        if review.get("status") not in {"pending", "approved", "rejected"}:
-            errors.append(f"{function_id}: invalid review status")
 
         if item.get("reliance_permitted") is True:
             for field in (
@@ -289,7 +301,7 @@ def validate_tool_reliance_inventory(
             for field in ("input", "output", "exclusions"):
                 if not _resolved_string_list(item.get(field)):
                     errors.append(f"{function_id}: reliance requires resolved {field}")
-            if applicability.get("status") != "reviewed" or not _exact_version(
+            if applicability.get("status") != "established" or not _exact_version(
                 applicability.get("osqar_version")
             ):
                 errors.append(f"{function_id}: reliance requires an exact OSQAr version")
@@ -311,10 +323,10 @@ def validate_tool_reliance_inventory(
                     f"{function_id}: reliance requires an immutable dependency-set revision"
                 )
             if not isinstance(standards, dict) or standards.get(
-                "interpretation_status"
-            ) != "controlled-copy-reviewed":
+                "basis_status"
+            ) != "controlled_copy_checked":
                 errors.append(
-                    f"{function_id}: reliance requires controlled-copy-reviewed standards basis"
+                    f"{function_id}: reliance requires a controlled-copy-checked standards basis"
                 )
             if not _resolved_string_list(item.get("independent_detection")):
                 errors.append(
@@ -342,8 +354,8 @@ def validate_tool_reliance_inventory(
                 osqar_version=str(applicability.get("osqar_version") or "").strip(),
             ):
                 errors.append(f"{function_id}: reliance requires a controlled known-anomaly register")
-            if not _reviewed_anomaly_disposition(item.get("anomaly_disposition")):
-                errors.append(f"{function_id}: reliance requires reviewed anomaly disposition")
+            if not _resolved_anomaly_disposition(item.get("anomaly_disposition")):
+                errors.append(f"{function_id}: reliance requires a resolved anomaly disposition")
             for field in (
                 "assumptions",
                 "operating_constraints",
@@ -352,15 +364,10 @@ def validate_tool_reliance_inventory(
             ):
                 if not _resolved_string_list(item.get(field)):
                     errors.append(f"{function_id}: reliance requires resolved {field}")
-            if (
-                not isinstance(standards, dict)
-                or standards.get("reviewer") != DESIGNATED_REVIEWER
-                or review.get("reviewer") != DESIGNATED_REVIEWER
-                or review.get("status") != "approved"
-            ):
-                errors.append(
-                    f"{function_id}: reliance requires independent approval by the designated reviewer"
-                )
+            errors.append(
+                f"{function_id}: the base framework cannot permit reliance; "
+                "authorization belongs in organization- or user-level assurance records"
+            )
             if item.get("boundary") != "candidate":
-                errors.append(f"{function_id}: only reviewed candidate functions may be relied upon")
+                errors.append(f"{function_id}: only candidate functions may be assessed for reliance")
     return errors

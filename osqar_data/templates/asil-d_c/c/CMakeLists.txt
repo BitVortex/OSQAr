@@ -11,7 +11,9 @@ if(DEFINED ENV{SOURCE_DATE_EPOCH})
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSOURCE_DATE_EPOCH=$ENV{SOURCE_DATE_EPOCH}")
 endif()
 
-# Safety-critical compiler flags (ISO 26262-6 §8.4, Table 7)
+# OSQAr project-policy compiler flags. ISO 26262-6 §8.4.5 and Table 6
+# provide implementation-language/design-principle context; they do not
+# mandate this particular compiler option set.
 set(SAFETY_FLAGS
     -Wall -Wextra -Wpedantic -Werror
     -Wconversion -Wshadow -Wstrict-prototypes

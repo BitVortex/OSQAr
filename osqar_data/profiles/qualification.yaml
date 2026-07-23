@@ -69,6 +69,20 @@ traceability:
   schema: osqar.traceability.v1
   extensions: declared-namespaces-only
   authored_edges_are_directional: true
+  standards_claims:
+    enabled: optional
+    catalog_entries_key: entries
+    catalog_reference_id_key: reference_id
+    claim_prefixes:
+      - STDCLAIM_
+    relation_targets:
+      realized_by:
+        - REQ_
+        - LM_
+      verified_by:
+        - VER_
+      evidenced_by:
+        - EVID_
   api_requirement_projection:
     enabled: optional
     api_kinds:

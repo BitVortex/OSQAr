@@ -61,15 +61,18 @@ This template follows ISO 26262-6:2018 for software-level product development.
 For guidance on authoring the RST documents, load the `iso26262-part6-software`
 skill. For compliance documentation generation, load `compliance-documentation`.
 
-## ASIL D Key Requirements
+## ASIL D Scaffold Policy and Researched References
 
-- **No dynamic allocation after initialization** (Part 6 Table 7: ++)
-- **No recursion** (Part 6 Table 7: ++)
-- **One entry, one exit per function** (Part 6 Table 7: ++)
-- **MC/DC coverage** at unit level (Part 6 Table 10: ++)
-- **Static analysis** enforced by tool (Part 6 Table 9: ++)
-- **MISRA C:2012** or equivalent coding standard
-- **5 Assumptions of Use** documented for SEooC (Part 10 §9.4.2)
+- **No dynamic allocation after initialization**, **no recursion**, **one entry,
+  one exit**, and **MISRA C:2012** are OSQAr project-policy defaults.
+- Exact coverage thresholds and the starter assumption count are OSQAr project
+  policy and must be tailored; they are not fixed ISO 26262 requirements.
+- The researched catalog maps ISO 26262-6:2018 Table 9 to software-unit structural
+  coverage and ISO 26262-10:2018 Clause 9 to informative SEooC guidance.
+
+The cited locator subjects were checked against the controlled 2018 copy.
+Applicability, tailoring, and project use still require competent review. See the
+packaged ISO 26262 reference catalog; its inventory is being reconciled separately.
 
 ## License
 

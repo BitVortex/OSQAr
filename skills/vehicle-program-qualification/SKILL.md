@@ -102,7 +102,10 @@ safety cases with integration arguments:
 
 ## Development Interface Agreement (DIA) Management
 
-Per ISO 26262-8 §5, every supplier relationship requires a DIA specifying:
+For distributed development to which ISO 26262-8 Clause 5 applies, establish a
+Development Interface Agreement covering the applicable division of activities
+and responsibilities. Do not infer that every commercial supplier relationship
+is necessarily within that scope. OSQAr records:
 
 | DIA Element | OSQAr Documentation |
 |-------------|---------------------|
@@ -121,10 +124,10 @@ Per ISO 26262-8 §5, every supplier relationship requires a DIA specifying:
    :tags: DIA;supplier_management;ISO_26262-8_§5
    :links: braking_ecu:LM_SCOPE;vehicle_integration:LM_INTEGRATION
 
-   **Supplier scope:** Software SEooC — ISO 26262-6, Parts 8 §11 (tools),
-   Part 9 §5 (decomposition if applicable)
-   **OEM scope:** System integration ISO 26262-4 §7,
-   vehicle validation ISO 26262-4 §8,
+   **Supplier scope:** Software SEooC — ISO 26262-6, ISO 26262-8:2018 §11 (tools),
+   ISO 26262-9:2018 §5 (decomposition if applicable)
+   **OEM scope:** System integration ISO 26262-4 §7;
+   vehicle validation ISO 26262-4 §8;
    production ISO 26262-7
    **Exchange format:** OSQAr shipment packages (needs.json + evidence)
    **Escalation:** Safety manager → project safety manager → executive
@@ -182,8 +185,10 @@ evidence format and quality bar:
        1. Signed SHA256SUMS manifest (OSQAr v0.7.3+ GPG signing)
        2. needs.json with bidirectional traceability
        3. Verification evidence from live tool runs (not hand-written)
-       4. Assumptions of Use catalogue (ISO 26262-10 §9.4.2)
-       5. Tool qualification evidence per ISO 26262-8 §11
+       4. Project Assumptions of Use catalogue (general SEooC guidance:
+          ISO 26262-10 §9.1)
+       5. Project-specific tool-confidence analysis and any resulting
+          qualification evidence under ISO 26262-8 Clause 11
        6. Supplier safety case contribution
 
        Minimum acceptance criteria:
@@ -197,8 +202,9 @@ evidence format and quality bar:
 
 ## Change Management at Scale
 
-A vehicle program spans 3-5 years with hundreds of changes. Per
-ISO 26262-8 §8, every change affecting a safety-related element requires:
+A vehicle program spans 3-5 years with hundreds of changes. ISO 26262-8
+§§8.4.3–8.4.4 provide the impact-analysis basis for applicable changes. This
+OSQAr project workflow records:
 
 1. **Change impact analysis** — which ECUs, safety goals, and verification
    evidence are affected?
@@ -224,18 +230,21 @@ osqar impact _build/html/needs.json --need-id REQ_SSR_FAULT_001     --direction 
 
 ## Production and Field Monitoring
 
-For production-intent vehicle programs (ISO 26262-7):
+For production-intent vehicle programs, the following are project implementation
+examples informed by ISO 26262-7, not universal prescriptions:
 
 ```rst
-.. lm:: Production safety: end-of-line test for all ECUs
-       verifies safety-related functions per ISO 26262-7 §6.4.
+.. lm:: Production safety: this project uses an end-of-line test for all ECUs
+       to verify its selected safety-related functions. ISO 26262-7 §6.4
+       provides production-planning and control context.
        Test results archived with VIN traceability.
    :id: LM_PRODUCTION_EOL
    :tags: production;safety;ISO_26262-7
 
-.. lm:: Field monitoring: fleet-wide data collection for
-       safety-related anomalies. Incident reports trigger
-       investigation per ISO 26262-7 §7.4.
+.. lm:: Field monitoring: this project uses fleet-wide data collection for
+       safety-related anomalies and project-defined investigation triggers.
+       ISO 26262-7 §7.4 provides operation, service, maintenance, and
+       decommissioning context.
    :id: LM_FIELD_MONITORING
    :tags: field_monitoring;ISO_26262-7;post_production
 
@@ -243,7 +252,7 @@ For production-intent vehicle programs (ISO 26262-7):
       incident reports, recall database
    **Analysis:** Statistical comparison of observed vs. predicted
       failure rates (FMEDA baseline)
-   **Trigger criteria:** Observed rate > 2× predicted rate OR
+   **Project trigger criteria:** Observed rate > 2× predicted rate OR
       any single incident with potential for catastrophic harm
    **Response time:** Investigation initiated within 5 business days
 ```
@@ -257,8 +266,9 @@ At industry scale, multiple standards apply simultaneously:
 | ISO 26262 | Functional safety | Primary qualification workflow |
 | ISO 21434 | Cybersecurity | `security-coengineering` skill |
 | ISO 21448 | SOTIF (ADAS) | `sotif-qualification` skill |
-| ISO 26262-11 | Semiconductors | HW/SW interface, fault injection |
-| ISO 26262-8 §11 | Tool qualification | TCL documentation in LM_ needs |
+| ISO 26262-11 §4.7.8 | Semiconductors | Dependent software/hardware failures |
+| ISO 26262-11 §4.8 | Semiconductors | Fault-injection guidance |
+| ISO 26262-8 §11 | Confidence in software-tool use | Use-case analysis and reviewed result in LM_ needs |
 | UN R155/R156 | Cybersecurity/SW update regulation | Evidence from cybersecurity workflow |
 
 For co-engineering across standards, use the `:collapsed:` field to link

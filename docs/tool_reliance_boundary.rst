@@ -4,13 +4,12 @@ Safety-tool reliance boundary
 Status and standards basis
 --------------------------
 
-This strategy is a **researched interpretation** of ISO 26262-8:2018,
-Clause 11. It has not yet been checked against a controlled copy of the
-standard. ``BitVortex`` is the designated independent functional-safety
-reviewer.
+ISO 26262-8:2018 Clause 11 was confirmed against the controlled copy as the
+context for confidence in the use of software tools. This OSQAr reliance strategy
+is still a **project interpretation**, not a standard-prescribed classification.
 
-No OSQAr function is currently approved for safety-lifecycle reliance by this
-strategy. The packaged inventory
+No OSQAr function is currently permitted for safety-lifecycle reliance by this
+base strategy. The packaged inventory
 ``osqar_data/governance/tool-reliance-v1.json`` deliberately sets
 ``reliance_permitted`` to ``false`` for every function and leaves version
 applicability unresolved. This is fail-closed: implementation, tests, or
@@ -22,9 +21,10 @@ product is qualified, compliant, certified, or safe.
 Claim boundary
 --------------
 
-A future reviewed disposition may permit reliance only on explicitly named,
-machine-checkable predicates for an exact OSQAr version, profile version,
-configuration, dependency set, and supported environment. Such permission
+A future organization- or user-level assurance disposition may permit reliance
+only on explicitly named, machine-checkable predicates for an exact OSQAr
+version, profile version, configuration, dependency set, and supported
+environment. Such permission
 would mean only that the documented predicate may support the identified
 lifecycle decision within its operating constraints.
 
@@ -55,8 +55,8 @@ The inventory identifies these candidates, all currently disabled:
 Each candidate is provisionally treated as capable of failing to detect an
 error in a relied-upon lifecycle work product. The packaged TI, tool-error-
 detection, and TCL labels are provisional research classifications, not final
-Clause 11 determinations. ``BitVortex`` must confirm or replace them using the
-exact use case and controlled standard.
+ISO 26262-8:2018 Clause 11 determinations. The adopting organization must
+establish or replace them for its exact use case using controlled standard text.
 
 Functions outside the boundary
 ------------------------------
@@ -71,15 +71,16 @@ The following remain convenience aids or explicitly excluded functions:
 * workspace combination;
 * project scaffolding, diagnostics, metadata, and reporting.
 
-Their outputs may inform competent review. They must not replace complete
-impact analysis, lifecycle review, evidence assessment, or safety-argument
+Their outputs may inform competent assessment. They must not replace complete
+impact analysis, lifecycle assessment, evidence assessment, or safety-argument
 judgment.
 
 Required per-function argument
 ------------------------------
 
-Before changing a function to ``reliance_permitted: true``, its inventory
-record and supporting report shall identify:
+The base inventory cannot be changed to ``reliance_permitted: true``. An
+organization or user that intends to rely on a function must maintain a
+separate assurance record identifying:
 
 #. the exact downstream decision allowed to rely on the result;
 #. the input, output, configuration, exclusions, and operating constraints;
@@ -91,19 +92,12 @@ record and supporting report shall identify:
 #. exact OSQAr, profile, Python, dependency, and platform versions;
 #. immutable validation evidence;
 #. known anomalies and residual limitations;
-#. independent approval by the designated reviewer.
+#. the accountable authorization and its supporting assessment record.
 
-The inventory validator rejects reliance unless all documented controls are
-machine-resolved: exact OSQAr, profile, Python, dependency, configuration, and
-environment applicability; controlled-copy-reviewed standards status; a named
-lifecycle decision and owner; nonblank independent detection; immutable
-evidence; explicit assumptions, constraints, limitations, anomalies, and
-revalidation triggers; and approval by the fixed designated reviewer
-``BitVortex``. Immutable evidence entries bind a 40- or 64-hex revision into the
-identifier, bind the evidence digest through ``urn:sha256:<digest>``, and name a
-relative local JSON evidence artifact. Validation hashes the artifact bytes and
-requires its evidence-envelope revision to equal the declared revision.
-Placeholder, whitespace-only, or unresolved values fail closed.
+The base inventory validator rejects any attempt to set
+``reliance_permitted`` to ``true``. It validates the shipped structural and
+technical boundary only; organization- and user-level assessment logs,
+authorizations, and reliance decisions remain outside the base framework.
 
 Required independent evidence
 -----------------------------
@@ -122,7 +116,7 @@ Evidence should be selected per predicate. The minimum candidate set is:
 * deterministic machine-readable reports;
 * captured command, OSQAr version, profile version, Python/dependency versions,
   configuration, exclusions, hooks, and platform;
-* an independently reviewed validation report tied to an immutable revision.
+* an independently assessed validation report tied to an immutable revision.
 
 Reusing the same OSQAr implementation to generate and verify an artifact is
 not automatically independent error detection. The argument must state the
@@ -145,7 +139,7 @@ A relied-upon version requires a known-anomaly register recording affected
 functions, versions, impact, workaround, detection status, and whether prior
 outputs require regeneration.
 
-Revalidation review is required after changes to at least:
+Revalidation assessment is required after changes to at least:
 
 * the behavior profile or acceptance policy;
 * traceability vocabulary or cardinalities;
@@ -155,24 +149,17 @@ Revalidation review is required after changes to at least:
 * supported dependencies, Python versions, or operating platforms;
 * a known anomaly affecting a relied-upon predicate.
 
-Independent review gate
------------------------
+Organization- and user-level assurance records
+----------------------------------------------
 
-``BitVortex`` should answer, for every candidate function:
+The base framework deliberately contains no assessor identity, assessment log,
+or authorization status. Adopting organizations and users maintain those
+records under their own governance. Such records should establish, per function
+and exact use case, the downstream decision, Tool Impact rationale, independent
+detection strength, exact environment and configuration, immutable evidence,
+semantic boundaries, coupled dependency failures, anomalies, accountable
+authority, and authorization outcome.
 
-#. Is the downstream lifecycle decision stated precisely?
-#. Is the Tool Impact rationale use-case-specific?
-#. Could a warning, skipped step, exclusion, missing tool, stale report, or
-   empty test suite still yield a pass?
-#. Is the claimed detection mechanism independent of the implementation being
-   assessed?
-#. Are exact versions, dependencies, configuration, and operating limits
-   fixed?
-#. Do the evidence identifiers resolve to immutable, reproducible results?
-#. Are semantic judgments visibly outside the automated claim?
-#. Are coupled dependency failures and anomalies addressed?
-
-Only after those questions are resolved against controlled standard text and
-versioned evidence may the inventory status become ``reviewed`` and an
-individual candidate become permitted. Approval is per function and use case;
-it is not blanket approval of OSQAr.
+An external authorization is per function and use case. It is not blanket
+approval of OSQAr and must not be represented by modifying the shipped base
+inventory.

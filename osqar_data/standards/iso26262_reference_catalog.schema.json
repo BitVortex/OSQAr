@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://osqar.dev/schema/iso26262-reference-catalog-v1.json",
+  "title": "OSQAr ISO 26262 example reference catalog",
+  "$comment": "This schema and tools.iso26262_reference_catalog.validate_catalog enforce mechanical structure and declared internal relationships for an illustrative, incomplete example. Cross-entry constraints such as reference_id uniqueness remain callable-validator responsibilities. These checks do not establish semantic validity, completeness, applicability, compliance, qualification, certification, or safety.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["catalog_version", "standard", "evidence_basis", "entries"],
+  "properties": {
+    "catalog_version": {"const": 1},
+    "standard": {"const": "ISO 26262"},
+    "evidence_basis": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/reference"}
+    }
+  },
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_id", "edition", "part", "clause", "topic",
+        "reference_kind", "project_paraphrase", "applicability"
+      ],
+      "properties": {
+        "reference_id": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "edition": {"const": "2018"},
+        "part": {"type": "integer", "minimum": 1, "maximum": 12},
+        "clause": {"type": "string", "pattern": "^[1-9][0-9]*(\\.[1-9][0-9]*)*$"},
+        "table": {"type": "integer", "minimum": 1},
+        "topic": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "reference_kind": {
+          "enum": [
+            "normative_requirement",
+            "normative_recommendation",
+            "guidance",
+            "project_policy"
+          ]
+        },
+        "project_paraphrase": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "applicability": {"type": "string", "minLength": 1, "pattern": "\\S"}
+      }
+    }
+  }
+}

@@ -82,7 +82,7 @@ Using ``osqar baseline``
 -------------------------
 
 OSQAr provides versioned requirement baselines via :ref:`cli-baseline` to support
-ISO 26262-8 §9 configuration management.  Baselines are stored as snapshots of
+configuration management under ISO 26262-8 Clause 7.  Baselines are stored as snapshots of
 ``needs.json`` in ``.osqar-baselines/<tag>/`` within the project directory.
 
 .. code-block:: bash
@@ -152,8 +152,9 @@ by a change — with :ref:`cli-impact`. It performs bidirectional graph traversa
      --format json --json-report impact_report.json
 
 Use impact analysis before every safety-relevant change to answer
-*"if I modify this requirement, what else must I review?"* — supporting
-ISO 26262-8 §9.4.2.4 impact analysis workflows.
+*"if I modify this requirement, what else must I review?"*. ISO 26262-8
+§§8.4.3–8.4.4 provide the change-impact-analysis basis, and §8.5.3 identifies
+the resulting impact analysis as a work product.
 
 The command can be integrated into CI so that every pull request that changes
 requirements automatically produces an impact report.

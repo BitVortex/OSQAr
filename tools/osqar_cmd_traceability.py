@@ -312,6 +312,8 @@ def cmd_traceability(args: argparse.Namespace) -> int:
     argv: list[str] = [str(args.needs_json)]
     if getattr(args, "json_report", None):
         argv += ["--json-report", str(args.json_report)]
+    if getattr(args, "project_config", None):
+        argv += ["--project-config", str(args.project_config)]
 
     for prefix_attr in ("req_prefix", "arch_prefix", "test_prefix", "code_prefix"):
         values = getattr(args, prefix_attr, None) or []
@@ -336,6 +338,12 @@ def register(sub: argparse._SubParsersAction) -> None:
     p_tr.add_argument("needs_json", type=Path, help="Path to needs.json or needs.yaml")
     p_tr.add_argument(
         "--json-report", type=Path, default=None, help="Write JSON report to this path"
+    )
+    p_tr.add_argument(
+        "--project-config",
+        type=Path,
+        default=None,
+        help="Project configuration declaring standards catalogs for STDCLAIM_* needs",
     )
     p_tr.add_argument(
         "--format",

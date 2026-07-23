@@ -15,7 +15,7 @@ qualification artifacts. Use it when authoring `01_requirements.rst`, `02_archit
 automotive software SEooC qualification.
 
 The guidance is ASIL-differentiated: requirements increase in rigour from ASIL A to ASIL D
-per Part 6 Tables 3-11.
+per ISO 26262-6:2018 Tables 3-11.
 
 ## When to Use
 
@@ -31,9 +31,9 @@ per Part 6 Tables 3-11.
 
 SSRs are derived from:
 - Technical Safety Requirements (TSRs) allocated to software — ISO 26262-4 §6.4.6
-- Hardware-Software Interface (HSI) specification — ISO 26262-4 §7.4
+- Hardware-Software Interface (HSI) specification — ISO 26262-4 §6.4.7
 - System architectural design constraints — ISO 26262-4 §6.4.3
-- Assumptions of Use for SEooC — ISO 26262-10 §9.4.2
+- Assumptions of Use for SEooC — general guidance in ISO 26262-10 §9.1
 
 ### OSQAr Need ID Conventions
 
@@ -53,7 +53,9 @@ Categories: `NOMINAL`, `FAULT`, `INIT`, `SHUTDOWN`, `INTERFACE`, `TIMING`,
 | Review independence | Author review | I1 (different person) | I2 (different team) | I2+ (different department) |
 | Traceability | Forward only | Bidirectional | Bidirectional + impact analysis | Bidirectional + CI-automated |
 
-Reference: ISO 26262-6 §6.4.2, Table 1.
+This rigour matrix is OSQAr project policy; it is not derived from
+ISO 26262-6:2018 Table 1; that table addresses topics covered by modelling and
+coding guidelines.
 
 ### Requirement Classes (all ASILs)
 
@@ -99,7 +101,8 @@ Reference: ISO 26262-6 §6.4.1.
 
 ### Architecture Views
 
-Per ISO 26262-6 §7.4.3, document these views as `ARCH_` needs:
+ISO 26262-6 §7.4.5 provides the architectural-view context. OSQAr documents
+the following project-selected views as `ARCH_` needs:
 
 | View | Description | OSQAr Section |
 |------|-------------|---------------|
@@ -113,18 +116,11 @@ Per ISO 26262-6 §7.4.3, document these views as `ARCH_` needs:
 
 ### ASIL-Differentiated Design Principles
 
-Per ISO 26262-6 Table 3:
-
-| Principle | ASIL A | ASIL B | ASIL C | ASIL D |
-|-----------|--------|--------|--------|--------|
-| Hierarchical structure | + | ++ | ++ | ++ |
-| Restricted size/complexity | — | + | + | ++ |
-| Strong cohesion | + | + | ++ | ++ |
-| Loose coupling | + | + | ++ | ++ |
-| Appropriate scheduling | + | ++ | ++ | ++ |
-| Restricted interrupts | — | — | + | ++ |
-
-++ = highly recommended, + = recommended, — = no recommendation
+ISO 26262-6:2018 Table 3 identifies principles for software architectural
+design and gives ASIL-dependent recommendation strengths. Use the packaged
+catalog for its controlled locator and topic. Select, tailor, and justify the
+applicable principles for the project; do not treat this skill as a
+reproduction of the table or as a universal fixed method set.
 
 ### Freedom from Interference
 
@@ -144,7 +140,10 @@ When elements of different ASIL coexist (mixed-criticality), document per ISO 26
 
 ### Safety Mechanism Patterns
 
-Per ISO 26262-6 Table 4 (error detection) and Table 5 (error handling):
+The following is an OSQAr project pattern, not a paraphrase of
+ISO 26262-6:2018 Tables 4/5. Table 4 addresses software-architecture
+verification methods; Table 5 addresses notation methods for software unit
+design, not error detection or error handling:
 
 ```rst
 .. arch:: Plausibility check: commanded torque vs. measured torque.
@@ -156,32 +155,22 @@ Per ISO 26262-6 Table 4 (error detection) and Table 5 (error handling):
 
 ## Software Verification → `03_verification.rst`
 
-### Coverage Targets by ASIL
+### Coverage and Verification Reference Map
 
-Per ISO 26262-6 Table 10 (unit level) and Table 11 (architectural level):
+Use the packaged catalog rather than reproducing recommendation ratings here.
+The researched mappings are:
 
-| Coverage Metric | ASIL A | ASIL B | ASIL C | ASIL D |
-|-----------------|--------|--------|--------|--------|
-| Statement (unit) | ++ | ++ | ++ | + |
-| Branch (unit) | + | ++ | ++ | ++ |
-| MC/DC (unit) | — | + | + | ++ |
-| Function (arch.) | + | + | ++ | ++ |
-| Call (arch.) | + | + | ++ | ++ |
+- ISO 26262-6:2018 Tables 7/8 — software-unit verification and unit-test derivation;
+- ISO 26262-6:2018 Table 9 — software-unit structural coverage;
+- ISO 26262-6:2018 Tables 10/11 — software-integration verification and test derivation;
+- ISO 26262-6:2018 Table 12 — software-architecture structural coverage; and
+- ISO 26262-6:2018 Table 13 — test environments for embedded-software testing;
+- ISO 26262-6:2018 Table 14 — embedded-software test methods; and
+- ISO 26262-6:2018 Table 15 — embedded-software test-case derivation methods.
 
-++ = highly recommended, + = recommended, — = no recommendation
-
-### Verification Methods by ASIL
-
-Per ISO 26262-6 Table 9:
-
-| Method | ASIL A | ASIL B | ASIL C | ASIL D |
-|--------|--------|--------|--------|--------|
-| Walk-through | ++ | + | — | — |
-| Inspection | + | ++ | ++ | ++ |
-| Static analysis | + | ++ | ++ | ++ |
-| Unit testing | ++ | ++ | ++ | ++ |
-| Integration testing | + | ++ | ++ | ++ |
-| Formal verification | — | — | + | + |
+Exact percentages and acceptance thresholds in examples are OSQAr project
+policy. The table subjects above were checked against the controlled 2018 copy;
+their applicability and project use still require competent review.
 
 ### OSQAr VER_ Needs — Example
 
@@ -203,22 +192,26 @@ Per ISO 26262-6 Table 9:
 
 ### Tool Qualification
 
-Verification tools must be classified per ISO 26262-8 §11.4:
+ISO 26262-8:2018 Clause 11 is the researched tool-confidence reference. Tool
+classification and any qualification conclusion require a project-specific
+assessment; do not copy fixed TI/TD/TCL results.
 
 ```rst
 .. lm:: Tool Confidence Level determination for verification toolchain.
    :id: LM_TOOL_TCL
    :tags: tool_qualification;TCL
 
-   **Compiler:** TI2, TD3 → TCL3 — qualification required
-   **Static analyzer:** TI2, TD2 → TCL2 — increased confidence from use
-   **Test framework:** TI1 → TCL1 — no qualification needed
-   **Coverage tool:** TI1, TD1 → TCL1 — no qualification needed
+   **Compiler:** <project analysis and reviewed result>
+   **Static analyzer:** <project analysis and reviewed result>
+   **Test framework:** <project analysis and reviewed result>
+   **Coverage tool:** <project analysis and reviewed result>
 ```
 
 ## Implementation → `04_implementation.rst`
 
-Per ISO 26262-6 Table 7 (modeling/coding guidelines) and Table 8 (design principles):
+The following are conservative OSQAr project-policy defaults. Do not attribute
+them to Tables 7/8; the researched catalog maps those tables to software-unit
+verification and test derivation.
 
 ### Mandatory Implementation Rules by ASIL
 
@@ -245,14 +238,16 @@ Example coding standards: MISRA C:2012, AUTOSAR C++14, CERT C.
    **Total modules:** 14 (8 ASIL D, 4 ASIL B, 2 QM)
    **Coding standard:** MISRA C:2012 Directive 4.14 (Mandatory)
    **Static analysis:** cppcheck 2.14 with MISRA addon
-   **Build reproducibility:** Verified per ISO 26262-8 §11.4.8
+   **Build reproducibility:** Verified against OSQAr project policy
 ```
 
 ## Lifecycle Management → `06_lifecycle_management.rst`
 
 ### Assumptions of Use for Software SEooC
 
-Per ISO 26262-10 §9.4.2, document at minimum:
+ISO 26262-10:2018 Clause 9 provides researched informative SEooC guidance. Document the
+project's actual assumptions; OSQAr does not prescribe a standards-derived
+minimum count. This is a project-authored mapping.
 
 ```rst
 .. lm:: Integration context: the software assumes single-core execution
@@ -286,20 +281,22 @@ Per ISO 26262-8 §7:
 
 - **ISO 26262-6** — all clause references in this skill
 - **ISO 26262-4 §6.4.1-§6.4.6** — TSR allocation to software
-- **ISO 26262-4 §7.4** — HSI specification
+- **ISO 26262-4 §6.4.7** — HSI specification
 - **ISO 26262-8 §7, §8, §11** — supporting processes
 - **ISO 26262-9 §5, §6** — ASIL decomposition, coexistence
 - **ISO 26262-10 §9** — SEooC framework
 
 ## Pitfalls
 
-1. **Copying Part 6 tables into requirements without context** — the tables are
-   informative guidance, not requirements. Requirements must be project-specific.
+1. **Copying Part 6 tables into requirements without context** — the tables give
+   method recommendations within normative clauses; they do not turn an untailored
+   OSQAr example into a project requirement. Requirements must be project-specific.
 2. **Claiming ASIL D compliance** — always use "qualification attempt targeting
    ASIL D" language. Formal compliance requires independent assessment.
 3. **Missing HSI in SSRs** — software requirements that don't reference
    hardware-software interfaces create untestable assumptions.
 4. **Coverage ≠ correctness** — 100% MC/DC coverage means code was exercised,
    not that it's correct. Tests must be requirements-based.
-5. **Dynamic memory in ASIL C/D** — ISO 26262-6 Table 7 strongly discourages
-   dynamic allocation at ASIL B+ and effectively prohibits at ASIL C/D.
+5. **Presenting coding policy as controlled text** — restrictions on dynamic
+   allocation and recursion are OSQAr scaffold policy until a project cites
+   reviewed controlled text precisely; Table 7 is not their catalog mapping.

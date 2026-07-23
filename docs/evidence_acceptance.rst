@@ -79,3 +79,28 @@ review dispositions. It does not determine whether requirements are correct,
 whether evidence is technically sufficient, or whether a safety argument is
 convincing. Passing does not establish ISO 26262 compliance, tool qualification,
 component qualification, certification, or safety.
+
+Standards-claim validation boundary
+-----------------------------------
+
+``STDCLAIM_*`` needs add a separate mechanical check to traceability. The check
+confirms that each authored catalog and ``reference_id`` resolves and that the
+claim's typed links have the permitted direction and resolve to project needs.
+A mechanical PASS does **not** approve the project interpretation, determine
+applicability, establish evidence adequacy, or demonstrate conformance or
+compliance with any standard. Those determinations require project-authorized
+human review against the controlled source and project context.
+
+The base boilerplate deliberately carries no organization-specific approval,
+acceptance, waiver, or applicability disposition. An adopting organization must
+record its own named reviewer, scope, rationale, date, and controlled revision in
+its external governance or review record. Such a disposition must not be
+inferred from an example claim, a generated reverse link, or a zero CLI exit
+status.
+
+Likewise, an ``evidenced_by`` relationship records only the authored direction
+from a claim to an ``EVID_*`` record. A placeholder or pending evidence record
+does not assert execution, a passing result, provenance, technical sufficiency,
+review, or acceptance. Promote evidence through the controlled evidence states
+only after those facts and dispositions exist; catalog resolution alone cannot
+perform that promotion.

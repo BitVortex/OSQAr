@@ -2,7 +2,9 @@
  * ASIL D SEooC C Library — Implementation
  *
  * Safety-related functions implementing the public API defined in project.h.
- * Follows ISO 26262-6 Table 7 guidelines for ASIL D:
+ * The following restrictions are OSQAr template policy, selected in the
+ * context of ISO 26262-6:2018, Clause 8.4.5, Table 6; projects shall tailor
+ * and justify them rather than treat them as direct standards mandates:
  *   - No dynamic allocation after initialization
  *   - No recursion
  *   - One entry, one exit per function

@@ -60,6 +60,10 @@ def test_installed_wheel_lane_emits_validated_evidence_and_proves_isolation() ->
     assert "import osqar_data" in run
     assert "importlib.resources.files(osqar_data)" in run
     assert "source_checkout" in run
+    assert "cp -R tests docs skills tools" in run
+    assert "cp -R osqar_data/templates" in run
+    assert "cp index.rst pyproject.toml" in run
+    assert "rm /tmp/osqar-installed-suite/tools/__init__.py" in run
     assert "|| true" not in run
 
     upload = _step("Upload installed-wheel framework evidence")

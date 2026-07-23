@@ -2,8 +2,10 @@ Verification (ISO 26262-6 §9-§11 — ASIL D)
 =============================================
 
 This document specifies verification activities for the software safety
-requirements and architectural design. Per ISO 26262-6 Table 10, ASIL D
-requires statement, branch, and MC/DC coverage at the unit level.
+requirements and architectural design. The researched mapping in the OSQAr
+reference catalog associates ISO 26262-6 Table 9 with software-unit structural
+coverage. Exact percentages below are OSQAr project policy, pending tailoring
+and review; they are not represented as thresholds prescribed by the standard.
 
 Naming convention: ``VER_<CATEGORY>_<NNN>``.
 
@@ -57,8 +59,9 @@ Coverage — MC/DC
 ----------------
 
 .. ver:: Modified Condition/Decision Coverage (MC/DC) shall be
-         demonstrated for all safety-related functions per
-         ISO 26262-6 Table 10 (++ for ASIL D).
+         demonstrated for all safety-related functions as an OSQAr
+         project acceptance criterion. Table 9 is the researched
+         software-unit structural-coverage reference.
    :id: VER_COVERAGE_MCDC
    :status: draft
    :tags: ASIL_D;coverage;MC/DC
@@ -66,9 +69,9 @@ Coverage — MC/DC
 
    **Tool:** gcov/lcov (--all-blocks for MC/DC approximation)
    **Target:** MC/DC coverage ≥100% with justified exclusions
-   **Note:** Full MC/DC requires commercial tooling; gcov provides
-     branch+block coverage as a reasonable approximation per
-     ISO 26262-6 §9.4 guidance on tool limitations.
+   **Note:** gcov branch/block data is not treated as proof of MC/DC.
+   The selected tool and any approximation require project justification
+   and project-specific assessment.
 
 Static Analysis — Coding Standard
 ---------------------------------
@@ -128,7 +131,7 @@ Dynamic Analysis — Valgrind
 
    **Tool:** Valgrind 3.22
    **Target:** Zero memory errors (0 bytes definitely lost,
-     0 bytes indirectly lost, 0 errors)
+   0 bytes indirectly lost, 0 errors)
 
 Fuzzing
 -------

@@ -10,8 +10,8 @@ Naming convention: ``LM_<CATEGORY>_<NNN>``.
    Load ``iso26262-part6-software`` and ``compliance-documentation``
    for guidance on lifecycle management content.
 
-Assumptions of Use (SEooC — ISO 26262-10 §9.4.2)
--------------------------------------------------
+Assumptions of Use (SEooC — general guidance in ISO 26262-10 §9.1)
+------------------------------------------------------------------
 
 .. lm:: **Integration context**: The software component assumes
        single-threaded execution or externally-synchronized
@@ -50,11 +50,10 @@ Assumptions of Use (SEooC — ISO 26262-10 §9.4.2)
    :tags: ASIL_D;SEooC;assumption_of_use;error_handling
    :links: REQ_SSR_EXTASSUME_003
 
-.. lm:: **Toolchain**: The component shall be compiled with a
-       qualified compiler (TCL3 per ISO 26262-8 §11.4) using the
-       documented build configuration. The integrator shall verify
-       that the compiler version used in their build chain matches
-       the qualified version.
+.. lm:: **Toolchain**: The component shall be compiled using the compiler
+       version and build configuration covered by this project's reviewed
+       tool-use analysis. Classification and any qualification action shall
+       be determined for the actual use case under ISO 26262-8 Clause 11.
    :id: LM_AOU_TOOLCHAIN
    :status: draft
    :tags: ASIL_D;SEooC;assumption_of_use;toolchain
@@ -72,27 +71,27 @@ Configuration Management Baseline
 
    **Repository tag:** <libversion>-<osqarversion>
    **Artifacts:** 01-06 RST documents, conf.py, osqar_project.json,
-     source code, build configuration, verification evidence
-   **Retention:** Per organizational policy (≥15 years for automotive
-     safety, ISO 26262-2 §6.4.13)
+   source code, build configuration, verification evidence
+   **Retention:** <project retention period and organizational-policy basis>
 
 Tool Qualification
 ------------------
 
-.. lm:: Tool Confidence Level determination for the verification
-       toolchain per ISO 26262-8 §11.4.
+.. lm:: Project-specific confidence analysis for each relied-upon tool use
+       under ISO 26262-8 Clause 11.
    :id: LM_TOOL_TCL
    :status: draft
    :tags: ASIL_D;tool_qualification;TCL
 
-   **Compiler (GCC):** TI2, TD3 → TCL3 — qualification required
-     (increased confidence from use: 10+ years in safety-critical
-     automotive, or formal compiler validation)
-   **Static analyzer (cppcheck):** TI2, TD2 → TCL2
-     (increased confidence from use, open-source community validation)
-   **Coverage tool (gcov/lcov):** TI1, TD1 → TCL1 — no qualification
-     needed (coverage tools measure, not transform)
-   **Build system (CMake):** TI1, TD1 → TCL1 — no qualification needed
+   **Compiler (GCC):** <use case, impact, error-detection measures,
+   reviewed classification, and any qualification action>
+   **Static analyzer (cppcheck):** <project-specific evaluation>
+   **Coverage tool (gcov/lcov):** <project-specific evaluation>
+   **Build system (CMake):** <project-specific evaluation>
+
+   Tool names and categories do not determine fixed TI/TD/TCL results. Complete
+   this analysis for the project's actual uses before claiming tool confidence
+   or qualification.
 
 Safety Case Evidence Index
 --------------------------
@@ -107,5 +106,5 @@ Safety Case Evidence Index
    **SC_SAFETY_MEMORY (memory safety) →** VER_DYNAMIC_MEMORY, VER_DYNAMIC_VALGRIND
    **SC_SAFETY_ARITHMETIC (arithmetic safety) →** VER_COVERAGE_MCDC
    **SC_SAFETY_VERIFICATION (verification completeness) →**
-     VER_COVERAGE_STMT, VER_COVERAGE_BRANCH, VER_STATIC_MISRA,
-     VER_STATIC_DEFECTS, VER_REPRODUCIBLE
+   VER_COVERAGE_STMT, VER_COVERAGE_BRANCH, VER_STATIC_MISRA,
+   VER_STATIC_DEFECTS, VER_REPRODUCIBLE

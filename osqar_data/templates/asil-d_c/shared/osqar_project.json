@@ -8,6 +8,14 @@
     "build": "./build-and-test.sh build",
     "test": "./build-and-test.sh test"
   },
+  "standards": {
+    "catalogs": [
+      {
+        "id": "iso26262-2018",
+        "source": "package:osqar_data/standards/iso26262_reference_catalog.json"
+      }
+    ]
+  },
   "verification": {
     "run": [
       {
@@ -67,7 +75,7 @@
         "activity": "MC/DC Coverage (ASIL D)",
         "status": "not_run",
         "reason": "commercial_tool_required",
-        "description": "Full Modified Condition/Decision Coverage per ISO 26262-6 Table 10 requires commercial tooling.",
+        "description": "MC/DC is addressed by ISO 26262-6 §9.4.4 and Table 9. This project currently plans commercial tooling for full MC/DC measurement.",
         "mitigation": "gcov/lcov provides branch+block coverage as an approximation. Full MC/DC verification planned with qualified coverage tool."
       },
       "stack_depth": {

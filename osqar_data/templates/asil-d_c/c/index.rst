@@ -8,6 +8,7 @@ and ISO 26262-6:2018 for software-level product development.
 .. toctree::
    :maxdepth: 1
 
+   00_standards_claims
    01_requirements
    02_architecture
    03_verification
