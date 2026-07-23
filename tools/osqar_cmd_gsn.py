@@ -9,7 +9,7 @@ PlantUML backend (default): produces .puml with goals (rectangles), strategies
 Renders via system ``plantuml`` when --render is passed.
 
 gsn2x YAML backend (--backend gsn2x-yaml): produces gsn2x-compatible YAML
-for the formally correct GSN renderer. gsn2x produces diagrams with
+for the gsn2x renderer. gsn2x produces diagrams with
 GSN Community Standard shapes (parallelogram strategies, rounded-rectangle
 context with side-connectors, solid hollow-head in-context-of arrows).
 
@@ -397,7 +397,7 @@ def _render_plantuml(puml_path: Path, output_dir: Path | None = None) -> bool:
     return False
 
 
-# ── gsn2x YAML backend (formally correct GSN) ──────────────────────────────
+# ── gsn2x YAML backend ────────────────────────────────────────────────────
 
 def _to_gsn2x_yaml(
     safety_cases: list[dict[str, Any]],

@@ -54,11 +54,15 @@ osqar build-docs && osqar open-docs
 - SHA256SUMS manifest generation and verification
 - GPG detached signature support (`osqar sign create` / `osqar sign verify`)
 - Incremental mode — only rebuild changed stages
-- Project metadata declaration with OSQAr-qualified dependency pins
+- Project metadata declaration with pinned OSQAr shipment dependencies
 
 **Verification & CI**
 
 - Traceability rule enforcement (REQ→ARCH, ARCH→REQ, REQ→TEST)
+- Fail-closed evidence-state and provenance validation (`osqar framework validate`)
+- Standards-neutral claim catalogs with stable reference IDs and typed claim links
+- Packaged tool-reliance boundary with all base reliance disabled pending
+  use-case-specific assessment
 - Code trace scanning with enforcement (`osqar code-trace`)
 - Configurable verification activities (sanitizers, static analysis, fuzzing)
 - Auto-generated gap documentation from `osqar_project.json`
@@ -80,7 +84,10 @@ osqar build-docs && osqar open-docs
 git clone https://github.com/BitVortex/OSQAr.git
 cd OSQAr
 poetry install
-osqar build-docs && osqar open-docs
+./osqar build-docs && ./osqar open-docs
 ```
+
+The framework package targets Python `>=3.9,<3.15`; generated project
+templates currently target Python `>=3.9,<3.14`.
 
 For the full contributor setup (editable install, evidence tools, CI), see the [framework docs](https://bitvortex.github.io/OSQAr/).

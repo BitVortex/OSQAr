@@ -130,10 +130,10 @@ Optional: add project metadata into the shipment directory (recommended for mult
 		--origin url=https://example.com/repo.git \
 		--origin revision=<commit>
 
-Optional: declare dependencies on other OSQAr-qualified libraries
+Optional: declare dependencies on other OSQAr-described libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If your shipped component depends on other OSQAr-qualified components, declare them in the shipped
+If your shipped component depends on other OSQAr-described components, declare them in the shipped
 ``osqar_project.json`` under ``dependencies``.
 
 Each dependency entry includes a pin:

@@ -718,7 +718,7 @@ Synopsis
 Options
 ^^^^^^^
 
-- ``--version``: required; release/tag version, e.g. ``v0.9.0``
+- ``--version``: required; release/tag version, e.g. ``v0.10.0``
 - ``--docs-dir``: path to built framework HTML docs (default: ``_build/html``)
 - ``--output-dir``: staging/output directory (default: ``_dist``)
 
@@ -956,7 +956,7 @@ shipment pin
 Compute a stable pin from a shipment manifest (default: ``SHA256SUMS``).
 
 This prints a hex SHA-256 digest of the manifest file bytes. It can be used to
-identify an OSQAr-qualified dependency precisely.
+identify an OSQAr-described dependency precisely.
 
 Synopsis
 ^^^^^^^^
@@ -1016,7 +1016,7 @@ workspace
 
 The ``workspace`` command group operates on multiple shipments in an integrator workspace.
 
-If supplier-provided shipment metadata declares OSQAr-qualified dependencies, you can use
+If supplier-provided shipment metadata declares OSQAr-described dependencies, you can use
 ``--enforce-deps`` on workspace commands to fail on missing/ambiguous/conflicting dependencies.
 
 Workspace commands that produce an output directory (e.g., ``workspace report`` / ``workspace intake``)
@@ -1270,8 +1270,8 @@ specifications from ``.. safety-case::`` needs in a sphinx-needs
   ``sphinxcontrib.plantuml``.
 - ``gsn2x-yaml`` — produces a gsn2x-compatible YAML specification for the
   `jonasthewolf/gsn2x <https://github.com/jonasthewolf/gsn2x>`_ Rust binary.
-  gsn2x renders **formally correct** GSN diagrams per the GSN Community
-  Standard: parallelogram strategies, rounded-rectangle context nodes with
+  gsn2x renders diagrams using GSN Community Standard node shapes:
+  parallelogram strategies, rounded-rectangle context nodes with
   side-connectors, solid hollow-head in-context-of arrows. Requires the
   gsn2x binary (~2.7 MB download from GitHub releases).
 
@@ -1461,7 +1461,7 @@ Examples
 .. code-block:: console
 
   # Sign a shipment manifest
-  osqar sign sign --manifest _build/html/SHA256SUMS --key qualification@example.com
+  osqar sign create --manifest _build/html/SHA256SUMS --key qualification@example.com
 
   # Verify before unpacking a received shipment
   osqar sign verify --manifest _build/html/SHA256SUMS

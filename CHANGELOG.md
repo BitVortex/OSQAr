@@ -5,6 +5,61 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2026-07-23
+
+### Added
+- **Fail-closed evidence acceptance** (`osqar framework validate`) with packaged
+  `basic` and `qualification` profiles, independently supplied source/configuration
+  anchors, recursive JUnit validation, threshold and finding checks, and atomic
+  machine-readable acceptance reports. (#24, #28)
+- **Safety-tool reliance boundary** with a packaged per-function inventory and
+  validator. The base policy permits no safety-lifecycle reliance and requires a
+  separate use-case-specific assurance disposition before any reliance claim.
+  (#27, #29)
+- **Standards-neutral claim model** with stable catalog reference IDs, typed
+  `STDCLAIM_*` relationships, mechanical traceability checks, and an ASIL-D C
+  showcase. (#22, #31)
+- **Illustrative ISO 26262:2018 reference catalog**, schema, generated documentation,
+  and occurrence inventory. The catalog is explicitly incomplete; mechanical PASS
+  does not establish semantic validity, compliance, qualification, certification,
+  or safety. Independent semantic review is tracked in #32. (#22, #31)
+
+### Changed
+- Expanded the framework regression and fault-injection suite,
+  including malformed/missing evidence, checksum, traceability, CLI, source-tree,
+  and installed-wheel paths; CI now publishes deterministic evidence reports for
+  these checks. (#23, #30)
+- Clarified the boundary between generated evidence, mechanical acceptance,
+  project-authorized review, and standards interpretation throughout the docs,
+  templates, and content-authoring skills.
+- Updated release-facing documentation for v0.10.0 and corrected stale CI-guide
+  references, invalid CLI examples, and the obsolete skills documentation URL.
+
+### Removed
+- The unused top-level `templates/basic` mirror, which had diverged from the
+  authoritative packaged templates under `osqar_data/templates`.
+
+### Fixed
+- Framework release bundles now include the complete `osqar_data` runtime package,
+  including evidence profiles, the tool-reliance inventory, standards catalogs,
+  static assets, and packaged templates.
+- Release and CI staging outputs are ignored so local release verification does
+  not leave untracked artifact trees or archives in the repository.
+- Pytest and the root Sphinx build exclude local `_dist` bundles, preventing
+  generated nested tests and scaffold documents from contaminating source checks.
+- The release workflow is tag-triggered only and rejects tags that do not equal
+  `v<package-version>` before any build, upload, PyPI publication, or GitHub release.
+- Framework bundles created by an installed wheel now generate portable CLI
+  launchers when repository-level wrapper scripts are unavailable.
+- The tag-release assembler and CLI bundle command now ship only the canonical
+  `osqar_data/` runtime resources instead of recreating a second template mirror.
+- Installed-wheel CI staging now includes the root Sphinx and release-workflow
+  configuration consumed by release-hygiene regressions, while explicitly
+  deselecting tests marked as requiring a complete source checkout.
+- Active guidance now uses neutral ``OSQAr-described`` dependency terminology,
+  narrows GSN renderer claims to demonstrated node-shape behavior, and documents
+  the generated-template Python support range.
+
 ## [0.9.0] - 2026-05-26
 
 ### Added
@@ -42,7 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **PlantUML GSN backend** (`osqar gsn generate --backend plantuml`, default): generates
-  `.puml` diagrams embeddable via `.. plantuml::` in Sphinx. Aproximate GSN shapes
+  `.puml` diagrams embeddable via `.. plantuml::` in Sphinx. Approximate GSN shapes
   (strategy→hexagon) with zero extra CI dependencies. The `--render` flag now invokes
   the system `plantuml` binary. (#20, #21)
 - **Formally correct gsn2x backend** (`osqar gsn generate --backend gsn2x-yaml --render`):

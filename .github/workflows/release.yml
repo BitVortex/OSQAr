@@ -4,13 +4,27 @@ on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
+  release-metadata:
+    name: Validate release tag and package version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Require tag/package version equality
+        run: python tools/check_release_version.py --tag "${GITHUB_REF_NAME}"
+
   pypi-publish:
+    needs: release-metadata
     name: Publish osqar to PyPI
     runs-on: ubuntu-latest
     environment: pypi
@@ -39,6 +53,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   framework-bundle:
+    needs: release-metadata
     name: Framework bundle (docs + CLI + templates)
     runs-on: ubuntu-latest
     steps:
@@ -105,6 +120,7 @@ jobs:
             osqar_framework_bundle_${{ github.ref_name }}.zip.sha256
 
   bazel-example-shipment:
+    needs: release-metadata
     name: Example shipment (reproducible, Bazel) [${{ matrix.example }}]
     runs-on: ubuntu-24.04
     strategy:
@@ -359,6 +375,7 @@ jobs:
     name: Publish GitHub Release assets
     runs-on: ubuntu-latest
     needs:
+      - release-metadata
       - framework-bundle
       - example-workspace
     steps:

@@ -6,7 +6,7 @@ publish a single archive that contains:
 
 - built framework documentation (HTML)
 - CLI tooling (tools/ + repo-root wrappers)
-- scaffolding templates (templates/)
+- packaged runtime resources, including scaffolding templates (osqar_data/)
 
 The output of this script is a *staging directory* that a CI workflow can archive
 in deterministic ways (tar --sort=name, --mtime, gzip -n, etc.).
@@ -68,9 +68,9 @@ def assemble_bundle(*, version: str, docs_dir: Path, output_dir: Path) -> Path:
     # Built framework docs
     _copytree(docs_dir, bundle_root / "docs")
 
-    # Tooling + templates
+    # Tooling + canonical packaged runtime resources
     _copytree(repo_root / "tools", bundle_root / "tools")
-    _copytree(repo_root / "templates", bundle_root / "templates")
+    _copytree(repo_root / "osqar_data", bundle_root / "osqar_data")
 
     # Convenience wrappers
     _copyfile(repo_root / "osqar", bundle_root / "osqar")
@@ -101,7 +101,7 @@ def assemble_bundle(*, version: str, docs_dir: Path, output_dir: Path) -> Path:
                 "Contents:",
                 "- docs/: built HTML framework documentation (open docs/index.html)",
                 "- tools/: stdlib-only CLI implementation",
-                "- templates/: project scaffolding templates used by the CLI",
+                "- osqar_data/: templates, profiles, governance, standards, and static resources",
                 "- osqar / osqar.cmd / osqar.ps1: OSQAr CLI entrypoints",
                 "",
                 "Quickstart:",

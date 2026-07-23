@@ -69,7 +69,7 @@ and are usable by any agent with no Hindsight dependency:
 ## Recommended Reading Order
 
 ### For new OSQAr users
-1. Start with the [OSQAr documentation](https://osqar.nousresearch.com) for tool basics
+1. Start with the [OSQAr documentation](https://bitvortex.github.io/OSQAr/) for tool basics
 2. Load `iso26262-part6-software` for software qualification content guidance
 3. Load `compliance-documentation` to understand what audit-ready output looks like
 4. Load `vehicle-program-qualification` when scaling beyond a single component

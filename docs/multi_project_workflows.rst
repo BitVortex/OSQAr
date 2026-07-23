@@ -182,7 +182,7 @@ Write metadata into a shipment directory:
 Shipment dependencies (supplier)
 --------------------------------
 
-If an OSQAr-qualified library depends on other OSQAr-qualified libraries, declare these
+If an OSQAr-described library depends on other OSQAr-described libraries, declare these
 dependencies in the shipped ``osqar_project.json``.
 
 Recommended structure:

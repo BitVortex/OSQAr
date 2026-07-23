@@ -67,29 +67,49 @@ def cmd_framework_bundle(args: argparse.Namespace) -> int:
                 out.parent.mkdir(parents=True, exist_ok=True)
                 out.write_bytes(entry.read_bytes())
 
+    fallback_launchers = {
+        "osqar": """#!/usr/bin/env python3
+from tools.osqar_cli import main
+
+raise SystemExit(main())
+""",
+        "osqar.cmd": """@echo off
+python -m tools.osqar_cli %*
+exit /b %ERRORLEVEL%
+""",
+        "osqar.ps1": """$ErrorActionPreference = 'Stop'
+python -m tools.osqar_cli @args
+exit $LASTEXITCODE
+""",
+    }
+
+    def _write_fallback_launcher(name: str, dst: Path) -> None:
+        dst.write_text(fallback_launchers[name], encoding="utf-8")
+        if name == "osqar":
+            dst.chmod(dst.stat().st_mode | 0o111)
+
     _copytree(docs_dir, bundle_root / "docs")
     _copytree(repo_root / "tools", bundle_root / "tools")
 
-    templates_src = repo_root / "templates"
-    if templates_src.is_dir():
-        _copytree(templates_src, bundle_root / "templates")
+    data_src = repo_root / "osqar_data"
+    if data_src.is_dir():
+        _copytree(data_src, bundle_root / "osqar_data")
     else:
-        # PyPI installs do not have a repo-root `templates/` folder; use packaged resources.
         try:
-            tmpl_res = resources.files("osqar_data").joinpath("templates")
-            if not tmpl_res.is_dir():
-                raise FileNotFoundError("Packaged templates not found")
-            _copy_resource_tree(tmpl_res, bundle_root / "templates")
-        except Exception as exc:
-            print(f"ERROR: templates not found (repo or packaged): {exc}", file=sys.stderr)
+            data_res = resources.files("osqar_data")
+            if not data_res.is_dir():
+                raise FileNotFoundError("Packaged OSQAr resources not found")
+            _copy_resource_tree(data_res, bundle_root / "osqar_data")
+        except (FileNotFoundError, ModuleNotFoundError, OSError) as exc:
+            print(f"ERROR: OSQAr resources not found: {exc}", file=sys.stderr)
             return 2
 
-    if (repo_root / "osqar").is_file():
-        _copyfile(repo_root / "osqar", bundle_root / "osqar")
-    if (repo_root / "osqar.cmd").is_file():
-        _copyfile(repo_root / "osqar.cmd", bundle_root / "osqar.cmd")
-    if (repo_root / "osqar.ps1").is_file():
-        _copyfile(repo_root / "osqar.ps1", bundle_root / "osqar.ps1")
+    for name in ("osqar", "osqar.cmd", "osqar.ps1"):
+        src = repo_root / name
+        if src.is_file():
+            _copyfile(src, bundle_root / name)
+        else:
+            _write_fallback_launcher(name, bundle_root / name)
 
     for file_name in (
         "README.md",
@@ -111,7 +131,7 @@ def cmd_framework_bundle(args: argparse.Namespace) -> int:
                 "Contents:",
                 "- docs/: built HTML framework documentation (open docs/index.html)",
                 "- tools/: stdlib-only CLI implementation",
-                "- templates/: project scaffolding templates used by the CLI",
+                "- osqar_data/: packaged templates, profiles, governance, standards, and static resources",
                 "- osqar / osqar.cmd / osqar.ps1: OSQAr CLI entrypoints",
                 "",
                 "Quickstart:",
@@ -211,7 +231,7 @@ def register(sub: argparse._SubParsersAction) -> None:
         "bundle",
         help="Assemble a framework bundle directory (docs + CLI + templates)",
     )
-    p_fwb.add_argument("--version", required=True, help="Release/tag version, e.g. v0.4.2")
+    p_fwb.add_argument("--version", required=True, help="Release/tag version, e.g. v0.10.0")
     p_fwb.add_argument(
         "--docs-dir",
         default=Path("_build/html"),

@@ -16,11 +16,16 @@ dist/
 build/
 *.egg-info/
 
-# Legacy workspace overview outputs (no longer generated)
-
 # Local temporary workspaces/shipments (release sanity, experiments)
 _tmp*/
 tmp_ws_report/
+_dist/
+_ci_per_example/
+_ci_shipments/
+_ci_workspace/
+osqar_framework_bundle_v*.zip*
+osqar_example_workspace_v*.zip*
+osqar_*_shipment.zip*
 
 # Example build artifacts
 examples/**/build/

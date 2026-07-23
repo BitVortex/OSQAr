@@ -1,6 +1,6 @@
 [project]
 name = "osqar"
-version = "0.9.0"
+version = "0.10.0"
 description = "Open Safety Qualification Architecture - A Sphinx-Needs boilerplate for safety-related systems."
 readme = "README.md"
 license = "Apache-2.0"
@@ -44,8 +44,12 @@ black = "^23.7"
 addopts = [
 	"-ra",
 	"--ignore=_build",
+	"--ignore=_dist",
 	"--ignore=examples",
 	"--ignore=templates",
+]
+markers = [
+	"source_checkout: requires a complete repository checkout",
 ]
 
 [tool.poetry.group.evidence]

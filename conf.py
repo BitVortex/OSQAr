@@ -78,6 +78,8 @@ if not _NO_DIAGRAMS:
 # treated as root Sphinx sources.
 exclude_patterns = [
     "_build",
+    # Local release bundles contain nested Sphinx projects and test fixtures.
+    "_dist/**",
     # Local Poetry/virtualenv (otherwise Sphinx may index site-packages .rst files).
     ".venv",
     ".venv/**",

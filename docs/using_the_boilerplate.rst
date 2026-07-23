@@ -161,8 +161,8 @@ Workspace commands typically discover shipments by scanning for ``SHA256SUMS`` i
 Declared dependencies (pins)
 ----------------------------
 
-OSQAr supports **workspace dependency closure** for OSQAr-qualified libraries.
-If a shipped component depends on other OSQAr-qualified components, the supplier can declare those dependencies
+OSQAr supports **workspace dependency closure** for OSQAr-described libraries.
+If a shipped component depends on other OSQAr-described components, the supplier can declare those dependencies
 in the shipped ``osqar_project.json``.
 
 Each dependency is identified by:
@@ -787,7 +787,7 @@ Optional convenience (higher-level workflows in one command)::
       --output intake/archive/2026-02-01 \
       --traceability
 
-   # Optional: enforce declared OSQAr-qualified dependencies
+   # Optional: enforce declared OSQAr-described dependencies
    osqar workspace verify \
       --root intake/received \
       --recursive \
