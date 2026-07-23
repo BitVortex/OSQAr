@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -229,6 +229,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool_reliance_boundary.html">Safety-tool reliance boundary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iso26262_reference_catalog.html">ISO 26262 Example Reference Catalog</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
 <ul>
@@ -626,7 +627,8 @@ This is a shortcut for <code class="docutils literal notranslate"><span class="p
 <span id="cli-impact"></span><h3>impact<a class="headerlink" href="#impact" title="Link to this heading">¶</a></h3>
 <p>Analyze change impact by traversing traceability links from a seed need ID.</p>
 <p>This command answers <em>“if I change this requirement, what else is affected?”</em> — supporting
-ISO 26262-8 §9.4.2.4 impact analysis workflows. It performs bidirectional graph traversal
+change-impact analysis under ISO 26262-8 §§8.4.3–8.4.4; the resulting impact
+analysis is a work product identified in §8.5.3. It performs bidirectional graph traversal
 on the <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> traceability graph and shows all reachable needs with their type,
 status, and title.</p>
 <p>See <a class="reference internal" href="lifecycle_management.html"><span class="doc">Lifecycle Management</span></a> for integrating impact analysis into your change control process.</p>
@@ -1276,7 +1278,7 @@ also write a machine-readable <code class="docutils literal notranslate"><span c
 <section id="baseline">
 <span id="cli-baseline"></span><h3>baseline<a class="headerlink" href="#baseline" title="Link to this heading">¶</a></h3>
 <p>Versioned requirement baselines for change management. Supports
-ISO 26262-8 §9 configuration management requirements — snapshot the
+configuration management under ISO 26262-8 Clause 7 — snapshot the
 current <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> as a named baseline, list stored baselines, and
 compute structured diffs between any two baselines.</p>
 <p>Baselines are stored in <code class="docutils literal notranslate"><span class="pre">.osqar-baselines/&lt;tag&gt;/</span></code> within the project
@@ -1544,8 +1546,9 @@ auditor review</p></td>
 <section id="sign">
 <span id="cli-sign"></span><h3>sign<a class="headerlink" href="#sign" title="Link to this heading">¶</a></h3>
 <p>Cryptographically sign shipment manifests using GPG detached signatures.</p>
-<p>Provides integrity <em>and authenticity</em> evidence for auditable shipments.
-ISO 26262-8 §11.4.4 expects authenticity evidence for tool chains.</p>
+<p>Provides integrity <em>and authenticity</em> evidence for auditable shipments. GPG is
+an OSQAr-selected project-policy mechanism, not an ISO 26262 requirement. Part
+8 Clause 11 is the researched tool-confidence context; the mechanism remains OSQAr policy.</p>
 <p>See <a class="reference internal" href="suppliers_guide.html"><span class="doc">Supplier’s Guide</span></a> (supplier signing) and <a class="reference internal" href="integrators_guide.html"><span class="doc">Integrator’s Guide</span></a> (verification).</p>
 <section id="id58">
 <h4>Subcommands<a class="headerlink" href="#id58" title="Link to this heading">¶</a></h4>

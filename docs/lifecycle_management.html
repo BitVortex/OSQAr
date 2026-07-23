@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -229,6 +229,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool_reliance_boundary.html">Safety-tool reliance boundary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iso26262_reference_catalog.html">ISO 26262 Example Reference Catalog</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
 <ul>
@@ -353,7 +354,7 @@ In OSQAr, a shipment is an evidence bundle that contains <strong>Sphinx document
 <section id="using-osqar-baseline">
 <h3>Using <code class="docutils literal notranslate"><span class="pre">osqar</span> <span class="pre">baseline</span></code><a class="headerlink" href="#using-osqar-baseline" title="Link to this heading">¶</a></h3>
 <p>OSQAr provides versioned requirement baselines via <a class="reference internal" href="cli_reference.html#cli-baseline"><span class="std std-ref">baseline</span></a> to support
-ISO 26262-8 §9 configuration management.  Baselines are stored as snapshots of
+configuration management under ISO 26262-8 Clause 7.  Baselines are stored as snapshots of
 <code class="docutils literal notranslate"><span class="pre">needs.json</span></code> in <code class="docutils literal notranslate"><span class="pre">.osqar-baselines/&lt;tag&gt;/</span></code> within the project directory.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Snapshot the current requirements as a named baseline</span>
 osqar<span class="w"> </span>baseline<span class="w"> </span>snapshot<span class="w"> </span>--tag<span class="w"> </span>v1.0<span class="w"> </span>--message<span class="w"> </span><span class="s2">&quot;Initial qualification baseline&quot;</span>
@@ -419,8 +420,9 @@ osqar<span class="w"> </span>impact<span class="w"> </span>./_build/html/needs.j
 </pre></div>
 </div>
 <p>Use impact analysis before every safety-relevant change to answer
-<em>“if I modify this requirement, what else must I review?”</em> — supporting
-ISO 26262-8 §9.4.2.4 impact analysis workflows.</p>
+<em>“if I modify this requirement, what else must I review?”</em>. ISO 26262-8
+§§8.4.3–8.4.4 provide the change-impact-analysis basis, and §8.5.3 identifies
+the resulting impact analysis as a work product.</p>
 <p>The command can be integrated into CI so that every pull request that changes
 requirements automatically produces an impact report.</p>
 </section>

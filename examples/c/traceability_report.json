@@ -24,5 +24,17 @@
       ]
     }
   },
+  "standards_claims": {
+    "boundary": "Mechanical validation only: catalog reference resolution and authored graph shape were checked; standards interpretation, applicability, adequacy, and compliance require project-authorized human review.",
+    "catalogs": [],
+    "counts": {
+      "catalogs": 0,
+      "claims": 0,
+      "references": 0,
+      "violations": 0
+    },
+    "references": [],
+    "violations": []
+  },
   "violations": []
 }

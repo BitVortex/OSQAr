@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -229,6 +229,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool_reliance_boundary.html">Safety-tool reliance boundary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iso26262_reference_catalog.html">ISO 26262 Example Reference Catalog</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
 <ul>
@@ -405,13 +406,15 @@ traceability checks, shipment packaging (the <em>how</em> of using OSQAr)</p></l
 </ol>
 <p><strong>Agent then authors:</strong></p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">01_requirements.rst</span></code> — REQ_SSR_NOMINAL_*, REQ_SSR_FAULT_*, etc.
-following the Part 6 Table 7 techniques table and ASIL D rigour</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">01_requirements.rst</span></code> — project-specific REQ_SSR_NOMINAL_*,
+REQ_SSR_FAULT_*, etc.; do not attribute these scaffold categories or counts
+to ISO 26262-6:2018 Table 7</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">02_architecture.rst</span></code> — ARCH_* needs with static/dynamic views,
 freedom from interference, safety mechanism patterns</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">03_verification.rst</span></code> — VER_* needs with MC/DC coverage targets,
 static analysis, fault injection, tool qualification</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">06_lifecycle_management.rst</span></code> — 5 AoUs for the SEooC per Part 10 §9.4.2</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">06_lifecycle_management.rst</span></code> — 5 project-defined AoUs for the SEooC;
+ISO 26262-10:2018 §9.1 provides the general informative SEooC context</p></li>
 </ul>
 <p><strong>Agent finally runs:</strong></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>osqar<span class="w"> </span>new<span class="w"> </span>--language<span class="w"> </span>c<span class="w"> </span>--name<span class="w"> </span>my-lib-qualification<span class="w"> </span>--template<span class="w"> </span>asil-d-c
@@ -459,9 +462,11 @@ numbers that don’t exist in the standard.</p></li>
 <li><p><strong>Overclaiming compliance</strong> — never use “ASIL D compliant” or “ISO 26262 certified.”
 Always use “qualification attempt targeting ASIL D” or “developed per
 ISO 26262:2018 processes.”</p></li>
-<li><p><strong>Confusing tools with techniques</strong> — “unit testing” is a technique; “CUnit 3.2.7”
-is a tool. The standard requires both: the technique must be applied (Part 6
-Table 9) and the tool must be qualified (Part 8 §11).</p></li>
+<li><p><strong>Confusing tools, test derivation, and coverage</strong> — “unit testing” is a
+technique; “CUnit 3.2.7” is a tool. The researched catalog maps
+ISO 26262-6:2018 Tables 7/8 to unit verification/test derivation and Table 9
+to software-unit structural coverage. ISO 26262-8:2018 Clause 11 is the researched
+tool-confidence reference. These mappings are project-authored interpretations.</p></li>
 <li><p><strong>Forgetting the safety manual</strong> — for SEooC qualification, the safety manual
 (including AoUs) is as important as the safety case. The integrator cannot
 use the component safely without it.</p></li>
@@ -472,9 +477,10 @@ is adequate, or evidence is valid.</p></li>
 configuration management (R-049), change management (R-050), and
 documentation management (R-052) apply to ALL parts and are frequently
 overlooked in single-component SEooC qualifications.</p></li>
-<li><p><strong>Assuming verification tools don’t need qualification</strong> — every tool in
-the safety toolchain must be classified (TI/TD → TCL). Even CI/CD tools
-that transform source code are in scope per Part 8 §11.</p></li>
+<li><p><strong>Assuming verification tools never need evaluation</strong> — evaluate each relied-upon
+tool use under ISO 26262-8:2018 Clause 11. Classification and any qualification need
+depend on the tool’s use case and available error-detection measures; do not
+assign fixed TI/TD/TCL results by tool category.</p></li>
 <li><p><strong>Not consulting the ``osqar-qualification`` skill</strong> — the tool-usage skill
 documents the exact CLI commands, project structure, and pitfalls for the
 OSQAr framework itself. It is complementary to the content-authoring skills

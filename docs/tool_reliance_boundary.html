@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -229,6 +229,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Safety-tool reliance boundary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iso26262_reference_catalog.html">ISO 26262 Example Reference Catalog</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
 <ul>
@@ -281,12 +282,11 @@
 <h1>Safety-tool reliance boundary<a class="headerlink" href="#safety-tool-reliance-boundary" title="Link to this heading">¶</a></h1>
 <section id="status-and-standards-basis">
 <h2>Status and standards basis<a class="headerlink" href="#status-and-standards-basis" title="Link to this heading">¶</a></h2>
-<p>This strategy is a <strong>researched interpretation</strong> of ISO 26262-8:2018,
-Clause 11. It has not yet been checked against a controlled copy of the
-standard. <code class="docutils literal notranslate"><span class="pre">BitVortex</span></code> is the designated independent functional-safety
-reviewer.</p>
-<p>No OSQAr function is currently approved for safety-lifecycle reliance by this
-strategy. The packaged inventory
+<p>ISO 26262-8:2018 Clause 11 was confirmed against the controlled copy as the
+context for confidence in the use of software tools. This OSQAr reliance strategy
+is still a <strong>project interpretation</strong>, not a standard-prescribed classification.</p>
+<p>No OSQAr function is currently permitted for safety-lifecycle reliance by this
+base strategy. The packaged inventory
 <code class="docutils literal notranslate"><span class="pre">osqar_data/governance/tool-reliance-v1.json</span></code> deliberately sets
 <code class="docutils literal notranslate"><span class="pre">reliance_permitted</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code> for every function and leaves version
 applicability unresolved. This is fail-closed: implementation, tests, or
@@ -296,9 +296,10 @@ product is qualified, compliant, certified, or safe.</p>
 </section>
 <section id="claim-boundary">
 <h2>Claim boundary<a class="headerlink" href="#claim-boundary" title="Link to this heading">¶</a></h2>
-<p>A future reviewed disposition may permit reliance only on explicitly named,
-machine-checkable predicates for an exact OSQAr version, profile version,
-configuration, dependency set, and supported environment. Such permission
+<p>A future organization- or user-level assurance disposition may permit reliance
+only on explicitly named, machine-checkable predicates for an exact OSQAr
+version, profile version, configuration, dependency set, and supported
+environment. Such permission
 would mean only that the documented predicate may support the identified
 lifecycle decision within its operating constraints.</p>
 <p>It would not establish:</p>
@@ -328,8 +329,8 @@ lifecycle decision within its operating constraints.</p>
 <p>Each candidate is provisionally treated as capable of failing to detect an
 error in a relied-upon lifecycle work product. The packaged TI, tool-error-
 detection, and TCL labels are provisional research classifications, not final
-Clause 11 determinations. <code class="docutils literal notranslate"><span class="pre">BitVortex</span></code> must confirm or replace them using the
-exact use case and controlled standard.</p>
+ISO 26262-8:2018 Clause 11 determinations. The adopting organization must
+establish or replace them for its exact use case using controlled standard text.</p>
 </section>
 <section id="functions-outside-the-boundary">
 <h2>Functions outside the boundary<a class="headerlink" href="#functions-outside-the-boundary" title="Link to this heading">¶</a></h2>
@@ -343,14 +344,15 @@ justified;</p></li>
 <li><p>workspace combination;</p></li>
 <li><p>project scaffolding, diagnostics, metadata, and reporting.</p></li>
 </ul>
-<p>Their outputs may inform competent review. They must not replace complete
-impact analysis, lifecycle review, evidence assessment, or safety-argument
+<p>Their outputs may inform competent assessment. They must not replace complete
+impact analysis, lifecycle assessment, evidence assessment, or safety-argument
 judgment.</p>
 </section>
 <section id="required-per-function-argument">
 <h2>Required per-function argument<a class="headerlink" href="#required-per-function-argument" title="Link to this heading">¶</a></h2>
-<p>Before changing a function to <code class="docutils literal notranslate"><span class="pre">reliance_permitted:</span> <span class="pre">true</span></code>, its inventory
-record and supporting report shall identify:</p>
+<p>The base inventory cannot be changed to <code class="docutils literal notranslate"><span class="pre">reliance_permitted:</span> <span class="pre">true</span></code>. An
+organization or user that intends to rely on a function must maintain a
+separate assurance record identifying:</p>
 <ol class="arabic simple">
 <li><p>the exact downstream decision allowed to rely on the result;</p></li>
 <li><p>the input, output, configuration, exclusions, and operating constraints;</p></li>
@@ -362,19 +364,12 @@ detect a lifecycle-work-product error;</p></li>
 <li><p>exact OSQAr, profile, Python, dependency, and platform versions;</p></li>
 <li><p>immutable validation evidence;</p></li>
 <li><p>known anomalies and residual limitations;</p></li>
-<li><p>independent approval by the designated reviewer.</p></li>
+<li><p>the accountable authorization and its supporting assessment record.</p></li>
 </ol>
-<p>The inventory validator rejects reliance unless all documented controls are
-machine-resolved: exact OSQAr, profile, Python, dependency, configuration, and
-environment applicability; controlled-copy-reviewed standards status; a named
-lifecycle decision and owner; nonblank independent detection; immutable
-evidence; explicit assumptions, constraints, limitations, anomalies, and
-revalidation triggers; and approval by the fixed designated reviewer
-<code class="docutils literal notranslate"><span class="pre">BitVortex</span></code>. Immutable evidence entries bind a 40- or 64-hex revision into the
-identifier, bind the evidence digest through <code class="docutils literal notranslate"><span class="pre">urn:sha256:&lt;digest&gt;</span></code>, and name a
-relative local JSON evidence artifact. Validation hashes the artifact bytes and
-requires its evidence-envelope revision to equal the declared revision.
-Placeholder, whitespace-only, or unresolved values fail closed.</p>
+<p>The base inventory validator rejects any attempt to set
+<code class="docutils literal notranslate"><span class="pre">reliance_permitted</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>. It validates the shipped structural and
+technical boundary only; organization- and user-level assessment logs,
+authorizations, and reliance decisions remain outside the base framework.</p>
 </section>
 <section id="required-independent-evidence">
 <h2>Required independent evidence<a class="headerlink" href="#required-independent-evidence" title="Link to this heading">¶</a></h2>
@@ -392,7 +387,7 @@ implementation;</p></li>
 <li><p>deterministic machine-readable reports;</p></li>
 <li><p>captured command, OSQAr version, profile version, Python/dependency versions,
 configuration, exclusions, hooks, and platform;</p></li>
-<li><p>an independently reviewed validation report tied to an immutable revision.</p></li>
+<li><p>an independently assessed validation report tied to an immutable revision.</p></li>
 </ul>
 <p>Reusing the same OSQAr implementation to generate and verify an artifact is
 not automatically independent error detection. The argument must state the
@@ -412,7 +407,7 @@ failure mode or state it as a limitation.</p>
 <p>A relied-upon version requires a known-anomaly register recording affected
 functions, versions, impact, workaround, detection status, and whether prior
 outputs require regeneration.</p>
-<p>Revalidation review is required after changes to at least:</p>
+<p>Revalidation assessment is required after changes to at least:</p>
 <ul class="simple">
 <li><p>the behavior profile or acceptance policy;</p></li>
 <li><p>traceability vocabulary or cardinalities;</p></li>
@@ -423,26 +418,18 @@ outputs require regeneration.</p>
 <li><p>a known anomaly affecting a relied-upon predicate.</p></li>
 </ul>
 </section>
-<section id="independent-review-gate">
-<h2>Independent review gate<a class="headerlink" href="#independent-review-gate" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">BitVortex</span></code> should answer, for every candidate function:</p>
-<ol class="arabic simple">
-<li><p>Is the downstream lifecycle decision stated precisely?</p></li>
-<li><p>Is the Tool Impact rationale use-case-specific?</p></li>
-<li><p>Could a warning, skipped step, exclusion, missing tool, stale report, or
-empty test suite still yield a pass?</p></li>
-<li><p>Is the claimed detection mechanism independent of the implementation being
-assessed?</p></li>
-<li><p>Are exact versions, dependencies, configuration, and operating limits
-fixed?</p></li>
-<li><p>Do the evidence identifiers resolve to immutable, reproducible results?</p></li>
-<li><p>Are semantic judgments visibly outside the automated claim?</p></li>
-<li><p>Are coupled dependency failures and anomalies addressed?</p></li>
-</ol>
-<p>Only after those questions are resolved against controlled standard text and
-versioned evidence may the inventory status become <code class="docutils literal notranslate"><span class="pre">reviewed</span></code> and an
-individual candidate become permitted. Approval is per function and use case;
-it is not blanket approval of OSQAr.</p>
+<section id="organization-and-user-level-assurance-records">
+<h2>Organization- and user-level assurance records<a class="headerlink" href="#organization-and-user-level-assurance-records" title="Link to this heading">¶</a></h2>
+<p>The base framework deliberately contains no assessor identity, assessment log,
+or authorization status. Adopting organizations and users maintain those
+records under their own governance. Such records should establish, per function
+and exact use case, the downstream decision, Tool Impact rationale, independent
+detection strength, exact environment and configuration, immutable evidence,
+semantic boundaries, coupled dependency failures, anomalies, accountable
+authority, and authorization outcome.</p>
+<p>An external authorization is per function and use case. It is not blanket
+approval of OSQAr and must not be represented by modifying the shipped base
+inventory.</p>
 </section>
 </section>
 
@@ -510,7 +497,7 @@ it is not blanket approval of OSQAr.</p>
 <li><a class="reference internal" href="#required-independent-evidence">Required independent evidence</a></li>
 <li><a class="reference internal" href="#dependencies-and-coupled-failures">Dependencies and coupled failures</a></li>
 <li><a class="reference internal" href="#anomalies-and-revalidation">Anomalies and revalidation</a></li>
-<li><a class="reference internal" href="#independent-review-gate">Independent review gate</a></li>
+<li><a class="reference internal" href="#organization-and-user-level-assurance-records">Organization- and user-level assurance records</a></li>
 </ul>
 </li>
 </ul>

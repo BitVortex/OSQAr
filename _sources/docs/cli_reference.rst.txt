@@ -389,7 +389,8 @@ impact
 Analyze change impact by traversing traceability links from a seed need ID.
 
 This command answers *"if I change this requirement, what else is affected?"* — supporting
-ISO 26262-8 §9.4.2.4 impact analysis workflows. It performs bidirectional graph traversal
+change-impact analysis under ISO 26262-8 §§8.4.3–8.4.4; the resulting impact
+analysis is a work product identified in §8.5.3. It performs bidirectional graph traversal
 on the ``needs.json`` traceability graph and shows all reachable needs with their type,
 status, and title.
 
@@ -1138,7 +1139,7 @@ baseline
 --------
 
 Versioned requirement baselines for change management. Supports
-ISO 26262-8 §9 configuration management requirements — snapshot the
+configuration management under ISO 26262-8 Clause 7 — snapshot the
 current ``needs.json`` as a named baseline, list stored baselines, and
 compute structured diffs between any two baselines.
 
@@ -1408,8 +1409,9 @@ sign
 
 Cryptographically sign shipment manifests using GPG detached signatures.
 
-Provides integrity *and authenticity* evidence for auditable shipments.
-ISO 26262-8 §11.4.4 expects authenticity evidence for tool chains.
+Provides integrity *and authenticity* evidence for auditable shipments. GPG is
+an OSQAr-selected project-policy mechanism, not an ISO 26262 requirement. Part
+8 Clause 11 is the researched tool-confidence context; the mechanism remains OSQAr policy.
 
 See :doc:`suppliers_guide` (supplier signing) and :doc:`integrators_guide` (verification).
 

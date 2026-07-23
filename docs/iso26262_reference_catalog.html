@@ -1,0 +1,1684 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="search" title="Search" href="../search.html" /><link rel="next" title="OSQAr Examples" href="../examples/index.html" /><link rel="prev" title="Evidence states and acceptance" href="evidence_acceptance.html" />
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
+        <title>ISO 26262 Example Reference Catalog - OSQAr 0.9.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">OSQAr 0.9.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">OSQAr 0.9.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">🚀 Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started with OSQAr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_the_boilerplate.html">Using the OSQAr Boilerplate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_setup_from_scratch.html">Setting Up A Project From Scratch</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📖 Guides (by role)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="suppliers_guide.html">Supplier’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integrators_guide.html">Integrator’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🏢 Professional Deployment</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lifecycle_management.html">Lifecycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_project_workflows.html">Multi-project workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collaboration_workflows.html">Collaboration workflows (multi-user)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci_integration.html">Integrating Verification into CI</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🔧 Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cli_reference.html">CLI Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool_reliance_boundary.html">Safety-tool reliance boundary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">ISO 26262 Example Reference Catalog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">OSQAr Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🧠 Agent Skills</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="agent_skills_usage.html">Agent Skills for OSQAr Qualification</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/docs/iso26262_reference_catalog.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="iso-26262-example-reference-catalog">
+<h1>ISO 26262 Example Reference Catalog<a class="headerlink" href="#iso-26262-example-reference-catalog" title="Link to this heading">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This page is generated from an illustrative, incomplete example catalog.
+OSQAr’s mechanical checks do not establish the semantic validity,
+completeness, or applicability of its project-authored mappings.
+The example does not establish compliance, qualification, certification,
+or safety. OSQAr policy is not an ISO 26262 requirement. Repository citation
+occurrences are maintained separately and do not require use of OSQAr
+skills or templates.</p>
+</div>
+<section id="example-data-source">
+<h2>Example data source<a class="headerlink" href="#example-data-source" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">osqar_data/standards/iso26262_reference_catalog.json</span></code> is the machine-data
+source for this example page; it is not an authoritative ISO 26262 source.
+This page must be regenerated with
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">tools.generate_iso26262_reference_docs</span></code>; tests reject drift.
+Repository occurrence closure is maintained separately in
+<code class="docutils literal notranslate"><span class="pre">tests/data/iso26262_reference_inventory.json</span></code>. It is generated maintenance
+evidence, not a packaged catalog field or a required user-project layout.</p>
+<section id="iso26262-2-2018-c6-4-6-planning-and-coordination-of-safety-activities">
+<h3>ISO26262-2:2018-C6.4.6 — planning and coordination of safety activities<a class="headerlink" href="#iso26262-2-2018-c6-4-6-planning-and-coordination-of-safety-activities" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-2:2018, Clause 6.4.6</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing planning and coordination of safety activities when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 2 Clause 6.4.6 as the controlled-copy-checked location for planning and coordination of safety activities.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-2-2018-c6-4-8-safety-case">
+<h3>ISO26262-2:2018-C6.4.8 — safety case<a class="headerlink" href="#iso26262-2-2018-c6-4-8-safety-case" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-2:2018, Clause 6.4.8</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing safety case when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 2 Clause 6.4.8 as the controlled-copy-checked location for safety case.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-2-2018-c6-4-9-confirmation-measures">
+<h3>ISO26262-2:2018-C6.4.9 — confirmation measures<a class="headerlink" href="#iso26262-2-2018-c6-4-9-confirmation-measures" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-2:2018, Clause 6.4.9</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing confirmation measures when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 2 Clause 6.4.9 as the controlled-copy-checked location for confirmation measures.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-2-2018-c6-4-10-confirmation-reviews">
+<h3>ISO26262-2:2018-C6.4.10 — confirmation reviews<a class="headerlink" href="#iso26262-2-2018-c6-4-10-confirmation-reviews" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-2:2018, Clause 6.4.10</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing confirmation reviews when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 2 Clause 6.4.10 as the controlled-copy-checked location for confirmation reviews.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-2-2018-c6-4-11-functional-safety-audit">
+<h3>ISO26262-2:2018-C6.4.11 — functional safety audit<a class="headerlink" href="#iso26262-2-2018-c6-4-11-functional-safety-audit" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-2:2018, Clause 6.4.11</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing functional safety audit when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 2 Clause 6.4.11 as the controlled-copy-checked location for functional safety audit.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-2-2018-c6-4-12-functional-safety-assessment">
+<h3>ISO26262-2:2018-C6.4.12 — functional safety assessment<a class="headerlink" href="#iso26262-2-2018-c6-4-12-functional-safety-assessment" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-2:2018, Clause 6.4.12</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing functional safety assessment when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 2 Clause 6.4.12 as the controlled-copy-checked location for functional safety assessment.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-2-2018-c6-4-13-release-for-production">
+<h3>ISO26262-2:2018-C6.4.13 — release for production<a class="headerlink" href="#iso26262-2-2018-c6-4-13-release-for-production" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-2:2018, Clause 6.4.13</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing release for production when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 2 Clause 6.4.13 as the controlled-copy-checked location for release for production.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-3-2018-c6-hazard-analysis-and-risk-assessment">
+<h3>ISO26262-3:2018-C6 — hazard analysis and risk assessment<a class="headerlink" href="#iso26262-3-2018-c6-hazard-analysis-and-risk-assessment" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-3:2018, Clause 6</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing hazard analysis and risk assessment when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 3 Clause 6 as the controlled-copy-checked location for hazard analysis and risk assessment.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-3-2018-c7-functional-safety-concept">
+<h3>ISO26262-3:2018-C7 — functional safety concept<a class="headerlink" href="#iso26262-3-2018-c7-functional-safety-concept" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-3:2018, Clause 7</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing functional safety concept when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 3 Clause 7 as the controlled-copy-checked location for functional safety concept.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c6-technical-safety-concept">
+<h3>ISO26262-4:2018-C6 — technical safety concept<a class="headerlink" href="#iso26262-4-2018-c6-technical-safety-concept" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 6</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing technical safety concept when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 6 as the controlled-copy-checked location for technical safety concept.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c6-4-1-specification-of-technical-safety-requirements">
+<h3>ISO26262-4:2018-C6.4.1 — specification of technical safety requirements<a class="headerlink" href="#iso26262-4-2018-c6-4-1-specification-of-technical-safety-requirements" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 6.4.1</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing specification of technical safety requirements when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 6.4.1 as the controlled-copy-checked location for specification of technical safety requirements.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c6-4-2-safety-mechanisms">
+<h3>ISO26262-4:2018-C6.4.2 — safety mechanisms<a class="headerlink" href="#iso26262-4-2018-c6-4-2-safety-mechanisms" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 6.4.2</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing safety mechanisms when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 6.4.2 as the controlled-copy-checked location for safety mechanisms.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c6-4-3-system-architectural-design-specification-and-technical-safety-concept">
+<h3>ISO26262-4:2018-C6.4.3 — system architectural design specification and technical safety concept<a class="headerlink" href="#iso26262-4-2018-c6-4-3-system-architectural-design-specification-and-technical-safety-concept" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 6.4.3</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing system architectural design specification and technical safety concept when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 6.4.3 as the controlled-copy-checked location for system architectural design specification and technical safety concept.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c6-4-4-safety-analyses-and-avoidance-of-systematic-failures">
+<h3>ISO26262-4:2018-C6.4.4 — safety analyses and avoidance of systematic failures<a class="headerlink" href="#iso26262-4-2018-c6-4-4-safety-analyses-and-avoidance-of-systematic-failures" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 6.4.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing safety analyses and avoidance of systematic failures when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 6.4.4 as the controlled-copy-checked location for safety analyses and avoidance of systematic failures.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c6-4-5-control-of-random-hardware-failures-during-operation">
+<h3>ISO26262-4:2018-C6.4.5 — control of random hardware failures during operation<a class="headerlink" href="#iso26262-4-2018-c6-4-5-control-of-random-hardware-failures-during-operation" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 6.4.5</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing control of random hardware failures during operation when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 6.4.5 as the controlled-copy-checked location for control of random hardware failures during operation.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c6-4-6-allocation-to-hardware-and-software">
+<h3>ISO26262-4:2018-C6.4.6 — allocation to hardware and software<a class="headerlink" href="#iso26262-4-2018-c6-4-6-allocation-to-hardware-and-software" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 6.4.6</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing allocation to hardware and software when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 6.4.6 as the controlled-copy-checked location for allocation to hardware and software.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c6-4-7-hardware-software-interface-specification">
+<h3>ISO26262-4:2018-C6.4.7 — hardware-software interface specification<a class="headerlink" href="#iso26262-4-2018-c6-4-7-hardware-software-interface-specification" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 6.4.7</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing hardware-software interface specification when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 6.4.7 as the controlled-copy-checked location for hardware-software interface specification.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c7-system-and-item-integration-and-testing">
+<h3>ISO26262-4:2018-C7 — system and item integration and testing<a class="headerlink" href="#iso26262-4-2018-c7-system-and-item-integration-and-testing" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 7</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing system and item integration and testing when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 7 as the controlled-copy-checked location for system and item integration and testing.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-4-2018-c8-safety-validation">
+<h3>ISO26262-4:2018-C8 — safety validation<a class="headerlink" href="#iso26262-4-2018-c8-safety-validation" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-4:2018, Clause 8</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing safety validation when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 4 Clause 8 as the controlled-copy-checked location for safety validation.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t1-topics-covered-by-modelling-and-coding-guidelines">
+<h3>ISO26262-6:2018-T1 — topics covered by modelling and coding guidelines<a class="headerlink" href="#iso26262-6-2018-t1-topics-covered-by-modelling-and-coding-guidelines" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 5.4.3, Table 1</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for topics covered by modelling and coding guidelines, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 1 as the controlled-copy-checked recommendation mapping for topics covered by modelling and coding guidelines.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c6-4-software-safety-requirements">
+<h3>ISO26262-6:2018-C6.4 — software safety requirements<a class="headerlink" href="#iso26262-6-2018-c6-4-software-safety-requirements" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 6.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing software safety requirements when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 6.4 as the controlled-copy-checked location for software safety requirements.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c6-4-1-derivation-of-software-safety-requirements">
+<h3>ISO26262-6:2018-C6.4.1 — derivation of software safety requirements<a class="headerlink" href="#iso26262-6-2018-c6-4-1-derivation-of-software-safety-requirements" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 6.4.1</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing derivation of software safety requirements when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 6.4.1 as the controlled-copy-checked location for derivation of software safety requirements.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c7-4-software-architectural-design-requirements-and-recommendations">
+<h3>ISO26262-6:2018-C7.4 — software architectural design requirements and recommendations<a class="headerlink" href="#iso26262-6-2018-c7-4-software-architectural-design-requirements-and-recommendations" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 7.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing software architectural design requirements and recommendations when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 7.4 as the controlled-copy-checked location for software architectural design requirements and recommendations.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t3-principles-for-software-architectural-design">
+<h3>ISO26262-6:2018-T3 — principles for software architectural design<a class="headerlink" href="#iso26262-6-2018-t3-principles-for-software-architectural-design" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 7.4.3, Table 3</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for principles for software architectural design, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 3 as the controlled-copy-checked recommendation mapping for principles for software architectural design.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c7-4-5-static-and-dynamic-aspects-of-software-architectural-design">
+<h3>ISO26262-6:2018-C7.4.5 — static and dynamic aspects of software architectural design<a class="headerlink" href="#iso26262-6-2018-c7-4-5-static-and-dynamic-aspects-of-software-architectural-design" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 7.4.5</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing static and dynamic aspects of software architectural design when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 7.4.5 as the controlled-copy-checked location for static and dynamic aspects of software architectural design.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c7-4-6-allocation-of-software-safety-requirements-to-software-components-and-units">
+<h3>ISO26262-6:2018-C7.4.6 — allocation of software safety requirements to software components and units<a class="headerlink" href="#iso26262-6-2018-c7-4-6-allocation-of-software-safety-requirements-to-software-components-and-units" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 7.4.6</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing allocation of software safety requirements to software components and units when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 7.4.6 as the controlled-copy-checked location for allocation of software safety requirements to software components and units.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t4-methods-for-verification-of-software-architectural-design">
+<h3>ISO26262-6:2018-T4 — methods for verification of software architectural design<a class="headerlink" href="#iso26262-6-2018-t4-methods-for-verification-of-software-architectural-design" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 7.4.14, Table 4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for methods for verification of software architectural design, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 4 as the controlled-copy-checked recommendation mapping for methods for verification of software architectural design.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c8-4-software-unit-design-and-implementation-requirements-and-recommendations">
+<h3>ISO26262-6:2018-C8.4 — software unit design and implementation requirements and recommendations<a class="headerlink" href="#iso26262-6-2018-c8-4-software-unit-design-and-implementation-requirements-and-recommendations" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 8.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing software unit design and implementation requirements and recommendations when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 8.4 as the controlled-copy-checked location for software unit design and implementation requirements and recommendations.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t5-notations-for-software-unit-design">
+<h3>ISO26262-6:2018-T5 — notations for software unit design<a class="headerlink" href="#iso26262-6-2018-t5-notations-for-software-unit-design" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 8.4.3, Table 5</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for notations for software unit design, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 5 as the controlled-copy-checked recommendation mapping for notations for software unit design.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c8-4-5-design-principles-for-software-unit-design-and-implementation">
+<h3>ISO26262-6:2018-C8.4.5 — design principles for software unit design and implementation<a class="headerlink" href="#iso26262-6-2018-c8-4-5-design-principles-for-software-unit-design-and-implementation" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 8.4.5</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing design principles for software unit design and implementation when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 8.4.5 as the controlled-copy-checked location for design principles for software unit design and implementation.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t6-design-principles-for-software-unit-design-and-implementation">
+<h3>ISO26262-6:2018-T6 — design principles for software unit design and implementation<a class="headerlink" href="#iso26262-6-2018-t6-design-principles-for-software-unit-design-and-implementation" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 8.4.5, Table 6</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for design principles for software unit design and implementation, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 6 as the controlled-copy-checked recommendation mapping for design principles for software unit design and implementation.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c9-software-unit-verification">
+<h3>ISO26262-6:2018-C9 — software unit verification<a class="headerlink" href="#iso26262-6-2018-c9-software-unit-verification" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 9</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing software unit verification when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 9 as the controlled-copy-checked location for software unit verification.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c9-4-software-unit-verification-requirements-and-recommendations">
+<h3>ISO26262-6:2018-C9.4 — software unit verification requirements and recommendations<a class="headerlink" href="#iso26262-6-2018-c9-4-software-unit-verification-requirements-and-recommendations" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 9.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing software unit verification requirements and recommendations when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 9.4 as the controlled-copy-checked location for software unit verification requirements and recommendations.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t7-methods-for-software-unit-verification">
+<h3>ISO26262-6:2018-T7 — methods for software unit verification<a class="headerlink" href="#iso26262-6-2018-t7-methods-for-software-unit-verification" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 9.4.2, Table 7</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for methods for software unit verification, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 7 as the controlled-copy-checked recommendation mapping for methods for software unit verification.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t8-methods-for-deriving-software-unit-test-cases">
+<h3>ISO26262-6:2018-T8 — methods for deriving software unit test cases<a class="headerlink" href="#iso26262-6-2018-t8-methods-for-deriving-software-unit-test-cases" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 9.4.3, Table 8</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for methods for deriving software unit test cases, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 8 as the controlled-copy-checked recommendation mapping for methods for deriving software unit test cases.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c9-4-4-completeness-and-structural-coverage-of-software-unit-verification">
+<h3>ISO26262-6:2018-C9.4.4 — completeness and structural coverage of software unit verification<a class="headerlink" href="#iso26262-6-2018-c9-4-4-completeness-and-structural-coverage-of-software-unit-verification" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 9.4.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing completeness and structural coverage of software unit verification when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 9.4.4 as the controlled-copy-checked location for completeness and structural coverage of software unit verification.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t9-structural-coverage-metrics-at-software-unit-level">
+<h3>ISO26262-6:2018-T9 — structural coverage metrics at software unit level<a class="headerlink" href="#iso26262-6-2018-t9-structural-coverage-metrics-at-software-unit-level" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 9.4.4, Table 9</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for structural coverage metrics at software unit level, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 9 as the controlled-copy-checked recommendation mapping for structural coverage metrics at software unit level.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c10-software-integration-and-verification">
+<h3>ISO26262-6:2018-C10 — software integration and verification<a class="headerlink" href="#iso26262-6-2018-c10-software-integration-and-verification" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 10</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing software integration and verification when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 10 as the controlled-copy-checked location for software integration and verification.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c10-4-software-integration-and-verification-requirements-and-recommendations">
+<h3>ISO26262-6:2018-C10.4 — software integration and verification requirements and recommendations<a class="headerlink" href="#iso26262-6-2018-c10-4-software-integration-and-verification-requirements-and-recommendations" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 10.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing software integration and verification requirements and recommendations when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 10.4 as the controlled-copy-checked location for software integration and verification requirements and recommendations.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t10-methods-for-verification-of-software-integration">
+<h3>ISO26262-6:2018-T10 — methods for verification of software integration<a class="headerlink" href="#iso26262-6-2018-t10-methods-for-verification-of-software-integration" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 10.4.2, Table 10</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for methods for verification of software integration, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 10 as the controlled-copy-checked recommendation mapping for methods for verification of software integration.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t11-methods-for-deriving-software-integration-test-cases">
+<h3>ISO26262-6:2018-T11 — methods for deriving software integration test cases<a class="headerlink" href="#iso26262-6-2018-t11-methods-for-deriving-software-integration-test-cases" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 10.4.3, Table 11</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of methods or principles for methods for deriving software integration test cases, according to the applicable ASIL and project context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Table 11 as the controlled-copy-checked recommendation mapping for methods for deriving software integration test cases.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t12-structural-coverage-metrics-at-software-architecture-level">
+<h3>ISO26262-6:2018-T12 — structural coverage metrics at software architecture level<a class="headerlink" href="#iso26262-6-2018-t12-structural-coverage-metrics-at-software-architecture-level" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 10.4.5, Table 12</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Assessment of completeness of software integration testing against the software architecture.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Table 12 for the mapping of structural coverage measures at software-architecture level.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c11-testing-of-embedded-software">
+<h3>ISO26262-6:2018-C11 — testing of embedded software<a class="headerlink" href="#iso26262-6-2018-c11-testing-of-embedded-software" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 11</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing testing of embedded software when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 11 as the controlled-copy-checked location for testing of embedded software.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-c11-4-embedded-software-testing-requirements-and-recommendations">
+<h3>ISO26262-6:2018-C11.4 — embedded-software testing requirements and recommendations<a class="headerlink" href="#iso26262-6-2018-c11-4-embedded-software-testing-requirements-and-recommendations" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 11.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing embedded-software testing requirements and recommendations when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 6 Clause 11.4 as the controlled-copy-checked location for embedded-software testing requirements and recommendations.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t13-test-environments-for-embedded-software-testing">
+<h3>ISO26262-6:2018-T13 — test environments for embedded-software testing<a class="headerlink" href="#iso26262-6-2018-t13-test-environments-for-embedded-software-testing" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 11.4.1, Table 13</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection and justification of embedded-software test environments.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Table 13 when selecting and justifying environments for embedded-software testing.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t14-methods-for-tests-of-embedded-software">
+<h3>ISO26262-6:2018-T14 — methods for tests of embedded software<a class="headerlink" href="#iso26262-6-2018-t14-methods-for-tests-of-embedded-software" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 11.4.2, Table 14</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selection of methods for embedded-software testing.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Table 14 for the method mapping for tests of embedded software.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-6-2018-t15-methods-for-deriving-embedded-software-test-cases">
+<h3>ISO26262-6:2018-T15 — methods for deriving embedded-software test cases<a class="headerlink" href="#iso26262-6-2018-t15-methods-for-deriving-embedded-software-test-cases" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 11.4.3, Table 15</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Derivation of embedded-software test cases.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Table 15 for methods used to derive embedded-software test cases.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-7-2018-c6-4-production-requirements-and-recommendations">
+<h3>ISO26262-7:2018-C6.4 — production requirements and recommendations<a class="headerlink" href="#iso26262-7-2018-c6-4-production-requirements-and-recommendations" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-7:2018, Clause 6.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing production requirements and recommendations when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 7 Clause 6.4 as the controlled-copy-checked location for production requirements and recommendations.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-7-2018-c7-4-operation-service-and-decommissioning-requirements-and-recommendations">
+<h3>ISO26262-7:2018-C7.4 — operation, service, and decommissioning requirements and recommendations<a class="headerlink" href="#iso26262-7-2018-c7-4-operation-service-and-decommissioning-requirements-and-recommendations" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-7:2018, Clause 7.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing operation, service, and decommissioning requirements and recommendations when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 7 Clause 7.4 as the controlled-copy-checked location for operation, service, and decommissioning requirements and recommendations.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-8-2018-c5-interfaces-within-distributed-developments">
+<h3>ISO26262-8:2018-C5 — interfaces within distributed developments<a class="headerlink" href="#iso26262-8-2018-c5-interfaces-within-distributed-developments" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 5</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing interfaces within distributed developments when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 8 Clause 5 as the controlled-copy-checked location for interfaces within distributed developments.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-8-2018-c7-configuration-management">
+<h3>ISO26262-8:2018-C7 — configuration management<a class="headerlink" href="#iso26262-8-2018-c7-configuration-management" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 7</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing configuration management when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 8 Clause 7 as the controlled-copy-checked location for configuration management.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-8-2018-c8-change-management">
+<h3>ISO26262-8:2018-C8 — change management<a class="headerlink" href="#iso26262-8-2018-c8-change-management" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 8</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing change management when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 8 Clause 8 as the controlled-copy-checked location for change management.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-8-2018-c8-4-3-change-request-analysis">
+<h3>ISO26262-8:2018-C8.4.3 — change request analysis<a class="headerlink" href="#iso26262-8-2018-c8-4-3-change-request-analysis" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 8.4.3</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing change request analysis when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 8 Clause 8.4.3 as the controlled-copy-checked location for change request analysis.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-8-2018-c8-4-4-change-request-evaluation">
+<h3>ISO26262-8:2018-C8.4.4 — change request evaluation<a class="headerlink" href="#iso26262-8-2018-c8-4-4-change-request-evaluation" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 8.4.4</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing change request evaluation when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 8 Clause 8.4.4 as the controlled-copy-checked location for change request evaluation.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-8-2018-c8-5-3-impact-analysis-and-change-request-plan-work-products">
+<h3>ISO26262-8:2018-C8.5.3 — impact analysis and change request plan work products<a class="headerlink" href="#iso26262-8-2018-c8-5-3-impact-analysis-and-change-request-plan-work-products" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 8.5.3</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Recording impact analysis and planning an evaluated change under the change-management process.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 8 Clause 8.5.3 as the controlled-copy-checked locator for the impact analysis and change request plan resulting from change-request evaluation.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-8-2018-c11-confidence-in-the-use-of-software-tools">
+<h3>ISO26262-8:2018-C11 — confidence in the use of software tools<a class="headerlink" href="#iso26262-8-2018-c11-confidence-in-the-use-of-software-tools" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 11</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing confidence in the use of software tools when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 8 Clause 11 as the controlled-copy-checked location for confidence in the use of software tools.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-8-2018-c14-proven-in-use-argument-guidance">
+<h3>ISO26262-8:2018-C14 — proven-in-use argument guidance<a class="headerlink" href="#iso26262-8-2018-c14-proven-in-use-argument-guidance" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 14</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative recommendation</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing proven-in-use argument guidance when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 8 Clause 14 as the controlled-copy-checked location for proven-in-use argument guidance.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-9-2018-c5-requirements-decomposition-with-respect-to-asil-tailoring">
+<h3>ISO26262-9:2018-C5 — requirements decomposition with respect to ASIL tailoring<a class="headerlink" href="#iso26262-9-2018-c5-requirements-decomposition-with-respect-to-asil-tailoring" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-9:2018, Clause 5</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing requirements decomposition with respect to ASIL tailoring when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 9 Clause 5 as the controlled-copy-checked location for requirements decomposition with respect to ASIL tailoring.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-9-2018-c6-criteria-for-coexistence-of-elements">
+<h3>ISO26262-9:2018-C6 — criteria for coexistence of elements<a class="headerlink" href="#iso26262-9-2018-c6-criteria-for-coexistence-of-elements" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-9:2018, Clause 6</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing criteria for coexistence of elements when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 9 Clause 6 as the controlled-copy-checked location for criteria for coexistence of elements.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-9-2018-c7-analysis-of-dependent-failures">
+<h3>ISO26262-9:2018-C7 — analysis of dependent failures<a class="headerlink" href="#iso26262-9-2018-c7-analysis-of-dependent-failures" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-9:2018, Clause 7</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing analysis of dependent failures when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 9 Clause 7 as the controlled-copy-checked location for analysis of dependent failures.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-9-2018-c8-safety-analyses">
+<h3>ISO26262-9:2018-C8 — safety analyses<a class="headerlink" href="#iso26262-9-2018-c8-safety-analyses" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-9:2018, Clause 8</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>normative requirement</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing safety analyses when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 9 Clause 8 as the controlled-copy-checked location for safety analyses.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-10-2018-c5-selected-topics-regarding-safety-management">
+<h3>ISO26262-10:2018-C5 — selected topics regarding safety management<a class="headerlink" href="#iso26262-10-2018-c5-selected-topics-regarding-safety-management" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-10:2018, Clause 5</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>guidance</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing selected topics regarding safety management when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 10 Clause 5 as the controlled-copy-checked location for selected topics regarding safety management.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-10-2018-c9-safety-element-out-of-context-guidance">
+<h3>ISO26262-10:2018-C9 — Safety Element out of Context guidance<a class="headerlink" href="#iso26262-10-2018-c9-safety-element-out-of-context-guidance" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-10:2018, Clause 9</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>guidance</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing Safety Element out of Context guidance when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 10 Clause 9 as the controlled-copy-checked location for Safety Element out of Context guidance.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-10-2018-c9-1-safety-element-out-of-context-development-guidance">
+<h3>ISO26262-10:2018-C9.1 — Safety Element out of Context development guidance<a class="headerlink" href="#iso26262-10-2018-c9-1-safety-element-out-of-context-development-guidance" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-10:2018, Clause 9.1</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>guidance</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing Safety Element out of Context development guidance when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 10 Clause 9.1 as the controlled-copy-checked location for Safety Element out of Context development guidance.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-11-2018-c4-7-8-dependent-failures-between-software-and-hardware-elements">
+<h3>ISO26262-11:2018-C4.7.8 — dependent failures between software and hardware elements<a class="headerlink" href="#iso26262-11-2018-c4-7-8-dependent-failures-between-software-and-hardware-elements" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-11:2018, Clause 4.7.8</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>guidance</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing dependent failures between software and hardware elements when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 11 Clause 4.7.8 as the controlled-copy-checked location for dependent failures between software and hardware elements.</p>
+</dd>
+</dl>
+</section>
+<section id="iso26262-11-2018-c4-8-fault-injection-guidance">
+<h3>ISO26262-11:2018-C4.8 — fault-injection guidance<a class="headerlink" href="#iso26262-11-2018-c4-8-fault-injection-guidance" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-11:2018, Clause 4.8</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>guidance</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Activities and work products addressing fault-injection guidance when this locator applies to the item, element, or lifecycle context.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use Part 11 Clause 4.8 as the controlled-copy-checked location for fault-injection guidance.</p>
+</dd>
+</dl>
+</section>
+<section id="osqar-policy-6-c9-numeric-thresholds-numeric-thresholds-as-osqar-project-policy">
+<h3>OSQAR-POLICY-6-C9-NUMERIC-THRESHOLDS — numeric thresholds as OSQAr project policy<a class="headerlink" href="#osqar-policy-6-c9-numeric-thresholds-numeric-thresholds-as-osqar-project-policy" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 9</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>project policy</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Coverage targets, test counts, complexity limits, retention periods, and other numeric acceptance criteria.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any exact percentage, count, or threshold in an OSQAr template is a project-selected acceptance criterion; it is not attributed to ISO 26262.</p>
+</dd>
+</dl>
+</section>
+<section id="osqar-policy-6-c10-graph-cardinalities-exact-graph-cardinalities-as-osqar-project-policy">
+<h3>OSQAR-POLICY-6-C10-GRAPH-CARDINALITIES — exact graph cardinalities as OSQAr project policy<a class="headerlink" href="#osqar-policy-6-c10-graph-cardinalities-exact-graph-cardinalities-as-osqar-project-policy" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 10</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>project policy</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Traceability checks, minimum-link rules, closed inventories, and generated graph acceptance criteria.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Exact required link counts and graph cardinalities are OSQAr validation policy, not a claim about standard-prescribed counts.</p>
+</dd>
+</dl>
+</section>
+<section id="osqar-policy-6-c8-coding-restrictions-coding-restrictions-as-osqar-project-policy">
+<h3>OSQAR-POLICY-6-C8-CODING-RESTRICTIONS — coding restrictions as OSQAr project policy<a class="headerlink" href="#osqar-policy-6-c8-coding-restrictions-coding-restrictions-as-osqar-project-policy" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-6:2018, Clause 8</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>project policy</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ASIL-D C scaffold implementation constraints and project coding standards.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>Specific language versions, allocation rules, recursion bans, entry/exit constraints, and named coding-rule sets are template policy unless precisely supported by controlled text.</p>
+</dd>
+</dl>
+</section>
+<section id="osqar-policy-8-c11-gpg-authenticity-gpg-authenticity-mechanism-as-osqar-project-policy">
+<h3>OSQAR-POLICY-8-C11-GPG-AUTHENTICITY — GPG authenticity mechanism as OSQAr project policy<a class="headerlink" href="#osqar-policy-8-c11-gpg-authenticity-gpg-authenticity-mechanism-as-osqar-project-policy" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 11</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>project policy</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>OSQAr shipment signing and verification commands.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>GPG detached signatures are OSQAr’s selected mechanism for shipment-manifest authenticity; the mechanism choice is not attributed to ISO 26262.</p>
+</dd>
+</dl>
+</section>
+<section id="osqar-policy-8-c11-reproducibility-reproducibility-controls-as-osqar-project-policy">
+<h3>OSQAR-POLICY-8-C11-REPRODUCIBILITY — reproducibility controls as OSQAr project policy<a class="headerlink" href="#osqar-policy-8-c11-reproducibility-reproducibility-controls-as-osqar-project-policy" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-8:2018, Clause 11</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>project policy</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Shipment builds, tests, timestamps, and source-date environment handling.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>OSQAr reproducible-mode defaults and environment controls are project policy and engineering evidence, not a direct standards mandate.</p>
+</dd>
+</dl>
+</section>
+<section id="osqar-policy-10-c9-assumption-counts-fixed-seooc-assumption-counts-as-osqar-project-policy">
+<h3>OSQAR-POLICY-10-C9-ASSUMPTION-COUNTS — fixed SEooC assumption counts as OSQAr project policy<a class="headerlink" href="#osqar-policy-10-c9-assumption-counts-fixed-seooc-assumption-counts-as-osqar-project-policy" title="Link to this heading">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Location<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ISO 26262-10:2018, Clause 9</p>
+</dd>
+<dt class="field-even">Classification<span class="colon">:</span></dt>
+<dd class="field-even"><p>project policy</p>
+</dd>
+<dt class="field-odd">Applicability<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Template assumptions of use, lifecycle needs, and completeness checks.</p>
+</dd>
+<dt class="field-even">OSQAr paraphrase<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number and starter content of assumptions supplied by an OSQAr template are project scaffolding choices and must be tailored to the actual integration context.</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../examples/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">OSQAr Examples</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="evidence_acceptance.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Evidence states and acceptance</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, OSQAr Contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">ISO 26262 Example Reference Catalog</a><ul>
+<li><a class="reference internal" href="#example-data-source">Example data source</a><ul>
+<li><a class="reference internal" href="#iso26262-2-2018-c6-4-6-planning-and-coordination-of-safety-activities">ISO26262-2:2018-C6.4.6 — planning and coordination of safety activities</a></li>
+<li><a class="reference internal" href="#iso26262-2-2018-c6-4-8-safety-case">ISO26262-2:2018-C6.4.8 — safety case</a></li>
+<li><a class="reference internal" href="#iso26262-2-2018-c6-4-9-confirmation-measures">ISO26262-2:2018-C6.4.9 — confirmation measures</a></li>
+<li><a class="reference internal" href="#iso26262-2-2018-c6-4-10-confirmation-reviews">ISO26262-2:2018-C6.4.10 — confirmation reviews</a></li>
+<li><a class="reference internal" href="#iso26262-2-2018-c6-4-11-functional-safety-audit">ISO26262-2:2018-C6.4.11 — functional safety audit</a></li>
+<li><a class="reference internal" href="#iso26262-2-2018-c6-4-12-functional-safety-assessment">ISO26262-2:2018-C6.4.12 — functional safety assessment</a></li>
+<li><a class="reference internal" href="#iso26262-2-2018-c6-4-13-release-for-production">ISO26262-2:2018-C6.4.13 — release for production</a></li>
+<li><a class="reference internal" href="#iso26262-3-2018-c6-hazard-analysis-and-risk-assessment">ISO26262-3:2018-C6 — hazard analysis and risk assessment</a></li>
+<li><a class="reference internal" href="#iso26262-3-2018-c7-functional-safety-concept">ISO26262-3:2018-C7 — functional safety concept</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c6-technical-safety-concept">ISO26262-4:2018-C6 — technical safety concept</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c6-4-1-specification-of-technical-safety-requirements">ISO26262-4:2018-C6.4.1 — specification of technical safety requirements</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c6-4-2-safety-mechanisms">ISO26262-4:2018-C6.4.2 — safety mechanisms</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c6-4-3-system-architectural-design-specification-and-technical-safety-concept">ISO26262-4:2018-C6.4.3 — system architectural design specification and technical safety concept</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c6-4-4-safety-analyses-and-avoidance-of-systematic-failures">ISO26262-4:2018-C6.4.4 — safety analyses and avoidance of systematic failures</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c6-4-5-control-of-random-hardware-failures-during-operation">ISO26262-4:2018-C6.4.5 — control of random hardware failures during operation</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c6-4-6-allocation-to-hardware-and-software">ISO26262-4:2018-C6.4.6 — allocation to hardware and software</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c6-4-7-hardware-software-interface-specification">ISO26262-4:2018-C6.4.7 — hardware-software interface specification</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c7-system-and-item-integration-and-testing">ISO26262-4:2018-C7 — system and item integration and testing</a></li>
+<li><a class="reference internal" href="#iso26262-4-2018-c8-safety-validation">ISO26262-4:2018-C8 — safety validation</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t1-topics-covered-by-modelling-and-coding-guidelines">ISO26262-6:2018-T1 — topics covered by modelling and coding guidelines</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c6-4-software-safety-requirements">ISO26262-6:2018-C6.4 — software safety requirements</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c6-4-1-derivation-of-software-safety-requirements">ISO26262-6:2018-C6.4.1 — derivation of software safety requirements</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c7-4-software-architectural-design-requirements-and-recommendations">ISO26262-6:2018-C7.4 — software architectural design requirements and recommendations</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t3-principles-for-software-architectural-design">ISO26262-6:2018-T3 — principles for software architectural design</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c7-4-5-static-and-dynamic-aspects-of-software-architectural-design">ISO26262-6:2018-C7.4.5 — static and dynamic aspects of software architectural design</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c7-4-6-allocation-of-software-safety-requirements-to-software-components-and-units">ISO26262-6:2018-C7.4.6 — allocation of software safety requirements to software components and units</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t4-methods-for-verification-of-software-architectural-design">ISO26262-6:2018-T4 — methods for verification of software architectural design</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c8-4-software-unit-design-and-implementation-requirements-and-recommendations">ISO26262-6:2018-C8.4 — software unit design and implementation requirements and recommendations</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t5-notations-for-software-unit-design">ISO26262-6:2018-T5 — notations for software unit design</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c8-4-5-design-principles-for-software-unit-design-and-implementation">ISO26262-6:2018-C8.4.5 — design principles for software unit design and implementation</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t6-design-principles-for-software-unit-design-and-implementation">ISO26262-6:2018-T6 — design principles for software unit design and implementation</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c9-software-unit-verification">ISO26262-6:2018-C9 — software unit verification</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c9-4-software-unit-verification-requirements-and-recommendations">ISO26262-6:2018-C9.4 — software unit verification requirements and recommendations</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t7-methods-for-software-unit-verification">ISO26262-6:2018-T7 — methods for software unit verification</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t8-methods-for-deriving-software-unit-test-cases">ISO26262-6:2018-T8 — methods for deriving software unit test cases</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c9-4-4-completeness-and-structural-coverage-of-software-unit-verification">ISO26262-6:2018-C9.4.4 — completeness and structural coverage of software unit verification</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t9-structural-coverage-metrics-at-software-unit-level">ISO26262-6:2018-T9 — structural coverage metrics at software unit level</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c10-software-integration-and-verification">ISO26262-6:2018-C10 — software integration and verification</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c10-4-software-integration-and-verification-requirements-and-recommendations">ISO26262-6:2018-C10.4 — software integration and verification requirements and recommendations</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t10-methods-for-verification-of-software-integration">ISO26262-6:2018-T10 — methods for verification of software integration</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t11-methods-for-deriving-software-integration-test-cases">ISO26262-6:2018-T11 — methods for deriving software integration test cases</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t12-structural-coverage-metrics-at-software-architecture-level">ISO26262-6:2018-T12 — structural coverage metrics at software architecture level</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c11-testing-of-embedded-software">ISO26262-6:2018-C11 — testing of embedded software</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-c11-4-embedded-software-testing-requirements-and-recommendations">ISO26262-6:2018-C11.4 — embedded-software testing requirements and recommendations</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t13-test-environments-for-embedded-software-testing">ISO26262-6:2018-T13 — test environments for embedded-software testing</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t14-methods-for-tests-of-embedded-software">ISO26262-6:2018-T14 — methods for tests of embedded software</a></li>
+<li><a class="reference internal" href="#iso26262-6-2018-t15-methods-for-deriving-embedded-software-test-cases">ISO26262-6:2018-T15 — methods for deriving embedded-software test cases</a></li>
+<li><a class="reference internal" href="#iso26262-7-2018-c6-4-production-requirements-and-recommendations">ISO26262-7:2018-C6.4 — production requirements and recommendations</a></li>
+<li><a class="reference internal" href="#iso26262-7-2018-c7-4-operation-service-and-decommissioning-requirements-and-recommendations">ISO26262-7:2018-C7.4 — operation, service, and decommissioning requirements and recommendations</a></li>
+<li><a class="reference internal" href="#iso26262-8-2018-c5-interfaces-within-distributed-developments">ISO26262-8:2018-C5 — interfaces within distributed developments</a></li>
+<li><a class="reference internal" href="#iso26262-8-2018-c7-configuration-management">ISO26262-8:2018-C7 — configuration management</a></li>
+<li><a class="reference internal" href="#iso26262-8-2018-c8-change-management">ISO26262-8:2018-C8 — change management</a></li>
+<li><a class="reference internal" href="#iso26262-8-2018-c8-4-3-change-request-analysis">ISO26262-8:2018-C8.4.3 — change request analysis</a></li>
+<li><a class="reference internal" href="#iso26262-8-2018-c8-4-4-change-request-evaluation">ISO26262-8:2018-C8.4.4 — change request evaluation</a></li>
+<li><a class="reference internal" href="#iso26262-8-2018-c8-5-3-impact-analysis-and-change-request-plan-work-products">ISO26262-8:2018-C8.5.3 — impact analysis and change request plan work products</a></li>
+<li><a class="reference internal" href="#iso26262-8-2018-c11-confidence-in-the-use-of-software-tools">ISO26262-8:2018-C11 — confidence in the use of software tools</a></li>
+<li><a class="reference internal" href="#iso26262-8-2018-c14-proven-in-use-argument-guidance">ISO26262-8:2018-C14 — proven-in-use argument guidance</a></li>
+<li><a class="reference internal" href="#iso26262-9-2018-c5-requirements-decomposition-with-respect-to-asil-tailoring">ISO26262-9:2018-C5 — requirements decomposition with respect to ASIL tailoring</a></li>
+<li><a class="reference internal" href="#iso26262-9-2018-c6-criteria-for-coexistence-of-elements">ISO26262-9:2018-C6 — criteria for coexistence of elements</a></li>
+<li><a class="reference internal" href="#iso26262-9-2018-c7-analysis-of-dependent-failures">ISO26262-9:2018-C7 — analysis of dependent failures</a></li>
+<li><a class="reference internal" href="#iso26262-9-2018-c8-safety-analyses">ISO26262-9:2018-C8 — safety analyses</a></li>
+<li><a class="reference internal" href="#iso26262-10-2018-c5-selected-topics-regarding-safety-management">ISO26262-10:2018-C5 — selected topics regarding safety management</a></li>
+<li><a class="reference internal" href="#iso26262-10-2018-c9-safety-element-out-of-context-guidance">ISO26262-10:2018-C9 — Safety Element out of Context guidance</a></li>
+<li><a class="reference internal" href="#iso26262-10-2018-c9-1-safety-element-out-of-context-development-guidance">ISO26262-10:2018-C9.1 — Safety Element out of Context development guidance</a></li>
+<li><a class="reference internal" href="#iso26262-11-2018-c4-7-8-dependent-failures-between-software-and-hardware-elements">ISO26262-11:2018-C4.7.8 — dependent failures between software and hardware elements</a></li>
+<li><a class="reference internal" href="#iso26262-11-2018-c4-8-fault-injection-guidance">ISO26262-11:2018-C4.8 — fault-injection guidance</a></li>
+<li><a class="reference internal" href="#osqar-policy-6-c9-numeric-thresholds-numeric-thresholds-as-osqar-project-policy">OSQAR-POLICY-6-C9-NUMERIC-THRESHOLDS — numeric thresholds as OSQAr project policy</a></li>
+<li><a class="reference internal" href="#osqar-policy-6-c10-graph-cardinalities-exact-graph-cardinalities-as-osqar-project-policy">OSQAR-POLICY-6-C10-GRAPH-CARDINALITIES — exact graph cardinalities as OSQAr project policy</a></li>
+<li><a class="reference internal" href="#osqar-policy-6-c8-coding-restrictions-coding-restrictions-as-osqar-project-policy">OSQAR-POLICY-6-C8-CODING-RESTRICTIONS — coding restrictions as OSQAr project policy</a></li>
+<li><a class="reference internal" href="#osqar-policy-8-c11-gpg-authenticity-gpg-authenticity-mechanism-as-osqar-project-policy">OSQAR-POLICY-8-C11-GPG-AUTHENTICITY — GPG authenticity mechanism as OSQAr project policy</a></li>
+<li><a class="reference internal" href="#osqar-policy-8-c11-reproducibility-reproducibility-controls-as-osqar-project-policy">OSQAR-POLICY-8-C11-REPRODUCIBILITY — reproducibility controls as OSQAr project policy</a></li>
+<li><a class="reference internal" href="#osqar-policy-10-c9-assumption-counts-fixed-seooc-assumption-counts-as-osqar-project-policy">OSQAR-POLICY-10-C9-ASSUMPTION-COUNTS — fixed SEooC assumption counts as OSQAr project policy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../_static/documentation_options.js?v=39bb1c6d"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+    <script src="../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+    <script src="../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+    <script src="../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+    <script src="../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=f783d6a5"></script>
+    <script src="../_static/figure-zoom.js?v=f149fe55"></script>
+    </body>
+</html>

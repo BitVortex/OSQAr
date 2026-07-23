@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -229,6 +229,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool_reliance_boundary.html">Safety-tool reliance boundary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iso26262_reference_catalog.html">ISO 26262 Example Reference Catalog</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
 <ul>
@@ -466,6 +467,60 @@ in the shipped <code class="docutils literal notranslate"><span class="pre">osqa
 <span class="go">  --json-report ./_build/html/traceability_report.json</span>
 </pre></div>
 </div>
+<p>Projects that author <code class="docutils literal notranslate"><span class="pre">STDCLAIM_*</span></code> needs must also identify the project catalog
+declarations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">osqar</span> <span class="n">traceability</span> <span class="o">./</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">needs</span><span class="o">.</span><span class="n">json</span> \
+  <span class="o">--</span><span class="n">project</span><span class="o">-</span><span class="n">config</span> <span class="o">./</span><span class="n">osqar_project</span><span class="o">.</span><span class="n">json</span> \
+  <span class="o">--</span><span class="n">json</span><span class="o">-</span><span class="n">report</span> <span class="o">./</span><span class="n">_build</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">traceability_report</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>The ASIL-D C boilerplate includes an ISO 26262 declaration and claims only as
+worked examples. They are not a declaration about the standard applicable to a
+new project. Replace that declaration with a project-authorized catalog, for
+example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;standards&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;catalogs&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;project-standard&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;standards/catalog.json&quot;</span><span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then replace each example claim’s <code class="docutils literal notranslate"><span class="pre">standards_catalog</span></code>, <code class="docutils literal notranslate"><span class="pre">standards_refs</span></code>,
+<code class="docutils literal notranslate"><span class="pre">project_interpretation</span></code>, and <code class="docutils literal notranslate"><span class="pre">applicability</span></code> values. Remove example claims
+that the project does not adopt. A user catalog’s minimal machine-readable
+contract is a JSON object with an <code class="docutils literal notranslate"><span class="pre">entries</span></code> array; every entry needs a unique,
+non-empty <code class="docutils literal notranslate"><span class="pre">reference_id</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;entries&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;reference_id&quot;</span><span class="p">:</span> <span class="s2">&quot;PROJECT-STANDARD-REF-001&quot;</span><span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Catalog paths are resolved relative to <code class="docutils literal notranslate"><span class="pre">osqar_project.json</span></code>. Keep the catalog
+under project control and use stable identifiers; the minimal contract proves
+only that an authored identifier resolves, not that its interpretation is
+correct.</p>
+<p>Standards-claim links are authored from the claim to project objects:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">realized_by</span></code> points to requirements or lifecycle records (<code class="docutils literal notranslate"><span class="pre">REQ_*</span></code> or
+<code class="docutils literal notranslate"><span class="pre">LM_*</span></code>) that implement or instantiate the project interpretation;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verified_by</span></code> points to planned or executed verification activities
+(<code class="docutils literal notranslate"><span class="pre">VER_*</span></code>) that evaluate it; and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">evidenced_by</span></code> points to evidence records (<code class="docutils literal notranslate"><span class="pre">EVID_*</span></code>) associated with that
+evaluation.</p></li>
+</ul>
+<p>A reverse link generated by Sphinx is navigation, not a substitute for one of
+these authored claim-to-target links. A resolvable <code class="docutils literal notranslate"><span class="pre">evidenced_by</span></code> link also
+does not mean that the artifact exists, an activity ran, a result passed, or a
+reviewer accepted the evidence. Keep placeholder evidence explicitly pending
+until execution, provenance, result, and review state are recorded.</p>
+<p><code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">traceability</span> <span class="pre">--project-config</span></code> propagates the same catalog check.
+<code class="docutils literal notranslate"><span class="pre">shipment</span> <span class="pre">prepare</span></code> and <code class="docutils literal notranslate"><span class="pre">doctor</span></code> use <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/osqar_project.json</span></code>
+automatically when it exists. Projects without <code class="docutils literal notranslate"><span class="pre">STDCLAIM_*</span></code> needs remain
+valid without a project configuration.</p>
 </section>
 <section id="checksum-manifest-shipment-integrity">
 <h3>Checksum manifest (shipment integrity)<a class="headerlink" href="#checksum-manifest-shipment-integrity" title="Link to this heading">¶</a></h3>

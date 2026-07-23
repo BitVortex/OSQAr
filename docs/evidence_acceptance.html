@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="search" title="Search" href="../search.html" /><link rel="next" title="OSQAr Examples" href="../examples/index.html" /><link rel="prev" title="Safety-tool reliance boundary" href="tool_reliance_boundary.html" />
+<link rel="search" title="Search" href="../search.html" /><link rel="next" title="ISO 26262 Example Reference Catalog" href="iso26262_reference_catalog.html" /><link rel="prev" title="Safety-tool reliance boundary" href="tool_reliance_boundary.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
         <title>Evidence states and acceptance - OSQAr 0.9.0 documentation</title>
@@ -12,9 +12,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -229,6 +229,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration_and_hooks.html">Configuration and hooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool_reliance_boundary.html">Safety-tool reliance boundary</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Evidence states and acceptance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iso26262_reference_catalog.html">ISO 26262 Example Reference Catalog</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
 <ul>
@@ -350,6 +351,28 @@ whether evidence is technically sufficient, or whether a safety argument is
 convincing. Passing does not establish ISO 26262 compliance, tool qualification,
 component qualification, certification, or safety.</p>
 </section>
+<section id="standards-claim-validation-boundary">
+<h2>Standards-claim validation boundary<a class="headerlink" href="#standards-claim-validation-boundary" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">STDCLAIM_*</span></code> needs add a separate mechanical check to traceability. The check
+confirms that each authored catalog and <code class="docutils literal notranslate"><span class="pre">reference_id</span></code> resolves and that the
+claim’s typed links have the permitted direction and resolve to project needs.
+A mechanical PASS does <strong>not</strong> approve the project interpretation, determine
+applicability, establish evidence adequacy, or demonstrate conformance or
+compliance with any standard. Those determinations require project-authorized
+human review against the controlled source and project context.</p>
+<p>The base boilerplate deliberately carries no organization-specific approval,
+acceptance, waiver, or applicability disposition. An adopting organization must
+record its own named reviewer, scope, rationale, date, and controlled revision in
+its external governance or review record. Such a disposition must not be
+inferred from an example claim, a generated reverse link, or a zero CLI exit
+status.</p>
+<p>Likewise, an <code class="docutils literal notranslate"><span class="pre">evidenced_by</span></code> relationship records only the authored direction
+from a claim to an <code class="docutils literal notranslate"><span class="pre">EVID_*</span></code> record. A placeholder or pending evidence record
+does not assert execution, a passing result, provenance, technical sufficiency,
+review, or acceptance. Promote evidence through the controlled evidence states
+only after those facts and dispositions exist; catalog resolution alone cannot
+perform that promotion.</p>
+</section>
 </section>
 
         </article>
@@ -357,12 +380,12 @@ component qualification, certification, or safety.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../examples/index.html">
+          <a class="next-page" href="iso26262_reference_catalog.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">OSQAr Examples</div>
+                <div class="title">ISO 26262 Example Reference Catalog</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -412,6 +435,7 @@ component qualification, certification, or safety.</p>
 <li><a class="reference internal" href="#controlled-states">Controlled states</a></li>
 <li><a class="reference internal" href="#command">Command</a></li>
 <li><a class="reference internal" href="#boundary">Boundary</a></li>
+<li><a class="reference internal" href="#standards-claim-validation-boundary">Standards-claim validation boundary</a></li>
 </ul>
 </li>
 </ul>

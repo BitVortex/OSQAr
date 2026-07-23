@@ -112,13 +112,15 @@ Example: Authoring Software Requirements for an ASIL D C Library
 
 **Agent then authors:**
 
-* ``01_requirements.rst`` — REQ_SSR_NOMINAL_*, REQ_SSR_FAULT_*, etc.
-  following the Part 6 Table 7 techniques table and ASIL D rigour
+* ``01_requirements.rst`` — project-specific REQ_SSR_NOMINAL_*,
+  REQ_SSR_FAULT_*, etc.; do not attribute these scaffold categories or counts
+  to ISO 26262-6:2018 Table 7
 * ``02_architecture.rst`` — ARCH_* needs with static/dynamic views,
   freedom from interference, safety mechanism patterns
 * ``03_verification.rst`` — VER_* needs with MC/DC coverage targets,
   static analysis, fault injection, tool qualification
-* ``06_lifecycle_management.rst`` — 5 AoUs for the SEooC per Part 10 §9.4.2
+* ``06_lifecycle_management.rst`` — 5 project-defined AoUs for the SEooC;
+  ISO 26262-10:2018 §9.1 provides the general informative SEooC context
 
 **Agent finally runs:**
 
@@ -167,9 +169,11 @@ Common Pitfalls for Agents
 2. **Overclaiming compliance** — never use "ASIL D compliant" or "ISO 26262 certified."
    Always use "qualification attempt targeting ASIL D" or "developed per
    ISO 26262:2018 processes."
-3. **Confusing tools with techniques** — "unit testing" is a technique; "CUnit 3.2.7"
-   is a tool. The standard requires both: the technique must be applied (Part 6
-   Table 9) and the tool must be qualified (Part 8 §11).
+3. **Confusing tools, test derivation, and coverage** — "unit testing" is a
+   technique; "CUnit 3.2.7" is a tool. The researched catalog maps
+   ISO 26262-6:2018 Tables 7/8 to unit verification/test derivation and Table 9
+   to software-unit structural coverage. ISO 26262-8:2018 Clause 11 is the researched
+   tool-confidence reference. These mappings are project-authored interpretations.
 4. **Forgetting the safety manual** — for SEooC qualification, the safety manual
    (including AoUs) is as important as the safety case. The integrator cannot
    use the component safely without it.
@@ -180,9 +184,10 @@ Common Pitfalls for Agents
    configuration management (R-049), change management (R-050), and
    documentation management (R-052) apply to ALL parts and are frequently
    overlooked in single-component SEooC qualifications.
-7. **Assuming verification tools don't need qualification** — every tool in
-   the safety toolchain must be classified (TI/TD → TCL). Even CI/CD tools
-   that transform source code are in scope per Part 8 §11.
+7. **Assuming verification tools never need evaluation** — evaluate each relied-upon
+   tool use under ISO 26262-8:2018 Clause 11. Classification and any qualification need
+   depend on the tool's use case and available error-detection measures; do not
+   assign fixed TI/TD/TCL results by tool category.
 8. **Not consulting the ``osqar-qualification`` skill** — the tool-usage skill
    documents the exact CLI commands, project structure, and pitfalls for the
    OSQAr framework itself. It is complementary to the content-authoring skills
