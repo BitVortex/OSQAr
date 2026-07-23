@@ -67,6 +67,7 @@ def _doctor_run_checksums_verify(
 def _doctor_run_traceability(
     *,
     needs_json: Path,
+    project_config: Path | None,
     enforce_req_has_test: bool,
     enforce_arch_traces_req: bool,
     enforce_test_traces_req: bool,
@@ -78,6 +79,8 @@ def _doctor_run_traceability(
     tmp_path = u.temp_json_report_path()
     try:
         argv = [str(needs_json), "--json-report", str(tmp_path)]
+        if project_config is not None:
+            argv += ["--project-config", str(project_config)]
         if enforce_req_has_test:
             argv += ["--enforce-req-has-test"]
         if enforce_arch_traces_req:
@@ -436,6 +439,11 @@ def cmd_doctor(args: argparse.Namespace) -> int:
                 else:
                     trc, treport = _doctor_run_traceability(
                         needs_json=needs_json,
+                        project_config=(
+                            project_dir / u.DEFAULT_PROJECT_METADATA
+                            if (project_dir / u.DEFAULT_PROJECT_METADATA).is_file()
+                            else None
+                        ),
                         enforce_req_has_test=bool(
                             getattr(args, "enforce_req_has_test", False)
                         ),

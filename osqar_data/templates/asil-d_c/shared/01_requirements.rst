@@ -111,8 +111,20 @@ Interface Validation
    :status: draft
    :tags: ASIL_D;interface_validation;data_integrity
 
-Assumptions of Use (SEooC — ISO 26262-10 §9.4.2)
---------------------------------------------------
+Verification Criteria
+---------------------
+
+.. need:: The project shall apply statement, branch, and MC/DC structural-
+          coverage criteria to safety-related source files. The exact
+          percentage targets and treatment of exclusions are project policy
+          and shall be reviewed for this component.
+   :id: REQ_VER_COVERAGE_CRITERIA
+   :status: draft
+   :tags: ASIL_D;verification;coverage;project_policy
+   :links: ARCH_DETERMINISTIC_FLOW
+
+Assumptions of Use (SEooC — general guidance in ISO 26262-10 §9.1)
+------------------------------------------------------------------
 
 .. need:: **Integration context**: The component assumes single-threaded
           execution or externally-synchronized multi-threaded access.
@@ -137,9 +149,10 @@ Assumptions of Use (SEooC — ISO 26262-10 §9.4.2)
    :status: draft
    :tags: ASIL_D;SEooC;assumption_of_use;error_handling
 
-.. need:: **Toolchain**: The component shall be built with a qualified
-          compiler (TCL3 per ISO 26262-8 §11.4) and linked against
-          a qualified C runtime library.
+.. need:: **Toolchain**: The integrator shall use the compiler and C runtime
+          versions identified by this project's reviewed tool-use analysis.
+          Classification and any qualification action shall be determined for
+          the actual use case under ISO 26262-8 Clause 11.
    :id: REQ_SSR_EXTASSUME_004
    :status: draft
    :tags: ASIL_D;SEooC;assumption_of_use;toolchain

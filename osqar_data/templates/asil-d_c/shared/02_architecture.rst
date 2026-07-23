@@ -2,9 +2,9 @@ Architecture (ISO 26262-6 §7.4 — ASIL D SEooC)
 ================================================
 
 This document describes the software architectural design implementing
-the software safety requirements. Per ISO 26262-6 §7.4.3, the architecture
-must define static structure, dynamic behaviour, data flow, and fault
-handling with freedom from interference.
+the software safety requirements. ISO 26262-6 §7.4.5 provides the context for
+architectural views. The static structure, dynamic behaviour, data flow, fault
+handling, and freedom-from-interference content below is the OSQAr project layout.
 
 Naming convention: ``ARCH_<COMPONENT>_<NNN>``.
 
@@ -67,6 +67,7 @@ Fault Handling
          Fault reaction shall return error codes to the caller.
          No fault shall result in undefined behaviour, deadlock,
          or resource leak.
+
    :id: ARCH_FAULT_HANDLING
    :status: draft
    :tags: ASIL_D;fault_handling;defensive_programming;layered_defense

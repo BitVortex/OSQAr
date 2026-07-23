@@ -1,0 +1,741 @@
+{
+  "catalog_version": 1,
+  "standard": "ISO 26262",
+  "evidence_basis": "Illustrative, incomplete project-authored mapping example informed by controlled ISO 26262:2018 Parts 1–12 checks. OSQAr mechanical validation does not establish semantic validity, completeness, applicability, compliance, qualification, certification, or safety. No copyrighted standard text is reproduced and controlled PDFs are not redistributed.",
+  "entries": [
+    {
+      "reference_id": "ISO26262-2:2018-C6.4.6",
+      "edition": "2018",
+      "part": 2,
+      "clause": "6.4.6",
+      "topic": "planning and coordination of safety activities",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 2 Clause 6.4.6 as the controlled-copy-checked location for planning and coordination of safety activities.",
+      "applicability": "Activities and work products addressing planning and coordination of safety activities when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-2:2018-C6.4.8",
+      "edition": "2018",
+      "part": 2,
+      "clause": "6.4.8",
+      "topic": "safety case",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 2 Clause 6.4.8 as the controlled-copy-checked location for safety case.",
+      "applicability": "Activities and work products addressing safety case when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-2:2018-C6.4.9",
+      "edition": "2018",
+      "part": 2,
+      "clause": "6.4.9",
+      "topic": "confirmation measures",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 2 Clause 6.4.9 as the controlled-copy-checked location for confirmation measures.",
+      "applicability": "Activities and work products addressing confirmation measures when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-2:2018-C6.4.10",
+      "edition": "2018",
+      "part": 2,
+      "clause": "6.4.10",
+      "topic": "confirmation reviews",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 2 Clause 6.4.10 as the controlled-copy-checked location for confirmation reviews.",
+      "applicability": "Activities and work products addressing confirmation reviews when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-2:2018-C6.4.11",
+      "edition": "2018",
+      "part": 2,
+      "clause": "6.4.11",
+      "topic": "functional safety audit",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 2 Clause 6.4.11 as the controlled-copy-checked location for functional safety audit.",
+      "applicability": "Activities and work products addressing functional safety audit when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-2:2018-C6.4.12",
+      "edition": "2018",
+      "part": 2,
+      "clause": "6.4.12",
+      "topic": "functional safety assessment",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 2 Clause 6.4.12 as the controlled-copy-checked location for functional safety assessment.",
+      "applicability": "Activities and work products addressing functional safety assessment when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-2:2018-C6.4.13",
+      "edition": "2018",
+      "part": 2,
+      "clause": "6.4.13",
+      "topic": "release for production",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 2 Clause 6.4.13 as the controlled-copy-checked location for release for production.",
+      "applicability": "Activities and work products addressing release for production when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-3:2018-C6",
+      "edition": "2018",
+      "part": 3,
+      "clause": "6",
+      "topic": "hazard analysis and risk assessment",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 3 Clause 6 as the controlled-copy-checked location for hazard analysis and risk assessment.",
+      "applicability": "Activities and work products addressing hazard analysis and risk assessment when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-3:2018-C7",
+      "edition": "2018",
+      "part": 3,
+      "clause": "7",
+      "topic": "functional safety concept",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 3 Clause 7 as the controlled-copy-checked location for functional safety concept.",
+      "applicability": "Activities and work products addressing functional safety concept when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C6",
+      "edition": "2018",
+      "part": 4,
+      "clause": "6",
+      "topic": "technical safety concept",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 6 as the controlled-copy-checked location for technical safety concept.",
+      "applicability": "Activities and work products addressing technical safety concept when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C6.4.1",
+      "edition": "2018",
+      "part": 4,
+      "clause": "6.4.1",
+      "topic": "specification of technical safety requirements",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 6.4.1 as the controlled-copy-checked location for specification of technical safety requirements.",
+      "applicability": "Activities and work products addressing specification of technical safety requirements when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C6.4.2",
+      "edition": "2018",
+      "part": 4,
+      "clause": "6.4.2",
+      "topic": "safety mechanisms",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 6.4.2 as the controlled-copy-checked location for safety mechanisms.",
+      "applicability": "Activities and work products addressing safety mechanisms when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C6.4.3",
+      "edition": "2018",
+      "part": 4,
+      "clause": "6.4.3",
+      "topic": "system architectural design specification and technical safety concept",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 6.4.3 as the controlled-copy-checked location for system architectural design specification and technical safety concept.",
+      "applicability": "Activities and work products addressing system architectural design specification and technical safety concept when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C6.4.4",
+      "edition": "2018",
+      "part": 4,
+      "clause": "6.4.4",
+      "topic": "safety analyses and avoidance of systematic failures",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 6.4.4 as the controlled-copy-checked location for safety analyses and avoidance of systematic failures.",
+      "applicability": "Activities and work products addressing safety analyses and avoidance of systematic failures when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C6.4.5",
+      "edition": "2018",
+      "part": 4,
+      "clause": "6.4.5",
+      "topic": "control of random hardware failures during operation",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 6.4.5 as the controlled-copy-checked location for control of random hardware failures during operation.",
+      "applicability": "Activities and work products addressing control of random hardware failures during operation when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C6.4.6",
+      "edition": "2018",
+      "part": 4,
+      "clause": "6.4.6",
+      "topic": "allocation to hardware and software",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 6.4.6 as the controlled-copy-checked location for allocation to hardware and software.",
+      "applicability": "Activities and work products addressing allocation to hardware and software when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C6.4.7",
+      "edition": "2018",
+      "part": 4,
+      "clause": "6.4.7",
+      "topic": "hardware-software interface specification",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 6.4.7 as the controlled-copy-checked location for hardware-software interface specification.",
+      "applicability": "Activities and work products addressing hardware-software interface specification when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C7",
+      "edition": "2018",
+      "part": 4,
+      "clause": "7",
+      "topic": "system and item integration and testing",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 7 as the controlled-copy-checked location for system and item integration and testing.",
+      "applicability": "Activities and work products addressing system and item integration and testing when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-4:2018-C8",
+      "edition": "2018",
+      "part": 4,
+      "clause": "8",
+      "topic": "safety validation",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 4 Clause 8 as the controlled-copy-checked location for safety validation.",
+      "applicability": "Activities and work products addressing safety validation when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T1",
+      "edition": "2018",
+      "part": 6,
+      "clause": "5.4.3",
+      "table": 1,
+      "topic": "topics covered by modelling and coding guidelines",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 1 as the controlled-copy-checked recommendation mapping for topics covered by modelling and coding guidelines.",
+      "applicability": "Selection and justification of methods or principles for topics covered by modelling and coding guidelines, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C6.4",
+      "edition": "2018",
+      "part": 6,
+      "clause": "6.4",
+      "topic": "software safety requirements",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 6.4 as the controlled-copy-checked location for software safety requirements.",
+      "applicability": "Activities and work products addressing software safety requirements when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C6.4.1",
+      "edition": "2018",
+      "part": 6,
+      "clause": "6.4.1",
+      "topic": "derivation of software safety requirements",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 6.4.1 as the controlled-copy-checked location for derivation of software safety requirements.",
+      "applicability": "Activities and work products addressing derivation of software safety requirements when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C7.4",
+      "edition": "2018",
+      "part": 6,
+      "clause": "7.4",
+      "topic": "software architectural design requirements and recommendations",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 7.4 as the controlled-copy-checked location for software architectural design requirements and recommendations.",
+      "applicability": "Activities and work products addressing software architectural design requirements and recommendations when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T3",
+      "edition": "2018",
+      "part": 6,
+      "clause": "7.4.3",
+      "table": 3,
+      "topic": "principles for software architectural design",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 3 as the controlled-copy-checked recommendation mapping for principles for software architectural design.",
+      "applicability": "Selection and justification of methods or principles for principles for software architectural design, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C7.4.5",
+      "edition": "2018",
+      "part": 6,
+      "clause": "7.4.5",
+      "topic": "static and dynamic aspects of software architectural design",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 7.4.5 as the controlled-copy-checked location for static and dynamic aspects of software architectural design.",
+      "applicability": "Activities and work products addressing static and dynamic aspects of software architectural design when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C7.4.6",
+      "edition": "2018",
+      "part": 6,
+      "clause": "7.4.6",
+      "topic": "allocation of software safety requirements to software components and units",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 7.4.6 as the controlled-copy-checked location for allocation of software safety requirements to software components and units.",
+      "applicability": "Activities and work products addressing allocation of software safety requirements to software components and units when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T4",
+      "edition": "2018",
+      "part": 6,
+      "clause": "7.4.14",
+      "table": 4,
+      "topic": "methods for verification of software architectural design",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 4 as the controlled-copy-checked recommendation mapping for methods for verification of software architectural design.",
+      "applicability": "Selection and justification of methods or principles for methods for verification of software architectural design, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C8.4",
+      "edition": "2018",
+      "part": 6,
+      "clause": "8.4",
+      "topic": "software unit design and implementation requirements and recommendations",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 8.4 as the controlled-copy-checked location for software unit design and implementation requirements and recommendations.",
+      "applicability": "Activities and work products addressing software unit design and implementation requirements and recommendations when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T5",
+      "edition": "2018",
+      "part": 6,
+      "clause": "8.4.3",
+      "table": 5,
+      "topic": "notations for software unit design",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 5 as the controlled-copy-checked recommendation mapping for notations for software unit design.",
+      "applicability": "Selection and justification of methods or principles for notations for software unit design, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C8.4.5",
+      "edition": "2018",
+      "part": 6,
+      "clause": "8.4.5",
+      "topic": "design principles for software unit design and implementation",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 8.4.5 as the controlled-copy-checked location for design principles for software unit design and implementation.",
+      "applicability": "Activities and work products addressing design principles for software unit design and implementation when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T6",
+      "edition": "2018",
+      "part": 6,
+      "clause": "8.4.5",
+      "table": 6,
+      "topic": "design principles for software unit design and implementation",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 6 as the controlled-copy-checked recommendation mapping for design principles for software unit design and implementation.",
+      "applicability": "Selection and justification of methods or principles for design principles for software unit design and implementation, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C9",
+      "edition": "2018",
+      "part": 6,
+      "clause": "9",
+      "topic": "software unit verification",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 9 as the controlled-copy-checked location for software unit verification.",
+      "applicability": "Activities and work products addressing software unit verification when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C9.4",
+      "edition": "2018",
+      "part": 6,
+      "clause": "9.4",
+      "topic": "software unit verification requirements and recommendations",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 9.4 as the controlled-copy-checked location for software unit verification requirements and recommendations.",
+      "applicability": "Activities and work products addressing software unit verification requirements and recommendations when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T7",
+      "edition": "2018",
+      "part": 6,
+      "clause": "9.4.2",
+      "table": 7,
+      "topic": "methods for software unit verification",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 7 as the controlled-copy-checked recommendation mapping for methods for software unit verification.",
+      "applicability": "Selection and justification of methods or principles for methods for software unit verification, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T8",
+      "edition": "2018",
+      "part": 6,
+      "clause": "9.4.3",
+      "table": 8,
+      "topic": "methods for deriving software unit test cases",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 8 as the controlled-copy-checked recommendation mapping for methods for deriving software unit test cases.",
+      "applicability": "Selection and justification of methods or principles for methods for deriving software unit test cases, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C9.4.4",
+      "edition": "2018",
+      "part": 6,
+      "clause": "9.4.4",
+      "topic": "completeness and structural coverage of software unit verification",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 9.4.4 as the controlled-copy-checked location for completeness and structural coverage of software unit verification.",
+      "applicability": "Activities and work products addressing completeness and structural coverage of software unit verification when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T9",
+      "edition": "2018",
+      "part": 6,
+      "clause": "9.4.4",
+      "table": 9,
+      "topic": "structural coverage metrics at software unit level",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 9 as the controlled-copy-checked recommendation mapping for structural coverage metrics at software unit level.",
+      "applicability": "Selection and justification of methods or principles for structural coverage metrics at software unit level, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C10",
+      "edition": "2018",
+      "part": 6,
+      "clause": "10",
+      "topic": "software integration and verification",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 10 as the controlled-copy-checked location for software integration and verification.",
+      "applicability": "Activities and work products addressing software integration and verification when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C10.4",
+      "edition": "2018",
+      "part": 6,
+      "clause": "10.4",
+      "topic": "software integration and verification requirements and recommendations",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 10.4 as the controlled-copy-checked location for software integration and verification requirements and recommendations.",
+      "applicability": "Activities and work products addressing software integration and verification requirements and recommendations when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T10",
+      "edition": "2018",
+      "part": 6,
+      "clause": "10.4.2",
+      "table": 10,
+      "topic": "methods for verification of software integration",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 10 as the controlled-copy-checked recommendation mapping for methods for verification of software integration.",
+      "applicability": "Selection and justification of methods or principles for methods for verification of software integration, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T11",
+      "edition": "2018",
+      "part": 6,
+      "clause": "10.4.3",
+      "table": 11,
+      "topic": "methods for deriving software integration test cases",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 6 Table 11 as the controlled-copy-checked recommendation mapping for methods for deriving software integration test cases.",
+      "applicability": "Selection and justification of methods or principles for methods for deriving software integration test cases, according to the applicable ASIL and project context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T12",
+      "edition": "2018",
+      "part": 6,
+      "clause": "10.4.5",
+      "table": 12,
+      "topic": "structural coverage metrics at software architecture level",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Table 12 for the mapping of structural coverage measures at software-architecture level.",
+      "applicability": "Assessment of completeness of software integration testing against the software architecture."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C11",
+      "edition": "2018",
+      "part": 6,
+      "clause": "11",
+      "topic": "testing of embedded software",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 11 as the controlled-copy-checked location for testing of embedded software.",
+      "applicability": "Activities and work products addressing testing of embedded software when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-C11.4",
+      "edition": "2018",
+      "part": 6,
+      "clause": "11.4",
+      "topic": "embedded-software testing requirements and recommendations",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 6 Clause 11.4 as the controlled-copy-checked location for embedded-software testing requirements and recommendations.",
+      "applicability": "Activities and work products addressing embedded-software testing requirements and recommendations when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T13",
+      "edition": "2018",
+      "part": 6,
+      "clause": "11.4.1",
+      "table": 13,
+      "topic": "test environments for embedded-software testing",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Table 13 when selecting and justifying environments for embedded-software testing.",
+      "applicability": "Selection and justification of embedded-software test environments."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T14",
+      "edition": "2018",
+      "part": 6,
+      "clause": "11.4.2",
+      "table": 14,
+      "topic": "methods for tests of embedded software",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Table 14 for the method mapping for tests of embedded software.",
+      "applicability": "Selection of methods for embedded-software testing."
+    },
+    {
+      "reference_id": "ISO26262-6:2018-T15",
+      "edition": "2018",
+      "part": 6,
+      "clause": "11.4.3",
+      "table": 15,
+      "topic": "methods for deriving embedded-software test cases",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Table 15 for methods used to derive embedded-software test cases.",
+      "applicability": "Derivation of embedded-software test cases."
+    },
+    {
+      "reference_id": "ISO26262-7:2018-C6.4",
+      "edition": "2018",
+      "part": 7,
+      "clause": "6.4",
+      "topic": "production requirements and recommendations",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 7 Clause 6.4 as the controlled-copy-checked location for production requirements and recommendations.",
+      "applicability": "Activities and work products addressing production requirements and recommendations when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-7:2018-C7.4",
+      "edition": "2018",
+      "part": 7,
+      "clause": "7.4",
+      "topic": "operation, service, and decommissioning requirements and recommendations",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 7 Clause 7.4 as the controlled-copy-checked location for operation, service, and decommissioning requirements and recommendations.",
+      "applicability": "Activities and work products addressing operation, service, and decommissioning requirements and recommendations when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-8:2018-C5",
+      "edition": "2018",
+      "part": 8,
+      "clause": "5",
+      "topic": "interfaces within distributed developments",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 8 Clause 5 as the controlled-copy-checked location for interfaces within distributed developments.",
+      "applicability": "Activities and work products addressing interfaces within distributed developments when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-8:2018-C7",
+      "edition": "2018",
+      "part": 8,
+      "clause": "7",
+      "topic": "configuration management",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 8 Clause 7 as the controlled-copy-checked location for configuration management.",
+      "applicability": "Activities and work products addressing configuration management when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-8:2018-C8",
+      "edition": "2018",
+      "part": 8,
+      "clause": "8",
+      "topic": "change management",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 8 Clause 8 as the controlled-copy-checked location for change management.",
+      "applicability": "Activities and work products addressing change management when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-8:2018-C8.4.3",
+      "edition": "2018",
+      "part": 8,
+      "clause": "8.4.3",
+      "topic": "change request analysis",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 8 Clause 8.4.3 as the controlled-copy-checked location for change request analysis.",
+      "applicability": "Activities and work products addressing change request analysis when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-8:2018-C8.4.4",
+      "edition": "2018",
+      "part": 8,
+      "clause": "8.4.4",
+      "topic": "change request evaluation",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 8 Clause 8.4.4 as the controlled-copy-checked location for change request evaluation.",
+      "applicability": "Activities and work products addressing change request evaluation when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-8:2018-C8.5.3",
+      "edition": "2018",
+      "part": 8,
+      "clause": "8.5.3",
+      "topic": "impact analysis and change request plan work products",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 8 Clause 8.5.3 as the controlled-copy-checked locator for the impact analysis and change request plan resulting from change-request evaluation.",
+      "applicability": "Recording impact analysis and planning an evaluated change under the change-management process."
+    },
+    {
+      "reference_id": "ISO26262-8:2018-C11",
+      "edition": "2018",
+      "part": 8,
+      "clause": "11",
+      "topic": "confidence in the use of software tools",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 8 Clause 11 as the controlled-copy-checked location for confidence in the use of software tools.",
+      "applicability": "Activities and work products addressing confidence in the use of software tools when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-8:2018-C14",
+      "edition": "2018",
+      "part": 8,
+      "clause": "14",
+      "topic": "proven-in-use argument guidance",
+      "reference_kind": "normative_recommendation",
+      "project_paraphrase": "Use Part 8 Clause 14 as the controlled-copy-checked location for proven-in-use argument guidance.",
+      "applicability": "Activities and work products addressing proven-in-use argument guidance when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-9:2018-C5",
+      "edition": "2018",
+      "part": 9,
+      "clause": "5",
+      "topic": "requirements decomposition with respect to ASIL tailoring",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 9 Clause 5 as the controlled-copy-checked location for requirements decomposition with respect to ASIL tailoring.",
+      "applicability": "Activities and work products addressing requirements decomposition with respect to ASIL tailoring when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-9:2018-C6",
+      "edition": "2018",
+      "part": 9,
+      "clause": "6",
+      "topic": "criteria for coexistence of elements",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 9 Clause 6 as the controlled-copy-checked location for criteria for coexistence of elements.",
+      "applicability": "Activities and work products addressing criteria for coexistence of elements when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-9:2018-C7",
+      "edition": "2018",
+      "part": 9,
+      "clause": "7",
+      "topic": "analysis of dependent failures",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 9 Clause 7 as the controlled-copy-checked location for analysis of dependent failures.",
+      "applicability": "Activities and work products addressing analysis of dependent failures when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-9:2018-C8",
+      "edition": "2018",
+      "part": 9,
+      "clause": "8",
+      "topic": "safety analyses",
+      "reference_kind": "normative_requirement",
+      "project_paraphrase": "Use Part 9 Clause 8 as the controlled-copy-checked location for safety analyses.",
+      "applicability": "Activities and work products addressing safety analyses when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-10:2018-C5",
+      "edition": "2018",
+      "part": 10,
+      "clause": "5",
+      "topic": "selected topics regarding safety management",
+      "reference_kind": "guidance",
+      "project_paraphrase": "Use Part 10 Clause 5 as the controlled-copy-checked location for selected topics regarding safety management.",
+      "applicability": "Activities and work products addressing selected topics regarding safety management when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-10:2018-C9",
+      "edition": "2018",
+      "part": 10,
+      "clause": "9",
+      "topic": "Safety Element out of Context guidance",
+      "reference_kind": "guidance",
+      "project_paraphrase": "Use Part 10 Clause 9 as the controlled-copy-checked location for Safety Element out of Context guidance.",
+      "applicability": "Activities and work products addressing Safety Element out of Context guidance when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-10:2018-C9.1",
+      "edition": "2018",
+      "part": 10,
+      "clause": "9.1",
+      "topic": "Safety Element out of Context development guidance",
+      "reference_kind": "guidance",
+      "project_paraphrase": "Use Part 10 Clause 9.1 as the controlled-copy-checked location for Safety Element out of Context development guidance.",
+      "applicability": "Activities and work products addressing Safety Element out of Context development guidance when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-11:2018-C4.7.8",
+      "edition": "2018",
+      "part": 11,
+      "clause": "4.7.8",
+      "topic": "dependent failures between software and hardware elements",
+      "reference_kind": "guidance",
+      "project_paraphrase": "Use Part 11 Clause 4.7.8 as the controlled-copy-checked location for dependent failures between software and hardware elements.",
+      "applicability": "Activities and work products addressing dependent failures between software and hardware elements when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "ISO26262-11:2018-C4.8",
+      "edition": "2018",
+      "part": 11,
+      "clause": "4.8",
+      "topic": "fault-injection guidance",
+      "reference_kind": "guidance",
+      "project_paraphrase": "Use Part 11 Clause 4.8 as the controlled-copy-checked location for fault-injection guidance.",
+      "applicability": "Activities and work products addressing fault-injection guidance when this locator applies to the item, element, or lifecycle context."
+    },
+    {
+      "reference_id": "OSQAR-POLICY-6-C9-NUMERIC-THRESHOLDS",
+      "edition": "2018",
+      "part": 6,
+      "clause": "9",
+      "topic": "numeric thresholds as OSQAr project policy",
+      "reference_kind": "project_policy",
+      "project_paraphrase": "Any exact percentage, count, or threshold in an OSQAr template is a project-selected acceptance criterion; it is not attributed to ISO 26262.",
+      "applicability": "Coverage targets, test counts, complexity limits, retention periods, and other numeric acceptance criteria."
+    },
+    {
+      "reference_id": "OSQAR-POLICY-6-C10-GRAPH-CARDINALITIES",
+      "edition": "2018",
+      "part": 6,
+      "clause": "10",
+      "topic": "exact graph cardinalities as OSQAr project policy",
+      "reference_kind": "project_policy",
+      "project_paraphrase": "Exact required link counts and graph cardinalities are OSQAr validation policy, not a claim about standard-prescribed counts.",
+      "applicability": "Traceability checks, minimum-link rules, closed inventories, and generated graph acceptance criteria."
+    },
+    {
+      "reference_id": "OSQAR-POLICY-6-C8-CODING-RESTRICTIONS",
+      "edition": "2018",
+      "part": 6,
+      "clause": "8",
+      "topic": "coding restrictions as OSQAr project policy",
+      "reference_kind": "project_policy",
+      "project_paraphrase": "Specific language versions, allocation rules, recursion bans, entry/exit constraints, and named coding-rule sets are template policy unless precisely supported by controlled text.",
+      "applicability": "ASIL-D C scaffold implementation constraints and project coding standards."
+    },
+    {
+      "reference_id": "OSQAR-POLICY-8-C11-GPG-AUTHENTICITY",
+      "edition": "2018",
+      "part": 8,
+      "clause": "11",
+      "topic": "GPG authenticity mechanism as OSQAr project policy",
+      "reference_kind": "project_policy",
+      "project_paraphrase": "GPG detached signatures are OSQAr's selected mechanism for shipment-manifest authenticity; the mechanism choice is not attributed to ISO 26262.",
+      "applicability": "OSQAr shipment signing and verification commands."
+    },
+    {
+      "reference_id": "OSQAR-POLICY-8-C11-REPRODUCIBILITY",
+      "edition": "2018",
+      "part": 8,
+      "clause": "11",
+      "topic": "reproducibility controls as OSQAr project policy",
+      "reference_kind": "project_policy",
+      "project_paraphrase": "OSQAr reproducible-mode defaults and environment controls are project policy and engineering evidence, not a direct standards mandate.",
+      "applicability": "Shipment builds, tests, timestamps, and source-date environment handling."
+    },
+    {
+      "reference_id": "OSQAR-POLICY-10-C9-ASSUMPTION-COUNTS",
+      "edition": "2018",
+      "part": 10,
+      "clause": "9",
+      "topic": "fixed SEooC assumption counts as OSQAr project policy",
+      "reference_kind": "project_policy",
+      "project_paraphrase": "The number and starter content of assumptions supplied by an OSQAr template are project scaffolding choices and must be tailored to the actual integration context.",
+      "applicability": "Template assumptions of use, lifecycle needs, and completeness checks."
+    }
+  ]
+}

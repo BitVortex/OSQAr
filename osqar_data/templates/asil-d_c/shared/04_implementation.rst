@@ -18,10 +18,16 @@ Source Inventory
    **Language:** C (C99 or C11 with no extensions)
    **Coding standard:** MISRA C:2012 (mandatory rules enforced)
    **Build system:** CMake ≥3.16 with reproducible build support
-   **Compiler:** GCC ≥10 or Clang ≥14 (qualified per ISO 26262-8 §11)
-   **No dynamic allocation after init** (ISO 26262-6 Table 7: ++ for ASIL D)
-   **No recursion** (ISO 26262-6 Table 7: ++ for ASIL C/D)
-   **One entry, one exit per function** (ISO 26262-6 Table 7: ++ for all ASIL)
+   **Compiler:** GCC ≥10 or Clang ≥14 (OSQAr project selection; evaluate the
+   actual use case under ISO 26262-8 Clause 11 before making any tool-confidence
+   or qualification claim)
+   **No dynamic allocation after init** (OSQAr project policy)
+   **No recursion** (OSQAr project policy)
+   **One entry, one exit per function** (OSQAr project policy)
+
+   These exact coding restrictions are conservative scaffold defaults. They
+   are not attributed to ISO 26262-6 Table 7; its researched mapping is
+   software-unit verification methods; the restrictions remain scaffold policy.
 
 Build Configuration
 -------------------

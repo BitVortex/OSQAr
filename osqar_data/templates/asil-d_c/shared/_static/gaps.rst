@@ -1,8 +1,10 @@
 Gap Documentation
 =================
 
-ISO 26262-8 §11.4.8 requires that planned-but-not-executed verification
-activities be documented with justifications.
+OSQAr project policy requires planned-but-not-executed verification activities
+to be documented with justifications. ISO 26262-8:2018 Clause 11 is the researched
+tool-confidence context; this exact gap rule is not
+represented as an ISO 26262 requirement.
 
 .. note::
 

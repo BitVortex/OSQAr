@@ -9,9 +9,8 @@
   },
   "standards_basis": {
     "reference": "ISO 26262-8:2018 Clause 11",
-    "interpretation_status": "researched-pending-controlled-review",
-    "reviewer": "BitVortex",
-    "note": "Provisional use-case reasoning; verify against a controlled standard copy before approval."
+    "basis_status": "provisional",
+    "note": "The base framework records provisional use-case reasoning only; organization-specific standards assessment and authorization are external."
   },
   "claim_boundary": "Only named mechanical predicates may become relied upon after exact-version evidence and independent approval. Passing a predicate does not establish semantic adequacy, safety, standards conformity, certification, or tool qualification.",
   "functions": [
@@ -30,10 +29,6 @@
       ],
       "evidence": [],
       "human_judgment": "Whether the declared inventory is complete and the artifacts are adequate remains outside this predicate.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -42,10 +37,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -68,8 +63,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -96,10 +90,6 @@
       ],
       "evidence": [],
       "human_judgment": "Inventory closure and integrity do not establish evidence adequacy or release acceptability.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -108,10 +98,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -134,8 +124,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -161,11 +150,7 @@
         "Seeded reversed-edge, dead-link, duplicate, unknown-type, and cardinality mutations"
       ],
       "evidence": [],
-      "human_judgment": "Requirements, allocations, verification methods, and safety relevance remain subject to competent review.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
+      "human_judgment": "Requirements, allocations, verification methods, and safety relevance remain subject to competent assessment.",
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -174,10 +159,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -192,7 +177,7 @@
       "dependencies": [],
       "known_anomalies": [],
       "residual_limitations": [
-        "Requirements, allocations, verification methods, and safety relevance remain subject to competent review."
+        "Requirements, allocations, verification methods, and safety relevance remain subject to competent assessment."
       ],
       "revalidation_triggers": [
         "OSQAr behavior or acceptance-policy change",
@@ -200,8 +185,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -228,10 +212,6 @@
       ],
       "evidence": [],
       "human_judgment": "Mechanical acceptance does not establish that evidence sufficiently supports a safety claim.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -240,10 +220,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -266,8 +246,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -294,10 +273,6 @@
       ],
       "evidence": [],
       "human_judgment": "Signer authorization, trust policy, inventory completeness, and artifact adequacy remain external.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -306,10 +281,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -332,8 +307,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -360,10 +334,6 @@
       ],
       "evidence": [],
       "human_judgment": "Aggregate success cannot exceed its named predicates and does not establish semantic adequacy.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -372,10 +342,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -398,8 +368,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -423,10 +392,6 @@
       "independent_detection": [],
       "evidence": [],
       "human_judgment": "Execution completion and report acceptance require separately established controls.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -435,10 +400,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -461,8 +426,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -485,11 +449,7 @@
       "erroneous_output": "Untyped traversal can produce an incomplete or over-inclusive candidate impact set.",
       "independent_detection": [],
       "evidence": [],
-      "human_judgment": "The output is a reviewer prompt and not a complete safety-impact determination.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
+      "human_judgment": "The output is an assessment aid and not a complete safety-impact determination.",
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -498,10 +458,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -516,7 +476,7 @@
       "dependencies": [],
       "known_anomalies": [],
       "residual_limitations": [
-        "The output is a reviewer prompt and not a complete safety-impact determination."
+        "The output is an assessment aid and not a complete safety-impact determination."
       ],
       "revalidation_triggers": [
         "OSQAr behavior or acceptance-policy change",
@@ -524,8 +484,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -548,11 +507,7 @@
       "erroneous_output": "Heuristic root, context, and evidence classification can produce an unsound or incomplete argument view.",
       "independent_detection": [],
       "evidence": [],
-      "human_judgment": "A competent reviewer must establish safety-argument semantics and sufficiency.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
+      "human_judgment": "A competent assessor must establish safety-argument semantics and sufficiency.",
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -561,10 +516,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -579,7 +534,7 @@
       "dependencies": [],
       "known_anomalies": [],
       "residual_limitations": [
-        "A competent reviewer must establish safety-argument semantics and sufficiency."
+        "A competent assessor must establish safety-argument semantics and sufficiency."
       ],
       "revalidation_triggers": [
         "OSQAr behavior or acceptance-policy change",
@@ -587,8 +542,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -612,10 +566,6 @@
       "independent_detection": [],
       "evidence": [],
       "human_judgment": "Combined output must not be treated as a complete safety interface or impact model.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -624,10 +574,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -650,8 +600,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -674,11 +623,7 @@
       "erroneous_output": "Fields outside the implemented comparison set can change without appearing in the report.",
       "independent_detection": [],
       "evidence": [],
-      "human_judgment": "Git and complete-schema review remain necessary for change completeness.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
+      "human_judgment": "Git and complete-schema assessment remain necessary for change completeness.",
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -687,10 +632,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -705,7 +650,7 @@
       "dependencies": [],
       "known_anomalies": [],
       "residual_limitations": [
-        "Git and complete-schema review remain necessary for change completeness."
+        "Git and complete-schema assessment remain necessary for change completeness."
       ],
       "revalidation_triggers": [
         "OSQAr behavior or acceptance-policy change",
@@ -713,8 +658,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"
@@ -737,11 +681,7 @@
       "erroneous_output": "Generated or displayed convenience information may be incomplete or stale.",
       "independent_detection": [],
       "evidence": [],
-      "human_judgment": "Generated content and status information require project review before lifecycle use.",
-      "review": {
-        "reviewer": "BitVortex",
-        "status": "pending"
-      },
+      "human_judgment": "Generated content and status information require project assessment before lifecycle use.",
       "owner": "OSQAr maintainers",
       "lifecycle_decision": {
         "id": "unresolved",
@@ -750,10 +690,10 @@
         "work_product": "unresolved"
       },
       "assumptions": [
-        "No reliance is permitted while version applicability or controlled-copy review is unresolved."
+        "No reliance is permitted while version applicability or standards applicability is unresolved."
       ],
       "operating_constraints": [
-        "Use only as documented; outputs remain subject to competent independent review."
+        "Use only as documented; outputs remain subject to competent external assessment."
       ],
       "profile_applicability": [
         "unresolved"
@@ -768,7 +708,7 @@
       "dependencies": [],
       "known_anomalies": [],
       "residual_limitations": [
-        "Generated content and status information require project review before lifecycle use."
+        "Generated content and status information require project assessment before lifecycle use."
       ],
       "revalidation_triggers": [
         "OSQAr behavior or acceptance-policy change",
@@ -776,8 +716,7 @@
         "known anomaly affecting this function"
       ],
       "anomaly_disposition": {
-        "status": "unresolved",
-        "review_revision": "unresolved"
+        "status": "unresolved"
       },
       "input": [
         "unresolved"

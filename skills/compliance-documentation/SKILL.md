@@ -52,7 +52,7 @@ osqar traceability _build/html/needs.json     --format xlsx     --format-output 
 | REQ_Title | One-line description | Must be specific and verifiable |
 | Status | active/draft/obsolete | Only active needs are in scope |
 | Tags | ASIL/domain tags | Shows ASIL allocation, safety relevance |
-| ARCH_Linked | Architecture elements implementing this REQ | Required per ISO 26262-6 §7.4.3 |
+| ARCH_Linked | Architecture elements implementing this REQ | Allocation trace context: ISO 26262-6 §7.4.6 |
 | VER_Linked | Verification activities testing this REQ | Required per ISO 26262-6 §9.4 |
 | IMPL_Linked | Implementation elements realizing this REQ | Required per ISO 26262-6 §8.4 |
 | LM_Linked | Lifecycle management elements | Required for SEooC AoUs |
@@ -76,7 +76,7 @@ Map every OSQAr need to a specific ISO clause to demonstrate coverage.
    "REQ_SSR_* (all have :id:, :tags:, :links:)", "✓"
    "§7.4.3", "Software architectural design principles",
    "ARCH_* (8 needs)", "✓"
-   "§7.4.10", "Verification of software architectural design",
+   "§7.4.14", "Verification of software architectural design",
    "REVIEW_ARCH_* (3 needs)", "✓"
    "§8.4.4", "Software unit design and implementation",
    "IMPL_UNIT_* (5 needs)", "✓"
@@ -104,18 +104,18 @@ Identify and justify any standard requirements that are not fully addressed.
    * - Clause
      - Gap Description
      - Justification / Mitigation
-   * - §11.4.3 (Back-to-back testing)
-     - No model-based development used; code is handwritten
-     - Not applicable — no Simulink or similar models in toolchain
-   * - §9.4.5 (Resource usage testing)
-     - Stack depth measured but heap usage not profiled
-     - Mitigation: no dynamic allocation at ASIL D (per Table 7);
-       heap is statically pre-allocated at init; documented in IMPL_ALLOC
-   * - §8.11 (Tool qualification — compiler)
-     - Compiler TCL3 analysis started but not completed
-     - Mitigation: increased confidence from use argument
-       (10+ vehicle programs, 10⁸+ field hours);
-       formal TCL3 report planned for next release
+   * - §11.4.3 (Embedded-software test-case derivation)
+     - Applicable test-case derivation methods have not yet been selected
+     - Mitigation: derive and review cases against the software requirements
+       and justify the project-selected methods
+   * - §9.4.5 (Software-unit test environment)
+     - Unit tests currently run only in a host environment
+     - Mitigation: evaluate environment representativeness and document any
+       additional target or target-like verification needed for this project
+   * - ISO 26262-8:2018 Clause 11 (Confidence in the use of software tools)
+     - The compiler use case has not yet received a reviewed tool-confidence analysis
+     - Mitigation: assess the actual use, tool impact, and error-detection measures;
+       record classification and any qualification action supported by that analysis
 ```
 
 OSQAr's `verification.gaps` configuration in `osqar_project.json` auto-generates
@@ -196,8 +196,9 @@ A structured catalogue of all verification evidence with provenance.
      - valgrind_report.txt
 ```
 
-**Compliance rule:** Every evidence entry must include tool name AND version
-(ISO 26262-8 §11.4.4). "Tool version: latest" is not acceptable.
+**OSQAr project rule:** Every evidence entry must include tool name AND version.
+ISO 26262-8:2018 Clause 11 is the researched tool-confidence reference; do not
+attribute this exact field rule to a subclause.
 
 ### 5. Assessment Readiness Report
 
@@ -396,7 +397,7 @@ verify all items:
    * - 3
      - Functional safety concept documented
      - REQ_SSR_* + ARCH_* (FSRs + TSRs)
-     - ISO 26262-3 §7, Part 4 §6
+     - ISO 26262-3 §7; ISO 26262-4:2018 §6
    * - 4
      - Software safety requirements specified
      - REQ_SSR_* (all 14 SSRs)
@@ -422,26 +423,30 @@ verify all items:
      - VER_EMBEDDED_*
      - ISO 26262-6 §11.4
    * - 10
-     - Safety analyses (FMEA, FTA, DFA) performed
-     - VER_FMEA, VER_FTA, VER_DFA
-     - ISO 26262-9 §8
+     - Dependent failure analysis performed where applicable
+     - VER_DFA
+     - ISO 26262-9 §7
    * - 11
-     - Tool qualification evidence assembled
+     - Safety analyses performed where applicable
+     - VER_FMEA, VER_FTA
+     - ISO 26262-9 §8
+   * - 12
+     - Tool-confidence analysis and any resulting qualification evidence assembled
      - LM_TOOL_TCL_*
      - ISO 26262-8 §11
-   * - 12
+   * - 13
      - SEooC AoUs documented (if applicable)
      - LM_AOU_*
-     - ISO 26262-10 §9.4.2
-   * - 13
+     - ISO 26262-10 §9.1 (general guidance)
+   * - 14
      - Safety case complete with evidence links
      - SC_* (all SC_ needs)
-     - ISO 26262-2 §6.4.8, Part 10 §5
-   * - 14
+     - ISO 26262-2 §6.4.8; ISO 26262-10:2018 §5
+   * - 15
      - Confirmation reviews/audit/assessment scheduled
      - LM_CONFIRMATION_*
      - ISO 26262-2 §6.4.9-§6.4.12
-   * - 15
+   * - 16
      - Release authorization documented
      - LM_RELEASE
      - ISO 26262-2 §6.4.13
@@ -466,16 +471,18 @@ When assessments span multiple standards, coordinate evidence:
    is adequate, or evidence is valid. Traceability is necessary but not sufficient.
 2. **Hand-written evidence** — assessors can identify hand-entered numbers.
    All evidence must come from automated tool output with tool name, version,
-   and date. See ISO 26262-8 §11.4.4.
+   and date under OSQAr project policy. ISO 26262-8:2018 Clause 11 is the researched
+   tool-confidence context; the exact field rule remains OSQAr policy.
 3. **Version drift** — compliance documentation generated at one point in time
    must match the shipped artifacts. Use OSQAr baselines to lock versions.
 4. **Overclaiming compliance language** — never state "ISO 26262 compliant"
    or "ASIL D certified." Use "qualification attempt targeting ASIL D"
    and "developed per ISO 26262:2018 processes." Certification requires
    independent assessment.
-5. **Missing tool qualification** — verification results from unqualified
-   tools may be rejected by an assessor. Every tool in the safety toolchain
-   must have a TCL classification and qualification evidence if TCL2/TCL3.
+5. **Missing tool-use evaluation** — evidence may be rejected when reliance on
+   a tool is unsupported. Evaluate relevant tool use under ISO 26262-8:2018 Clause 11;
+   classification and any qualification action follow from the reviewed use-case
+   analysis, not from a fixed category assigned to the tool name.
 6. **Incomplete gap justifications** — simply stating "not applicable" is
    insufficient. Every gap must explain WHY it's not applicable with
    reference to the project scope, SEooC assumptions, or standard clause

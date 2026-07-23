@@ -89,8 +89,12 @@ jobs:
         /tmp/osqar-wheel/bin/python -m pip install --upgrade pip
         /tmp/osqar-wheel/bin/python -m pip install dist/osqar-*.whl pytest pytest-cov
         mkdir -p /tmp/osqar-installed-suite/.github/workflows
-        cp -R tests /tmp/osqar-installed-suite/tests
+        cp -R tests docs skills tools /tmp/osqar-installed-suite/
+        mkdir -p /tmp/osqar-installed-suite/osqar_data
+        cp -R osqar_data/templates /tmp/osqar-installed-suite/osqar_data/templates
+        cp index.rst pyproject.toml /tmp/osqar-installed-suite/
         cp .github/workflows/ci.yml /tmp/osqar-installed-suite/.github/workflows/ci.yml
+        rm /tmp/osqar-installed-suite/tools/__init__.py
         (cd /tmp/osqar-installed-suite && /tmp/osqar-wheel/bin/python -m pytest -q tests \
           --junitxml=$GITHUB_WORKSPACE/installed-wheel-test-results.xml \
           --cov=tools \

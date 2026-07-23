@@ -8,8 +8,10 @@
  * return an error code, accept validated inputs, and operate with
  * deterministic resource usage (no dynamic allocation, no recursion).
  *
- * ISO 26262-6 §8.4: Software unit design and implementation
- * ISO 26262-6 Table 7:  Design and coding guidelines for ASIL D
+ * ISO 26262-6:2018, Clause 8.4, Table 6 provides the software-unit
+ * design and implementation context. The concrete restrictions below are
+ * OSQAr template policy and require project tailoring; they are not direct
+ * ISO 26262 mandates.
  */
 
 #ifdef __cplusplus

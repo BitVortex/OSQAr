@@ -277,6 +277,9 @@ def cmd_shipment_traceability(args: argparse.Namespace) -> int:
     )
 
     argv = [str(needs_json), "--json-report", str(json_report)]
+    project_config = getattr(args, "project_config", None)
+    if project_config:
+        argv += ["--project-config", str(Path(project_config).expanduser().resolve())]
     if bool(getattr(args, "enforce_req_has_test", False)):
         argv += ["--enforce-req-has-test"]
     if bool(getattr(args, "enforce_arch_traces_req", False)):
@@ -504,8 +507,10 @@ _GAP_RST_INTRO = """\
 Gap Documentation
 =================
 
-ISO 26262-8 §11.4.8 requires that planned-but-not-executed verification
-activities be documented with justifications.
+OSQAr project policy requires planned-but-not-executed verification activities
+to be documented with justifications. ISO 26262-8:2018 Clause 11 is the researched
+tool-confidence context; this exact gap rule is not
+represented as an ISO 26262 requirement.
 
 .. note::
 
@@ -818,6 +823,11 @@ def _shipment_prepare_impl(args: argparse.Namespace, *, label: str) -> int:
             shipment=str(shipment_dir),
             needs_json=None,
             json_report=str(shipment_dir / u.DEFAULT_TRACEABILITY_REPORT),
+            project_config=(
+                str((project_dir / u.DEFAULT_PROJECT_METADATA).resolve())
+                if (project_dir / u.DEFAULT_PROJECT_METADATA).is_file()
+                else None
+            ),
             enforce_req_has_test=bool(getattr(args, "enforce_req_has_test", False)),
             enforce_arch_traces_req=bool(getattr(args, "enforce_arch_traces_req", False)),
             enforce_test_traces_req=bool(getattr(args, "enforce_test_traces_req", False)),
@@ -1054,12 +1064,19 @@ def _shipment_verify_impl(args: argparse.Namespace, *, label: str) -> int:
                 tmp_trace_report = Path(tf.name)
             report = tmp_trace_report
 
+        project_config = getattr(args, "project_config", None)
+        if not project_config:
+            shipped_project_config = shipment_dir / u.DEFAULT_PROJECT_METADATA
+            if shipped_project_config.is_file():
+                project_config = str(shipped_project_config)
+
         trace_rc = int(
             cmd_shipment_traceability(
                 argparse.Namespace(
                     shipment=str(shipment_dir),
                     needs_json=getattr(args, "needs_json", None),
                     json_report=str(report),
+                    project_config=project_config,
                     enforce_req_has_test=bool(getattr(args, "enforce_req_has_test", False)),
                     enforce_arch_traces_req=bool(getattr(args, "enforce_arch_traces_req", False)),
                     enforce_test_traces_req=bool(getattr(args, "enforce_test_traces_req", False)),
@@ -1584,6 +1601,11 @@ def register(sub: argparse._SubParsersAction) -> None:
         "--json-report",
         default=None,
         help="Write JSON report (default: <shipment>/traceability_report.json)",
+    )
+    p_tr2.add_argument(
+        "--project-config",
+        default=None,
+        help="Optional project configuration declaring standards catalogs",
     )
     p_tr2.add_argument("--enforce-req-has-test", action="store_true")
     p_tr2.add_argument("--enforce-arch-traces-req", action="store_true")

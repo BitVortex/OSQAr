@@ -115,8 +115,10 @@ and are usable by any agent with no Hindsight dependency:
 Domain-Specific Skills (standards expertise)   Content-Authoring Skills (OSQAr mapping)
 ─────────────────────────────         ─────────────────────────────────────
 iso-26262-application                  iso26262-part6-software
-  "ISO 26262-6 §9.4 requires MC/DC       "Use VER_COVERAGE_MCDC need with
-   for ASIL D unit testing"              :tags: ASIL_D;coverage;MC/DC"
+  "ISO 26262-6:2018 §9.4.4/Table 9       "Use VER_COVERAGE_MCDC need with
+   gives MC/DC its strongest ASIL D       :tags: ASIL_D;coverage;MC/DC"
+   recommendation; applicability
+   remains project-specific"
 
 functional-safety-fundamentals         compliance-documentation
   "Safety case requires GSN structure    "osqar traceability --format xlsx

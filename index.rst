@@ -41,6 +41,7 @@ A shipment is a reviewable bundle containing **Sphinx documentation with traceab
    docs/configuration_and_hooks
    docs/tool_reliance_boundary
    docs/evidence_acceptance
+   docs/iso26262_reference_catalog
 
 .. toctree::
    :maxdepth: 1
@@ -84,8 +85,9 @@ For organizations adopting OSQAr across teams and projects:
 
 - :doc:`docs/cli_reference` — full per-command reference (all flags, exit codes, examples)
 - :doc:`docs/configuration_and_hooks` — project/workspace config files, custom commands, hooks
-- :doc:`docs/tool_reliance_boundary` — fail-closed Clause 11 tool-reliance boundary and review gate
+- :doc:`docs/tool_reliance_boundary` — fail-closed Clause 11 tool-reliance boundary and external-assurance separation
 - :doc:`docs/evidence_acceptance` — controlled evidence states, fail-closed profiles, and limits
+- :doc:`docs/iso26262_reference_catalog` — researched ISO 26262 mappings and explicit OSQAr policy boundaries
 
 📦 Examples
 ===========

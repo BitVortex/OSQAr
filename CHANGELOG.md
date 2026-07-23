@@ -88,7 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Workspace combine** (`osqar workspace combine`): merge multiple project
   ``needs.json`` exports with namespace prefixes. (#17)
 - **GPG manifest signing** (`osqar sign create` / `sign verify`): detached signatures for
-  shipment manifest authenticity (ISO 26262-8 §11.4.4). (#18)
+  shipment manifest authenticity as an OSQAr project-policy mechanism. (#18)
 - **GSN safety case support** (`osqar gsn generate`): generate gsn2x-compatible YAML from
   ``.. safety-case::`` needs, with optional PlantUML rendering. (#18)
 - **Change impact analysis** (`osqar impact`): transitive closure on traceability links
@@ -134,7 +134,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ``needs.json`` exports with namespace prefixes for cross-project traceability.
   ``workspace traceability`` runs checks on the combined output. (#17)
 - **GPG manifest signing** (`osqar sign create` / ``sign verify``): detached
-  signature support for shipment manifest authenticity (ISO 26262-8 §11.4.4). (#18)
+  signature support for shipment manifest authenticity as an OSQAr project-policy mechanism. (#18)
 - **GSN safety case support** (`osqar gsn generate`): generate gsn2x-compatible
   YAML from ``.. safety-case::`` needs, with optional rendering via gsn2x. (#18)
 
