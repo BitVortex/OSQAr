@@ -6,15 +6,15 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Configuration and hooks" href="configuration_and_hooks.html" /><link rel="prev" title="Integrating Verification into CI" href="ci_integration.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
-        <title>CLI Reference - OSQAr 0.9.0 documentation</title>
+        <title>CLI Reference - OSQAr 0.10.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.9.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.10.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.9.0 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.10.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -923,7 +923,7 @@ missing.</p>
 <section id="id25">
 <h4>Options<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h4>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--version</span></code>: required; release/tag version, e.g. <code class="docutils literal notranslate"><span class="pre">v0.9.0</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--version</span></code>: required; release/tag version, e.g. <code class="docutils literal notranslate"><span class="pre">v0.10.0</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--docs-dir</span></code>: path to built framework HTML docs (default: <code class="docutils literal notranslate"><span class="pre">_build/html</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output-dir</span></code>: staging/output directory (default: <code class="docutils literal notranslate"><span class="pre">_dist</span></code>)</p></li>
 </ul>
@@ -1127,7 +1127,7 @@ in <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/
 <h4>shipment pin<a class="headerlink" href="#shipment-pin" title="Link to this heading">¶</a></h4>
 <p>Compute a stable pin from a shipment manifest (default: <code class="docutils literal notranslate"><span class="pre">SHA256SUMS</span></code>).</p>
 <p>This prints a hex SHA-256 digest of the manifest file bytes. It can be used to
-identify an OSQAr-qualified dependency precisely.</p>
+identify an OSQAr-described dependency precisely.</p>
 </section>
 <section id="id36">
 <h4>Synopsis<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h4>
@@ -1173,7 +1173,7 @@ identify an OSQAr-qualified dependency precisely.</p>
 <section id="workspace">
 <span id="cli-workspace"></span><h3>workspace<a class="headerlink" href="#workspace" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">workspace</span></code> command group operates on multiple shipments in an integrator workspace.</p>
-<p>If supplier-provided shipment metadata declares OSQAr-qualified dependencies, you can use
+<p>If supplier-provided shipment metadata declares OSQAr-described dependencies, you can use
 <code class="docutils literal notranslate"><span class="pre">--enforce-deps</span></code> on workspace commands to fail on missing/ambiguous/conflicting dependencies.</p>
 <p>Workspace commands that produce an output directory (e.g., <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">report</span></code> / <code class="docutils literal notranslate"><span class="pre">workspace</span> <span class="pre">intake</span></code>)
 also write a machine-readable <code class="docutils literal notranslate"><span class="pre">subproject_overview.json</span></code> which includes <code class="docutils literal notranslate"><span class="pre">dependency_analysis</span></code>
@@ -1393,8 +1393,8 @@ context (rectangles), and assumptions (ellipses). Renderable via
 <code class="docutils literal notranslate"><span class="pre">sphinxcontrib.plantuml</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gsn2x-yaml</span></code> — produces a gsn2x-compatible YAML specification for the
 <a class="reference external" href="https://github.com/jonasthewolf/gsn2x">jonasthewolf/gsn2x</a> Rust binary.
-gsn2x renders <strong>formally correct</strong> GSN diagrams per the GSN Community
-Standard: parallelogram strategies, rounded-rectangle context nodes with
+gsn2x renders diagrams using GSN Community Standard node shapes:
+parallelogram strategies, rounded-rectangle context nodes with
 side-connectors, solid hollow-head in-context-of arrows. Requires the
 gsn2x binary (~2.7 MB download from GitHub releases).</p></li>
 </ul>
@@ -1594,7 +1594,7 @@ an OSQAr-selected project-policy mechanism, not an ISO 26262 requirement. Part
 <section id="id63">
 <h4>Examples<a class="headerlink" href="#id63" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Sign<span class="w"> </span>a<span class="w"> </span>shipment<span class="w"> </span>manifest
-<span class="go">osqar sign sign --manifest _build/html/SHA256SUMS --key qualification@example.com</span>
+<span class="go">osqar sign create --manifest _build/html/SHA256SUMS --key qualification@example.com</span>
 
 <span class="gp"># </span>Verify<span class="w"> </span>before<span class="w"> </span>unpacking<span class="w"> </span>a<span class="w"> </span>received<span class="w"> </span>shipment
 <span class="go">osqar sign verify --manifest _build/html/SHA256SUMS</span>
@@ -1929,7 +1929,7 @@ scope.</p>
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=39bb1c6d"></script>
+    <script src="../_static/documentation_options.js?v=82662543"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>

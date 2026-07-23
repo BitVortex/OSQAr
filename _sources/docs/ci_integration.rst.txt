@@ -34,8 +34,11 @@ The verification pipeline has three layers:
    shipment``) — invoked by CI for traceability verification, integrity
    manifests, and shipment packaging.
 
-A reusable CI workflow template is included in the OSQAr repository at
-``templates/ci-qualification.yml``.
+Use the `OSQAr-cJSON CI workflow`_ as a concrete reference. OSQAr does not ship a
+generic CI workflow template: build commands, evidence producers, required tools,
+and acceptance criteria are project-specific.
+
+.. _`OSQAr-cJSON CI workflow`: https://github.com/BitVortex/OSQAr-cJSON/blob/main/.github/workflows/ci.yml
 
 Step 1: Write ``build-and-test.sh``
 ===================================
@@ -54,43 +57,24 @@ The shell script is the heart of the pipeline.  It must:
 - Accept subcommands so individual phases can be iterated on quickly.
 - Exit non-zero on any failure (``set -euo pipefail``).
 
-Reference: `OSQAr-cJSON build-and-test.sh`_ (411 lines, covers all verification
-activities relevant for an ISO 26262 SEooC qualification attempt targeting ASIL D).
+Reference: `OSQAr-cJSON build-and-test.sh`_ (covers the verification activities
+selected for that ISO 26262 SEooC qualification attempt targeting ASIL D).
 
 .. _`OSQAr-cJSON build-and-test.sh`: https://github.com/BitVortex/OSQAr-cJSON/blob/main/build-and-test.sh
 
 Step 2: Wire the CI workflow
 ============================
 
-Copy ``templates/ci-qualification.yml`` from the OSQAr repository to
-``.github/workflows/ci.yml`` in your qualification project.
+Create ``.github/workflows/ci.yml`` for the project, using the reference workflow
+as a starting point where appropriate. At minimum, adapt:
 
-Replace the ``<PLACEHOLDER>`` tokens:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Placeholder
-     - Description
-     - Example (cJSON)
-   * - ``<PROJECT>``
-     - Short project identifier
-     - ``osqar_cjson``
-   * - ``<SYSTEM_DEPS>``
-     - Additional ``apt`` packages
-     - ``cppcheck gcovr lcov``
-   * - ``<VER_|TEST_>``
-     - Test need ID prefix
-     - ``VER_``
-   * - ``<IMPL_|CODE_>``
-     - Implementation need ID prefix
-     - ``IMPL_``
-   * - ``<OSQAR_VERSION>``
-     - Pinned OSQAr CLI version
-     - ``0.8.0``
-   * - ``<SOURCE_FILES>``
-     - Shell commands to copy source into shipment
-     - ``cp cjson-source/cJSON.c ...``
+* the project identifier and source files included in the shipment;
+* required system and Python tool dependencies;
+* the pinned OSQAr version;
+* verification and implementation need-ID prefixes;
+* project-specific build, test, analyzer, and evidence-acceptance commands; and
+* tag patterns, artifact retention, publication permissions, and protected
+  environments.
 
 The workflow triggers on pushes to ``main`` and on tags matching
 ``<libversion>-<osqarversion>`` (e.g., ``1.7.19-0.9.0``).
@@ -203,8 +187,8 @@ Reference implementation
 
 Key files to study:
 
-- `ci.yml <https://github.com/BitVortex/OSQAr-cJSON/blob/main/.github/workflows/ci.yml>`_ — CI workflow (199 lines)
-- `build-and-test.sh <https://github.com/BitVortex/OSQAr-cJSON/blob/main/build-and-test.sh>`_ — verification pipeline (411 lines)
+- `ci.yml <https://github.com/BitVortex/OSQAr-cJSON/blob/main/.github/workflows/ci.yml>`_ — CI workflow
+- `build-and-test.sh <https://github.com/BitVortex/OSQAr-cJSON/blob/main/build-and-test.sh>`_ — verification pipeline
 - `osqar_project.json <https://github.com/BitVortex/OSQAr-cJSON/blob/main/osqar_project.json>`_ — project config with gap definitions
 - `conf.py <https://github.com/BitVortex/OSQAr-cJSON/blob/main/conf.py>`_ — Sphinx config with PlantUML and custom need prefixes
 

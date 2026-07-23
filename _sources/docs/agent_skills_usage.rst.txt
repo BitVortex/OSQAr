@@ -126,7 +126,7 @@ Example: Authoring Software Requirements for an ASIL D C Library
 
 .. code-block:: bash
 
-   osqar new --language c --name my-lib-qualification --template asil-d-c
+   osqar new --language c --name my-lib-qualification --template asil-d_c
    # ... author documents ...
    python3 -m sphinx -b html -W . _build/html
    osqar traceability _build/html/needs.json --test-prefix VER_ --code-prefix IMPL_
