@@ -3,6 +3,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -54,6 +56,13 @@ def test_installed_wheel_ci_stages_release_hygiene_inputs() -> None:
         "cp .github/workflows/ci.yml .github/workflows/release.yml "
         "/tmp/osqar-installed-suite/.github/workflows/"
     ) in workflow
+
+
+@pytest.mark.source_checkout
+def test_readme_does_not_advertise_removed_asil_d_template() -> None:
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "asil-d_c" not in readme
+    assert "ASIL‑D C template" not in readme
 
 
 def test_active_documentation_avoids_overstated_qualification_claims() -> None:

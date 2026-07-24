@@ -4,90 +4,132 @@
 
 # OSQAr — Open Safety Qualification Architecture
 
-**Auditable evidence shipments with traceability.** Write requirements, architecture, and verification plans in reStructuredText. Link them with `sphinx-needs`. Package into integrity-protected shipments. Integrate across teams.
+OSQAr is an open framework for creating, checking, and exchanging auditable
+evidence packages for safety-related engineering. It combines structured
+requirements and architecture documentation, explicit traceability, verification
+results, integrity manifests, and reproducible shipment workflows.
+
+OSQAr performs mechanical checks and records their results. It does **not**
+determine whether a system is safe, compliant, certified, or qualified.
+
+## Quick start
+
+Install the CLI with [`pipx`](https://pipx.pypa.io/):
 
 ```bash
 pipx install osqar
-osqar new --language c --name hello_safety && cd hello_safety
-osqar build-docs && osqar open-docs
+osqar new --language c --name hello_safety
+cd hello_safety
+osqar build-docs
+osqar open-docs
 ```
 
-## Who this is for
+The default scaffold is intentionally generic. Adapt its needs, evidence model,
+acceptance criteria, and standards references to the project and its assurance
+plan.
 
-| Role | Does |
-|---|---|
-| **Supplier** | Produce auditable evidence shipments (docs + code + tests + checksums) |
-| **Integrator** | Verify, intake, and archive received shipments; enforce dependency closure |
-| **Internal team** | Standardize evidence packaging across subprojects and CI |
+## Core workflow
 
-## Quick links
+1. **Scaffold a project.** Start from a basic C, C++, Rust, or Python project.
+2. **Describe the engineering evidence.** Author requirements, architecture,
+   verification activities, results, assumptions, and lifecycle records in
+   reStructuredText with `sphinx-needs` links.
+3. **Check the evidence graph.** Build the documentation, validate traceability,
+   inspect change impact, and record machine-readable reports.
+4. **Prepare a shipment.** Assemble the declared evidence, generate checksums,
+   and optionally create a distributable archive.
+5. **Verify and integrate.** Verify received shipments before intake, preserve
+   their provenance, and combine accepted projects in an integrator workspace.
 
-- 📖 **Docs**: [bitvortex.github.io/OSQAr](https://bitvortex.github.io/OSQAr/) — full framework documentation
-- 📦 **Examples**: [bitvortex.github.io/OSQAr/examples](https://bitvortex.github.io/OSQAr/examples/) — C, C++, Rust, Python reference projects
-- 🔬 **Full demo**: [OSQAr‑cJSON](https://github.com/BitVortex/OSQAr-cJSON) — ISO 26262 SEooC qualification attempt targeting ASIL D (88% coverage, 162 tests)
-- 📥 **Downloads**: [GitHub Releases](https://github.com/bitvortex/OSQAr/releases) — pre-built framework bundles and example workspaces
+A typical producer-side command is:
 
-## Features
+```bash
+osqar shipment prepare --archive
+```
 
-**Documentation & traceability**
+Use `osqar --help` and `osqar <command> --help` for the complete command surface.
 
-- Structured requirements, architecture, verification plans via `sphinx-needs` + reStructuredText
-- PlantUML architecture diagrams embedded in docs
-- Machine-readable `needs.json` exports with full traceability graph
-- CSV and Excel (`--format xlsx`) traceability matrix exports for auditor review
-- Change impact analysis (`osqar impact`) from any seed requirement
-- Versioned requirement baselines with snapshot/list/diff (`osqar baseline`)
-- Requirement ID prefix overrides (`--req-prefix`, `--arch-prefix`, etc.)
+## Capabilities
 
-**Scaffolding & skills**
+### Evidence and traceability
 
-- Language templates for C, C++, Rust, Python (`osqar new --language`)
-- **ASIL‑D C template** (`osqar new --language c --template asil-d_c`) with pre‑populated
-  ISO 26262‑6 software safety requirements, architecture, verification, and lifecycle needs
-- Agent‑ready content‑authoring skills (ISO 26262‑6, ISO 21434, ISO 21448, vehicle programs,
-  compliance documentation) — see `skills/` and the Agent Skills usage guide
-- GSN safety case generation (`osqar gsn generate`) with PlantUML and gsn2x backends
+- Structured requirements, architecture, verification, result, and lifecycle
+  records using Sphinx and `sphinx-needs`.
+- Machine-readable `needs.json` exports and CSV/XLSX traceability matrices.
+- Change-impact traversal and versioned requirement baselines.
+- Typed traceability profiles with explicit direction, type, cardinality,
+  lifecycle, cycle, orphan, and result-state rules.
+- Code-reference scanning for need identifiers in implementation and tests.
+- GSN-shaped safety-case views rendered through PlantUML or gsn2x.
 
-**Shipment & integrity**
+### Verification and provenance
 
-- One-shot shipment preparation (`osqar shipment prepare --archive`)
-- SHA256SUMS manifest generation and verification
-- GPG detached signature support (`osqar sign create` / `osqar sign verify`)
-- Incremental mode — only rebuild changed stages
-- Project metadata declaration with pinned OSQAr shipment dependencies
+- Fail-closed framework evidence validation with machine-readable reports.
+- Standards-neutral claim catalogs with stable reference identifiers and typed
+  claim links.
+- Project-supplied evidence anchors rather than trust in local status labels.
+- SHA-256 shipment manifests and optional detached GPG signatures.
+- Versioned closed release manifests with file size, digest, identity, path, and
+  exact-set checks.
+- Explicit tool-reliance boundaries for project-specific assurance decisions.
 
-**Verification & CI**
+### Delivery and integration
 
-- Traceability rule enforcement (REQ→ARCH, ARCH→REQ, REQ→TEST)
-- Fail-closed evidence-state and provenance validation (`osqar framework validate`)
-- Standards-neutral claim catalogs with stable reference IDs and typed claim links
-- Packaged tool-reliance boundary with all base reliance disabled pending
-  use-case-specific assessment
-- Code trace scanning with enforcement (`osqar code-trace`)
-- Configurable verification activities (sanitizers, static analysis, fuzzing)
-- Auto-generated gap documentation from `osqar_project.json`
-- PlantUML-free build mode (`OSQAR_NO_DIAGRAMS=1`) for offline/CI
-- Scaffold projects with `osqar new --no-diagrams` to permanently disable diagrams
+- Basic scaffolds for C, C++, Rust, and Python.
+- Documentation builds with optional PlantUML-free operation for offline CI.
+- One-command shipment preparation and archive generation.
+- Workspace verification, intake, dependency-closure checks, reporting, and
+  cross-project traceability.
+- Framework bundles, example workspaces, and release artifacts published through
+  [GitHub Releases](https://github.com/BitVortex/OSQAr/releases).
 
-**Multi-project & organization**
+## Interpreting OSQAr results
 
-- Workspace orchestration: list, report, verify, intake, combine
-- Cross-project traceability via namespace-prefixed workspace combine
-- Dependency closure enforcement across received shipments
-- Lifecycle management and collaboration workflows for multi-user teams
-- Reproducible native builds (C/C++/Rust, optional Bazel integration)
-- Extensible via project/workspace JSON config + command hooks
+OSQAr distinguishes mechanical validation from engineering judgment:
 
-**Getting started as a developer**
+- A successful command means that the executed, versioned rules passed for the
+  supplied inputs.
+- It does not establish that requirements are complete or technically correct.
+- It does not validate a standards interpretation or replace confirmation
+  measures, independent review, safety assessment, or tool qualification.
+- Safety integrity levels, acceptance criteria, evidence authorities, and tool
+  reliance must be defined and justified for the specific project.
+- Illustrative catalogs, examples, and generated documents are starting points,
+  not compliance or certification evidence by themselves.
+
+## Scaffolding
+
+The recommended starting point is the default `basic` scaffold:
+
+```bash
+osqar new --language cpp --name controller
+osqar new --language rust --name monitor --no-diagrams
+```
+
+Reference-project scaffolding may be available from a source checkout. Run
+`osqar new --help` to inspect the options provided by the installed version.
+Generated projects currently target Python `>=3.9,<3.14`; the framework package
+targets Python `>=3.9,<3.15`.
+
+## Documentation and downloads
+
+- [Framework documentation](https://bitvortex.github.io/OSQAr/)
+- [Reference examples](https://bitvortex.github.io/OSQAr/examples)
+- [Published releases and evidence bundles](https://github.com/BitVortex/OSQAr/releases)
+- [Issue tracker](https://github.com/BitVortex/OSQAr/issues)
+
+## Development
 
 ```bash
 git clone https://github.com/BitVortex/OSQAr.git
 cd OSQAr
 poetry install
-./osqar build-docs && ./osqar open-docs
+./osqar build-docs
 ```
 
-The framework package targets Python `>=3.9,<3.15`; generated project
-templates currently target Python `>=3.9,<3.14`.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for contributor setup, tests, and review
+expectations.
 
-For the full contributor setup (editable install, evidence tools, CI), see the [framework docs](https://bitvortex.github.io/OSQAr/).
+## License
+
+OSQAr is distributed under the [Apache License 2.0](LICENSE).
