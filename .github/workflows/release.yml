@@ -542,23 +542,9 @@ jobs:
         with:
           body_path: dist/RELEASE-NOTES.md
           files: |
-            # Framework tooling first
-            dist/_release_payload/osqar_framework_bundle_${{ github.ref_name }}.zip
-            dist/_release_payload/osqar_framework_bundle_${{ github.ref_name }}.zip.sha256
-
-            # Combined example workspace
-            dist/_release_payload/osqar_example_workspace_${{ github.ref_name }}.zip
-            dist/_release_payload/osqar_example_workspace_${{ github.ref_name }}.zip.sha256
-
-            # Python wheel and source archive
-            dist/_release_payload/*.whl
-            dist/_release_payload/*.tar.gz
-            dist/_release_payload/SHA256SUMS
-
-            # Signed premanifest, detached signature bundle, provenance, final inventory
-            dist/_release_payload/OSQAR-RELEASE-PREMANIFEST.json
-            dist/_release_payload/OSQAR-RELEASE-PREMANIFEST.sigstore.json
+            # Publish every file from the exact accepted payload; do not maintain a
+            # second hand-written inventory that can omit producer artifacts.
+            dist/_release_payload/*
             dist/OSQAR-RELEASE-MANIFEST.json
-            dist/_release_payload/release-attestation.intoto.jsonl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -42,15 +42,8 @@ def test_release_upload_includes_payload_integrity_and_provenance_assets() -> No
         if step.get("uses") == "softprops/action-gh-release@v2"
     )
     files = str(release["with"]["files"])
-    for name in (
-        "*.whl",
-        "*.tar.gz",
-        "SHA256SUMS",
-        "OSQAR-RELEASE-MANIFEST.json",
-        "OSQAR-RELEASE-PREMANIFEST.sigstore.json",
-        "release-attestation.intoto.jsonl",
-    ):
-        assert name in files
+    assert "dist/_release_payload/*" in files
+    assert "dist/OSQAR-RELEASE-MANIFEST.json" in files
     assert release["with"]["body_path"] == "dist/RELEASE-NOTES.md"
     assert "generate_release_notes" not in release["with"]
     assert "RELEASE-NOTES.md" not in files
@@ -75,6 +68,7 @@ def test_every_non_manifest_release_upload_is_in_checksum_and_final_inventory() 
         if line.strip() and not line.lstrip().startswith("#")
     }
     assert "dist/OSQAR-RELEASE-MANIFEST.json" in uploads
+    assert "dist/_release_payload/*" in uploads
     assert all(upload.startswith("dist/") for upload in uploads)
     assert "find _release_payload -type f ! -name SHA256SUMS" in inventory_run
     assert "--root _release_payload" in inventory_run
