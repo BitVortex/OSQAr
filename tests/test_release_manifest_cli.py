@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from tools.osqar_cli import main
@@ -96,7 +97,7 @@ def test_verify_rejects_external_hardlink_report_alias_to_payload_without_modifi
         "--producer-command", "build", "--tool-version", "1",
     ]) == 0
     report = tmp_path.parent / f"{tmp_path.name}-report.json"
-    report.hardlink_to(payload)
+    os.link(payload, report)
 
     assert main([
         "release-manifest", "verify", "--root", str(tmp_path), "--manifest", str(manifest),
@@ -140,7 +141,7 @@ def test_verify_rejects_hardlink_report_alias_to_manifest_without_modification(
     ]) == 0
     sentinel = manifest.read_bytes()
     report = tmp_path.parent / f"{tmp_path.name}-manifest-report.json"
-    report.hardlink_to(manifest)
+    os.link(manifest, report)
 
     assert main([
         "release-manifest", "verify", "--root", str(tmp_path), "--manifest", str(manifest),

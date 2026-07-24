@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 from pathlib import Path
 
 from tools.osqar_cli import main
@@ -159,7 +160,7 @@ def test_cli_rejects_hardlink_report_alias_without_modifying_input(tmp_path: Pat
     original = json.dumps({"needs": _needs()})
     source.write_text(original, encoding="utf-8")
     report = tmp_path / "report.json"
-    report.hardlink_to(source)
+    os.link(source, report)
 
     rc = main([
         "traceability",
