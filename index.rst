@@ -1,119 +1,104 @@
-OSQAr (Open Safety Qualification Architecture)
+OSQAr — Open Safety Qualification Architecture
 ==============================================
 
-OSQAr is a documentation-first framework for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
+OSQAr helps teams author, check, package, and exchange auditable engineering
+evidence. It connects human-readable requirements and architecture to explicit
+traceability, verification records, implementation, and integrity-protected
+shipments.
 
-A shipment is a reviewable bundle containing **Sphinx documentation with traceability**, plus **implementation**, **tests**, and **verification reports** — all integrity-protected with checksum manifests.
+OSQAr performs versioned mechanical checks. A successful result does not decide
+that a system is safe, compliant, certified, or qualified, and does not replace
+project-specific engineering judgment or independent assessment.
+
+Start here
+==========
+
+New to OSQAr? Follow these pages in order:
+
+#. :doc:`docs/getting_started` — install the CLI and build a first project.
+#. :doc:`docs/using_the_boilerplate` — understand project, shipment, and
+   workspace concepts and follow the day-to-day workflow.
+#. :doc:`docs/asil_examples` — explore the C and Rust ASIL-target examples while
+   keeping the target distinct from achieved qualification.
+#. :doc:`docs/project_setup_from_scratch` — create a production project or
+   migrate existing engineering content.
 
 .. toctree::
    :maxdepth: 2
-   :caption: 🚀 Getting Started
-   :hidden:
+   :caption: Start here
 
    docs/getting_started
    docs/using_the_boilerplate
+   docs/asil_examples
    docs/project_setup_from_scratch
+
+Task guides
+===========
+
+Choose the guide that matches your immediate job:
+
+* :doc:`docs/suppliers_guide` — author, check, and ship component evidence.
+* :doc:`docs/integrators_guide` — verify, intake, and preserve received evidence.
+* :doc:`docs/ci_integration` — automate checks and generated artifacts.
+* :doc:`docs/lifecycle_management` — manage baselines and controlled changes.
+* :doc:`docs/multi_project_workflows` — verify dependencies and workspaces.
+* :doc:`docs/collaboration_workflows` — coordinate authors and reviewers.
 
 .. toctree::
    :maxdepth: 1
-   :caption: 📖 Guides (by role)
-   :hidden:
+   :caption: Task guides
 
    docs/suppliers_guide
    docs/integrators_guide
-
-.. toctree::
-   :maxdepth: 1
-   :caption: 🏢 Professional Deployment
-   :hidden:
-
+   docs/ci_integration
    docs/lifecycle_management
    docs/multi_project_workflows
    docs/collaboration_workflows
-   docs/ci_integration
+
+Power-user reference
+====================
+
+Use these pages when you need exact behavior, configuration, or assurance
+boundaries:
+
+* :doc:`docs/cli_reference` — commands, options, outputs, and exit behavior.
+* :doc:`docs/configuration_and_hooks` — project/workspace configuration and hooks.
+* :doc:`docs/evidence_acceptance` — controlled evidence states and validation.
+* :doc:`docs/typed_traceability` — strict directed profiles and API projection.
+* :doc:`docs/tool_reliance_boundary` — mechanical checks versus tool assurance.
+* :doc:`docs/release_manifest` — closed release-payload validation.
+* :doc:`docs/iso26262_reference_catalog` — researched mappings and explicit
+  project-policy boundaries.
+* :doc:`docs/agent_skills_usage` — content-authoring support for agents and
+  human reviewers.
 
 .. toctree::
    :maxdepth: 1
-   :caption: 🔧 Reference
-   :hidden:
+   :caption: Power-user reference
 
    docs/cli_reference
    docs/configuration_and_hooks
-   docs/tool_reliance_boundary
    docs/evidence_acceptance
-   docs/iso26262_reference_catalog
    docs/typed_traceability
+   docs/tool_reliance_boundary
    docs/release_manifest
+   docs/iso26262_reference_catalog
+   docs/agent_skills_usage
+
+Reference projects
+==================
+
+The repository contains basic examples for C, C++, Python, and Rust. The CLI
+also packages two deliberately incomplete ASIL-target examples:
+``asil_example_c`` and ``asil_example_rust``. See :doc:`docs/asil_examples`
+before adapting either one.
 
 .. toctree::
    :maxdepth: 1
-   :caption: 📦 Examples
-   :hidden:
+   :caption: Repository examples
 
    examples/index
 
-.. toctree::
-   :maxdepth: 1
-   :caption: 🧠 Agent Skills
-   :hidden:
-
-   docs/agent_skills_usage
-
-🚀 Getting Started
-==================
-
-- :doc:`docs/getting_started` — **start here**: what OSQAr is, install, first shipment in 5 minutes
-- :doc:`docs/using_the_boilerplate` — comprehensive guide: mental model, terms, workflow recipes
-- :doc:`docs/project_setup_from_scratch` — scaffold a new project or migrate an existing one
-
-📖 Guides (by role)
-===================
-
-- :doc:`docs/suppliers_guide` — produce auditable evidence shipments for a component
-- :doc:`docs/integrators_guide` — verify, intake, and integrate received shipments
-
-🏢 Professional Deployment
-==========================
-
-For organizations adopting OSQAr across teams and projects:
-
-- :doc:`docs/lifecycle_management` — requirements lifecycle, baselines, change management
-- :doc:`docs/multi_project_workflows` — workspace orchestration, dependency closure, batch intake
-- :doc:`docs/collaboration_workflows` — multi-user workflows, review processes, team coordination
-- :doc:`docs/ci_integration` — wire OSQAr into GitHub Actions or other CI pipelines
-
-🔧 Reference
-============
-
-- :doc:`docs/cli_reference` — full per-command reference (all flags, exit codes, examples)
-- :doc:`docs/configuration_and_hooks` — project/workspace config files, custom commands, hooks
-- :doc:`docs/tool_reliance_boundary` — fail-closed Clause 11 tool-reliance boundary and external-assurance separation
-- :doc:`docs/evidence_acceptance` — controlled evidence states, fail-closed profiles, and limits
-- :doc:`docs/iso26262_reference_catalog` — researched ISO 26262 mappings and explicit OSQAr policy boundaries
-- :doc:`docs/typed_traceability` — directed qualification graph and API-to-requirement projection
-
-📦 Examples
-===========
-
-OSQAr ships with reference examples for C, C++, Rust, and Python:
-
-- `All examples <examples/>`_
-
-For **safety-related embedded** projects, OSQAr recommends **C** or **Rust**. The **Python** example is an easy-to-run demo for the documentation and traceability workflow.
-
-Full demonstration — OSQAr-cJSON
---------------------------------
-
-For a complete, real-world qualification project, see:
-
-- `OSQAr-cJSON <https://github.com/BitVortex/OSQAr-cJSON>`_ — an ISO 26262 SEooC qualification attempt of the cJSON library targeting ASIL D, with CI-driven evidence shipments, 88% statement coverage, 162 Unity tests, and reproducible builds.
-
-🧠 Agent Skills
-===============
-
-OSQAr ships with content-authoring skills that help authors — human engineers and
-AI agents alike — map ISO standards requirements onto OSQAr qualification needs.
-
-- :doc:`docs/agent_skills_usage` — how agents should navigate the three-tier skill
-  ecosystem (content-authoring + domain-specific + organization-specific), task
-  routing, clause verification, and common pitfalls
+For a larger external demonstration, see `OSQAr-cJSON
+<https://github.com/BitVortex/OSQAr-cJSON>`_. It is a qualification attempt
+targeting ASIL D, not evidence that qualification has been achieved.

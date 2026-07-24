@@ -1,0 +1,45 @@
+{
+  "version": "0.1.0",
+  "origin": {
+    "vcs": "git",
+    "path": "."
+  },
+  "commands": {
+    "build": "./build-and-test.sh build",
+    "test": "./build-and-test.sh test"
+  },
+  "standards": {
+    "catalogs": [
+      {
+        "id": "iso26262-2018",
+        "source": "package:osqar_data/standards/iso26262_reference_catalog.json"
+      }
+    ]
+  },
+  "verification": {
+    "run": [],
+    "gaps": {
+      "accepted_test_report": {
+        "activity": "Accepted Rust test-result evidence",
+        "status": "not_run",
+        "reason": "evidence_pipeline_not_configured",
+        "description": "Cargo tests are executable, but this example does not fabricate an accepted JUnit result or provenance record.",
+        "mitigation": "Configure a project-controlled result converter and evidence-acceptance activity before using test results in a qualification argument."
+      },
+      "structural_coverage": {
+        "activity": "Project-selected structural coverage",
+        "status": "not_run",
+        "reason": "project_method_required",
+        "description": "Coverage method, target, exclusions, and target environment have not been authorized for this example.",
+        "mitigation": "Select and review a Rust coverage method for the actual project context; do not treat general branch or block data as MC/DC proof."
+      },
+      "coding_standard": {
+        "activity": "Project-selected Rust coding-standard analysis",
+        "status": "not_run",
+        "reason": "project_method_required",
+        "description": "This scaffold does not prescribe or claim conformance to a Rust coding standard.",
+        "mitigation": "Select applicable rules, analysis tooling, deviation handling, and acceptance criteria."
+      }
+    }
+  }
+}

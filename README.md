@@ -4,119 +4,153 @@
 
 # OSQAr — Open Safety Qualification Architecture
 
-OSQAr is an open framework for creating, checking, and exchanging auditable
-evidence packages for safety-related engineering. It combines structured
-requirements and architecture documentation, explicit traceability, verification
-results, integrity manifests, and reproducible shipment workflows.
+OSQAr helps engineering teams **author, check, package, and exchange auditable
+evidence** for safety-related work. A project can connect requirements,
+architecture, implementation, verification activities, results, assumptions,
+and lifecycle records, then publish them as an integrity-protected shipment.
 
-OSQAr performs mechanical checks and records their results. It does **not**
-determine whether a system is safe, compliant, certified, or qualified.
+OSQAr automates repeatable, versioned checks. It does **not** decide whether a
+system is safe or whether evidence is technically sufficient. A passing result
+does not establish compliance, certification, tool qualification, or ASIL
+qualification.
 
-## Quick start
+## Start here
 
-Install the CLI with [`pipx`](https://pipx.pypa.io/):
+Install the CLI with [`pipx`](https://pipx.pypa.io/), create a generic project,
+and render its documentation:
 
 ```bash
 pipx install osqar
-osqar new --language c --name hello_safety
-cd hello_safety
+osqar new --language rust --name first_osqar_project
+cd first_osqar_project
 osqar build-docs
 osqar open-docs
 ```
 
-The default scaffold is intentionally generic. Adapt its needs, evidence model,
-acceptance criteria, and standards references to the project and its assurance
-plan.
+The generated project is a starting structure. Replace its example needs,
+acceptance criteria, and evidence placeholders with project-authorized content.
 
-## Core workflow
+Next steps:
 
-1. **Scaffold a project.** Start from a basic C, C++, Rust, or Python project.
-2. **Describe the engineering evidence.** Author requirements, architecture,
-   verification activities, results, assumptions, and lifecycle records in
-   reStructuredText with `sphinx-needs` links.
-3. **Check the evidence graph.** Build the documentation, validate traceability,
-   inspect change impact, and record machine-readable reports.
-4. **Prepare a shipment.** Assemble the declared evidence, generate checksums,
-   and optionally create a distributable archive.
-5. **Verify and integrate.** Verify received shipments before intake, preserve
-   their provenance, and combine accepted projects in an integrator workspace.
+1. Read the [five-minute guide](docs/getting_started.rst).
+2. Learn the [project → shipment → workspace workflow](docs/using_the_boilerplate.rst).
+3. Use the [CLI reference](docs/cli_reference.rst) when you need every option,
+   exit code, and resolution rule.
 
-A typical producer-side command is:
+The rendered documentation is available at the
+[OSQAr documentation site](https://bitvortex.github.io/OSQAr/).
 
-```bash
-osqar shipment prepare --archive
-```
+## Choose the right starting point
 
-Use `osqar --help` and `osqar <command> --help` for the complete command surface.
+### Basic scaffold — recommended for a new project
 
-## Capabilities
-
-### Evidence and traceability
-
-- Structured requirements, architecture, verification, result, and lifecycle
-  records using Sphinx and `sphinx-needs`.
-- Machine-readable `needs.json` exports and CSV/XLSX traceability matrices.
-- Change-impact traversal and versioned requirement baselines.
-- Typed traceability profiles with explicit direction, type, cardinality,
-  lifecycle, cycle, orphan, and result-state rules.
-- Code-reference scanning for need identifiers in implementation and tests.
-- GSN-shaped safety-case views rendered through PlantUML or gsn2x.
-
-### Verification and provenance
-
-- Fail-closed framework evidence validation with machine-readable reports.
-- Standards-neutral claim catalogs with stable reference identifiers and typed
-  claim links.
-- Project-supplied evidence anchors rather than trust in local status labels.
-- SHA-256 shipment manifests and optional detached GPG signatures.
-- Versioned closed release manifests with file size, digest, identity, path, and
-  exact-set checks.
-- Explicit tool-reliance boundaries for project-specific assurance decisions.
-
-### Delivery and integration
-
-- Basic scaffolds for C, C++, Rust, and Python.
-- Documentation builds with optional PlantUML-free operation for offline CI.
-- One-command shipment preparation and archive generation.
-- Workspace verification, intake, dependency-closure checks, reporting, and
-  cross-project traceability.
-- Framework bundles, example workspaces, and release artifacts published through
-  [GitHub Releases](https://github.com/BitVortex/OSQAr/releases).
-
-## Interpreting OSQAr results
-
-OSQAr distinguishes mechanical validation from engineering judgment:
-
-- A successful command means that the executed, versioned rules passed for the
-  supplied inputs.
-- It does not establish that requirements are complete or technically correct.
-- It does not validate a standards interpretation or replace confirmation
-  measures, independent review, safety assessment, or tool qualification.
-- Safety integrity levels, acceptance criteria, evidence authorities, and tool
-  reliance must be defined and justified for the specific project.
-- Illustrative catalogs, examples, and generated documents are starting points,
-  not compliance or certification evidence by themselves.
-
-## Scaffolding
-
-The recommended starting point is the default `basic` scaffold:
+Use `basic` when you want a small, standards-neutral project structure:
 
 ```bash
-osqar new --language cpp --name controller
+osqar new --language c --name controller
 osqar new --language rust --name monitor --no-diagrams
 ```
 
-Reference-project scaffolding may be available from a source checkout. Run
-`osqar new --help` to inspect the options provided by the installed version.
-Generated projects currently target Python `>=3.9,<3.14`; the framework package
-targets Python `>=3.9,<3.15`.
+Basic scaffolds are available for C, C++, Python, and Rust.
 
-## Documentation and downloads
+### ASIL-target examples — learn from explicit, incomplete links
 
-- [Framework documentation](https://bitvortex.github.io/OSQAr/)
-- [Reference examples](https://bitvortex.github.io/OSQAr/examples)
-- [Published releases and evidence bundles](https://github.com/BitVortex/OSQAr/releases)
-- [Issue tracker](https://github.com/BitVortex/OSQAr/issues)
+Use these examples to explore how a project **targeting ASIL D** might link
+bounded standards claims to draft requirements, implementation, planned
+verification, and pending evidence:
+
+```bash
+osqar new --language c --template asil_example_c --name asil_c_walkthrough
+osqar new --language rust --template asil_example_rust --name asil_rust_walkthrough
+```
+
+Both examples deliberately keep evidence pending and label project policy as
+project policy. They demonstrate exemplary links; generating or building one
+does not establish ASIL qualification. Before project use, replace the example
+catalog declarations, interpretations, requirements, acceptance criteria, tool
+assumptions, and evidence records.
+
+See [Understanding the ASIL-target examples](docs/asil_examples.rst) for the
+common evidence model, language-specific differences, and tailoring checklist.
+
+## The OSQAr workflow
+
+1. **Author** — describe stable needs and explicit links in reStructuredText.
+2. **Build** — render readable Sphinx documentation and export `needs.json`.
+3. **Check** — run traceability, evidence-state, impact, checksum, and policy
+   checks selected by the project.
+4. **Package** — prepare an evidence shipment and its integrity manifest.
+5. **Verify and integrate** — validate received bytes before intake and preserve
+   provenance in a workspace.
+
+A common producer command is:
+
+```bash
+osqar shipment prepare --project . --archive
+```
+
+A common integrator sequence is:
+
+```bash
+osqar shipment verify --shipment received/component
+osqar workspace intake --root workspace --shipment received/component
+osqar workspace verify --root workspace --recursive
+```
+
+Run `osqar --help` or `osqar <command> --help` for installed-version help.
+
+## Documentation map
+
+### New users
+
+- [Getting started](docs/getting_started.rst) — install, scaffold, build, inspect,
+  and prepare a first shipment.
+- [Understanding the ASIL-target examples](docs/asil_examples.rst) — compare the
+  C and Rust examples without confusing a target with achieved qualification.
+- [Project setup](docs/project_setup_from_scratch.rst) — start cleanly or migrate
+  an existing codebase.
+
+### Task guides
+
+- [Supplier guide](docs/suppliers_guide.rst) — produce an evidence shipment.
+- [Integrator guide](docs/integrators_guide.rst) — verify and intake a shipment.
+- [CI integration](docs/ci_integration.rst) — run repeatable checks in automation.
+- [Lifecycle management](docs/lifecycle_management.rst) — baselines, changes,
+  and release discipline.
+- [Multi-project workflows](docs/multi_project_workflows.rst) — dependency closure
+  and workspace operations.
+
+### Power-user reference
+
+- [CLI reference](docs/cli_reference.rst) — commands, flags, outputs, and exits.
+- [Configuration and hooks](docs/configuration_and_hooks.rst) — project and
+  workspace configuration.
+- [Evidence acceptance](docs/evidence_acceptance.rst) — controlled evidence
+  states and fail-closed validation boundaries.
+- [Typed traceability](docs/typed_traceability.rst) — directed profiles,
+  qualification rules, and API projection.
+- [Tool-reliance boundary](docs/tool_reliance_boundary.rst) — separate mechanical
+  checks from project-specific tool assurance.
+- [Release manifest](docs/release_manifest.rst) — closed payload verification.
+
+## What OSQAr checks—and what it cannot conclude
+
+A successful command means only that the named rules executed successfully for
+the supplied inputs. Depending on the command, OSQAr can check structure,
+identifiers, authored link direction, profile rules, evidence state, file
+identity, checksums, manifests, and closed payload membership.
+
+OSQAr cannot establish that:
+
+- requirements or architecture are complete or technically correct;
+- a standards interpretation is valid or applicable;
+- verification methods and acceptance criteria are adequate;
+- evidence is independent, sufficient, or accepted by an authority;
+- a tool is qualified for a specific relied-upon use; or
+- a system or component is safe, compliant, certified, or qualified.
+
+Those conclusions require competent project-specific engineering, review,
+assessment, and authorization.
 
 ## Development
 
@@ -125,10 +159,12 @@ git clone https://github.com/BitVortex/OSQAr.git
 cd OSQAr
 poetry install
 ./osqar build-docs
+poetry run python -m pytest -q tests
 ```
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for contributor setup, tests, and review
-expectations.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contributor setup and review gates.
+Published archives are available from
+[GitHub Releases](https://github.com/BitVortex/OSQAr/releases).
 
 ## License
 

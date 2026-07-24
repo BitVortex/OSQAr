@@ -336,9 +336,9 @@ def test_repository_inventory_is_deterministic_complete_and_excludes_self_refere
     second = scan_repository_references(ROOT)
 
     assert first == second
-    assert len(first) == 147
+    assert len(first) == 139
     assert len({(ref.edition, ref.part, ref.clause, ref.table) for ref in first}) == 66
-    assert len({ref.source_path for ref in first}) == 23
+    assert len({ref.source_path for ref in first}) == 21
     assert not any(ref.source_path.startswith("tests/") for ref in first)
     assert not any("iso26262_reference_catalog" in ref.source_path for ref in first)
     reliance_reference = next(
@@ -351,8 +351,8 @@ def test_repository_inventory_is_deterministic_complete_and_excludes_self_refere
     assert reliance_reference.column == 43
     assert reliance_reference.raw == "ISO 26262-8:2018 Clause 11"
     scanned_paths = {ref.source_path for ref in first}
-    assert "osqar_data/templates/asil-d_c/c/include/project.h" in scanned_paths
-    assert "osqar_data/templates/asil-d_c/c/src/project.c" in scanned_paths
+    assert "osqar_data/templates/asil_example/c/include/project.h" in scanned_paths
+    assert "osqar_data/templates/asil_example/c/src/project.c" in scanned_paths
 
 
 def test_packaged_catalog_covers_every_inventory_locator_and_exact_source_path() -> None:

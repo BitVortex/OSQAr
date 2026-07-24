@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
-project(osqar_asil_d_c C)
+project(asil_example_c C)
 
-# ── Compiler settings for ASIL D safety library ──
+# ── Example compiler settings (project policy; ASIL D target) ──
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
@@ -30,18 +30,18 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address,undefined -fn
 set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_COVERAGE} -fprofile-arcs -ftest-coverage -O0")
 
 # ── Library target ──
-add_library(osqar_asil_d STATIC src/project.c)
-target_include_directories(osqar_asil_d PUBLIC include)
-target_compile_options(osqar_asil_d PRIVATE ${SAFETY_FLAGS})
+add_library(asil_example_c STATIC src/project.c)
+target_include_directories(asil_example_c PUBLIC include)
+target_compile_options(asil_example_c PRIVATE ${SAFETY_FLAGS})
 
 # ── Test target ──
-add_executable(osqar_asil_d_tests tests/test_project.c)
-target_link_libraries(osqar_asil_d_tests PRIVATE osqar_asil_d)
-target_compile_options(osqar_asil_d_tests PRIVATE ${SAFETY_FLAGS})
+add_executable(asil_example_c_tests tests/test_project.c)
+target_link_libraries(asil_example_c_tests PRIVATE asil_example_c)
+target_compile_options(asil_example_c_tests PRIVATE ${SAFETY_FLAGS})
 
 # ── Test runner ──
 enable_testing()
-add_test(NAME asil_d_unit_tests COMMAND osqar_asil_d_tests)
+add_test(NAME asil_example_c_unit_tests COMMAND asil_example_c_tests)
 
 # ── Coverage target ──
 add_custom_target(coverage

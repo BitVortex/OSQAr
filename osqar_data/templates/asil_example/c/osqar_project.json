@@ -28,7 +28,7 @@
         "id": "cppcheck",
         "label": "Static Analysis (cppcheck)",
         "command": "./build-and-test.sh static-analysis",
-        "report": "cppcheck_report.txt"
+        "report": "static_analysis_report.txt"
       },
       {
         "id": "coverage",
@@ -61,36 +61,36 @@
         "activity": "Fuzzing Campaign (AFL++)",
         "status": "not_run",
         "reason": "tooling_constraint",
-        "description": "24-hour AFL++ fuzzing campaign with ASan+UBSan instrumentation against all external interfaces.",
-        "mitigation": "Comprehensive unit tests cover boundary conditions; fuzzing planned for dedicated CI runner."
+        "description": "An example 24-hour AFL++ campaign has not been run or authorized for this scaffold.",
+        "mitigation": "Select interfaces, instrumentation, duration, corpus, target environment, and acceptance criteria for the actual project."
       },
-      "misra_c": {
-        "activity": "MISRA C:2012 Compliance",
+      "coding_standard": {
+        "activity": "Project-selected C coding-standard analysis",
         "status": "not_run",
-        "reason": "commercial_tool_required",
-        "description": "Full MISRA C:2012 compliance verification requires a commercial static analysis tool.",
-        "mitigation": "cppcheck with MISRA addon covers a subset of rules; compiler -Werror -Wall -Wextra covers additional rules. Full MISRA compliance verification planned with qualified tool."
+        "reason": "project_method_required",
+        "description": "This scaffold does not demonstrate conformance to MISRA C:2012 or another C coding standard.",
+        "mitigation": "Select applicable rules, analysis tooling, deviation handling, and acceptance criteria for the actual project."
       },
       "mc_dc": {
-        "activity": "MC/DC Coverage (ASIL D)",
+        "activity": "Project-selected MC/DC assessment",
         "status": "not_run",
-        "reason": "commercial_tool_required",
-        "description": "MC/DC is addressed by ISO 26262-6 §9.4.4 and Table 9. This project currently plans commercial tooling for full MC/DC measurement.",
-        "mitigation": "gcov/lcov provides branch+block coverage as an approximation. Full MC/DC verification planned with qualified coverage tool."
+        "reason": "project_method_required",
+        "description": "General branch or block coverage is not MC/DC evidence, and this scaffold has no accepted MC/DC result.",
+        "mitigation": "Select a suitable project method, tool use, exclusions, provenance, and review criteria."
       },
       "stack_depth": {
         "activity": "Stack Depth Verification",
         "status": "not_run",
         "reason": "tooling_constraint",
         "description": "Worst-case stack depth analysis for all safety-related call paths.",
-        "mitigation": "No recursion guarantees bounded stack depth; manual stack analysis via compiler -fstack-usage flag."
+        "mitigation": "Define the target execution environment and analyze each relevant call path using a project-selected method."
       },
       "reproducible_build": {
         "activity": "Reproducible Build Verification",
         "status": "not_run",
         "reason": "tooling_constraint",
         "description": "Bit-identical binary across independent rebuilds with SOURCE_DATE_EPOCH.",
-        "mitigation": "Build system configured with SOURCE_DATE_EPOCH support; verification pending CI environment."
+        "mitigation": "Define the compared artifacts, controlled inputs, environment, and acceptance criterion, then record an independent comparison."
       }
     }
   }

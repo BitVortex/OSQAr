@@ -705,7 +705,7 @@
       "topic": "coding restrictions as OSQAr project policy",
       "reference_kind": "project_policy",
       "project_paraphrase": "Specific language versions, allocation rules, recursion bans, entry/exit constraints, and named coding-rule sets are template policy unless precisely supported by controlled text.",
-      "applicability": "ASIL-D C scaffold implementation constraints and project coding standards."
+      "applicability": "ASIL-target example implementation constraints and project-selected coding standards."
     },
     {
       "reference_id": "OSQAR-POLICY-8-C11-GPG-AUTHENTICITY",

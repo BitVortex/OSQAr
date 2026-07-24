@@ -1,7 +1,7 @@
 #pragma once
 
 /*
- * ASIL D SEooC C Library — Public API
+ * C example targeting ASIL D — Public API
  *
  * This header defines the public interface of the safety-related
  * component. All functions follow the SEooC error-reporting pattern:

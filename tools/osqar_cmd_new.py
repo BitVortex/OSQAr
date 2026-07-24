@@ -17,8 +17,9 @@ TEMPLATES_BASIC: dict[str, str] = {
     "rust": "rust",
 }
 
-TEMPLATES_ASIL_D_C: dict[str, str] = {
-    "c": "c",
+TEMPLATES_ASIL_EXAMPLE: dict[str, tuple[str, str]] = {
+    "asil_example_c": ("c", "c"),
+    "asil_example_rust": ("rust", "rust"),
 }
 
 TEMPLATES_EXAMPLE: dict[str, Path] = {
@@ -243,10 +244,14 @@ def cmd_new(args: argparse.Namespace) -> int:
         if template is None:
             print(f"ERROR: Unsupported language: {args.language}", file=sys.stderr)
             return 2
-    elif template_kind == "asil-d_c":
-        template = TEMPLATES_ASIL_D_C.get(args.language)
-        if template is None:
-            print(f"ERROR: ASIL-D C template only supports language=c (got {args.language})", file=sys.stderr)
+    elif template_kind in TEMPLATES_ASIL_EXAMPLE:
+        expected_language, template = TEMPLATES_ASIL_EXAMPLE[template_kind]
+        if args.language != expected_language:
+            print(
+                f"ERROR: {template_kind} requires language={expected_language} "
+                f"(got {args.language})",
+                file=sys.stderr,
+            )
             return 2
     else:
         template = None
@@ -266,10 +271,13 @@ def cmd_new(args: argparse.Namespace) -> int:
             return 2
         shutil.rmtree(dest)
 
-    if template_kind in ("basic", "asil-d_c"):
+    if template_kind == "basic" or template_kind in TEMPLATES_ASIL_EXAMPLE:
+        resource_template = (
+            "asil_example" if template_kind in TEMPLATES_ASIL_EXAMPLE else template_kind
+        )
         try:
-            shared_src = _resource_dir("templates", template_kind, "shared")
-            lang_src = _resource_dir("templates", template_kind, template)
+            shared_src = _resource_dir("templates", resource_template, "shared")
+            lang_src = _resource_dir("templates", resource_template, template)
         except ModuleNotFoundError:
             print(
                 "ERROR: packaged templates not available (missing osqar_data).\n"
@@ -358,9 +366,13 @@ def register(sub: argparse._SubParsersAction) -> None:
     )
     p_new.add_argument(
         "--template",
-        choices=["basic", "example", "asil-d_c"],
+        choices=["basic", "example", "asil_example_c", "asil_example_rust"],
         default="basic",
-        help="Template profile (default: basic; 'example' copies the full reference examples; 'asil-d_c' provides ASIL D scaffolding for C libraries)",
+        help=(
+            "Template profile (default: basic; 'example' copies a reference "
+            "example; 'asil_example_c' and 'asil_example_rust' provide "
+            "incomplete examples for projects targeting ASIL D)"
+        ),
     )
     p_new.add_argument(
         "--force", action="store_true", help="Overwrite destination if it exists"

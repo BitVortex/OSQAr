@@ -1,76 +1,122 @@
-==================================
-Getting Started with OSQAr
-==================================
+Getting Started
+===============
 
-If you're new to OSQAr, this page gets you from zero to your first auditable evidence shipment in about five minutes.
+This guide takes you from installation to a rendered OSQAr project and explains
+what each step proves. Start with the generic scaffold; use the ASIL-target
+examples only after you understand the basic evidence workflow.
 
-What OSQAr is
-=============
+What OSQAr gives you
+====================
 
-OSQAr is a **documentation-first framework** for producing, verifying, and integrating **auditable evidence shipments** for safety/compliance work.
+An OSQAr project is a documentation and evidence workspace. It can contain:
 
-Think of it as "CI for traceability": you write structured requirements and architecture in reStructuredText, link them together with ``sphinx-needs``, run verification checks, and package everything into an integrity-protected shipment that an integrator or auditor can verify independently.
+* structured requirements, architecture, verification, and lifecycle records;
+* explicit links exported to machine-readable ``needs.json``;
+* implementation, tests, reports, and project configuration;
+* checksums and shipment metadata for transfer and archive.
 
-**One command to ship:**
+OSQAr validates selected mechanical rules. It cannot determine technical
+correctness, standards applicability, evidence sufficiency, safety, compliance,
+certification, or qualification.
 
-.. code-block:: console
+1. Install the CLI
+==================
 
-   osqar shipment prepare --project . --archive
-
-This builds your docs, runs traceability checks, generates checksums, and creates a ZIP archive — all in one shot.
-
-Install
-=======
-
-OSQAr is a Python package. Install it once:
-
-.. code-block:: console
+The lowest-friction installation uses ``pipx``::
 
    pipx install osqar
    osqar --help
 
-Build your first shipment
+For repository development, follow ``CONTRIBUTING.md`` and use the root
+``./osqar`` wrapper.
+
+2. Create a basic project
 =========================
 
-Scaffold a project, write one requirement, build:
+Choose the implementation language used by your project::
 
-.. code-block:: console
+   osqar new --language rust --name first_osqar_project
+   cd first_osqar_project
 
-   # 1. Create a new C project
-   osqar new --language c --name hello_safety --destination .
+The default ``basic`` scaffold is intentionally small and standards-neutral.
+Run ``osqar new --help`` to see templates available in the installed version.
 
-   # 2. Build the documentation with traceability
-   cd hello_safety
+3. Build and inspect
+====================
+
+Build the Sphinx documentation and open it::
+
    osqar build-docs
-
-   # 3. Open it in your browser
    osqar open-docs
 
-That's it — you have rendered documentation with a traceability graph, a ``needs.json`` export, and PlantUML diagram support.
+The build produces rendered HTML and a ``needs.json`` export under ``_build``.
+Inspect the generated pages and source RST files before changing them.
 
-For a full end-to-end run including test execution and evidence reports, check out the reference examples:
+4. Author one controlled change
+===============================
 
-.. code-block:: console
+Open ``01_requirements.rst`` and replace an example requirement with a real,
+uniquely identified project requirement. Then update the linked architecture or
+verification record and rebuild::
 
-   cd examples/python_hello_world
-   ./build-and-test.sh
+   osqar build-docs
+
+Stable identifiers are long-lived evidence addresses. Rename them only through
+a controlled migration that also updates every inbound and outbound reference.
+
+5. Run checks
+=============
+
+Run the checks selected by the project configuration::
+
+   osqar doctor --project .
+
+For an explicit traceability report::
+
+   osqar traceability _build/html/needs.json \
+     --json-report _build/html/traceability_report.json
+
+A successful report means the executed rules passed for those bytes. It is not
+a technical approval of the requirement or its links.
+
+6. Prepare a shipment
+=====================
+
+When the project content and configured checks are ready for review::
+
    osqar shipment prepare --project . --archive
 
-Where to go next
-================
+The command assembles the configured output and integrity data. Review its
+reports and contents before transfer. The receiver should independently verify
+the shipment; see :doc:`integrators_guide`.
 
-**By role:**
+Choose your next path
+=====================
 
-- :doc:`suppliers_guide` — produce auditable evidence shipments for a component
-- :doc:`integrators_guide` — verify, intake, and integrate received shipments
-- :doc:`ci_integration` — wire OSQAr into GitHub Actions or your CI pipeline
+I want to learn from a richer example
+-------------------------------------
 
-**In depth:**
+Read :doc:`asil_examples`, then generate the C or Rust ASIL-target example.
+Those examples show bounded links and pending evidence; they do not establish
+qualification.
 
-- :doc:`using_the_boilerplate` — comprehensive guide: mental model, terms, copy/paste workflow recipes
-- :doc:`project_setup_from_scratch` — scaffold a new project or migrate an existing one
-- :doc:`cli_reference` — full per-command reference (all flags, exit codes, examples)
+I produce evidence for another team
+-----------------------------------
 
-**Real-world demonstration:**
+Continue with :doc:`suppliers_guide` and :doc:`ci_integration`.
 
-- `OSQAr-cJSON <https://github.com/BitVortex/OSQAr-cJSON>`_ — an ISO 26262 SEooC qualification attempt of the cJSON library using OSQAr, targeting ASIL D, with CI-driven evidence shipments and 88% statement coverage.
+I receive and combine evidence
+------------------------------
+
+Continue with :doc:`integrators_guide` and :doc:`multi_project_workflows`.
+
+I need exact configuration or command behavior
+----------------------------------------------
+
+Use :doc:`configuration_and_hooks` and :doc:`cli_reference`.
+
+I need strict evidence and qualification-profile semantics
+----------------------------------------------------------
+
+Use :doc:`evidence_acceptance`, :doc:`typed_traceability`, and
+:doc:`tool_reliance_boundary`.

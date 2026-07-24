@@ -1,5 +1,5 @@
 /*
- * ASIL D SEooC C Library — Unit Tests
+ * C example targeting ASIL D — Unit Tests
  *
  * Requirements-based unit tests for the safety-related component.
  * Every test case traces to a specific software safety requirement (REQ_SSR_*)
@@ -144,7 +144,6 @@ static void test_underflow_boundary_safe(void) {
 
 static void test_last_error_stores(void) {
     osqar_init();
-    int result = 0;
     osqar_safe_add(1, 2, NULL); /* Triggers NULL pointer error */
     const char *msg = osqar_last_error();
     TEST_ASSERT(strstr(msg, "NULL pointer") != NULL,

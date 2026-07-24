@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Rust ASIL-target example (`asil_example_rust`) with safe checked-arithmetic
+  source, Cargo tests, language-specific implementation records, and the same
+  bounded standards-claim links and pending-evidence model as the C example.
+- A dedicated guide explaining the purpose, limits, language differences, and
+  tailoring steps for both ASIL-target examples.
+
+### Changed
+- Renamed the public `asil-d_c` scaffold to `asil_example_c` and restructured
+  shared example content so it contains no C-only tool or language assumptions.
+- Reworked the README and documentation home into progressive newcomer, task
+  guide, and power-user paths, with a shorter first-project walkthrough and
+  clearer links to detailed reference material.
+- Reframed ASIL wording throughout current guidance: ASIL D is an intended
+  project target, while qualification, compliance, certification, evidence
+  acceptance, and safety remain explicitly unestablished by the examples.
+
 ## [0.10.1] - 2026-07-24
 
 ### Added

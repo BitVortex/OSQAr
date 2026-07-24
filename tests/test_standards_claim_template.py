@@ -7,14 +7,15 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 from tools import traceability_check
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TEMPLATE_CONF = ROOT / "osqar_data/templates/asil-d_c/c/conf.py"
-PROJECT_CONFIG = ROOT / "osqar_data/templates/asil-d_c/shared/osqar_project.json"
-TEMPLATE_SHARED = ROOT / "osqar_data/templates/asil-d_c/shared"
-TEMPLATE_C = ROOT / "osqar_data/templates/asil-d_c/c"
+TEMPLATE_ROOT = ROOT / "osqar_data/templates/asil_example"
+TEMPLATE_SHARED = TEMPLATE_ROOT / "shared"
+TEMPLATE_LANGUAGES = {"c": TEMPLATE_ROOT / "c", "rust": TEMPLATE_ROOT / "rust"}
 
 
 def _assert_claim_fields(claim: dict[str, object], expected: dict[str, object]) -> None:
@@ -26,8 +27,11 @@ def _assert_claim_fields(claim: dict[str, object], expected: dict[str, object]) 
             assert claim[field] == expected_value
 
 
-def test_template_declares_packaged_iso26262_catalog() -> None:
-    project = json.loads(PROJECT_CONFIG.read_text(encoding="utf-8"))
+@pytest.mark.parametrize("language", ["c", "rust"])
+def test_template_declares_packaged_iso26262_catalog(language: str) -> None:
+    project = json.loads(
+        (TEMPLATE_LANGUAGES[language] / "osqar_project.json").read_text(encoding="utf-8")
+    )
 
     assert project["standards"]["catalogs"] == [
         {
@@ -37,12 +41,49 @@ def test_template_declares_packaged_iso26262_catalog() -> None:
     ]
 
 
+def test_shared_showcase_content_is_language_neutral() -> None:
+    shared_text = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted(TEMPLATE_SHARED.glob("*.rst"))
+    ).lower()
+
+    for c_only_term in (
+        "misra c",
+        "cppcheck",
+        "cmake",
+        "gcov",
+        "gcc",
+        "null pointer",
+        "valgrind",
+    ):
+        assert c_only_term not in shared_text
+    assert not (TEMPLATE_SHARED / "04_implementation.rst").exists()
+
+
+@pytest.mark.parametrize(
+    ("language", "expected_terms"),
+    [
+        ("c", ("**language:** c", "**build system:** cmake")),
+        ("rust", ("**language:** rust", "**build system:** cargo")),
+    ],
+)
+def test_language_examples_describe_their_actual_implementation(
+    language: str, expected_terms: tuple[str, ...]
+) -> None:
+    implementation = (
+        TEMPLATE_LANGUAGES[language] / "04_implementation.rst"
+    ).read_text(encoding="utf-8").lower()
+
+    for expected in expected_terms:
+        assert expected in implementation
+
+
 def test_template_build_emits_generic_claim_fields_and_typed_relation(tmp_path: Path) -> None:
     source = tmp_path / "source"
     output = tmp_path / "output"
     source.mkdir()
     (source / "_static").mkdir()
-    shutil.copyfile(TEMPLATE_CONF, source / "conf.py")
+    shutil.copyfile(TEMPLATE_LANGUAGES["c"] / "conf.py", source / "conf.py")
     (source / "index.rst").write_text(
         """Standards claim sentinel
 ========================
@@ -102,13 +143,14 @@ def test_template_build_emits_generic_claim_fields_and_typed_relation(tmp_path: 
     assert needs["EVID_SENTINEL"]["type"] == "evid"
 
 
-def test_asil_d_showcase_builds_bounded_claims_and_pending_evidence(
-    tmp_path: Path,
+@pytest.mark.parametrize("language", ["c", "rust"])
+def test_asil_target_showcase_builds_bounded_claims_and_pending_evidence(
+    tmp_path: Path, language: str,
 ) -> None:
     source = tmp_path / "source"
     output = tmp_path / "output"
     shutil.copytree(TEMPLATE_SHARED, source)
-    shutil.copytree(TEMPLATE_C, source, dirs_exist_ok=True)
+    shutil.copytree(TEMPLATE_LANGUAGES[language], source, dirs_exist_ok=True)
     assert (source / "00_standards_claims.rst").is_file()
 
     completed = subprocess.run(
@@ -142,7 +184,7 @@ def test_asil_d_showcase_builds_bounded_claims_and_pending_evidence(
             "VER_UNIT_001 evaluates selected project requirements, but one activity "
             "does not prove the complete cited context."
         ),
-        "applicability": "Draft software safety requirements for this example C SEooC.",
+        "applicability": "Draft software safety requirements for this example SEooC.",
         "realized_by": [
             "REQ_SSR_NOMINAL_001",
             "REQ_SSR_FAULT_001",
@@ -161,7 +203,7 @@ def test_asil_d_showcase_builds_bounded_claims_and_pending_evidence(
             "policy, not thresholds prescribed by the cited table."
         ),
         "applicability": (
-            "Draft software-unit structural-coverage criteria for safety-related C "
+            "Draft software-unit structural-coverage criteria for safety-related "
             "source files."
         ),
         "realized_by": ["REQ_VER_COVERAGE_CRITERIA"],
@@ -181,7 +223,7 @@ def test_asil_d_showcase_builds_bounded_claims_and_pending_evidence(
             "SEooC assumptions of use; the linked lifecycle records are "
             "project-authored assumptions."
         ),
-        "applicability": "Draft integration assumptions for this example C SEooC.",
+        "applicability": "Draft integration assumptions for this example SEooC.",
         "realized_by": [
             "LM_AOU_INTEGRATION",
             "LM_AOU_INPUTS",
@@ -232,7 +274,7 @@ def test_asil_d_showcase_builds_bounded_claims_and_pending_evidence(
         "no organization-specific disposition",
         "examples are deliberately incomplete",
         "do not establish compliance, qualification, certification, or safety",
-        "gcov branch/block data is not proof of mc/dc",
+        "general-purpose branch or block coverage data is not proof of mc/dc",
     ):
         assert required_text in boundary
 

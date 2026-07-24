@@ -1,18 +1,17 @@
-Requirements (ISO 26262-6 §6.4 — ASIL D SEooC)
-===================================================
+Draft Requirements (ASIL D target)
+==================================
 
-This document specifies the software safety requirements (SSRs) derived from
-the Technical Safety Requirements (TSRs) allocated to software for this
-ASIL D SEooC qualification attempt.
+This document contains example software requirements for a Safety Element out
+of Context (SEooC). They are not shown as derived from an accepted technical
+safety concept and require project-specific derivation, review, and authorization.
 
 Naming convention: ``REQ_SSR_<CATEGORY>_<NNN>`` where categories are:
 ``NOMINAL``, ``FAULT``, ``INIT``, ``SHUTDOWN``, ``INTERFACE``, ``TIMING``,
 ``MONITOR``, ``MEMORY``, ``REDUNDANCY``, ``DIAG``, ``CONFIG``, ``EXTASSUME``.
 
 .. note::
-   This template follows :ref:`ISO 26262-6 §6.4.1 <iso-26262-6-6.4.1>` for
-   software safety requirements specification. Load ``iso26262-part6-software``
-   for ASIL-differentiated guidance on authoring these needs.
+   ISO 26262-6:2018 Clause 6.4.1 provides software safety requirements process
+   context. The records below remain draft project content.
 
 Nominal Operation
 -----------------
@@ -45,11 +44,11 @@ Fault Detection
    :status: draft
    :tags: ASIL_D;fault_detection;arithmetic_safety
 
-.. need:: The component shall detect NULL pointer dereference attempts
-          on all externally-exposed API functions.
+.. need:: The component shall reject invalid or absent output destinations
+          at externally exposed interfaces without undefined behaviour.
    :id: REQ_SSR_FAULT_003
    :status: draft
-   :tags: ASIL_D;fault_detection;null_pointer;defensive_programming
+   :tags: ASIL_D;fault_detection;invalid_reference;defensive_programming
 
 Fault Reaction
 --------------
@@ -89,9 +88,9 @@ Timing Constraints
 Memory Safety
 -------------
 
-.. need:: The component shall not use dynamic memory allocation (malloc,
-          calloc, realloc, free) after initialization. All memory shall
-          be statically allocated or allocated during init only.
+.. need:: The component shall not perform unbounded dynamic allocation after
+          initialization. Permitted allocation and ownership behavior shall be
+          defined for the selected language and target environment.
    :id: REQ_SSR_MEMORY_001
    :status: draft
    :tags: ASIL_D;memory_safety;no_dynamic_allocation
@@ -149,8 +148,8 @@ Assumptions of Use (SEooC — general guidance in ISO 26262-10 §9.1)
    :status: draft
    :tags: ASIL_D;SEooC;assumption_of_use;error_handling
 
-.. need:: **Toolchain**: The integrator shall use the compiler and C runtime
-          versions identified by this project's reviewed tool-use analysis.
+.. need:: **Toolchain**: The integrator shall use the compiler, language runtime,
+          and build-tool versions identified by this project's reviewed tool-use analysis.
           Classification and any qualification action shall be determined for
           the actual use case under ISO 26262-8 Clause 11.
    :id: REQ_SSR_EXTASSUME_004

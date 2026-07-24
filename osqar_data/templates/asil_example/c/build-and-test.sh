@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 #
-# ASIL D SEooC C Library — Verification Pipeline
+# C example targeting ASIL D — Verification Pipeline
 # ===============================================
-# This script executes the full verification pipeline for the ASIL D C library
-# qualification: build, test, sanitize, coverage, static analysis, valgrind,
-# complexity, and reproducible build verification.
+# This script executes example build, test, coverage, and analysis commands.
+# Their execution does not establish qualification or evidence acceptance.
 #
 # Usage: ./build-and-test.sh [action]
 #   all              Run the full pipeline (default)
@@ -32,7 +31,7 @@ _cmake_build() {
     mkdir -p "${BUILD_DIR}"
     cmake -S . -B "${BUILD_DIR}" \
         -DCMAKE_BUILD_TYPE="${build_type}" \
-        -DCMAKE_C_COMPILER="${CC:-gcc}"
+        -DCMAKE_C_COMPILER="${CC:-cc}"
     cmake --build "${BUILD_DIR}" -- -j"$(nproc 2>/dev/null || echo 2)"
 }
 
@@ -108,17 +107,17 @@ do_static_analysis() {
             --suppress=missingIncludeSystem \
             -I "${INCLUDE_DIR}" \
             "${SRC_DIR}" "${INCLUDE_DIR}" \
-            --xml --xml-version=2 2>cppcheck_report.xml || true
-        echo "Static analysis report written to cppcheck_report.xml"
+            --xml --xml-version=2 2>static_analysis_report.xml || true
+        echo "Static analysis report written to static_analysis_report.xml"
         
         # Also produce a human-readable summary
         cppcheck --enable=all --inconclusive --std=c11 \
             --suppress=missingIncludeSystem \
             -I "${INCLUDE_DIR}" \
-            "${SRC_DIR}" "${INCLUDE_DIR}" > cppcheck_report.txt 2>&1 || true
-        echo "Human-readable report written to cppcheck_report.txt"
+            "${SRC_DIR}" "${INCLUDE_DIR}" > static_analysis_report.txt 2>&1 || true
+        echo "Human-readable report written to static_analysis_report.txt"
     else
-        echo "cppcheck not found — skipping static analysis" > cppcheck_report.txt
+        echo "cppcheck not found — skipping static analysis" > static_analysis_report.txt
     fi
 }
 
@@ -129,7 +128,7 @@ do_valgrind() {
         valgrind --leak-check=full --show-leak-kinds=all \
             --error-exitcode=1 \
             --track-origins=yes \
-            "${BUILD_DIR}/osqar_asil_d_tests" > valgrind_report.txt 2>&1 || true
+            "${BUILD_DIR}/asil_example_c_tests" > valgrind_report.txt 2>&1 || true
         echo "Valgrind report written to valgrind_report.txt"
     else
         echo "Valgrind not found — skipping" > valgrind_report.txt
@@ -151,7 +150,7 @@ do_complexity() {
 do_reproducible() {
     echo "=== Verifying reproducible build ==="
     do_build
-    sha256sum "${BUILD_DIR}/libosqar_asil_d.a" > checksums.txt 2>/dev/null || true
+    sha256sum "${BUILD_DIR}/libasil_example_c.a" > checksums.txt 2>/dev/null || true
     echo "Build artifact checksum written to checksums.txt"
 }
 
@@ -169,7 +168,7 @@ do_all() {
     echo ""
     echo "=== Verification Pipeline Complete ==="
     echo "Reports generated:"
-    ls -la test_results.xml coverage_report.txt cppcheck_report.txt \
+    ls -la test_results.xml coverage_report.txt static_analysis_report.txt \
         valgrind_report.txt complexity_report.txt checksums.txt 2>/dev/null || true
 }
 

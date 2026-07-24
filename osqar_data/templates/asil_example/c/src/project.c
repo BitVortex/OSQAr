@@ -1,5 +1,5 @@
 /*
- * ASIL D SEooC C Library — Implementation
+ * C example targeting ASIL D — Implementation
  *
  * Safety-related functions implementing the public API defined in project.h.
  * The following restrictions are OSQAr template policy, selected in the

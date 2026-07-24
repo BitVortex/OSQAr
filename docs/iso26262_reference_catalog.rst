@@ -571,7 +571,7 @@ OSQAR-POLICY-6-C8-CODING-RESTRICTIONS — coding restrictions as OSQAr project p
 
 :Location: ISO 26262-6:2018, Clause 8
 :Classification: project policy
-:Applicability: ASIL-D C scaffold implementation constraints and project coding standards.
+:Applicability: ASIL-target example implementation constraints and project-selected coding standards.
 :OSQAr paraphrase: Specific language versions, allocation rules, recursion bans, entry/exit constraints, and named coding-rule sets are template policy unless precisely supported by controlled text.
 
 OSQAR-POLICY-8-C11-GPG-AUTHENTICITY — GPG authenticity mechanism as OSQAr project policy

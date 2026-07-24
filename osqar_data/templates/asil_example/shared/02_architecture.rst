@@ -1,16 +1,17 @@
-Architecture (ISO 26262-6 §7.4 — ASIL D SEooC)
+Draft Architecture (ASIL D target SEooC example)
 ================================================
 
-This document describes the software architectural design implementing
-the software safety requirements. ISO 26262-6 §7.4.5 provides the context for
-architectural views. The static structure, dynamic behaviour, data flow, fault
-handling, and freedom-from-interference content below is the OSQAr project layout.
+This document contains example software-architecture proposals for a project
+targeting ASIL D. They are not an accepted design and are not shown to satisfy
+the draft requirements. ISO 26262-6:2018 Clause 7.4.5 provides context for
+architectural views; the specific structure, behaviour, data flow, and fault
+handling below remain project-authored example content.
 
 Naming convention: ``ARCH_<COMPONENT>_<NNN>``.
 
 .. note::
-   Load ``iso26262-part6-software`` for ASIL-differentiated architecture
-   design principles and freedom-from-interference patterns.
+   ``ASIL_D`` tags record the example's intended target classification. They do
+   not establish that any architecture objective or requirement is satisfied.
 
 Static Structure
 ----------------

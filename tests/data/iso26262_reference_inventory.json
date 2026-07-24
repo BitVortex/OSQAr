@@ -125,22 +125,20 @@
     {
       "reference_id": "ISO26262-6:2018-C6.4",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/shared/01_requirements.rst",
         "skills/compliance-documentation/SKILL.md"
       ]
     },
     {
       "reference_id": "ISO26262-6:2018-C6.4.1",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/shared/00_standards_claims.rst",
-        "osqar_data/templates/asil-d_c/shared/01_requirements.rst",
+        "osqar_data/templates/asil_example/shared/00_standards_claims.rst",
+        "osqar_data/templates/asil_example/shared/01_requirements.rst",
         "skills/iso26262-part6-software/SKILL.md"
       ]
     },
     {
       "reference_id": "ISO26262-6:2018-C7.4",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/shared/02_architecture.rst",
         "skills/compliance-documentation/SKILL.md"
       ]
     },
@@ -153,7 +151,7 @@
     {
       "reference_id": "ISO26262-6:2018-C7.4.5",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/shared/02_architecture.rst",
+        "osqar_data/templates/asil_example/shared/02_architecture.rst",
         "skills/iso26262-part6-software/SKILL.md"
       ]
     },
@@ -172,8 +170,7 @@
     {
       "reference_id": "ISO26262-6:2018-C8.4",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/c/include/project.h",
-        "osqar_data/templates/asil-d_c/shared/04_implementation.rst",
+        "osqar_data/templates/asil_example/c/include/project.h",
         "skills/compliance-documentation/SKILL.md"
       ]
     },
@@ -186,23 +183,23 @@
     {
       "reference_id": "ISO26262-6:2018-C8.4.5",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/c/CMakeLists.txt",
-        "osqar_data/templates/asil-d_c/c/src/project.c"
+        "osqar_data/templates/asil_example/c/CMakeLists.txt",
+        "osqar_data/templates/asil_example/c/src/project.c"
       ]
     },
     {
       "reference_id": "ISO26262-6:2018-T6",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/c/CMakeLists.txt",
-        "osqar_data/templates/asil-d_c/c/include/project.h",
-        "osqar_data/templates/asil-d_c/c/src/project.c",
+        "osqar_data/templates/asil_example/c/CMakeLists.txt",
+        "osqar_data/templates/asil_example/c/include/project.h",
+        "osqar_data/templates/asil_example/c/src/project.c",
         "skills/iso26262-part6-software/SKILL.md"
       ]
     },
     {
       "reference_id": "ISO26262-6:2018-C9",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/shared/03_verification.rst"
+        "osqar_data/templates/asil_example/shared/03_verification.rst"
       ]
     },
     {
@@ -215,7 +212,7 @@
       "reference_id": "ISO26262-6:2018-T7",
       "source_paths": [
         "docs/agent_skills_usage.rst",
-        "osqar_data/templates/asil-d_c/shared/04_implementation.rst",
+        "osqar_data/templates/asil_example/c/04_implementation.rst",
         "skills/iso26262-part6-software/SKILL.md"
       ]
     },
@@ -229,7 +226,6 @@
     {
       "reference_id": "ISO26262-6:2018-C9.4.4",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/shared/osqar_project.json",
         "skills/SKILL_INDEX.md"
       ]
     },
@@ -237,10 +233,8 @@
       "reference_id": "ISO26262-6:2018-T9",
       "source_paths": [
         "docs/agent_skills_usage.rst",
-        "osqar_data/templates/asil-d_c/c/README.md",
-        "osqar_data/templates/asil-d_c/shared/00_standards_claims.rst",
-        "osqar_data/templates/asil-d_c/shared/03_verification.rst",
-        "osqar_data/templates/asil-d_c/shared/osqar_project.json",
+        "osqar_data/templates/asil_example/shared/00_standards_claims.rst",
+        "osqar_data/templates/asil_example/shared/03_verification.rst",
         "skills/SKILL_INDEX.md",
         "skills/iso26262-part6-software/SKILL.md"
       ]
@@ -248,7 +242,7 @@
     {
       "reference_id": "ISO26262-6:2018-C10",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/shared/03_verification.rst"
+        "osqar_data/templates/asil_example/shared/06_lifecycle_management.rst"
       ]
     },
     {
@@ -278,7 +272,7 @@
     {
       "reference_id": "ISO26262-6:2018-C11",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/shared/03_verification.rst"
+        "osqar_data/templates/asil_example/shared/06_lifecycle_management.rst"
       ]
     },
     {
@@ -364,10 +358,10 @@
       "source_paths": [
         "docs/agent_skills_usage.rst",
         "docs/tool_reliance_boundary.rst",
-        "osqar_data/templates/asil-d_c/shared/01_requirements.rst",
-        "osqar_data/templates/asil-d_c/shared/04_implementation.rst",
-        "osqar_data/templates/asil-d_c/shared/06_lifecycle_management.rst",
-        "osqar_data/templates/asil-d_c/shared/_static/gaps.rst",
+        "osqar_data/templates/asil_example/c/04_implementation.rst",
+        "osqar_data/templates/asil_example/shared/01_requirements.rst",
+        "osqar_data/templates/asil_example/shared/06_lifecycle_management.rst",
+        "osqar_data/templates/asil_example/shared/_static/gaps.rst",
         "osqar_data/templates/basic/shared/_static/gaps.rst",
         "skills/compliance-documentation/SKILL.md",
         "skills/iso26262-part6-software/SKILL.md",
@@ -417,8 +411,7 @@
     {
       "reference_id": "ISO26262-10:2018-C9",
       "source_paths": [
-        "osqar_data/templates/asil-d_c/c/README.md",
-        "osqar_data/templates/asil-d_c/shared/00_standards_claims.rst",
+        "osqar_data/templates/asil_example/shared/00_standards_claims.rst",
         "skills/iso26262-part6-software/SKILL.md"
       ]
     },
@@ -426,8 +419,7 @@
       "reference_id": "ISO26262-10:2018-C9.1",
       "source_paths": [
         "docs/agent_skills_usage.rst",
-        "osqar_data/templates/asil-d_c/shared/01_requirements.rst",
-        "osqar_data/templates/asil-d_c/shared/06_lifecycle_management.rst",
+        "osqar_data/templates/asil_example/shared/01_requirements.rst",
         "skills/compliance-documentation/SKILL.md",
         "skills/iso26262-part6-software/SKILL.md",
         "skills/vehicle-program-qualification/SKILL.md"

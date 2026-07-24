@@ -1,8 +1,10 @@
-"""Sphinx configuration for an ASIL D SEooC C library qualification project.
+"""Sphinx configuration for an incomplete Rust example targeting ASIL D.
 
-This template follows ISO 26262-6:2018 for software-level product development
-targeting ASIL D. It includes sphinx-needs, conditional PlantUML, reproducible
-JSON output, and need type definitions for software SEooC qualification.
+This template uses selected ISO 26262-6:2018 references as illustrative process
+context for a project targeting ASIL D. It includes sphinx-needs, conditional
+PlantUML, reproducible
+JSON output, and typed needs used to demonstrate exemplary links. It does not
+assert qualification, compliance, certification, or safety.
 
 For content-authoring guidance, load the `iso26262-part6-software` skill.
 """
@@ -14,7 +16,7 @@ import shutil
 from importlib.metadata import version as _package_version
 from pathlib import Path
 
-project = "ASIL D SEooC Qualification (C)"
+project = "ASIL Target Example (Rust)"
 author = "OSQAr"
 copyright = "OSQAr Contributors"
 
@@ -42,6 +44,7 @@ html_js_files = ["figure-zoom.js"]
 exclude_patterns = [
     "_build",
     "build",
+    "target",
     ".venv",
     "__pycache__",
     "bazel-*",
@@ -52,7 +55,7 @@ needs_css = "modern.css"
 needs_build_json = True
 needs_reproducible_json = True
 
-# Need types for software SEooC qualification targeting ASIL D.
+# Need types for a software SEooC example targeting ASIL D.
 # Includes the existing standards-claim fields plus the typed graph fields.
 # The graph policy is defined by traceability-qualification-v1.json.
 needs_types = [
@@ -137,7 +140,7 @@ def _ensure_file(path: Path, content: str) -> None:
 _ensure_file(
     Path(__file__).parent / "test_results.xml",
     '<?xml version="1.0" encoding="utf-8"?>\n'
-    '<testsuite name="asil_d_tests" tests="0" failures="0" errors="0" skipped="0" time="0" />\n',
+    '<testsuite name="pending_tests" tests="0" failures="0" errors="0" skipped="0" time="0" />\n',
 )
 
 _ensure_file(
@@ -151,13 +154,8 @@ _ensure_file(
 )
 
 _ensure_file(
-    Path(__file__).parent / "cppcheck_report.txt",
+    Path(__file__).parent / "static_analysis_report.txt",
     "Static analysis report not yet generated. Run: ./build-and-test.sh static-analysis\n",
-)
-
-_ensure_file(
-    Path(__file__).parent / "valgrind_report.txt",
-    "Valgrind report not yet generated. Run: ./build-and-test.sh valgrind\n",
 )
 
 
