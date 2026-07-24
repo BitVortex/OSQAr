@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![CI](https://github.com/bitvortex/OSQAr/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bitvortex/OSQAr/actions/workflows/ci.yml)
-[![Docs](https://github.com/bitvortex/OSQAr/actions/workflows/pages-deploy.yml/badge.svg?branch=main)](https://github.com/bitvortex/OSQAr/actions/workflows/pages-deploy.yml)
+[![Docs](https://github.com/bitvortex/OSQAr/actions/workflows/pages-deploy.yml/badge.svg?branch=main)](https://bitvortex.github.io/OSQAr/)
 
 # OSQAr — Open Safety Qualification Architecture
 
@@ -32,9 +32,9 @@ acceptance criteria, and evidence placeholders with project-authorized content.
 
 Next steps:
 
-1. Read the [five-minute guide](docs/getting_started.rst).
-2. Learn the [project → shipment → workspace workflow](docs/using_the_boilerplate.rst).
-3. Use the [CLI reference](docs/cli_reference.rst) when you need every option,
+1. Read the [five-minute guide](https://bitvortex.github.io/OSQAr/docs/getting_started.html).
+2. Learn the [project → shipment → workspace workflow](https://bitvortex.github.io/OSQAr/docs/using_the_boilerplate.html).
+3. Use the [CLI reference](https://bitvortex.github.io/OSQAr/docs/cli_reference.html) when you need every option,
    exit code, and resolution rule.
 
 The rendered documentation is available at the
@@ -70,7 +70,7 @@ does not establish ASIL qualification. Before project use, replace the example
 catalog declarations, interpretations, requirements, acceptance criteria, tool
 assumptions, and evidence records.
 
-See [Understanding the ASIL-target examples](docs/asil_examples.rst) for the
+See [Understanding the ASIL-target examples](https://bitvortex.github.io/OSQAr/docs/asil_examples.html) for the
 common evidence model, language-specific differences, and tailoring checklist.
 
 ## The OSQAr workflow
@@ -103,35 +103,35 @@ Run `osqar --help` or `osqar <command> --help` for installed-version help.
 
 ### New users
 
-- [Getting started](docs/getting_started.rst) — install, scaffold, build, inspect,
+- [Getting started](https://bitvortex.github.io/OSQAr/docs/getting_started.html) — install, scaffold, build, inspect,
   and prepare a first shipment.
-- [Understanding the ASIL-target examples](docs/asil_examples.rst) — compare the
+- [Understanding the ASIL-target examples](https://bitvortex.github.io/OSQAr/docs/asil_examples.html) — compare the
   C and Rust examples without confusing a target with achieved qualification.
-- [Project setup](docs/project_setup_from_scratch.rst) — start cleanly or migrate
+- [Project setup](https://bitvortex.github.io/OSQAr/docs/project_setup_from_scratch.html) — start cleanly or migrate
   an existing codebase.
 
 ### Task guides
 
-- [Supplier guide](docs/suppliers_guide.rst) — produce an evidence shipment.
-- [Integrator guide](docs/integrators_guide.rst) — verify and intake a shipment.
-- [CI integration](docs/ci_integration.rst) — run repeatable checks in automation.
-- [Lifecycle management](docs/lifecycle_management.rst) — baselines, changes,
+- [Supplier guide](https://bitvortex.github.io/OSQAr/docs/suppliers_guide.html) — produce an evidence shipment.
+- [Integrator guide](https://bitvortex.github.io/OSQAr/docs/integrators_guide.html) — verify and intake a shipment.
+- [CI integration](https://bitvortex.github.io/OSQAr/docs/ci_integration.html) — run repeatable checks in automation.
+- [Lifecycle management](https://bitvortex.github.io/OSQAr/docs/lifecycle_management.html) — baselines, changes,
   and release discipline.
-- [Multi-project workflows](docs/multi_project_workflows.rst) — dependency closure
+- [Multi-project workflows](https://bitvortex.github.io/OSQAr/docs/multi_project_workflows.html) — dependency closure
   and workspace operations.
 
 ### Power-user reference
 
-- [CLI reference](docs/cli_reference.rst) — commands, flags, outputs, and exits.
-- [Configuration and hooks](docs/configuration_and_hooks.rst) — project and
+- [CLI reference](https://bitvortex.github.io/OSQAr/docs/cli_reference.html) — commands, flags, outputs, and exits.
+- [Configuration and hooks](https://bitvortex.github.io/OSQAr/docs/configuration_and_hooks.html) — project and
   workspace configuration.
-- [Evidence acceptance](docs/evidence_acceptance.rst) — controlled evidence
+- [Evidence acceptance](https://bitvortex.github.io/OSQAr/docs/evidence_acceptance.html) — controlled evidence
   states and fail-closed validation boundaries.
-- [Typed traceability](docs/typed_traceability.rst) — directed profiles,
+- [Typed traceability](https://bitvortex.github.io/OSQAr/docs/typed_traceability.html) — directed profiles,
   qualification rules, and API projection.
-- [Tool-reliance boundary](docs/tool_reliance_boundary.rst) — separate mechanical
+- [Tool-reliance boundary](https://bitvortex.github.io/OSQAr/docs/tool_reliance_boundary.html) — separate mechanical
   checks from project-specific tool assurance.
-- [Release manifest](docs/release_manifest.rst) — closed payload verification.
+- [Release manifest](https://bitvortex.github.io/OSQAr/docs/release_manifest.html) — closed payload verification.
 
 ## What OSQAr checks—and what it cannot conclude
 

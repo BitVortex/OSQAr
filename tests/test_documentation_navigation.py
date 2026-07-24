@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
+DOCS_BASE_URL = "https://bitvortex.github.io/OSQAr/"
 
 
 @pytest.mark.source_checkout
@@ -16,13 +18,36 @@ def test_readme_routes_new_and_power_users_without_overstating_examples() -> Non
         "## Start here",
         "--template asil_example_c",
         "--template asil_example_rust",
-        "docs/getting_started.rst",
-        "docs/asil_examples.rst",
-        "docs/cli_reference.rst",
+        f"{DOCS_BASE_URL}docs/getting_started.html",
+        f"{DOCS_BASE_URL}docs/asil_examples.html",
+        f"{DOCS_BASE_URL}docs/cli_reference.html",
         "does not establish ASIL qualification",
     ):
         assert required in readme
     assert "asil-d_c" not in readme
+
+
+@pytest.mark.source_checkout
+def test_readme_documentation_links_target_rendered_github_pages() -> None:
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    targets = re.findall(r"\[[^]]+\]\(([^)]+)\)", readme)
+
+    assert (
+        "[![Docs](https://github.com/bitvortex/OSQAr/actions/workflows/"
+        f"pages-deploy.yml/badge.svg?branch=main)]({DOCS_BASE_URL})"
+    ) in readme
+    source_links = [target for target in targets if target.endswith(".rst")]
+    assert source_links == []
+
+    rendered_links = [
+        target for target in targets if target.startswith(f"{DOCS_BASE_URL}docs/")
+    ]
+    assert rendered_links
+    for target in rendered_links:
+        relative_html = target.removeprefix(DOCS_BASE_URL).split("#", maxsplit=1)[0]
+        assert relative_html.endswith(".html")
+        source = ROOT / f"{relative_html.removesuffix('.html')}.rst"
+        assert source.is_file(), target
 
 
 @pytest.mark.source_checkout
