@@ -518,7 +518,11 @@ Synopsis
 
 .. code-block:: console
 
-  # Violation check (default)
+  # Directed qualification check and optional collapsed API allocation view
+  osqar traceability <needs_json> --profile qualification [--json-report <path>]
+              [--api-requirements-output <csv>]
+
+  # Prefix-based compatibility check (default)
   osqar traceability <needs_json> [--json-report <path>]
               [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]
               [--req-prefix <prefix> ...] [--arch-prefix <prefix> ...]
@@ -541,6 +545,10 @@ Options
 
 - ``needs_json``: path to ``needs.json``
 - ``--json-report``: write a JSON report
+- ``--profile``: ``basic`` prefix compatibility mode (default) or directed ``qualification`` policy
+- ``--api-prefix``: repeatable implementation-ID prefix for API projection
+  (defaults to ``API_`` and ``IMPL_``)
+- ``--api-requirements-output``: optionally write the collapsed API-to-requirement CSV after validation
 - ``--format``: output mode — ``check`` (default) for violation checking, ``csv`` for traceability matrix export, ``xlsx`` for Excel spreadsheet export
 - ``--format-output``: file path for CSV/XLSX export (required with ``--format csv`` or ``--format xlsx``)
 - ``--lm-prefix``: lifecycle management ID prefix for CSV columns (repeatable; default: ``LM_``)
@@ -586,6 +594,11 @@ Examples
 
   # Standard traceability check
   osqar traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json
+
+  # Qualification graph plus API-to-requirement allocation artifact
+  osqar traceability ./_build/html/needs.json --profile qualification \\
+    --json-report ./_build/html/typed-traceability.json \\
+    --api-requirements-output ./_build/html/api-requirements.csv
 
   # Export traceability matrix for auditors (CSV)
   osqar traceability ./_build/html/needs.json --format csv --format-output traceability_matrix.csv
@@ -1537,3 +1550,25 @@ Example
   # Combine first, then check traceability
   osqar workspace combine --root examples
   osqar workspace traceability
+
+release-manifest generate / verify
+----------------------------------
+
+Create and verify a deterministic, schema-versioned, closed inventory at the
+final prepared release boundary:
+
+.. code-block:: console
+
+  osqar release-manifest generate --root dist/release-payload \
+    --output dist/OSQAR-RELEASE-MANIFEST.json \
+    --release-version v0.10.0 --source-revision <commit> \
+    --producer-command "release workflow" --tool-version 0.10.0
+  osqar release-manifest verify --root dist/release-payload \
+    --manifest dist/OSQAR-RELEASE-MANIFEST.json \
+    --release-version v0.10.0 --source-revision <commit>
+
+The JSON manifest lists every shipped payload with its byte size and SHA-256.
+Its explicit exclusions do not silently expand the inventory. The manifest is
+separate from inner shipment checksum files, preventing circular self-hashing.
+Closure and integrity checks are mechanical only; they imply no compliance,
+certification, qualification, or safety conclusion.

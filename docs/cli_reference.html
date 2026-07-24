@@ -6,15 +6,15 @@
 <link rel="search" title="Search" href="../search.html" /><link rel="next" title="Configuration and hooks" href="configuration_and_hooks.html" /><link rel="prev" title="Integrating Verification into CI" href="ci_integration.html" />
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
-        <title>CLI Reference - OSQAr 0.10.0 documentation</title>
+        <title>CLI Reference - OSQAr 0.10.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common.css?v=bd9ab754" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=ffa536d2" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/layouts.css?v=448c382f" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/styles.css?v=6c8eb985" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
     <link rel="stylesheet" type="text/css" href="../_static/furo-fixes.css?v=fa4328a2" />
     
@@ -173,7 +173,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">OSQAr 0.10.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">OSQAr 0.10.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -197,7 +197,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">OSQAr 0.10.0 documentation</span>
+  <span class="sidebar-brand-text">OSQAr 0.10.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -230,6 +230,8 @@
 <li class="toctree-l1"><a class="reference internal" href="tool_reliance_boundary.html">Safety-tool reliance boundary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="evidence_acceptance.html">Evidence states and acceptance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="iso26262_reference_catalog.html">ISO 26262 Example Reference Catalog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typed_traceability.html">Typed qualification traceability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release_manifest.html">Closed release manifests</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">📦 Examples</span></p>
 <ul>
@@ -738,7 +740,11 @@ a sorted <code class="docutils literal notranslate"><span class="pre">needs</spa
 export a traceability matrix as CSV or Excel (XLSX) for auditor review.</p>
 <section id="id16">
 <h4>Synopsis<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Violation<span class="w"> </span>check<span class="w"> </span><span class="o">(</span>default<span class="o">)</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Directed<span class="w"> </span>qualification<span class="w"> </span>check<span class="w"> </span>and<span class="w"> </span>optional<span class="w"> </span>collapsed<span class="w"> </span>API<span class="w"> </span>allocation<span class="w"> </span>view
+<span class="go">osqar traceability &lt;needs_json&gt; --profile qualification [--json-report &lt;path&gt;]</span>
+<span class="go">            [--api-requirements-output &lt;csv&gt;]</span>
+
+<span class="gp"># </span>Prefix-based<span class="w"> </span>compatibility<span class="w"> </span>check<span class="w"> </span><span class="o">(</span>default<span class="o">)</span>
 <span class="go">osqar traceability &lt;needs_json&gt; [--json-report &lt;path&gt;]</span>
 <span class="go">            [--enforce-req-has-test] [--enforce-arch-traces-req] [--enforce-test-traces-req]</span>
 <span class="go">            [--req-prefix &lt;prefix&gt; ...] [--arch-prefix &lt;prefix&gt; ...]</span>
@@ -763,6 +769,10 @@ export a traceability matrix as CSV or Excel (XLSX) for auditor review.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">needs_json</span></code>: path to <code class="docutils literal notranslate"><span class="pre">needs.json</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--json-report</span></code>: write a JSON report</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--profile</span></code>: <code class="docutils literal notranslate"><span class="pre">basic</span></code> prefix compatibility mode (default) or directed <code class="docutils literal notranslate"><span class="pre">qualification</span></code> policy</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--api-prefix</span></code>: repeatable implementation-ID prefix for API projection
+(defaults to <code class="docutils literal notranslate"><span class="pre">API_</span></code> and <code class="docutils literal notranslate"><span class="pre">IMPL_</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--api-requirements-output</span></code>: optionally write the collapsed API-to-requirement CSV after validation</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--format</span></code>: output mode — <code class="docutils literal notranslate"><span class="pre">check</span></code> (default) for violation checking, <code class="docutils literal notranslate"><span class="pre">csv</span></code> for traceability matrix export, <code class="docutils literal notranslate"><span class="pre">xlsx</span></code> for Excel spreadsheet export</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--format-output</span></code>: file path for CSV/XLSX export (required with <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">csv</span></code> or <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">xlsx</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--lm-prefix</span></code>: lifecycle management ID prefix for CSV columns (repeatable; default: <code class="docutils literal notranslate"><span class="pre">LM_</span></code>)</p></li>
@@ -803,6 +813,11 @@ missing.</p>
 <h4>Examples<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h4>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Standard<span class="w"> </span>traceability<span class="w"> </span>check
 <span class="go">osqar traceability ./_build/html/needs.json --json-report ./_build/html/traceability_report.json</span>
+
+<span class="gp"># </span>Qualification<span class="w"> </span>graph<span class="w"> </span>plus<span class="w"> </span>API-to-requirement<span class="w"> </span>allocation<span class="w"> </span>artifact
+<span class="go">osqar traceability ./_build/html/needs.json --profile qualification \\</span>
+<span class="go">  --json-report ./_build/html/typed-traceability.json \\</span>
+<span class="go">  --api-requirements-output ./_build/html/api-requirements.csv</span>
 
 <span class="gp"># </span>Export<span class="w"> </span>traceability<span class="w"> </span>matrix<span class="w"> </span><span class="k">for</span><span class="w"> </span>auditors<span class="w"> </span><span class="o">(</span>CSV<span class="o">)</span>
 <span class="go">osqar traceability ./_build/html/needs.json --format csv --format-output traceability_matrix.csv</span>
@@ -1664,6 +1679,25 @@ scope.</p>
 </div>
 </section>
 </section>
+<section id="release-manifest-generate-verify">
+<h3>release-manifest generate / verify<a class="headerlink" href="#release-manifest-generate-verify" title="Link to this heading">¶</a></h3>
+<p>Create and verify a deterministic, schema-versioned, closed inventory at the
+final prepared release boundary:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">osqar release-manifest generate --root dist/release-payload \</span>
+<span class="go">  --output dist/OSQAR-RELEASE-MANIFEST.json \</span>
+<span class="go">  --release-version v0.10.0 --source-revision &lt;commit&gt; \</span>
+<span class="go">  --producer-command &quot;release workflow&quot; --tool-version 0.10.0</span>
+<span class="go">osqar release-manifest verify --root dist/release-payload \</span>
+<span class="go">  --manifest dist/OSQAR-RELEASE-MANIFEST.json \</span>
+<span class="go">  --release-version v0.10.0 --source-revision &lt;commit&gt;</span>
+</pre></div>
+</div>
+<p>The JSON manifest lists every shipped payload with its byte size and SHA-256.
+Its explicit exclusions do not silently expand the inventory. The manifest is
+separate from inner shipment checksum files, preventing circular self-hashing.
+Closure and integrity checks are mechanical only; they imply no compliance,
+certification, qualification, or safety conclusion.</p>
+</section>
 </section>
 </section>
 
@@ -1914,6 +1948,7 @@ scope.</p>
 <li><a class="reference internal" href="#id69">Example</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#release-manifest-generate-verify">release-manifest generate / verify</a></li>
 </ul>
 </li>
 </ul>
@@ -1929,7 +1964,7 @@ scope.</p>
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=82662543"></script>
+    <script src="../_static/documentation_options.js?v=261ea15a"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
