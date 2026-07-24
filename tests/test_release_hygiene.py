@@ -20,7 +20,7 @@ def test_release_version_gate_accepts_matching_tag_and_rejects_mismatch() -> Non
     script = ROOT / "tools" / "check_release_version.py"
 
     matching = subprocess.run(
-        [sys.executable, str(script), "--tag", "v0.10.1"],
+        [sys.executable, str(script), "--tag", "v0.10.2"],
         cwd=ROOT,
         capture_output=True,
         text=True,
