@@ -97,8 +97,12 @@ ASIL-differentiated guidance, RST examples, and pitfalls specific to OSQAr.
 reference in a qualification artifact should be verifiable against the
 published standard.
 
-Example: Authoring Software Requirements for an ASIL D C Library
-=================================================================
+Example: Authoring Toward an ASIL D Target in C
+===============================================
+
+This workflow starts from an incomplete example. Neither the scaffold nor
+agent-authored content establishes qualification; project-authorized review,
+accepted evidence, and the applicable assessment process remain necessary.
 
 **Agent loads (in order):**
 
@@ -126,7 +130,7 @@ Example: Authoring Software Requirements for an ASIL D C Library
 
 .. code-block:: bash
 
-   osqar new --language c --name my-lib-qualification --template asil-d_c
+   osqar new --language c --name my-lib-qualification --template asil_example_c
    # ... author documents ...
    python3 -m sphinx -b html -W . _build/html
    osqar traceability _build/html/needs.json --test-prefix VER_ --code-prefix IMPL_

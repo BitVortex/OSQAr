@@ -224,10 +224,11 @@ declarations::
      --project-config ./osqar_project.json \
      --json-report ./_build/html/traceability_report.json
 
-The ASIL-D C boilerplate includes an ISO 26262 declaration and claims only as
-worked examples. They are not a declaration about the standard applicable to a
-new project. Replace that declaration with a project-authorized catalog, for
-example::
+The ``asil_example_c`` and ``asil_example_rust`` scaffolds include an ISO 26262
+declaration and claims only as worked examples for projects targeting ASIL D.
+They do not establish qualification and are not declarations about the standard
+applicable to a new project. Replace that declaration with a project-authorized
+catalog, for example::
 
    {
      "standards": {
