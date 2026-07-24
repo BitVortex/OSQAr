@@ -22,6 +22,7 @@ from tools import osqar_cmd_framework
 from tools import osqar_cmd_gsn
 from tools import osqar_cmd_impact
 from tools import osqar_cmd_new
+from tools import osqar_cmd_release_manifest
 from tools import osqar_cmd_sign
 from tools import osqar_cmd_open_docs
 from tools import osqar_cmd_setup
@@ -44,6 +45,7 @@ def build_parser() -> argparse.ArgumentParser:
     osqar_cmd_traceability.register(sub)
     osqar_cmd_code_trace.register(sub)
     osqar_cmd_checksum.register(sub)
+    osqar_cmd_release_manifest.register(sub)
     osqar_cmd_framework.register(sub)
     osqar_cmd_gsn.register(sub)
 

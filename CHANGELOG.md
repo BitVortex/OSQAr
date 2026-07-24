@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.1] - 2026-07-24
+
+### Added
+- **Strict typed traceability qualification profile** with versioned relation rules,
+  directed cardinality and lifecycle checks, cycle/orphan rejection, deterministic
+  executed-rule reporting, and API-to-requirement projection with auditable paths.
+  Qualification evidence is bound to independently anchored activities accepted by
+  the framework validator; local status strings alone cannot establish acceptance.
+  (#25)
+- **Closed release-manifest contract** with a packaged v1 schema, deterministic
+  SHA-256/size inventory, required and optional artifact semantics, explicit
+  exclusions, exact-set verification, and fail-closed collision/path handling.
+  The release workflow now validates the final downloadable payload before either
+  PyPI or GitHub publication and derives release prose from the accepted manifest.
+  (#26)
+
+### Changed
+- The tag-release workflow now assembles producer outputs before signing,
+  attestation, checksums, and final outer-inventory verification. PyPI receives only
+  the accepted wheel and source distribution, isolated from other release assets.
+- Traceability's default compatibility profile remains non-qualifying; only a
+  passing strict qualification profile can emit a qualification-pass claim.
+
+### Fixed
+- Failed traceability and release-manifest operations invalidate owned stale outputs
+  without deleting or overwriting aliased payloads, manifests, or evidence files.
+- Release assets created after verification are excluded from publication; the only
+  final-inventory self-exception is the outer manifest itself.
+
 ## [0.10.0] - 2026-07-23
 
 ### Added

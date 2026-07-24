@@ -1,0 +1,38 @@
+{
+  "schema": "osqar.traceability-schema.v1",
+  "profile": "qualification",
+  "version": 1,
+  "entity_types": {
+    "requirement": {"prefixes": ["REQ_"]},
+    "architecture": {"prefixes": ["ARCH_"]},
+    "implementation": {"prefixes": ["IMPL_", "CODE_", "API_"], "kinds": ["api", "code", "component"]},
+    "verification": {"prefixes": ["VER_", "TEST_"]},
+    "result": {"prefixes": ["RESULT_"]},
+    "evidence": {"prefixes": ["EVID_"]},
+    "lifecycle": {"prefixes": ["LM_"], "kinds": ["assumption", "baseline", "configuration", "gap", "deviation"]},
+    "safety-case": {"prefixes": ["SC_"], "kinds": ["claim", "strategy", "context", "assumption", "evidence-reference"]}
+  },
+  "relations": {
+    "allocated_to": {"direction": "requirement->architecture", "source_minimum": 1, "source_maximum": null, "target_minimum": 1, "target_maximum": null},
+    "allocated_to_api": {"direction": "requirement->implementation", "source_minimum": 0, "source_maximum": null, "target_minimum": 0, "target_maximum": null},
+    "realized_by": {"direction": "architecture->implementation", "source_minimum": 1, "source_maximum": null, "target_minimum": 0, "target_maximum": null},
+    "verified_by": {"direction": "requirement->verification", "source_minimum": 1, "source_maximum": null, "target_minimum": 1, "target_maximum": null},
+    "produces": {"direction": "verification->result", "source_minimum": 1, "source_maximum": null, "target_minimum": 1, "target_maximum": 1},
+    "evidenced_by": {"direction": "result->evidence", "source_minimum": 1, "source_maximum": null, "target_minimum": 1, "target_maximum": null},
+    "supported_by": {"direction": "safety-case:claim->safety-case|result|evidence", "source_minimum": 1, "source_maximum": null},
+    "references": {"direction": "safety-case:evidence-reference->result|evidence", "source_minimum": 1, "source_maximum": null},
+    "constrains": {"direction": "lifecycle:assumption->requirement|architecture|verification", "source_minimum": 1, "source_maximum": null},
+    "applies_to": {"direction": "lifecycle:deviation->requirement|verification|result|evidence", "source_minimum": 1, "source_maximum": null}
+  },
+  "api_requirement_projection": {
+    "schema": "osqar.api-requirements.v1",
+    "audit_schema": "osqar.api-requirements-audit.v1",
+    "paths": [
+      "requirement->allocated_to->architecture->realized_by->implementation:api",
+      "requirement->allocated_to_api->implementation:api"
+    ],
+    "display_omits": ["architecture"],
+    "unallocated_apis": "explicit-row"
+  },
+  "boundary": "Project policy; these entity classes and cardinalities are not ISO 26262-prescribed graph cardinalities."
+}

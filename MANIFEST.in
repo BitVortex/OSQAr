@@ -9,6 +9,7 @@ recursive-include osqar_data/static *
 recursive-include osqar_data/governance *
 recursive-include osqar_data/profiles *
 recursive-include osqar_data/standards *
+recursive-include osqar_data/schemas *
 
 # Avoid shipping large/non-release directories
 prune _build

@@ -29,6 +29,7 @@ COMMAND_TEST_MATRIX = {
     "osqar_cmd_gsn": ("test_framework_command_matrix.py", "test_commands_reject_missing_or_malformed_inputs"),
     "osqar_cmd_impact": ("test_framework_command_matrix.py", "test_commands_reject_missing_or_malformed_inputs"),
     "osqar_cmd_new": ("test_framework_command_matrix.py", "test_commands_reject_missing_or_malformed_inputs"),
+    "osqar_cmd_release_manifest": ("test_release_manifest_cli.py", "test_verify_rejects_report_inside_shipment_without_stale_pass"),
     "osqar_cmd_setup": ("test_framework_command_matrix.py", "test_commands_reject_missing_or_malformed_inputs"),
     "osqar_cmd_shipment": ("test_framework_command_matrix.py", "test_commands_reject_missing_or_malformed_inputs"),
     "osqar_cmd_sign": ("test_command_negative_paths.py", "test_sign_create_rejects_success_without_signature"),

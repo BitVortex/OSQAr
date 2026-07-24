@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """`osqar traceability` subcommand."""
 
 from __future__ import annotations
@@ -7,10 +6,168 @@ import argparse
 import csv
 import io
 import json
+import sys
 from pathlib import Path
 
-from tools.traceability_check import _load_needs, _collect_trace_links
+from tools.traceability_check import _collect_trace_links, _load_needs
 from tools.traceability_check import cli as traceability_cli
+from tools.typed_traceability import (
+    API_AUDIT_SCHEMA,
+    project_api_requirement_paths,
+    project_api_requirements,
+    validate_typed_traceability,
+)
+
+API_REQUIREMENT_FIELDS = [
+    "API_ID",
+    "API_Title",
+    "Requirement_IDs",
+    "Requirement_Titles",
+    "Allocation_Status",
+    "Profile",
+    "Schema",
+]
+
+
+def _paths_alias(left: Path, right: Path) -> bool:
+    """Return whether two paths name the same lexical or existing filesystem object."""
+    if left == right:
+        return True
+    try:
+        return left.exists() and right.exists() and left.samefile(right)
+    except OSError:
+        return False
+
+
+def _run_typed_traceability(args: argparse.Namespace) -> int:
+    needs_path = Path(str(args.needs_json)).expanduser().resolve()
+    profile = str(getattr(args, "profile", "basic"))
+    artifact_arg = getattr(args, "api_requirements_output", None)
+    artifact = Path(artifact_arg).expanduser().resolve() if artifact_arg else None
+    audit = artifact.with_suffix(".audit.json") if artifact is not None else None
+    report_arg = getattr(args, "json_report", None)
+    report_path = Path(report_arg).expanduser().resolve() if report_arg else None
+    evidence_arg = getattr(args, "evidence_project", None)
+    evidence_project = Path(evidence_arg).expanduser().resolve() if evidence_arg else None
+    validation_context = {
+        "evidence_project": evidence_project,
+        "expected_source_revision": getattr(args, "source_revision", None),
+        "expected_configuration_sha256": getattr(args, "configuration_sha256", None),
+    }
+    api_prefixes = tuple(getattr(args, "api_prefix", None) or ("API_", "IMPL_"))
+
+    outputs = tuple(path for path in (artifact, audit, report_path) if path is not None)
+    protected_inputs = tuple(
+        path for path in (needs_path, evidence_project) if path is not None
+    )
+    for output in outputs:
+        for protected in protected_inputs:
+            if _paths_alias(output, protected):
+                print(
+                    f"ERROR: traceability output {output} aliases input {protected}",
+                    file=sys.stderr,
+                )
+                return 2
+    for index, output in enumerate(outputs):
+        for other in outputs[index + 1:]:
+            if _paths_alias(output, other):
+                print(
+                    f"ERROR: traceability outputs alias each other: {output} and {other}",
+                    file=sys.stderr,
+                )
+                return 2
+
+    # A failed invocation must not leave stale files that appear to belong to it.
+    try:
+        for output in outputs:
+            output.unlink(missing_ok=True)
+    except OSError as exc:
+        print(f"ERROR: failed to invalidate stale traceability output: {exc}", file=sys.stderr)
+        return 2
+
+    if artifact is not None and profile != "qualification":
+        print(
+            "ERROR: --api-requirements-output requires --profile qualification",
+            file=sys.stderr,
+        )
+        return 2
+
+    try:
+        needs = _load_needs(needs_path)
+    except Exception as exc:  # noqa: BLE001
+        print(f"ERROR: Failed to read {needs_path}: {exc}", file=sys.stderr)
+        return 2
+
+    if profile == "qualification":
+        report = validate_typed_traceability(needs, profile=profile, **validation_context)
+        if report_path is not None:
+            try:
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                report_path.write_text(
+                    json.dumps(report.as_dict(), indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+            except OSError as exc:
+                print(f"ERROR: failed to write typed traceability report: {exc}", file=sys.stderr)
+                return 2
+        if report.status != "PASS":
+            print(
+                f"Typed traceability: FAIL ({len(report.violations)} violation(s))",
+                file=sys.stderr,
+            )
+            for violation in report.violations:
+                print(f"  - {violation}", file=sys.stderr)
+            return 1
+        print(f"Typed traceability: PASS ({len(report.executed_rules)} rules)")
+
+    if artifact is not None and audit is not None:
+        try:
+            rows = project_api_requirements(
+                needs,
+                profile=profile,
+                api_prefixes=api_prefixes,
+                **validation_context,
+            )
+            paths = project_api_requirement_paths(
+                needs,
+                profile=profile,
+                api_prefixes=api_prefixes,
+                **validation_context,
+            )
+            csv_buffer = io.StringIO(newline="")
+            writer = csv.DictWriter(csv_buffer, fieldnames=API_REQUIREMENT_FIELDS)
+            writer.writeheader()
+            writer.writerows(rows)
+            audit_text = json.dumps(
+                {
+                    "schema": API_AUDIT_SCHEMA,
+                    "profile": profile,
+                    "paths": paths,
+                    "limitation": (
+                        "The CSV collapses architecture for presentation; this audit "
+                        "file preserves authored intermediate paths."
+                    ),
+                },
+                indent=2,
+                sort_keys=True,
+            ) + "\n"
+            artifact.parent.mkdir(parents=True, exist_ok=True)
+            audit.parent.mkdir(parents=True, exist_ok=True)
+            artifact.write_text(csv_buffer.getvalue(), encoding="utf-8")
+            audit.write_text(audit_text, encoding="utf-8")
+        except (OSError, ValueError) as exc:
+            for output in outputs:
+                try:
+                    output.unlink(missing_ok=True)
+                except OSError:
+                    pass
+            print(f"ERROR: failed to write API allocation artifacts: {exc}", file=sys.stderr)
+            return 2
+        print(
+            f"API-to-requirement allocation artifact written: {artifact} "
+            f"({len(rows)} APIs); audit paths: {audit}"
+        )
+    return 0
 
 
 def _need_title(need: dict) -> str:
@@ -47,7 +204,7 @@ def _export_csv(
     """Export a traceability matrix as CSV from needs.json."""
     try:
         needs = _load_needs(needs_json_path)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         print(f"ERROR: Failed to read {needs_json_path}: {exc}")
         return 2
 
@@ -168,7 +325,7 @@ def _export_xlsx(
 
     try:
         needs = _load_needs(needs_json_path)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         print(f"ERROR: Failed to read {needs_json_path}: {exc}")
         return 2
 
@@ -177,8 +334,6 @@ def _export_xlsx(
         return 1
 
     needs_by_id: dict[str, dict] = {str(n.get("id", "")): n for n in needs if n.get("id")}
-    all_ids = set(needs_by_id)
-
     req_rows: list[dict] = []
     for nid, need in sorted(needs_by_id.items()):
         if nid.startswith(req_prefixes):
@@ -269,6 +424,10 @@ def _export_xlsx(
 
 
 def cmd_traceability(args: argparse.Namespace) -> int:
+    profile = str(getattr(args, "profile", "basic"))
+    if profile == "qualification" or getattr(args, "api_requirements_output", None):
+        return _run_typed_traceability(args)
+
     # XLSX export mode
     fmt = getattr(args, "format", None)
     if fmt == "xlsx":
@@ -344,6 +503,47 @@ def register(sub: argparse._SubParsersAction) -> None:
         type=Path,
         default=None,
         help="Project configuration declaring standards catalogs for STDCLAIM_* needs",
+    )
+    p_tr.add_argument(
+        "--profile",
+        choices=["basic", "qualification"],
+        default="basic",
+        help="Validation behavior profile (default: basic compatibility mode)",
+    )
+    p_tr.add_argument(
+        "--api-requirements-output",
+        type=Path,
+        default=None,
+        help=(
+            "Optionally write a CSV API-to-requirement allocation view. The "
+            "projection traverses requirement -> architecture -> API backwards "
+            "but omits architecture from the displayed artifact."
+        ),
+    )
+    p_tr.add_argument(
+        "--api-prefix",
+        action="append",
+        default=None,
+        help=(
+            "Implementation ID prefix treated as an API in the qualification "
+            "projection (repeatable; default: API_, IMPL_)"
+        ),
+    )
+    p_tr.add_argument(
+        "--evidence-project",
+        type=Path,
+        default=None,
+        help="Qualification evidence project accepted by the framework validator",
+    )
+    p_tr.add_argument(
+        "--source-revision",
+        default=None,
+        help="Independent trusted source revision for qualification evidence",
+    )
+    p_tr.add_argument(
+        "--configuration-sha256",
+        default=None,
+        help="Independent trusted configuration SHA-256 for qualification evidence",
     )
     p_tr.add_argument(
         "--format",

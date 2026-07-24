@@ -18,7 +18,7 @@ def test_release_version_gate_accepts_matching_tag_and_rejects_mismatch() -> Non
     script = ROOT / "tools" / "check_release_version.py"
 
     matching = subprocess.run(
-        [sys.executable, str(script), "--tag", "v0.10.0"],
+        [sys.executable, str(script), "--tag", "v0.10.1"],
         cwd=ROOT,
         capture_output=True,
         text=True,
@@ -41,7 +41,7 @@ def test_release_publish_jobs_depend_on_version_gate() -> None:
     workflow = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
     assert "workflow_dispatch" not in workflow
     assert "  release-metadata:\n" in workflow
-    assert "  pypi-publish:\n    needs: release-metadata\n" in workflow
+    assert "  pypi-publish:\n    needs:\n      - release-metadata\n      - release-inventory\n" in workflow
     assert "  framework-bundle:\n    needs: release-metadata\n" in workflow
     assert "  bazel-example-shipment:\n    needs: release-metadata\n" in workflow
     assert "      - release-metadata\n" in workflow

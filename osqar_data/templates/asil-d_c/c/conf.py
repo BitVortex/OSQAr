@@ -53,12 +53,16 @@ needs_build_json = True
 needs_reproducible_json = True
 
 # Need types for software SEooC qualification targeting ASIL D.
-# Includes REQ_SSR_, ARCH_, VER_, IMPL_, LM_, SC_, STDCLAIM_, and EVID_ prefixes.
+# Includes the existing standards-claim fields plus the typed graph fields.
+# The graph policy is defined by traceability-qualification-v1.json.
 needs_types = [
     dict(directive="need", title="Requirement", prefix="REQ_", color="#BFD8D2", style="node"),
     dict(directive="arch", title="Architecture", prefix="ARCH_", color="#FEDCD2", style="node"),
     dict(directive="ver", title="Verification", prefix="VER_", color="#DFCCF1", style="node"),
+    dict(directive="result", title="Result", prefix="RESULT_", color="#E4D7B9", style="node"),
+    dict(directive="evidence", title="Evidence", prefix="EVID_", color="#D7E8C0", style="node"),
     dict(directive="impl", title="Implementation", prefix="IMPL_", color="#DCB239", style="node"),
+    dict(directive="api", title="API", prefix="API_", color="#F0C36E", style="node"),
     dict(directive="lm", title="Lifecycle", prefix="LM_", color="#B3C2F2", style="node"),
     dict(directive="sc", title="Safety Case", prefix="SC_", color="#C0E8D5", style="node"),
     dict(directive="stdclaim", title="Standards Claim", prefix="STDCLAIM_", color="#F4D06F", style="node"),
@@ -70,6 +74,8 @@ _needs_claim_fields = [
     "standards_refs",
     "project_interpretation",
     "applicability",
+    "kind",
+    "evidence_state",
 ]
 
 _needs_claim_links = [
@@ -93,6 +99,13 @@ _needs_claim_links = [
         "incoming": "evidences",
         "outgoing": "is evidenced by",
     },
+    {"option": "allocated_to", "incoming": "allocation from", "outgoing": "allocated to"},
+    {"option": "allocated_to_api", "incoming": "API allocation from", "outgoing": "allocated to API"},
+    {"option": "produces", "incoming": "produced by", "outgoing": "produces"},
+    {"option": "supported_by", "incoming": "supports", "outgoing": "supported by"},
+    {"option": "references", "incoming": "referenced by", "outgoing": "references"},
+    {"option": "constrains", "incoming": "constrained by", "outgoing": "constrains"},
+    {"option": "applies_to", "incoming": "deviation from", "outgoing": "applies to"},
 ]
 
 # Sphinx-Needs 8 replaced the legacy list-based configuration with mappings.
